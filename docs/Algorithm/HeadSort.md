@@ -1,7 +1,6 @@
----
-title: "堆排序"
-hidemeta: true
----
+
+
+# 堆排序
 
 [代码来自该视频](https://www.bilibili.com/video/BV1Eb41147dK?t=1590)
 [github仓库](https://github.com/whalefall541/learn4Algorithm.git)

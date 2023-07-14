@@ -66,13 +66,13 @@ EOF
 
 ### IDEA 配置截图
 
-![image-20230519011746636](https://gitee.com/jack541/repo-for-pic-go/raw/master/img/image-20230519011746636.png)
+![image-20230519011746636](https://s2.loli.net/2023/07/15/zYjAySuVTmbNCG1.png)
 
 
 
 ---
 
-![image-20230519011658616](https://gitee.com/jack541/repo-for-pic-go/raw/master/img/image-20230519011658616.png)
+![image-20230519011658616](https://s2.loli.net/2023/07/15/MuEtIrFQCgDplvK.png)
 
 ### DockerFile
 
@@ -161,13 +161,13 @@ services:
 
 配置Docker Compose executable 即可
 
-![image-20230519222216138](https://gitee.com/jack541/repo-for-pic-go/raw/master/img/image-20230519222216138.png)
+![image-20230519222216138](https://s2.loli.net/2023/07/15/m1OAeNiE9ZsCqGX.png)
 
 
 
 ---
 
-![image-20230520001747099](https://gitee.com/jack541/repo-for-pic-go/raw/master/img/image-20230520001747099.png)
+![image-20230520001747099](https://s2.loli.net/2023/07/15/BpjWZl64f2wHQyJ.png)
 
 > 注意部署时直接run 可能没有拉起三个contaner,这个时候可以先down 然后再deploy
 
@@ -177,5 +177,5 @@ services:
 
 192.168.3.163:8080
 
-![image-20230705233312670](https://gitee.com/jack541/repo-for-pic-go/raw/master/img/image-20230705233312670.png)
+![image-20230705233312670](https://s2.loli.net/2023/07/15/azqiL7VdEQXxYtC.png)
 

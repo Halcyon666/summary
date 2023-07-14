@@ -34,7 +34,7 @@
 * 采用扩展的AOL，在AOP概念的表达上颇具实例，使得AOP涉及的所有横切关注点逻辑在进行织入之前，可以自由自在地存活在自己的“国度中”。而像“编译到静态类可以提升系统运行性能”，“java
   虚拟机可以像加载平常类那种，加载已经织入相应逻辑的AO组件所在的文件并运行”等特点。使用这种方式，需要学习一门扩展的AOL语言。
 
-![](https://oscimg.oschina.net/oscnet/up-8b44413c3499ab8c5aaf6884bdd28946b6d.png)
+![](https://s2.loli.net/2023/07/15/lArHhiuGkVqd4Nm.png)
 
 ## Joinpoint
 
@@ -46,7 +46,7 @@
   * 正则表达式：Jboss、Spring AOP、AspectWerkz等均支持
   * 使用特定的Pointcut表达语言：Spring 2.0以后，借助于AspectJ的Pointcut表述语言解释器，支持使用AspectJ的Pointcut表述语言来指定Pointcut。
 
-![](https://oscimg.oschina.net/oscnet/up-1b5e31d34b8e44dfa4475d758149d2a363c.png)
+![](https://s2.loli.net/2023/07/15/ZeYxB1TENhjXPRt.png)
 
 ### 静态代理
 
@@ -297,9 +297,9 @@ public interface MethodMatcher {
 
 如果boolean matches(Method method, Class<?> targetClass);返回true时，三个参数的matches将会被执行，以进一步检查匹配条件；如果boolean matches(Method method, Class<?> targetClass);返回false，那么不管这个MethodMatcher是staticMethodMatcher还是DynamicMethodMatcher，该结果已经是最终结果，三个参数的方法肯定不会被执行了。
 
-![](https://oscimg.oschina.net/oscnet/up-56c82a867727a95b1dad667aae23f35016f.png)
+![](https://s2.loli.net/2023/07/15/joCBcvwn5NIWsVP.png)
 
-![常见pointcut](https://oscimg.oschina.net/oscnet/up-e2d8234131d2a7bcda1159c35d298a64d3e.png "常见pointcut")
+![常见pointcut](https://s2.loli.net/2023/07/15/3TktmhvxbHauZI2.png "常见pointcut")
 
 ### NameMatchMethodPointcut
 
@@ -482,7 +482,7 @@ ControlFlowPointcut匹配程序的调用流程，不是对某个方法执行所�
 * After Advice(finally)
 3. After Around
 
-![](https://oscimg.oschina.net/oscnet/up-6dde3692e0b345a926714217b05fc1844f1.png)
+![](https://s2.loli.net/2023/07/15/jhWAx2tqe6EzoNU.png)
 
 4. Introduction
 * 在AspectJ中称Inter-Type Declaration，在JBoss AOP 中称Mix-in，都是指这同一种类型的Advice。与之前的几种Advice类型不同，Introduction
@@ -490,7 +490,7 @@ ControlFlowPointcut匹配程序的调用流程，不是对某个方法执行所�
 * AspectJ采用静态织入的形式，那么对象在使用的时候，Introduction逻辑已经是编译织入完成的。所以理论上来说，AspectJ提供的Introduction类型的Advice，在现有Java平台上的AOP
   实现中是性能最好的；而像JBosss AOP或者Spring AOP等采用动态织入的AOP实现，Introduction的性能要稍逊一筹。
 
-![](https://oscimg.oschina.net/oscnet/up-22bd58e5adaa1b4d81cedc603cd6a3a4675.png)
+![](https://s2.loli.net/2023/07/15/xVSYeWcNrbk3aqg.png)
 
 在Spring中，Advice按照其自身实例能否在目标对象类的所有实例中共享这一标准，可以划分为两大类，即per-calss类型的Advice 和 per-instance类型的Advice。
 
@@ -568,7 +568,7 @@ Introduction 可以在不改动目标类定义的情况下，为目标类添加�
 
 Introduction继承了MethodInterceptor以及DynamicIntroductionAdvice，通过DynamicIntroductionAdvice，我们可以界定当前的IntroductionInterceptor为哪些接口类提供相应的拦截功能。通过MethodInterceptor,IntroductionInterceptor就可以处理新添加的接口上的方法调用了。通常情况下，对于IntroductionInterceptor来说，如果是新增加的接口上的方法调用，不必去调用MethodInterceptor的proceed（）方法。当前被拦截的方法实际上是整个调用链中要最终执行的唯一方法。
 
-![Introduction相关类图](https://oscimg.oschina.net/oscnet/up-dab617d645b217c3618bf51c07bdfdca5d8.png "Introduction相关类图")
+![Introduction相关类图](https://s2.loli.net/2023/07/15/64GVq9mJlEk7wMc.png "Introduction相关类图")
 
 * Introduction型的Advice两条分支，即以DynamicIntroductionAdvice为首的动态分支(不共享)和以IntroductionInfo为首的静态(共享)。
 
@@ -703,17 +703,17 @@ public class TesterFeatureIntroductionInterceptor extends DelegatingIntroduction
 
 Aspect是对系统中的横切关注点逻辑进行模块化封装的AOP的概念实体。通常情况下，Aspect可以包含多个Pointcut以及相关Advice定义。
 
-![](https://oscimg.oschina.net/oscnet/up-54403168dcfb0ec2d3084e5f49d0e678cc1.png)
+![](https://s2.loli.net/2023/07/15/9p6abQqSsHTxLFX.png)
 
 Advisor代表Spring中的Aspect，但是与正常的Aspect不同，Advisor通常只持有一个Pointcut和一个Advice。而理论上，Aspect定义中可以有多个Pointcut和多个Advice，所以Advisor是一种特殊的Aspect。
 
 ### PointcutAdvisor
 
-![](https://oscimg.oschina.net/oscnet/up-a07fb97fa23007ab71c566724aef6d68b6f.png)
+![](https://s2.loli.net/2023/07/15/Iy3GrnFvNWlB92k.png)
 
 ***
 
-![](https://oscimg.oschina.net/oscnet/up-58fd138fecf5bb12603ff296eb439e0360c.png)
+![](https://s2.loli.net/2023/07/15/yqwr2TXstDvE4YM.png)
 
 实际上，org.springframework.aop.PointcutAdvisor才是真正定义的有一个Pointcut和一个Advice的Advisor，大部分的Advisor实现全部是在PointcutAdvisor下的。
 
@@ -754,17 +754,17 @@ DefaultBeanFactoryPointcutAdvisor自身绑定到了BeanFactory,要使用DefaultB
 
 IntroductionAdvisor只能应用于类级别的拦截，只能使用Introduction型的Advice，而不能像PointcutAdvisor那样，可以使用任意类型的Pointcut，以及差不多任何类型的Advice。
 
-![IntroductionAdvisor类结构图](https://oscimg.oschina.net/oscnet/up-b0477a82d62b94dceeda67d6a8c23eed154.png "IntroductionAdvisor类结构图")
+![IntroductionAdvisor类结构图](https://s2.loli.net/2023/07/15/8pNE2drJ1BfLn4D.png "IntroductionAdvisor类结构图")
 
 #### Order
 
 大多数时候，会有多个关注横切点，那么，系统实现中就会有多个Advisor存在。当其中的某些Advisor的Pointcut匹配了同一个Joinpoint的时候，就会在这同一个Joinpoint处执行多个Advice的横切逻辑。一旦这几个需要在同一个Joinpoint处执行的Advice逻辑存在优先顺序依赖的话，就需要我们来干预了。
 
-![](https://oscimg.oschina.net/oscnet/up-306d297c19ff1032402f86643854b045754.png)
+![](https://s2.loli.net/2023/07/15/87ohZirCFMmLq46.png)
 
 Spring在处理同一Joinpoint处的多个Advisor的时候，会按照指定的顺序有优先级来执行他们。顺序号越小，优先级越高，优先级越高的，越先被执行。(默认情况下，Spring会按照它们的声明顺序来应用它们，最先声明的顺序号最小但优先级最大，其次次之)
 
-![](https://oscimg.oschina.net/oscnet/up-8e8112c31c3e7884c079675a98f834e4df9.png)
+![](https://s2.loli.net/2023/07/15/cnDqxbIEChpBNlz.png)
 
 各个Advisor实现类，其实已经实现了Order接口。在使用的时候我们可以直接指定即可
 
@@ -934,7 +934,7 @@ public class Test4Introduction {
 
 ### ProxyFactory本质
 
-![](https://img2020.cnblogs.com/blog/2023890/202007/2023890-20200720221906281-1367694573.png)
+![](https://s2.loli.net/2023/07/15/PpJEQOIGl7dKtj3.png)
 
 Spring AOP框架内使用AopProxy对使用的不用的代理实现机制进行了适度的抽象，主要有针对JDK动态代理和CGLIB两种机制的AopProxy两种实现，分别是Cglib2AopProxy和JdkDynamicAopProxy两种实现。动态代理需要通过InvocationHandler提供调用拦截，所以JdkDynamicAopProxy同时实现了InvocationHandler接口。采用抽象工厂模式，通过org.springframework.aop.framework.AopProxyFactory进行。
 
@@ -985,7 +985,7 @@ public class DefaultAopProxyFactory implements AopProxyFactory, Serializable {
 }
 ```
 
-![](https://img2020.cnblogs.com/blog/2023890/202007/2023890-20200720233704438-203646049.png)
+![](https://s2.loli.net/2023/07/15/pW1gjoys6k47dvm.png)
 
 AdvisedSupport是一个生成代理对象所需要的信息的载体。
 
@@ -1007,13 +1007,13 @@ ProxyConfig就是普通的JavaBean，定义了五个boolean型的属性，分别
 
 我们可以使用Advised接口访问相应代理对象所有持有的Advisor，进行添加Advisor、一处Advisor等相关动作。即使代理对象已经生成完毕，也可对其进行操作，直接操作Advised，更多时候用于测试场景，可以帮助我们检查生成的代理对象是否如所期望的那样。
 
-![](https://img2020.cnblogs.com/blog/2023890/202007/2023890-20200720233626519-1408969049.png)
+![](https://s2.loli.net/2023/07/15/hHNUgpVWqDFlZIw.png)
 
 ProxyFactory集AopProxy和AdvisedSupport于一身，可以通过AdvisedSupport设置生成代理对象所需要的相关信息，可以通过AopProxy生成代理对象。为了重用相关逻辑，Spring AOP框架在实现的时候，将一些公用的逻辑抽取到了org.springframework.aop.frameworkx.ProxyCreatorSupport中，自身继承了AdvisedSupport，所以就能具有设置生成代理对象所需要的相关信息。
 
 为了简化生成不同类型AopProxy的工作，ProxyCreatorSupport内部持有一个AopProxyFactory实例，默认采用的是DefaultAopProxyFactory。
 
-![](https://img2020.cnblogs.com/blog/2023890/202007/2023890-20200720233603959-1746364099.png)
+![](https://s2.loli.net/2023/07/15/TYd9iNmCvOAUcjt.png)
 
 ### ProxyFactoryBean
 
@@ -1329,7 +1329,7 @@ Sprig AOP框架中有关自动代理的实现架构
 * 所有的AutoProxyCreator都是InstantiationAwareBeanPostProcessor，这种类型的BeanPostProcessor与普通的BeanPostProcessor有所不同。当Spring IoC
   容器检测到有InstantiationAwareBeanPostProcessor类型的BeanPostProcessor的时候，会直接通过InstantiationAwareBeanPostProcessor中的逻辑构造对象实例返回，而不会走正常的对象实例化流程。也就是“短路”。这样AutoProxyCreator会直接构造目标对象的代理对象返回，而不是原来的目标对象。
 
-![](https://img2020.cnblogs.com/blog/2023890/202007/2023890-20200723232128763-918015187.png)
+![](https://s2.loli.net/2023/07/15/cFmOoXVuqKtrklU.png)
 
 AspectJAwareAdvisorAutoProxyCreator是Spring 2.0之后的AutoProxyCreator实现，也算是一个AutoProxyCreator的自定义实现。它还有一个子类AnnotationAwareAspectJAutoProxyCreator，可以根据Java5的注解捕获信息以完成自动代理。
 
@@ -1337,7 +1337,7 @@ Spring AOP还支持基于Jakarta Commons Atrributes的元数据的自动代理�
 
 ## TargetSource
 
-![](https://img2020.cnblogs.com/blog/2023890/202007/2023890-20200727230047191-1011428346.png)
+![](https://s2.loli.net/2023/07/15/1qdrvGiXQxtuZA2.png)
 
 TargetSource的作用：TargetSource它是目标对象的容器，当每个针对目标对象的方法调用经过层层拦截而到达调用链的终点的时候，就该调用目标对象上定义的方法了，这时候不是直接调用这个目标对象上的方法，而是通过某个TargetSource与实际目标对象之间交互，然后再调用从TargetSource中取得的目标对象上的相应的方法。
 
@@ -1357,7 +1357,7 @@ TargetSource的特性
 
 org.springframework.aop.target.SingletonTargetSource是使用最多的TargetSource实现类，虽然我们可能并不知道。因为通过ProxyFactory的setTarget()设置完目标对象之后，ProxyFactory内部会自行使用一个SingletonTargetSource对设置的目标对象进行封装。
 
-![](https://img2020.cnblogs.com/blog/2023890/202007/2023890-20200727225806720-1621121446.png)
+![](https://s2.loli.net/2023/07/15/fhJjrdlpYBCIxMX.png)
 
 #### PrototypeTargetSource
 

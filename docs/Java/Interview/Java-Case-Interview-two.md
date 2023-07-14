@@ -73,7 +73,7 @@ hidemeta: true
 7. 使用bean
 8. 调用DisposableBean 的 destroy()方法
 
-![](https://img2020.cnblogs.com/blog/2023890/202105/2023890-20210509004640951-1146007518.png)
+![](https://s2.loli.net/2023/07/15/WPZYtgrOGF5L1fX.png)
 
 [引用**月染霜华**博客](https://www.cnblogs.com/shoshana-kong/p/10692887.html)
 
@@ -150,7 +150,7 @@ Spring Boot 是Spring提供的一个快速开发工具，让程序员快速使�
 ## Spring MVC工作流程
 
 
-![Process Diagram](https://img2020.cnblogs.com/blog/2023890/202105/2023890-20210503191823271-1572263490.png)
+![Process Diagram](https://s2.loli.net/2023/07/15/aBpOvjSPdmCIoKg.png)
 
 1. 用户请求发往前端控制器 DispatcherServlet
 2. DispatcherServlet 调用处理器映射器 RequestMapping
@@ -256,15 +256,18 @@ Spring Boot 是Spring提供的一个快速开发工具，让程序员快速使�
 `@Configuration` 指定该类为配置类
 `@Bean` 在配置类中指定需要配置的类，并加载到容器中，比如redis,kafka配置类
 
-![](https://img2020.cnblogs.com/blog/2023890/202105/2023890-20210505195804214-476060273.png)
+![](https://s2.loli.net/2023/07/15/FoObHTBYnszMEqh.png)
 
 ## MySQL 聚族索引和非聚族索引的区别
 
 *聚族索引* 将数据和索引放到一块，并且按照一定的顺序排列
 *非聚族索引* 叶子节点不放数据，存储数据的地址值
 
-![](https://img2020.cnblogs.com/blog/2023890/202105/2023890-20210507221719936-1840786009.jpg)
-![](https://img2020.cnblogs.com/blog/2023890/202105/2023890-20210507221733685-1464771538.jpg)
+![](https://s2.loli.net/2023/07/15/5SieDPEQWFKpTt1.jpg)
+
+---
+
+![](https://s2.loli.net/2023/07/15/WB1YbpMG9LmUgaD.jpg)
 
 索引数据结构 *B+ Tree* *Hash Index* 
 

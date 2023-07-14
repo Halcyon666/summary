@@ -62,11 +62,11 @@ ntpdate 3.asia.pool.ntp.org
 
 注意最好使用 vmware 15, vmware 16的版本网络好像有问题。
 
-![image-20211216221256892](https://gitee.com/jack541/repo-for-pic-go/raw/master/img/image-20211216221256892.png)
+![image-20211216221256892](https://s2.loli.net/2023/07/15/FPTm7eqMnoli6Yr.png)
 
 
 
-![image-20211216221335326](https://gitee.com/jack541/repo-for-pic-go/raw/master/img/image-20211216221335326.png)
+![image-20211216221335326](https://s2.loli.net/2023/07/15/OpiwWHFrGackYZL.png)
 
 ### 查询当前文件夹总大小
 

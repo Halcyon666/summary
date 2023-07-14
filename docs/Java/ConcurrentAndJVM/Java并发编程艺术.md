@@ -17,7 +17,7 @@ hidemeta: true
 
 如果volatile变量修饰符使用恰当的话，它比synchronized的使用和执行成本更低，因为它不会引起线程上下文的切换和调度。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802162303429-1479809303.png)
+![](https://s2.loli.net/2023/07/15/QE9kipnKDcVxP7o.png)
 
 如果对声明了volatile的变量进行写操作，JVM就会向处理器发送一条Lock前缀的指令，将这个变量所在缓存行的数据写回到系统内存
 
@@ -38,7 +38,7 @@ jdk 7追加字节优化性能
 * 轻量级锁：线程在执行同步块之前，JVM会先在当前线程的栈桢中创建用于存储锁记录的空间，并将对象头中的Mark Word复制到锁记录中，官方称为Displaced Mark Word。然后线程尝试使用CAS将对象头中的Mark
   Word替换为指向锁记录的指针。如果成功，当前线程获得锁，如果失败，表示其他线程竞争锁，当前线程便尝试使用自旋来获取锁。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802162421750-609061107.png)
+![](https://s2.loli.net/2023/07/15/AsOFLjqtH5xgbTQ.png)
 
 ### cpu如何保证原子性
 
@@ -66,17 +66,17 @@ ABA问题：但是如果一个值原来是A，变成了B，又变成了A，那�
 
 ### 以何种机制来交换信息
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802165221425-1399169164.png)
+![](https://s2.loli.net/2023/07/15/6C1U59TcR82lsyY.png)
 
 ***
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802165250674-595936291.png)
+![](https://s2.loli.net/2023/07/15/dIu64VxAGWb1fh7.png)
 
 ### 指令重排序
 
 在执行程序时，为了提高性能，编译器和处理器常常会对指令做重排序。重排序分3种类型
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802165456644-935244991.png)
+![](https://s2.loli.net/2023/07/15/AkZdw43br7YtEWn.png)
 
 1. 编译器优化的重排序。编译器在不改变单线程程序语义的前提下，可以重新安排语句的执行顺序。
 2. 指令级并行重排序。现代处理器采用了指令级并行技术（Instruction-Level Parallelism，ILP）来将多条指令重叠执行。如果不存在数据依赖性，处理器可以改变语句对应机器指令的执行顺序。
@@ -90,11 +90,11 @@ ABA问题：但是如果一个值原来是A，变成了B，又变成了A，那�
 
 通过以批处理的方式刷新写缓冲区，以及合并写缓冲区中对同一内存地址的多次写，减少对内存总线的占用。虽然写缓冲区有这么多好处，但每个处理器上的写缓冲区，仅仅对它所在的处理器可见。这个特性会对内存操作的执行顺序产生重要的影响：处理器对内存的读/写操作的执行顺序，不一定与内存实际发生的读/写操作顺序一致！
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802165919403-2010342761.png)
+![](https://s2.loli.net/2023/07/15/cC3hmklsanAJLB4.png)
 
 sparc-TSO和X86拥有相对较强的处理器内存模型，它们仅允许对写-读操作做重排序
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802165948922-2084433003.png)
+![](https://s2.loli.net/2023/07/15/a4VU2ud1InQeCJl.png)
 
 StoreLoad Barriers是一个“全能型”的屏障，它同时具有其他3个屏障的效果。
 执行该屏障开销会很昂贵，因为当前处理器通常要把写缓冲区中的数据全部刷新到内存中（Buffer Fully Flush）。
@@ -120,7 +120,7 @@ java使用新的JSR-133内存模型。在JMM中如果一个操作执行的结果
 
 （不管程序是否同步）所有线程都只能看到一个单一的操作执行顺序。在顺序一致性内存模型中，每个操作都必须原子执行且立刻对所有线程可见。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802170753536-1047118709.png)
+![](https://s2.loli.net/2023/07/15/M6W49XzwpJ3PF1S.png)
 
 当多个线程并发执行时，图中的开关装置能把所有线程的所有内存读/写操作串行化（即在顺序一致性模型中，所有操作之间具有全序关系）。
 
@@ -129,7 +129,7 @@ java使用新的JSR-133内存模型。在JMM中如果一个操作执行的结果
 总线事务包括读事务（Read Transaction）和写事务（Write Transaction）。读事务从内存传送数据到处理器，写事务从处理器传送数据到内存，每个事务会读/写内存中一个或多个物理上连续的字。
 在一个处理器执行总线事务期间，总线会禁止其他的处理器和I/O设备执行内存的读/写。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802170925500-569421251.png)
+![](https://s2.loli.net/2023/07/15/2s6ZNIJyPWTKARl.png)
 
 当JVM在这种处理器上运行时，可能会把一个64位long/double型变量的写操作拆分为两个32位的写操作来执行。这两个32位的写操作可能会被分配到不同的总线事务中执行，此时对这个64位变量的写操作将不具有原子性。
 
@@ -141,23 +141,23 @@ java使用新的JSR-133内存模型。在JMM中如果一个操作执行的结果
 
 原子性：对任意单个volatile变量的读/写具有原子性，但类似于volatile++这种复合操作不具有原子性。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802171159772-285815457.png)
+![](https://s2.loli.net/2023/07/15/o5nWcyJKE69CV32.png)
 
 每一个箭头链接的两个节点，代表了一个happens-before关系。黑色箭头表示程序顺序规则；橙色箭头表示volatile规则；蓝色箭头表示组合这些规则后提供的happens-before保证。
 
 A线程写一个volatile变量后，B线程读同一个volatile变量。A线程在写volatile变量之前所有可见的共享变量(即写之前的值都写入到JMM中)，在B线程读同一个volatile变量后，将立即变得对B线程可见。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802171330721-1949099804.png)
+![](https://s2.loli.net/2023/07/15/yWFazJqi6dTmrKQ.png)
 
 ***
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802171338272-1374480604.png)
+![](https://s2.loli.net/2023/07/15/zOrsJ7AdvphY9jw.png)
 
 线程A写一个volatile变量，随后线程B读这个volatile变量，这个过程实质上是线程A通过主内存向线程B发送消息。
 
 ### volatile重排序规则表
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802171437252-709997511.png)
+![](https://s2.loli.net/2023/07/15/BKRL3GYlVgZ6onr.png)
 
 * 当第二个操作是volatile写时，不管第一个操作是什么，都不能重排序。这个规则确保volatile写之前的操作不会被编译器重排序到volatile写之后。
 * 当第一个操作是volatile读时，不管第二个操作是什么，都不能重排序。这个规则确保volatile读之后的操作不会被编译器重排序到volatile读之前。
@@ -169,15 +169,15 @@ A线程写一个volatile变量后，B线程读同一个volatile变量。A线程�
 * 当第一个操作是volatile读时，不管第二个操作是什么，都不能重排序。这个规则确保volatile读之后的操作不会被编译器重排序到volatile读之前。
 * 当第一个操作是volatile写，第二个操作是volatile读时，不能重排序。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802171705712-235984600.png)
+![](https://s2.loli.net/2023/07/15/6iUd3Y1bFgoxwLz.png)
 
 StoreLoad屏障:一个写线程写volatile变量，多个读线程读同一个volatile变量。当读线程的数量大大超过写线程时，选择在volatile写之后插入StoreLoad屏障将带来可观的执行效率的提升。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802171741022-793566359.png)
+![](https://s2.loli.net/2023/07/15/BhM4beUqx9ZJtrf.png)
 
 ***
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802171748021-323931162.png)
+![](https://s2.loli.net/2023/07/15/KleJBMWTGq9cbAa.png)
 
 ### ReentrantLock 中公平锁和非公平锁内存语义
 
@@ -189,7 +189,7 @@ StoreLoad屏障:一个写线程写volatile变量，多个读线程读同一个vo
 
 ### concurrent包实现示意图
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802172032842-2038230116.png)
+![](https://s2.loli.net/2023/07/15/ZiBQLHJSwsYdpoc.png)
 
 ## final域内存知识
 
@@ -199,24 +199,24 @@ StoreLoad屏障:一个写线程写volatile变量，多个读线程读同一个vo
 
 初次读一个包含final域的对象的引用，与随后初次读这个final域，这两个操作之间不能重排序
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802172117812-1888203954.png)
+![](https://s2.loli.net/2023/07/15/Da4P5Cl7dFgKYen.png)
 
 假设一个线程A执行writer()方法，随后另一个线程B执行reader()方法
 
 * JMM禁止编译器把final域的写重排序到构造函数之外。
 * 编译器会在final域的写之后，构造函数return之前，插入一个StoreStore屏障。这个屏障禁止处理器把final域的写重排序到构造函数之外。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802172206462-494404504.png)
+![](https://s2.loli.net/2023/07/15/Sh4OgLmT1iNGFCf.png)
 
 读到普通变量初始化之前的值
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802172230772-269435195.png)
+![](https://s2.loli.net/2023/07/15/k96DUOV1gT4Ftso.png)
 
 对象的普通域的操作被处理器重排序到读对象引用之前。读普通域时，该域还没有被写线程A写入，这是一个错误的读取操作。而读final域的重排序规则会把读对象final域的操作“限定”在读对象引用之后，此时该final域已经被A线程初始化过了，这是一个正确的读取操作。
 
 ### 被final修饰的类型为引用类型
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802172314261-959869504.png)
+![](https://s2.loli.net/2023/07/15/TLzvsetCf178j59.png)
 
 在构造函数内对一个final引用的对象的成员域的写入，与随后在构造函数外把这个被构造对象的引用赋值给一个引用变量，这两个操作之间不能重排序。
 
@@ -233,15 +233,15 @@ StoreLoad屏障:一个写线程写volatile变量，多个读线程读同一个vo
 
 在构造函数内部，不能让这个被构造对象的引用为其他线程所见，也就是对象引用不能在构造函数中“逸出”。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802172426642-1689971217.png)
+![](https://s2.loli.net/2023/07/15/iKW2PU6vFrCqVT9.png)
 
 执行read()方法的线程仍然可能无法看到final域被初始化后的值，因为这里的操作1和操作2之间可能被重排序。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802172506592-94669036.png)
+![](https://s2.loli.net/2023/07/15/w8cFmhtjfQYyk49.png)
 
 ***
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802172516509-678889698.png)
+![](https://s2.loli.net/2023/07/15/H7jnLcbMDz2WUhi.png)
 
 ### final语义在处理器中的实现
 
@@ -259,7 +259,7 @@ StoreLoad屏障:一个写线程写volatile变量，多个读线程读同一个vo
 
 对于不会改变程序执行结果的重排序，JMM对编译器和处理器不做要求（JMM允许这种重排序）。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802172640283-829689123.png)
+![](https://s2.loli.net/2023/07/15/8hkiCWZ7jDaoARU.png)
 
 ### happens-before关系的定义
 
@@ -293,7 +293,7 @@ StoreLoad屏障:一个写线程写volatile变量，多个读线程读同一个vo
 5. start()规则：如果线程A执行操作ThreadB.start()（启动线程B），那么A线程的ThreadB.start()操作happens-before于线程B中的任意操作。
 6. join()规则：如果线程A执行操作ThreadB. join()并成功返回，那么线程B中的任意操作happens-before于线程A从ThreadB. join()操作成功返回。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802172929677-1787034266.png)
+![](https://s2.loli.net/2023/07/15/rsJXG6e4DhLjVmW.png)
 
 * 1 happens-before 2和3 happens-before 4由程序顺序规则产生。由于编译器和处理器都要遵守as-if-serial语义，也就是说，as-if-serial
   语义保证了程序顺序规则。因此，可以把程序顺序规则看成是对as-if-serial语义的“封装”。
@@ -303,15 +303,15 @@ StoreLoad屏障:一个写线程写volatile变量，多个读线程读同一个vo
 
 ### 多线程并发初始化对象可能发生指令重排
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802173131232-259961503.png)
+![](https://s2.loli.net/2023/07/15/mHqVA9pQaDjPr8Y.png)
 
 ***
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802173148531-1960326066.png)
+![](https://s2.loli.net/2023/07/15/639NJO2xdsTVtjl.png)
 
 ***
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802173200157-1016872564.png)
+![](https://s2.loli.net/2023/07/15/u1TI87E4Xj3ROeq.png)
 
 这里A2和A3虽然重排序了，但Java内存模型的intra-thread semantics将确保A2一定会排在A4前面执行。因此，线程A的intra-thread semantics没有改变，但A2和A3的重排序，将导致线程B在B1处判断出instance不为空，线程B接下来将访问instance引用的对象。此时，线程B将会访问到一个还未初始化的对象。
 
@@ -322,11 +322,11 @@ StoreLoad屏障:一个写线程写volatile变量，多个读线程读同一个vo
 
 基于volatile的解决方案
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802173332373-1365161157.png)
+![](https://s2.loli.net/2023/07/15/dM7BZy5VlzsCkhf.png)
 
 ***
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802173344454-574849448.png)
+![](https://s2.loli.net/2023/07/15/z3orwgqmWOtPGvh.png)
 
 这个方案本质上是通过禁止图3-39中的2和3之间的重排序，来保证线程安全的延迟初始化
 
@@ -334,11 +334,11 @@ StoreLoad屏障:一个写线程写volatile变量，多个读线程读同一个vo
 
 在执行类的初始化期间，JVM会去获取一个锁。这个锁可以同步多个线程对同一个类的初始化。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802173354512-2027838065.png)
+![](https://s2.loli.net/2023/07/15/zY19HbjsKWfNayV.png)
 
 ***
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802173409941-812133128.png)
+![](https://s2.loli.net/2023/07/15/sCIdV7nUM9xitWr.png)
 
 ### 在首次发生下列任意一种情况时，一个类或接口类型T将被立即初始化
 
@@ -352,46 +352,46 @@ StoreLoad屏障:一个写线程写volatile变量，多个读线程读同一个vo
 
 第1阶段：通过在Class对象上同步（即获取Class对象的初始化锁），来控制类或接口的初始化。这个获取锁的线程会一直等待，直到当前线程能够获取到这个初始化锁。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802173559447-41988492.png)
+![](https://s2.loli.net/2023/07/15/EOH2Yjmk5G9buqy.png)
 
 ***
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802173608332-1540973726.png)
+![](https://s2.loli.net/2023/07/15/6kCQf31gUr9vRLE.png)
 
 第2阶段：线程A执行类的初始化，同时线程B在初始化锁对应的condition上等待。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802173639892-1164583500.png)
+![](https://s2.loli.net/2023/07/15/pQNSUy7f6TRHa42.png)
 
 ***
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802173653021-169040767.png)
+![](https://s2.loli.net/2023/07/15/dDaWkJe7LIwYEOs.png)
 
 第3阶段：线程A设置state=initialized，然后唤醒在condition中等待的所有线程。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802173745542-815051631.png)
+![](https://s2.loli.net/2023/07/15/6DeqC9QUvHIzfkw.png)
 
 ***
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802173755527-1822375083.png)
+![](https://s2.loli.net/2023/07/15/kK7IjBDOGTr56co.png)
 
 第4阶段：线程B结束类的初始化处理。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802173846298-231807032.png)
+![](https://s2.loli.net/2023/07/15/hUYNfDTKIspRQOM.png)
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802173852497-1934435914.png)
+![](https://s2.loli.net/2023/07/15/B5ceYPOi2bCJ1GM.png)
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802173859481-1704233693.png)
+![](https://s2.loli.net/2023/07/15/ZyfwU7qXLEbdYG6.png)
 
 线程A在第2阶段的A1执行类的初始化，并在第3阶段的A4释放初始化锁；线程B在第4阶段的B1获取同一个初始化锁，并在第4阶段的B4之后才开始访问这个类。根据Java内存模型规范的锁规则，这里将存在如下的happens-before关系。这个happens-before关系将保证：线程A执行类的初始化时的写入操作（执行类的静态初始化和初始化类中声明的静态字段），线程B一定能看到。
 第5阶段：线程C执行类的初始化的处理。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802173906542-1621661158.png)
+![](https://s2.loli.net/2023/07/15/woPNqEJTh4durWi.png)
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802174018922-1804491204.png)
+![](https://s2.loli.net/2023/07/15/cW9SGadHkCsyOuv.png)
 
 在第3阶段之后，类已经完成了初始化。因此线程C在第5阶段的类初始化处理过程相对简单一些（前面的线程A和B的类初始化处理过程都经历了两次锁获取-锁释放，而线程C的类初始化处理只需要经历一次锁获取-锁释放）。线程A在第2阶段的A1执行类的初始化，并在第3阶段的A4释放锁；线程C在第5阶段的C1获取同一个锁，并在在第5阶段的C4之后才开始访问这个类。根据Java内存模型规范的锁规则，将存在如下的happens-before关系。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802174126817-708551664.png)
+![](https://s2.loli.net/2023/07/15/uYt43fMHphDIbPd.png)
 
 通过对比基于volatile的双重检查锁定的方案和基于类初始化的方案，我们会发现基于类初始化的方案的实现代码更简洁。但基于volatile的双重检查锁定的方案有一个额外的优势：除了可以对静态字段实现延迟初始化外，还可以对实例字段实现延迟初始化。
 
@@ -411,7 +411,7 @@ StoreLoad屏障:一个写线程写volatile变量，多个读线程读同一个vo
 
 这里处理器对读/写操作的放松，是以两个操作之间不存在数据依赖性为前提的。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802174209456-1045845869.png)
+![](https://s2.loli.net/2023/07/15/BbOCiDTXS21np3V.png)
 
 从表3-12中可以看到，所有处理器内存模型都允许写-读重排序，原因在第1章已经说明过：它们都使用了写缓存区。写缓存区可能导致写-读操作重排序。同时，我们可以看到这些处理器内存模型都允许更早读到当前处理器的写，原因同样是因为写缓存区。由于写缓存区仅对当前处理器可见，这个特性导致当前处理器可以比其他处理器先看到临时保存在自己写缓存区中的写。表3-12中的各种处理器内存模型，从上到下，模型由强变弱。越是追求性能的处理器，内存模型设计得会越弱。因为这些处理器希望内存模型对它们的束缚越少越好，这样它们就可以做尽可能多的优化来提高性能。
 
@@ -419,7 +419,7 @@ StoreLoad屏障:一个写线程写volatile变量，多个读线程读同一个vo
 
 JMM屏蔽了不同处理器内存模型的差异，它在不同的处理器平台之上为Java程序员呈现了一个一致的内存模型。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802174330602-1747863345.png)
+![](https://s2.loli.net/2023/07/15/RPKLUMdQwvV3ieY.png)
 
 ### 各种内存模型之间的关系
 
@@ -435,7 +435,7 @@ JMM是一个语言级的内存模型，处理器内存模型是硬件级的内�
 
 * 未同步/未正确同步的多线程程序。JMM为它们提供了最小安全性保障：线程执行时读取到的值，要么是之前某个线程写入的值，要么是默认值（0、null、false）。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802174401447-2072248137.png)
+![](https://s2.loli.net/2023/07/15/7cTXfWNstg9hA6C.png)
 
 最小安全性保障与64位数据的非原子性写并不矛盾。它们是两个不同的概念，它们“发生”的时间点也不同。
 
@@ -445,7 +445,7 @@ JMM是一个语言级的内存模型，处理器内存模型是硬件级的内�
 
 最小安全性保证线程读取到的值，要么是之前某个线程写入的值，要么是默认值（0、null、false）。但最小安全性并不保证线程读取到的值，一定是某个线程写完后的值。最小安全性保证线程读取到的值不会无中生有的冒出来，但并不保证线程读取到的值一定是正确的。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802174424582-740017625.png)
+![](https://s2.loli.net/2023/07/15/l8oCFIcHQtBDN47.png)
 
 ### JSR-133对旧内存模型的修补
 
@@ -457,22 +457,22 @@ JMM是一个语言级的内存模型，处理器内存模型是硬件级的内�
 
 线程状态
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802174510492-1659792297.png)
+![](https://s2.loli.net/2023/07/15/Pyv3NbYOizDL21g.png)
 
 线程状态之间的变化
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802174537812-1155906316.png)
+![](https://s2.loli.net/2023/07/15/uNYIETvLB5rq1P9.png)
 
 ### Daemon线程
 
 Daemon线程被用作完成支持性工作，但是在Java虚拟机退出时Daemon线程中的finally块并不一定会执行。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802174600742-1404769781.png)
+![](https://s2.loli.net/2023/07/15/QCDdGTYXrzcLBfa.png)
 main线程（非Daemon线程）在启动了线程DaemonRunner之后随着main方法执行完毕而终止，而此时Java虚拟机中已经没有非Daemon线程，虚拟机需要退出。Java虚拟机中的所有Daemon线程都需要立即终止，因此DaemonRunner立即终止，但是DaemonRunner中的finally块并没有执行。
 
 ### 线程如何初始化
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802174626502-1373961105.png)
+![](https://s2.loli.net/2023/07/15/NgVPf4UdE8ucqKY.png)
 
 一个新构造的线程对象是由其parent线程来进行空间分配的，而child线程继承了parent是否为Daemon、优先级和加载资源的contextClassLoader以及可继承的ThreadLocal，同时还会分配一个唯一的ID来标识这个child线程。至此，一个能够运行的线程对象就初始化好了，在堆内存中等待着运行。
 
@@ -528,20 +528,20 @@ public class Interrupted {
 
 ### synchronized实现细节
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802174747152-1193669153.png)
+![](https://s2.loli.net/2023/07/15/cKot7CBiW8MDv3L.png)
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802174752322-511974634.png)
+![](https://s2.loli.net/2023/07/15/5IfkCJVwRAp2d8v.png)
 
 本质是对一个对象的监视器（monitor）进行获取，而这个获取过程是排他的，也就是同一时刻只能有一个线程获取到由synchronized所保护对象的监视器。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802174827132-1239808787.png)
+![](https://s2.loli.net/2023/07/15/CYZgR8Ed4NOUxKD.png)
 
 一个线程对Object（Object由synchronized保护）的访问，首先要获得Object的监视器。如果获取失败，线程进入同步队列，线程状态变为BLOCKED。当访问Object
 的前驱（获得了锁的线程）释放了锁，则该释放操作唤醒阻塞在同步队列中的线程，使其重新尝试对监视器的获取。
 
 ### 等待通知
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802174911492-510739964.png)
+![](https://s2.loli.net/2023/07/15/CuAtVir4sUe7WvO.png)
 
 等待/通知机制，是指一个线程A调用了对象O的wait()方法进入等待状态，而另一个线程B调用了对象O的notify()或者notifyAll()方法，线程A收到通知后从对象O的wait()方法返回，进而执行后续操作。上述两个线程通过对象O来完成交互，而对象上的wait()和notify/notifyAll()的关系就如同开关信号一样，用来完成等待方和通知方之间的交互工作。
 
@@ -618,13 +618,13 @@ public class SleepUtils {
 4. notify()方法将等待队列中的一个等待线程从等待队列中移到同步队列中，而notifyAll()方法则是将等待队列中所有的线程全部移到同步队列，被移动的线程状态由WAITING变为BLOCKED。
 5. 从wait()方法返回的前提是获得了调用对象的锁。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802175008742-1292572235.png)
+![](https://s2.loli.net/2023/07/15/RvmUCgVK1QwnIzs.png)
 
 WaitThread首先获取了对象的锁，然后调用对象的wait()方法，从而放弃了锁并进入了对象的等待队列WaitQueue中，进入等待状态。由于WaitThread释放了对象的锁，NotifyThread随后获取了对象的锁，并调用对象的notify()方法，将WaitThread从WaitQueue移到SynchronizedQueue中，此时WaitThread的状态变为阻塞状态。NotifyThread释放了锁之后，WaitThread再次获取到锁并从wait()方法返回继续执行。
 
 ### ThreadLocal 变量使用
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802175032492-99052007.png)
+![](https://s2.loli.net/2023/07/15/CABlOfMQNw9J71x.png)
 
 连接池案例 连接数增加则总链接数增加，同时为获取到的比例也在增加
 
@@ -785,7 +785,7 @@ public class ConnectionPoolTest {
 ```
 
 线程池
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802175217757-527854295.png)
+![](https://s2.loli.net/2023/07/15/Srd8muksLVXopij.png)
 
 ```java
 public class DefaultThreadPool<Job extends Runnable> implements ThreadPool<Job> {
@@ -916,7 +916,7 @@ public class DefaultThreadPool<Job extends Runnable> implements ThreadPool<Job> 
 
 ### lock锁
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802175325312-488681850.png)
+![](https://s2.loli.net/2023/07/15/T2tYREiaSpo3eyx.png)
 
 ### 锁和同步器AQS概念区别
 
@@ -924,25 +924,25 @@ public class DefaultThreadPool<Job extends Runnable> implements ThreadPool<Job> 
 
 同步器面向的是锁的实现者，它简化了锁的实现方式，屏蔽了同步状态管理、线程的排队、等待与唤醒等底层操作。锁和同步器很好地隔离了使用者和实现者所需关注的领域
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802175415712-573053946.png)
+![](https://s2.loli.net/2023/07/15/VABC2cpNlRky3eG.png)
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802175422292-1153019003.png)
+![](https://s2.loli.net/2023/07/15/XMl6UmZ3GkwvAyO.png)
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802175429047-675090066.png)
+![](https://s2.loli.net/2023/07/15/e3fV7UgrLNY46ZP.png)
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802175435302-2061792472.png)
+![](https://s2.loli.net/2023/07/15/do1wcpmjDu49I3s.png)
 
 因此同步器提供了一个基于CAS的设置尾节点的方法：compareAndSetTail(Node expect, Node update)，它需要传递当前线程“认为”的尾节点和当前节点，只有设置成功后，当前节点才正式与之前的尾节点建立关联。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802175818192-232624625.png)
+![](https://s2.loli.net/2023/07/15/BXPAhpmak3iQdKe.png)
 
 同步队列遵循FIFO，首节点是获取同步状态成功的节点，首节点的线程在释放同步状态时，将会唤醒后继节点，而后继节点将会在获取同步状态成功时将自己设置为首节点，如下图所示
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802175823422-823478009.png)
+![](https://s2.loli.net/2023/07/15/cIp73PN1Ym8Cf2o.png)
 
 设置首节点是通过获取同步状态成功的线程来完成的，由于只有一个线程能够成功获取到同步状态，因此设置头节点的方法并不需要使用CAS来保证，它只需要将首节点设置成为原首节点的后继节点并断开原首节点的next引用即可。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802175828281-1100756260.png)
+![](https://s2.loli.net/2023/07/15/kSXlBVHZn1AW6zi.png)
 
 > 参考资料
 > 

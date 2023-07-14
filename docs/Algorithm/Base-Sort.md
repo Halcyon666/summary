@@ -1,7 +1,4 @@
----
-title: "基数排序"
-hidemeta: true
----
+# 基数排序
 
 [参考视频](https://www.bilibili.com/video/BV184411L79P?t=650)
 [github仓库地址](https://github.com/whalefall541/learn4Algorithm)

@@ -44,7 +44,7 @@ public class FXNewsProvider {
 ### 接口注入
 
 FXNewsProvider为了让IoC Service Provider为其注入所依赖的IFXNewsListener，首先需要实现IFXNewsListenerCallable接口，这个接口会声明一个injectNewsListner方法（方法名随意），该方法的参数，就是所依赖对象的类型。这样， InjectionServiceContainer对象，即对应的IoCService Provider就可以通过这个接口方法将依赖对象注入到被注入对象FXNewsProvider当中。
-![](https://oscimg.oschina.net/oscnet/up-9df699f75b5917cfacca7c40e33f32876e5.png)
+![](https://s2.loli.net/2023/07/15/SNQgVDHi5ruUso3.png)
 
 * 缺点接口注入是现在不甚提倡的一种方式，基本处于“退役状态”。因为它强制被注入对象实现不必要的接口，带有侵入性。而构造方法注入和setter方法注入则不需要如此。
 
@@ -144,7 +144,7 @@ newsProvider.getAndPersistNews();
 
 Spring的IoC容器是一个IoC Service Provider，但是，这只是它被冠以IoC之名的部分原因，我们不能忽略的是“容器”。 Spring的IoC容器是一个提供IoC支持的轻量级容器，除了基本的IoC支持，它作为轻量级容器还提供了IoC之外的支持。如在Spring的IoC容器之上， Spring还提供了相应的AOP框架支持、企业级服务集成等服务。
 
-![IoC容器和Provider的 关系](https://oscimg.oschina.net/oscnet/up-74392209ce75bfa906c3bd90265ab2d3189.png "IoC容器和Provider的 关系")
+![IoC容器和Provider的 关系](https://s2.loli.net/2023/07/15/WX5mDwzVoFylCJZ.png "IoC容器和Provider的 关系")
 
 ### Spring提供了BeanFactory 和 ApplicationContext
 
@@ -395,7 +395,7 @@ public class FXNewsBean {
 }
 ```
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802003933580-1479173603.png)
+![](https://s2.loli.net/2023/07/15/KenXQ6NIYd45irD.png)
 
 ### 外部配置文件方式
 
@@ -1115,7 +1115,7 @@ public class Test4DateProp {
 * ApplicationContext启动之后会实例化所有的bean定义，这个特性在本书中已经多次提到。但ApplicationContext在实现的过程中依然遵循Spring
   容器实现流程的两个阶段，只不过它会在启动阶段的活动完成之后，紧接着调用注册到该容器的所有bean定义的实例化方法getBean()。这就是为什么当你得到ApplicationContext类型的容器引用时，容器内所有对象已经被全部实例化完成。不信你查一下类org.AbstractApplicationContext的refresh()方法。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802015021030-680456347.png)
+![](https://s2.loli.net/2023/07/15/wGtkiR4ULcpFfQj.png)
 
 * Bean的实例化与BeanWrapper
 
@@ -1366,9 +1366,9 @@ DefaultResourceLoader: ResourceLoader有一个默认的实现类，即org.spring
 * 否则， (a) 尝试通过URL，根据资源路径来定位资源，如果没有抛出MalformedURLException，有则会构造UrlResource类型的资源并返回； (b
   )如果还是无法根据资源路径定位指定的资源，则委派getResourceByPath(String) 方 法 来 定 位 ， DefaultResourceLoader 的getResourceByPath(String)方法默认实现逻辑是，构造ClassPathResource类型的资源并返回。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802020317951-474858000.png)
+![](https://s2.loli.net/2023/07/15/3S4uLnEjAsDTgJa.png)
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802020417186-46902994.png)
+![](https://s2.loli.net/2023/07/15/gXVo8SKvnThpwZm.png)
 
 ### 四种加载方式
 
@@ -1449,7 +1449,7 @@ messages_en_US.properties
 
 其中，文件名中的messages部分称作ResourceBundle将加载的资源的basename，其他语言或地区的资源在basename的基础上追加Locale特定代码。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802021006426-952805280.png)
+![](https://s2.loli.net/2023/07/15/8Y4A7NIqHhxa6Qb.png)
 
 如果某个业务对象需要国际化的信息支持，那么最简单的办法就是让它实现MessageSourceAware接口，然后注册到ApplicationContext容器。不过这样一来，该业务对象对ApplicationContext容器的依赖性就太强了，显得容器具有较强的侵入性。而实际上， 如果真的某个业务对象需要依赖于MessageSource的话，直接通过构造方法注入或者setter方法注入的方式声明依赖就可以了。
 
@@ -1624,7 +1624,7 @@ public class Test4Event {
 
 在实现中，需要注意到，为了避免事件处理期间事件监听器的注册或移除操作影响处理过程，我们对事件发布时点的监听器列表进行了一个安全复制（ safe-copy）。另外，事件的发布是顺序执行，所以为了能够不影响处理性能，事件监听器的处理逻辑应该尽量简短。
 
-![](https://gitee.com/jack541/repo-for-pic-go/raw/master/img/2023890-20200802021549273-218051801.png)
+![](https://s2.loli.net/2023/07/15/Qmwxcpa4qDJGMYu.png)
 
 * Spring 的容器内事件发布类结构分析
 Spring 的 ApplicationContext 容 器 内 部 允 许 以 org.springframework.context.ApplicationEvent的形式发布事件 ，容器内注册的org.springframework.context.ApplicationListener类型的bean定义会被ApplicationContext容器自动识别，它们负责监听容器内发布的所有ApplicationEvent类型的事件。
@@ -1762,7 +1762,7 @@ ApplicationEventMulticaster有一抽象实现类——org.springframework.contex
 
 容器启动开始，就会检查容器内是否存在名称为applicationEventMulticaster的ApplicationEventMulticaster对象实例。有的话就使用提供的实现，没有则默认初始化一个SimpleApplicationEventMulticaster作为将会使用的ApplicationEventMulticaster。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802022152498-288430297.png)
+<img src="https://s2.loli.net/2023/07/15/TvPHprcI9eL4DSz.png"  />
 
 ## Spring IoC容器扩展
 

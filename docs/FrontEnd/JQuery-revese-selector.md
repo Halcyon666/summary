@@ -43,7 +43,7 @@ $( "input[name!='newsletter']" ).next().append( "<b>; not newsletter</b>" );
 </html>
 ```
 
-![image-20211102230352413](https://gitee.com/jack541/repo-for-pic-go/raw/master//img/image-20211102230352413.png)
+![image-20211102230352413](https://s2.loli.net/2023/07/15/ogv7OYWx2DzkytS.png)
 
 ### 选择属性取反操作
 
@@ -83,7 +83,7 @@ $( "input[name!='newsletter']" ).next().append( "<b>; not newsletter</b>" );
 </html>
 ```
 
-![image-20211102231338241](https://gitee.com/jack541/repo-for-pic-go/raw/master//img/image-20211102231338241.png)
+![image-20211102231338241](https://s2.loli.net/2023/07/15/HsKBpjJUXtC2FwG.png)
 
 > 更多选择器用法请 [看这里](https://api.jquery.com/category/selectors/)
 

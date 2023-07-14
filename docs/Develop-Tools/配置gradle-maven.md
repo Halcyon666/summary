@@ -74,21 +74,21 @@ allprojects {
 
 3. idea配置gradle本地仓库地址
 
-![image-20211212154508471](https://gitee.com/jack541/repo-for-pic-go/raw/master/img/image-20211212154508471.png)
+![image-20211212154508471](https://s2.loli.net/2023/07/15/UKAVJTgs6lYP4Ci.png)
 
 ## 导入源码时gradle问题处理
 
 我导入的分支2.5.x版本代码，使用gradle Gradle 5.6.4就会出问题。出问题原因因为老版本的gradle缺少一些特性，例如`OperationCompletionListener`, 报错如下
-![](https://img2020.cnblogs.com/blog/2023890/202107/2023890-20210718135935432-557033601.png)
+![](https://s2.loli.net/2023/07/15/m45ZutFhdGQf1zr.png)
 
 使用wrapper gradle。也就是在项目根路径 执行`./gradlew`,但是还是报错 `failed: timeout`
-![](https://img2020.cnblogs.com/blog/2023890/202107/2023890-20210718140334499-970026114.png)
+![](https://s2.loli.net/2023/07/15/HuKged2EVnWqSz8.png)
 
 那么你需要换个命令指定超时时间长一些,命令如下
 `./gradlew -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.http.connectionTimeout=60000 --daemon` [命令来自](https://baikangwang.gitbooks.io/workingnotes/content/how-to-increase-read-timeout.html)
 
 当然可以通过IDE进行设置，这样也自动使用wrapper进行build
-![](https://img2020.cnblogs.com/blog/2023890/202107/2023890-20210718142007412-1265727334.png)
+![](https://s2.loli.net/2023/07/15/Gwk7mLMACQVc6nl.png)
 
 
 

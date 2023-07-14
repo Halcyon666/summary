@@ -101,11 +101,11 @@ rg.springframework.jdbc.UncategorizedSQLException: SqlMapClient operation; uncat
 此处不讨论新POI框架的内容；采取只修改jasper文件的方案：
 
 1. 选择文本框一定要是`text field` 不能是`static text`
-   ![](https://img2020.cnblogs.com/blog/2023890/202109/2023890-20210912222504065-1803993323.png)
+   ![](https://s2.loli.net/2023/07/15/NkCXDGsSVzqTUMm.png)
 2. 在框内写上三元表达式，然后勾选上`remove line when blank` and `blank when null`
-   ![](https://img2020.cnblogs.com/blog/2023890/202109/2023890-20210912222528597-1992856803.png)
+   ![](https://s2.loli.net/2023/07/15/vK4etqMGoj2zh69.png)
 3. 预览效果 此处是表达式为`1==2?"a":null`的效果图
-   ![](https://img2020.cnblogs.com/blog/2023890/202109/2023890-20210912222616618-113666703.png)
+   ![](https://s2.loli.net/2023/07/15/dMH1Velm5DrwOYg.png)
 
 ## 如何配置生成日志文件
 ```xml

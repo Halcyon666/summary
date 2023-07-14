@@ -1,7 +1,6 @@
----
-title: "冒泡排序"
-hidemeta: true
----
+
+
+# 冒泡排序
 
 **算法思维**：第一层for循环控制趟数，第二层for循环从j=0和j=1开始比较
 如果发现前面比后面大则互换位置
@@ -55,5 +54,4 @@ public class BubbleSort {
 
 
 > <font color="red" >转载请注明 [原文地址](https://www.cnblogs.com/whalefall541/p/14879376.html)</font>
-
 

@@ -341,7 +341,7 @@ Vue set方法改变数组元素的内容
 > <input @keyup.13="submit">
 > ```
 
-![image-20220104220828923](https://gitee.com/jack541/repo-for-pic-go/raw/master/img/image-20220104220828923.png)
+![image-20220104220828923](https://s2.loli.net/2023/07/15/5QHql3KiCsp4h9D.png)
 
 ## textarea v-model
 
@@ -388,7 +388,7 @@ Vue set方法改变数组元素的内容
 </script>
 ```
 
-![image-20220106231222754](https://gitee.com/jack541/repo-for-pic-go/raw/master/img/image-20220106231222754.png)
+
 
 ### v-model 单选互斥案例
 

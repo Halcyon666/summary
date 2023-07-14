@@ -1,7 +1,4 @@
----
-title: "二分插入"
-hidemeta: true
----
+# 二分插入
 
 [代码来自改视频改写](https://www.bilibili.com/video/BV1nJ411V7bd?p=161)
 

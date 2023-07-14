@@ -7,7 +7,7 @@
 
 注释内容为自己理解，如有错误请评论，或者私信给我，谢谢
 
-![图1-1](https://img2020.cnblogs.com/blog/2023890/202105/2023890-20210522003400396-1490389296.png)
+![图1-1](https://s2.loli.net/2023/07/15/KTyZxPf21UludEs.png)
 
 
 
@@ -15,7 +15,7 @@
 
 -------
 
-![图1-2](https://gitee.com/jack541/repo-for-pic-go/raw/master/img/2023890-20210522003416750-869603514.png)
+![图1-2](https://s2.loli.net/2023/07/15/my81bGBsHJpE47n.png)
 
 
 
@@ -23,7 +23,7 @@
 
 -------
 
-![图1-3](https://img2020.cnblogs.com/blog/2023890/202105/2023890-20210522003428839-760678242.png)
+![图1-3](https://s2.loli.net/2023/07/15/kItirzPyEoqG8lu.png)
 
 
 
@@ -36,7 +36,7 @@
 
 -------
 
-![图1-4](https://img2020.cnblogs.com/blog/2023890/202105/2023890-20210522003447948-744442378.png)
+![图1-4](https://s2.loli.net/2023/07/15/yHQe8skGVzd17o9.png)
 
 
 

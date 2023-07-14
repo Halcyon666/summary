@@ -49,7 +49,7 @@ public class Test4AspectJProxyFactory {
 * 针对@AspectJ风格的AOP，Spring AOP专门提供了一个AutoProxyCreator实现类进行自动代理，以免去过多的编码和配置工作，它是在AbstractAdvisorAutoProxyCreator基础上的一个扩展类。
 * 与AutoProxyCreator一样，我们需要在IoC容器的配置文件中注册一下AnnotationAwareAspectJAutoProxyCreator就可以了。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200813002027668-1744563204.png)
+![](https://s2.loli.net/2023/07/15/hrGdFWtgxbfa78l.png)
 
 [annotationawareaspectJautoproxycreatorxsd.xml](https://github.com/whalefall541/spring-demysify/blob/master/src/main/resources/annotationawareaspectJautoproxycreator/annotationawareaspectJautoproxycreatorxsd.xml)
 
@@ -265,7 +265,7 @@ public class Bar {
 
 使用@args标识符的Pointcut表达式会检查当前方法级的Joinpoint的方法参数类型，如果该次传入的参数类型拥有@args所制定的注解，当前Joinpoint将被匹配。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200805221620491-2029591240.png)
+![](https://s2.loli.net/2023/07/15/hvlZ4iRWjtozqS3.png)
 
 *@args会尝试对系统中所有对象的每次方法执行的参数，都进行指定的注解动态检查。只要参数的类型标注有@args指定的注解类型，当前方法执行就将匹配。只接受注解类型声明*
 
@@ -284,13 +284,13 @@ public class Bar {
 org.springframework.aop.aspectj.AspectJExpressionPointcut代表Spring AOP中面向AspectJ的Pointcut具体实现。虽然它使用AspectJ
 的相应支持，但是依然遵循Spring AOP的Pointcut定义。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200805231515550-992653238.png)
+![](https://s2.loli.net/2023/07/15/QXc4awHlyRibeIj.png)
 
 定义ExpressionPointcut和AbstractExpressionPointcut主要为了以后的扩展性。如果还有AspectJ的Pointcut描述语言之外的形式，我们可以在这两个基础上进行集成。
 
 在AspectJProxyFactory或者AnnotationAwareAspectJAutoProxyCreator通过反射获取了AspectJ中的@Pointcut定义的AspectJ形式的定义之后，在Spring AOP框架内部都会构造一个对应的AspectJExpressionPointcut对象实例。AspectJExpressionPointcut内部持有的通过反射获得的Pointcut表达式。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200813011404330-288558740.png)
+![](https://s2.loli.net/2023/07/15/SlIhfBd7UZtmqEC.png)
 
 AspectJExpressionPointcut 属于Spring AOP的Pointcut定义之一，Spring AOP框架内部处理Pointcut匹配的逻辑不需要改变，依然使用原来的匹配机制，即通过ClassFilter和MethodMatcher进行具体Joinpoint的匹配工作。不过，AspectJExpressionPointcut在实现ClassFilter和MethodMatcher相应的方法逻辑的时候，会委托AspectJ类库的相关类做具体的工作。AspectJExpressionJoinpoint会委托AspectJ类库中的PointcutParser来对它所持有的AspectJ形式的Pointcut表达式进行解析。PointcutParser解析完成之后会返回一个PointcutExpression对象(依然是AspectJ类库中的类)，之后匹配与否就直接委托这个PointcutExpression对象的相关方法进行处理了。
 
@@ -445,11 +445,11 @@ public class Test4IntroductionAspect {
 
 当这些Advice声明在不同的Aspect内的时候。如果多个Advice声明所对应的Pointcut定义匹配同一个Joinpoint，但它们又不是声明在同一个Aspect内的话。我们需要用到Spring的org.springframework.core.Ordered 接口，只需要让相应的Aspect定义实现Ordered接口即可，否则Advice执行顺序是不确定的。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200809204144554-1110300333.png)
+![](https://s2.loli.net/2023/07/15/NoimsEaDcIgdwMp.png)
 
 **Note: 如果通过编程方式来使用这些Aspect，Aspect内的Advice执行顺序完全由添加到AspectJProxyFactory的顺序决定，而不是Ordered接口所规定的顺序。，如果采用了如下代码的顺序的话，那么AnotherAspect内的Advice要比MultiAdviceAspect内的Advice优先执行。**
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200809223356237-59292928.png)
+![](https://s2.loli.net/2023/07/15/aXrGAu1x6KwJgBj.png)
 
 ### Aspect的实例化模式
 
@@ -485,7 +485,7 @@ public class MultiAdviceAspect {
 
 新的基于Schema的AOP配置方式，针对Pointcut、Advisor以及Aspect等概念提供了独立的配置元素，所有这些配置元素都包含在统一的配置元素中，即`<aop:config/>`它只有一个属性，proxy-target-class，对应ProxyConfig中的proxyTargetClass属性，通过该属性，我们可以控制是使用基于接口的代理还是基于类的代理。它内部可以有三个子元素，分别是`<aop:pointcut>、<aop:advisor>、<aop:aspect>`，必须按顺序进行配置。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200810225309623-491336315.png)
+![](https://s2.loli.net/2023/07/15/eRbMPO3Cwx1XEyL.png)
 
 对于`<aop:config>`来说，底层基本上是使用1.x中的自动代理机制实现的。相应的自动代理实现类，会根据元素内部对应的Pointcut、Advisor以及Aspect的子元素取得必要的织入信息，然后为容器内注册的bean进行自动代理。所以，如果愿意不用`<aop:config>`，而依然使用AutoProxyCreator实现类的方式也是可以的。
 
@@ -499,7 +499,7 @@ public class MultiAdviceAspect {
 在转向2.x版本基于Schema的配置方式之后，这些概念实际上是相同的，唯一需要改变的是具体配置方式的改变。现在使用`<aop:advisor>`替代各种具体的Advisor实现类的bean定义声明，
 使用`<aop:config>`取代各种AutoProxyCreator。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200810232510153-212240877.png)
+![](https://s2.loli.net/2023/07/15/HgJbXV8t4Ple9qZ.png)
 
 在`<aop:config>`中使用`<aop:advisor>`配置相应的Advisor，也就是特定于Spring AOP的Aspect。
 
@@ -510,7 +510,7 @@ public class MultiAdviceAspect {
 
 2. 深入挖掘`<aop:advisor>`
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200812211239430-132182668.png)
+![](https://s2.loli.net/2023/07/15/ICXHBAMW3c7z61Y.png)
 
 ### @AspectJ到“基于Schema的AOP迁移”
 
@@ -527,7 +527,7 @@ public class MultiAdviceAspect {
 * unchecked exception: java.lang.Error、java.lang.RuntimeException以及其子类。编译器不会在编译期对这些类型进行检查。
 * checked exception: java.lang.Exception及其子类，但是除去RuntimeException分支。必须对这些异常处理，并且编译器会在编译期对这些异常类型进行检查
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200813230513454-1077609340.png)
+![](https://s2.loli.net/2023/07/15/bXHyAk8ZaFerdfB.png)
 
 当系统中多个地方都可能抛出unchecked exception的时候，我们可以在调用的最顶层，分别添加异常处理逻辑对其进行处理(记录日志，通知相应人员)。我们可以实现一个对应Fault处理的Aspect，让其对系统中所有可能的Fault情况进行统一的处理。这个专职的Aspect，我们称之为Fault Barrier。
 
@@ -539,7 +539,7 @@ Acegi 框架最初独立于Spring开发，现在已经并入Spring Portfolio，�
 
 为了避免需要添加的缓存实现逻辑影响业务逻辑的实现，我们可以让缓存的实现独立于业务对象的实现之外，将系统中的缓存需求通过AOP的Aspect进行封装，只在系统中某个点确切需要缓存支持的情况下，才为其织入。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200813234936168-1191362474.png)
+![](https://s2.loli.net/2023/07/15/dVmx8W5NDYSGL4g.png)
 
 现成的Caching产品实现有EhCache、JBossCache等；Spring Modules项目提供了对现有Caching产品的集成，这样就可以通过外部声明的方式为系统中的Joinpoint添加Caching支持。
 
@@ -626,10 +626,10 @@ public class Test4NestableInvocationBO {
 * 第二次调用method1，却只有method1方法的执行拦截成功，而method1方法内部的method2方法却没有被拦截
 
 方法调用时序图
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200814004135685-1114164193.png)
+![](https://s2.loli.net/2023/07/15/pqer2USxgj7CTnL.png)
 
 同一对象内部方法嵌套调用示意图
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200814004257205-1188096860.png)
+![](https://s2.loli.net/2023/07/15/dXsEeAV9ofqGQH8.png)
 当method1调用method2时，它调用的是TargetObject上的method2，而不是ProxyObject上的method2。要针对met活动的横切逻辑，只织入到了ProxyObject上的method2方法中，所以在method1所调用的method2没有能够被成功拦截。
 
 3. 解决方案

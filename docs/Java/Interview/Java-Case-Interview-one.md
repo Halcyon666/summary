@@ -22,7 +22,7 @@ hidemeta: true
 
 ## JVM 虚拟机栈
 
-![](https://img2020.cnblogs.com/blog/2023890/202104/2023890-20210414232727120-68376988.png)
+![](https://s2.loli.net/2023/07/15/uYim8oFXnK3RHtN.png)
 
 java 栈
 [Oracle frame interpretation](https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-2.html#jvms-2.6.1)
@@ -188,7 +188,7 @@ Node的val和next都用volatile修饰，保证对其他线程的可见性。
 
 ## java中的异常体系
 
-![](https://img2020.cnblogs.com/blog/2023890/202104/2023890-20210428231737506-2020887355.png)
+![](https://s2.loli.net/2023/07/15/vkW5E2aPQqblVCe.png)
 
 **Error** 异常是程序无法处理的会造成程序停止；Exception则不会造成程序停止
 **RuntimeException** 发生在程序运行过程中，会导致程序当前线程执行失败。
@@ -370,7 +370,7 @@ key可以通过手动置为null或者使用弱引用；value可以调用set方�
 或者remove方法将Entry置为null(还是会调用expungeStaleEntry())
 
 如果有get,set的时候有调用到ThreadLocalMap上expungeStaleEntry()，会将value和Entry置位null
-![](https://img2020.cnblogs.com/blog/2023890/202104/2023890-20210430184350207-1205552811.png)
+![](https://s2.loli.net/2023/07/15/XlydYtFsAv71gNh.png)
 
 
 **使用原则** 

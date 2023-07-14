@@ -157,12 +157,12 @@ GCROOTS对象包括：
 ParNew(多线程 高吞吐)
 
 CMS(初始标记，并发标记（时间长），重新标记，并发清除（时间长）低延迟)
-![](https://img2020.cnblogs.com/blog/2023890/202109/2023890-20210920111706910-490637062.jpg)
+![](https://s2.loli.net/2023/07/15/jX4mntlDOTis3QH.jpg)
 
 <center>CMS垃圾收集过程图</center>
 
 G1(将整个堆划分为一个个小块，1-32M,RememberSet指向块的内存地址) 调整小 -XX:InitiatingHeapOccupancyPercent=45% 增多Minor GC频率，减少Full GC频率
-![](https://img2020.cnblogs.com/blog/2023890/202109/2023890-20210920111706708-440925468.jpg)
+![](https://s2.loli.net/2023/07/15/mCdVOHFJ2htgLqc.jpg)
 
 <center>G1垃圾收集过程图</center>
 

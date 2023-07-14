@@ -26,7 +26,7 @@ vue create vue_xxx
 
 ## [python环境变量配置无效的问题](https://zhuanlan.zhihu.com/p/431747120)
 
-![image-20220115145506444](https://gitee.com/jack541/repo-for-pic-go/raw/master/img/image-20220115145506444.png)
+![image-20220115145506444](https://s2.loli.net/2023/07/15/INyuG4bdKnh5jMf.png)
 
 ## 项目结构说明
 

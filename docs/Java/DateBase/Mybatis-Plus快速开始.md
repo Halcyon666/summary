@@ -78,6 +78,6 @@ public class SampleTest {
 
 项目结构：
 
-![image-20211219223218948](https://gitee.com/jack541/repo-for-pic-go/raw/master/img/image-20211219223218948.png)
+![image-20211219223218948](https://s2.loli.net/2023/07/15/4m8UKMGd3Qts1C5.png)
 
 >  <font color="red" >转载请注明 [原文地址](https://www.cnblogs.com/whalefall541/p/15708938.html)</font>
