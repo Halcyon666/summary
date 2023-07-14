@@ -1,8 +1,3 @@
----
-title: "Oracle存储过程快速上手"
-hidemeta: true
----
-
 ## ORACLE 存储过程语法
 
 ```sql
@@ -11,15 +6,15 @@ CREATE [OR REPLACE] PROCEDURE [schema.] procedure_name
 | {OUT | IN OUT} [NOCOPY] datatype][,...]{IS | AS} BODY;
 ```
 
-### 执行无参数的存储过程
+## 执行无参数的存储过程
 
 `EXEC procedure_name;`
 
-### 执行有参数的存储过程
+## 执行有参数的存储过程
 
 `EXEC procedure_name(parameters);`
 
-### 如果存储过程中有输出语句，需要设置SERVEROUTPUT的输出状态
+## 如果存储过程中有输出语句，需要设置SERVEROUTPUT的输出状态
 
 ```sql
 SHOW SERVEROUTPUT -- 查看
@@ -33,17 +28,17 @@ SET SERVEROUTPUT ON -- 开启
   ```sql
   CREATE PROCEDURE PRO_READER
   AS
+  BEGIN
+  UPDATE READERINFO2 SET BOOKCOUNT = BOOKCOUNT+1
+  WHERE UNIT = '计算机系';
+  END;
   ```
 
-BEGIN
-UPDATE READERINFO2 SET BOOKCOUNT = BOOKCOUNT+1
-WHERE UNIT = '计算机系';
-END;
-
-```
 ## 在存储过程中使用游标
 * 搜索READERINFO2表中所有自动化系和生物系的数据，并判断当借书的数据（BOOKCOUNT）小于3时，为其增加1
+
 ```sql
+
 CREATE PROCEDURE PRO_READER_COT
 AS
     v_readerinfo READERINFO2%ROWTYPE;-- 声明标变量v_readerinfo，其数据类型为READERINFO2行记录类型
@@ -72,34 +67,32 @@ AS
 ## 在存储过程中创建表
 
 * 要求在存储过程中创建一个表用于存储临时数据
-  
-  ```sql
-  CREATE PROCEDURE PRO_CRTTAB
-  AS
-  tabeexists VARCHAR2(2); -- 声明变量
-  my_createtab VARCHAR2(400);
-  ```
 
+  
+
+```sql
+CREATE PROCEDURE PRO_CRTTAB
+AS
+tabeexists VARCHAR2(2); -- 声明变量
+my_createtab VARCHAR2(400);
 BEGIN 
     SELECT COUNT(1) INTO tabeexists
     FROM ALL_TABLES
     WHERE TABLE_NAME = 'MY_TEST_TAB';-- 从ALL_TABLES数据字典中查询是否已经存在临时表MY_TEST_TAB,并把结果赋值给变量tabeexists
-
     my_createtab := 'CREATE GLOBAL TEMPORARY TABLE MY_TEST_TAB
-     (TEST VARCHAR2(20) not null)
-      ON Commit Preserve Rows';-- 表示变量my_createtab赋值创建临时表的语句
-    
-    IF tabeexists = 0 THEN 
-        EXECUTE IMMEDIATE my_createtab;
-        DBMS_OUTPUT.PUT_LINE('临时表创建成功...');
-    ELSE
-        EXECUTE IMMEDIATE 'DELETE FROM MY_TEST_TAB';
-        DBMS_OUTPUT.PUT_LINE('记录已经删除...');
-    END IF;
+ (TEST VARCHAR2(20) not null)
+  ON Commit Preserve Rows';-- 表示变量my_createtab赋值创建临时表的语句
 
+IF tabeexists = 0 THEN 
+    EXECUTE IMMEDIATE my_createtab;
+    DBMS_OUTPUT.PUT_LINE('临时表创建成功...');
+ELSE
+    EXECUTE IMMEDIATE 'DELETE FROM MY_TEST_TAB';
+    DBMS_OUTPUT.PUT_LINE('记录已经删除...');
+END IF;
 END;
-
 ```
+
 使用`GRANT CREATE ANY TABLE TO <USER>`为用户赋予权限
 
 ## 带有参数的存储过程
@@ -167,7 +160,7 @@ CREATE PROCEDURE
 
 简单实用案例
 
-```
+```sql
 -- create PROCEDURE
 create or replace procedure out_value(param1 in out VARCHAR2)
 as
@@ -177,7 +170,6 @@ end;
 /
 
 -- CALL
-
 declare
   param1 VARCHAR2(1000) := sys_guid(); 
 BEGIN
@@ -246,11 +238,11 @@ END;
 在Oracle的数据字典 USER_SOURCE 中记录用户定义的存储过程的元数据
 
 * 从 USER_SOURCE 中查询当前用户的所有存储过程名称
-  
-  ```sql
-  SELECT DISTINCT NAME FROM USER_SOURCE 
-  WHERE TYPE = 'PROCEDURE'
-  ```
+
+```sql
+SELECT DISTINCT NAME FROM USER_SOURCE 
+WHERE TYPE = 'PROCEDURE'
+```
 
 ```sql
 -- 只查看当前用户所有的存储过程，不查看具体的脚本
@@ -399,31 +391,31 @@ END;
     v_out_publish VARCHAR2(50);
     v_out_author VARCHAR2(50);
     v_out_price NUMBER(8);
+  BEGIN
+      SELECT BOOKNAME. PUBLISH, AUTHOR, PRICE INTO 
+      v_bookname, v_out_publish, v_author, v_out_price
+      FROM BOOKID = in_bookid;
+      out_publish := v_out_publish;
+      out_author := v_out_author;
+      in_bookid := v_out_price;
+      RETURN v_bookname;
+  END;
+  /
   ```
 
-BEGIN
-    SELECT BOOKNAME. PUBLISH, AUTHOR, PRICE INTO 
-    v_bookname, v_out_publish, v_author, v_out_price
-    FROM BOOKID = in_bookid;
-    out_publish := v_out_publish;
-    out_author := v_out_author;
-    in_bookid := v_out_price;
-    RETURN v_bookname;
-END;
-/
 
-```
+
+```sql
 ## 查看函数
 
 ```sql
 -- 查看函数列表
 SELECT OBJECT_NAEM, OBJECT_ID, STATUS FROM USER_OBJECTS WHERE OBJECT_TYPE = 'FUNCTION';/
-```
-
-```sql
 -- 查看函数相关脚本
 SELECT * FROM USER_SOURCE WHERE TYPE = 'FUNCTION' AND NAME = 'MYUSER' ORDER BY LINE;/
 ```
+
+
 
 ## 修改函数
 
@@ -445,11 +437,10 @@ END;
 
 ```sql
 ALTER FUNCTION function_name COMILE;
-```
-
-```sql
 DROP FUNCTION function_name;
 ```
+
+
 
 ## ORACLE 循环结构 IF WHILE FOR
 
@@ -569,7 +560,7 @@ SELECT OBJECT_NAME ,LAST_DDL_TIME ,STATUS FROM ALL_OBJECTS
 
 可能原因：在调用储存过程时，CALL XXX ();
 
-1. <font style="color:red">**储存过程名称后面不能有空格**</font>
+1. <font style={{color: 'red'}}>储存过程名称后面不能有空格</font>
 
 2. 入参不要使用?作为展位符号，如果为空直接使用'' 或者 null即可
 

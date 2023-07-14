@@ -1,4 +1,4 @@
-[TOC]
+
 # The Problems of Development
 
 ## ORACLE 11G R2安装
