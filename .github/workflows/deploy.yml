@@ -1,31 +1,24 @@
-name: Deploy to GitHub Pages
-
+name: Deploy Github pages
 on:
   push:
     branches:
       - main
-
 jobs:
-  deploy:
-    name: Deploy to GitHub Pages
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16.x
-          cache: yarn
-
-      - name: Install dependencies
-        run: yarn install 
-      - name: Build website
-        run: yarn build
-
-      # Popular action to deploy to GitHub Pages:
-      # Docs: https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-docusaurus
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.ACCESS_TOKEN  }}
-          # Build output to publish to the `gh-pages` branch:
-          publish_dir: ./build
+    - name: Checkout
+      uses: actions/checkout@main
+      with:
+        persist-credentials: false
+    - name: Install and Build
+      run: |
+        npm install
+        npm run-script build 
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: build
+        BUILD_SCRIPT: npm install && npm run build
