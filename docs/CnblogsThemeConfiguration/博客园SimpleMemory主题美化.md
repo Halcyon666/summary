@@ -1,0 +1,227 @@
+---
+title: "博客园主题美化 Simple Memory"
+hidemeta: true
+---
+
+所有内容来自[marsggbo'github](https://github.com/marsggbo/Cnblogs-Theme-SimpleMemory) ，[页面效果](https://www.cnblogs.com/whalefall541/)
+
+## 页面定制CSS代码
+
+由于js文件太长，点击[链接](https://files.cnblogs.com/files/whalefall541/%E9%A1%B5%E9%9D%A2%E5%AE%9A%E5%88%B6CSS%E4%BB%A3%E7%A0%81.css)获取。
+
+## 博客侧边栏公告
+
+```html
+<script type="text/javascript">
+    window.cnblogsConfig = {
+        GhVersions    : 'v1.3.2', // 版本
+        blogUser      : "WhaleFall541", // 用户名
+        blogAvatar    : "https://images.cnblogs.com/cnblogs_com/whalefall541/1815978/t_200730122732u=251289958,1860898046&fm=26&gp=0.jpg?a=1596263261858", // 用户头像
+        blogStartDate : "2020-04-28", // 入园时间
+
+        // 标签聚焦 失焦显示字样
+        webpageTitleOnblur: '(oﾟvﾟ)ノ Hi',
+        webpageTitleOnblurTimeOut: 500,
+        webpageTitleFocus: '(*´∇｀*) Welcome Back！',
+        webpageTitleFocusTimeOut: 1000,
+        // 设置网站图标图片
+        webpageIcon: "https://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@master/img/webp/blog_logo.webp",
+
+        // 日/夜间模式自动切换
+        switchDayNight: {
+            enable: true,
+            auto: {
+                enable: true
+            }
+        },
+
+        // 页面加载loading
+        loading: {
+             rebound: {
+                 tension: 16,
+             },
+             spinner: {
+                 id: 'spinner',
+                 radius: 90,
+             }
+        },
+
+        // 是否渲染主页banner动效 以及配置动态效果
+        homeTopAnimationRendered: true,
+        homeTopAnimation: {
+            color   : 'random',
+        },
+
+        // 是否渲染文章页banner动效 以及配置动态效果
+        essayTopAnimationRendered: true,
+        essayTopAnimation: {
+            triW : 14,
+            triH : 20,
+        },
+
+        // 是否渲染页面背景动效 以及配置动态效果
+        bgAnimationRendered: true,
+        backgroundAnimation: {
+            colorSaturation: "60%",
+            colorBrightness: "50%",
+        },
+
+        // 主页banner图片Url，推荐尺寸>= 1920*1080，支持多张，每次刷新随机设置一张。
+        homeTopImg: [
+            "https://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@master/img/webp/home_top_bg.webp",
+            "https://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@master/img/webp/home_top_bg.webp"
+        ],
+
+        // 主页banner上的标语
+        homeBannerTextType: "one",
+
+        // 文章页banner图片Url，推荐尺寸>= 1920*600，支持多张，每次刷新随机设置一张。
+        essayTopImg: [
+            "https://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@master/img/webp/nothome_top_bg.webp",
+            "https://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@master/img/webp/nothome_top_bg.webp"
+        ],
+
+        // 文章页后缀
+        essaySuffix: {
+            aboutHtml: "I am a good person",
+        },
+
+        // 限制代码框高度，开启行号
+        codeMaxHeight: true,
+        codeLineNumber: true,
+
+        // 设置代码框字体样式
+        essayCode: {
+            fontFamily: "'Ubuntu Mono',monospace", // 代码框字体
+               fontSize: "14px" // 代码框字体大小
+           },
+
+        // 设置博客园代码块样式
+        essayCodeHighlightingType: "highlightjs",
+        essayCodeHighlighting: "monokai-sublime",
+
+        // 页脚样式
+        footerStyle: 1,
+
+        bottomBlogroll: [ // 友情链接，[[链接名,链接]....]
+            ["申请坑位", 'https://msg.cnblogs.com/send/WhaleFall541'],
+            ["申请坑位", 'https://msg.cnblogs.com/send/WhaleFall541'],
+            ["申请坑位", 'https://msg.cnblogs.com/send/WhaleFall541'],
+            ["申请坑位", 'https://msg.cnblogs.com/send/WhaleFall541'],
+            ["申请坑位", 'https://msg.cnblogs.com/send/WhaleFall541'],
+        ],
+
+        // 页脚标语
+        bottomText: {
+            icon: "❤️",   // v1.3.0 已废弃该配置
+            iconFont: {  // v1.3.0 新增配置
+            icon:  "icon-xl", // iconfont 图标名称
+            color: "red",     // 图标颜色
+            fontSize: "16px"  // 图标大小
+        },
+        left : "年少有为",
+        right: "再喝一杯无所谓"
+        },
+
+        // 控制台输出
+        consoleList: [
+            ['BNDong CNBlogs', 'https://www.cnblogs.com/whalefall541/'],
+            ['BNDong GitHub', 'https://github.com/whalefall541'],
+            ['BNDong Email', '905400899@qq.com'],
+        ],
+
+        // 关闭广告
+        advertising: false,
+        // 版本映射
+        //isVersionMapping: true,
+
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@v1.3.2/src/script/simpleMemory.min.js"></script>
+```
+
+## 页首HTML代码
+
+```html
+<!--鼠标点击效果-->
+<script src="https://blog-static.cnblogs.com/files/e-cat/cursor-effects.js"></script>
+```
+
+## 页脚HTML代码
+
+[歌曲外连接地址网址](http://music.xf1433.com/)
+[站点统计添加教程地址](https://www.dbnuo.com/Cnblogs-Theme-SimpleMemory/docs/v1.1/#/Docs/Customization/statistical)
+
+```html
+<!-- 为博客底部添加音乐组件 -->
+<div id="player"  class="aplayer"></div>
+<link href="https://files.cnblogs.com/files/shwee/APlayer.min_v1.10.1.css" rel="stylesheet">
+<script src="https://files.cnblogs.com/files/shwee/APlayer.min_v1.10.1.js"></script> 
+
+<script type="text/javascript">
+const ap = new APlayer({
+    container: document.getElementById('player'),
+    fixed: true,
+    autoplay: false, //自动播放
+    audio: [
+     {
+        name: '少年',
+        artist: '梦然',
+        url: 'https://sharefs.yun.kugou.com/202007312156/bca63d525a16a0616f627034dd952225/G170/M07/16/11/SocBAF3H3aqAUYOEADmpdloW3bU827.mp3',
+        cover: 'http://singerimg.kugou.com/uploadpic/pass/softhead/100/20200316/20200316100918253.jpg',
+    },
+    {
+         name: '尘埃',
+        artist: '林小柯',
+        url: 'https://sharefs.yun.kugou.com/202007312152/ce719e234408f2a051036e82fa2d3c66/G234/M01/01/17/iocBAF8VC52AVMU_AEUrEl4PAeg694.mp3',
+        cover: 'http://singerimg.kugou.com/uploadpic/pass/softhead/100/20200717/20200717092613611085.jpg',
+    }, 
+    {
+        name: '飞鸟和禅',
+        artist: '任然',
+        url: 'https://sharefs.yun.kugou.com/202007312155/0a8845b6d04662ec100a2451d97e8feb/G229/M09/13/0F/xZQEAF79mTeAKaQYAEhIqW4SCKE706.mp3',
+        cover: 'http://singerimg.kugou.com/uploadpic/pass/softhead/100/20180511/20180511143205725.jpg',
+    },
+       {
+        name: 'Dancing With Your Ghost',
+        artist: 'Sasha Sloan',
+        url: 'https://sharefs.yun.kugou.com/202007312149/7211cbed6b9f9aff2c882cdcb559fa6a/G164/M08/10/05/5A0DAF0Tb5KAba2GADBLeoi7JDs405.mp3',
+        cover: 'http://y.gtimg.cn/music/photo_new/T002R300x300M000002G0MjC1C1DzQ.jpg',
+    },
+    {
+        name: '烟火人间',
+        artist: '添儿呗',
+        url: 'https://sharefs.yun.kugou.com/202007312155/75225268703973b37f5032773d57ca3e/G229/M06/11/05/xZQEAF7XTwaAGgahAEDY_d8fN9A054.mp3',
+        cover: 'http://singerimg.kugou.com/uploadpic/pass/softhead/100/20200414/20200414235715772797.jpg',
+    },
+    {
+        name: '摘仙',
+        artist: '伊格赛听、叶里',
+        url: 'https://sharefs.yun.kugou.com/202007312202/e6ce50923987a990b986d1b3af081d64/G201/M0A/03/05/qZQEAF47vMmAQQKJACuOCD-UTD4341.mp3',
+        cover: 'http://y.gtimg.cn/music/photo_new/T002R300x300M000004VNyEb4JwvZc.jpg',
+    }
+    ]
+});
+ap.init();
+</script>
+
+<!--添加站点统计-->
+<div id="cnzzProtocol"  style="display: none;">
+    <span class="id_cnzz_stat_icon" id='cnzz_stat_icon_你的id'></span>
+    <script src='https://v1.cnzz.com/z_stat.php?id=你的id&online=1&show=line' type='text/javascript'></script>
+</div>
+
+<!--图片放放大效果-->
+<script type="text/javascript" src="https://blog-static.cnblogs.com/files/jajian/img.enlarge.js"></script>
+<div id="outerdiv" style="text-align: center;position: fixed;z-index: 1000;top: 0;left: 0;
+    width: 100%;height: 100%;background-color: rgba(255,255,255,.9);">
+    <img id="bigimg" style="height: auto;width: 65%;border: 5px solid #7e8c8d; 
+        margin: auto;position: absolute;top: 0;bottom: 0;left: 0;right: 0;" src="" />
+</div>
+
+<!--设置鼠标吸附效果-->
+<script id="c_n_script" src="https://blog-static.cnblogs.com/files/xiaokang01/js.js" color="240,230,140" opacity="1" count="75" zindex="-2">if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+} else {}</script>
+```
+
+> <font color="red" >转载请注明 [原文地址](https://www.cnblogs.com/whalefall541/p/13416785.html)</font>

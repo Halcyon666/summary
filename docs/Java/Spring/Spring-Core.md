@@ -1,0 +1,385 @@
+ ---
+title: "SPRING CORE"
+hidemeta: true
+---
+ ## 在一个生命周期长的对象里面定义一个`scope`为`request`，或`session`的对象
+
+ 1. xml配置方式
+
+ `proxy-target-class` `default=true`使用CGlib进行代理; `default=false` 时使用JDK动态代理;
+
+ ```xml
+ <!-- DefaultUserPreferences implements the UserPreferences interface -->
+ <bean id="userPreferences" class="com.stuff.DefaultUserPreferences" scope="session">
+ 	<aop:scoped-proxy proxy-target-class="false"/>
+ </bean>
+ <bean id="userManager" class="com.stuff.UserManager">
+ 	<property name="userPreferences" ref="userPreferences"/>
+ </bean>
+ ```
+
+ 2. 注解方式
+
+ CGLIB 方式：`@Scope(value="request", proxyMode= ScopedProxyMode.TARGET_CLASS)`
+
+ JDK动态代理 方式：`@Scope(value="request", proxyMode= ScopedProxyMode.INTERFACES)`
+
+ 
+
+ ## `util` 标签
+
+ 未使用util标签时 注入 constant `isolation`
+
+ ```xml
+ <bean id="..." class="...">
+ 	<property name="isolation">
+ 		<bean id="java.sql.Connection.TRANSACTION_SERIALIZABLE"
+ class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean" />
+ 	</property>
+ </bean>
+ ```
+
+ 使用util标签可以更加简洁
+
+ ```xml
+ <bean id="..." class="...">
+ 	<property name="isolation">
+ 		<util:constant static-field="java.sql.Connection.TRANSACTION_SERIALIZABLE"/>
+ 	</property>
+ </bean>
+ ```
+
+ ## 如果一个单例bean引用了原型bean，如何保证每次单例bean中的原型bean每次都是不一样的？
+
+ 方法一：`lookup`,通过lookup会自动去查找类型一样的bean进行注入；注意使用lookup的方法必须为抽象方法；
+
+ ```java
+ @Component("AAA")
+ @Scope(value = "prototype")
+ public class AAA {
+     @Bean
+     public AAA createAAA(A a,B b) {
+         return this;
+     }
+ }
+ 
+ @Component
+ public abstract class ControllerManager {
+ 
+     private AAA aaa;
+ 
+     @Lookup
+     public abstract AAA createAAA() ;
+ 
+     public void test() {
+         this.aaa = createAAA();
+         System.err.println(this.getClass()+" "+this);
+     }
+ }
+ ```
+
+ 方法二：实现ApplicationContextAware拿到beanFactory对象，每次方法调用的时候都会获取到一个新的单例bean
+
+ ## `@Autowired` field 注入为什么不用setter,getter方法？
+
+ `@Autowired`先会按类型注入，如果有多个类型，则按照名字注入；
+
+ ```java
+ 在源码中设置值是通过反射实现`org.springframework.beans.DirectFieldAccessor.FieldPropertyHandler#setValue`
+ 
+ ```java
+ @Override
+ public void setValue(@Nullable Object value) throws Exception {
+ 	try {
+ 		ReflectionUtils.makeAccessible(this.field);
+ 		this.field.set(getWrappedInstance(), value);
+ 	}
+ 	catch (IllegalAccessException ex) {
+ 		throw new InvalidPropertyException(getWrappedClass(), this.field.getName(),
+ 				"Field is not accessible", ex);
+ 	}
+ }
+ ```
+
+ ## 如果`@Autowired`接口有多个子实现类，如何指定为特定的一个呢？
+
+ 1. 在某一个子实现类上使用`@Primary`指定要注入的Bean为当前的bean
+
+ ```java
+ @Primary 
+ public class ProtoBeanImpl implements ProtoBean{
+ }
+ ```
+
+ ```java
+ @Primary
+ @Bean
+ public ProtoBeanImpl protoBean(){
+     return new ProtoBeanImpl();
+ }
+ ```
+
+ 2. 使用`@Qulifier("xxx")`注解 指定要注入的bean的类型
+
+ ```java
+ 	@Qualifier("protoBeanImpl2")
+     @Autowired
+     private ProtoBean bean;
+ ```
+
+ ```java
+ @Autowired
+ public SingleBean(@Qualifier("protoBeanImpl2") ProtoBean proto) {
+     this.protoBeanImpl2 = (ProtoBeanImpl2) proto;
+ }
+ ```
+
+ 3. 使用@Bean上的`autowireCandidate = false` 指定该bean 不会被其他类自动注入
+
+ ```java
+ @Bean(autowireCandidate = false)
+ public ProtoBeanImpl protoBean(){
+     return new ProtoBeanImpl();
+ }
+ ```
+
+ ## 构造器注入
+
+ using constructor inject,do not need other annotation if all the properties is base type ,using
+ @ConstrutorProperties({"xxx","xxx",...}) to inject the value
+
+ 1. if just one constructor here ,need not `@Autowired`
+ 2. only one multi-argument constructor can be set `@Autowired(required = true)`
+ 3. if one more constructor are annotationed with ` @Autowired(required = false)`
+    The constructor with the greatest number of dependencies that can be satisfied
+     by matching beans in the Spring container will be chose
+
+ 4. The @Autowired, @Inject, @Value, and @Resource annotations are handled by Spring
+    BeanPostProcessor implementations
+
+
+ ## 使用AspectJ注解进行AOP配置好还是xml？
+
+ 使用xml配置时，将AOP配置分散了，一部分在xml中，一部分在后台的class类中。不符合DRY原则。
+
+ 然而使用`@AspectJ`，则将整个AOP的配置放在一个配置类中，@AspectJ支持额外的实例模型更丰富的组合，是每个切面成为一个模型单元。
+ 同时，@AspectJ 能被 Spring AOP 和AspectJ 解析，你可以使用AspectJ的语法去实现更加复杂的切面逻辑
+
+ ## 闭包 和 回调
+
+ 闭包:闭包和匿名函数经常被用作同义词。但严格来说，匿名函数就是字面意义上没有被赋予名称的函数，而闭包则实际上是一个函数的实例，也就是说是存在于内存里的某个结构体。如果从实现上来看的话，匿名函数如果没有捕捉自由变量，那么它其实可以被实现为一个**函数指针**，或者直接内联到调点，如果它捕捉了自由变量那么它将是一个闭包；而闭包则意味着同时包括函数指针和环境两个关键元素。[参考出处][闭包]
+ [Closure Sample][闭包]
+
+ ```java
+ public interface Adder {
+     int add(int x);
+ }
+ 
+ public static Adder makeAdder(final int n) {
+     return new Adder() {
+         public int add(int x) {
+             return x + n;
+         }
+     };
+ }
+ ```
+
+ 回调：在计算机程序设计中，回调函数，或简称回调（Callback 即call then back 被主函数调用运算后会返回主函数），是指通过参数将函数传递到它代码的，某一块可执行代码的引用[参考出处][回调]
+ [Callback Sample][Callback Sample] 
+
+ ```java
+ class RemoteClass {
+ 
+     private OnChangeListener mOnChangeListener;
+ 
+     void makeSomeChanges() {
+         /*
+         .. do something here and call callback
+         */
+         mOnChangeListener.onChanged(this, 1);
+     }
+ 
+     public void setOnChangeListener(OnChangeListener listener) {
+         mOnChangeListener = listener;
+     }
+ 
+     public interface OnChangeListener {
+         public void onChanged(RemoteClass remoteClass, int test);
+     }
+ }
+ ```
+
+ ```java
+ class Test {
+ 
+     public static void main(String[] args) {    
+         RemoteClass obj = new RemoteClass();
+         obj.setOnChangeListener(demoChanged);
+         obj.makeSomeChanges();
+     }
+ 	// this case remid me of spring framework lots of anonymous ObjectFactory call back
+     private static RemoteClass.OnChangeListener demoChanged = new RemoteClass.OnChangeListener() {
+         @Override
+         public void onChanged(RemoteClass remoteClass, int incoming) {
+             switch (incoming) {
+                 case 1:
+                     System.out.println("I will take appropriate action!");
+                     break;
+                 default:
+                     break;
+             }
+         }
+     };
+ }
+ ```
+
+ ```java
+ // callback in springframework 4.3.x 
+ // @see org.springframework.beans.factory.support.AbstractBeanFactory#doGetBean
+ // Create bean instance.
+ if (mbd.isSingleton()) {
+ 	sharedInstance = getSingleton(beanName, new ObjectFactory<Object>() {
+ 		@Override
+ 		public Object getObject() throws BeansException {
+ 			try {
+ 				return createBean(beanName, mbd, args);
+ 			}
+ 			catch (BeansException ex) {
+ 				// Explicitly remove instance from singleton cache: It might have been put there
+ 				// eagerly by the creation process, to allow for circular reference resolution.
+ 				// Also remove any beans that received a temporary reference to the bean.
+ 				destroySingleton(beanName);
+ 				throw ex;
+ 			}
+ 		}
+ 	});
+ 	bean = getObjectForBeanInstance(sharedInstance, name, beanName, mbd);
+ }
+ ```
+
+ [闭包]: https://zh.wikipedia.org/wiki/%E9%97%AD%E5%8C%85_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6)
+ [回调]: https://zh.wikipedia.org/wiki/%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0
+ [Callback Sample]: https://stackoverflow.com/questions/19405421/what-is-a-callback-method-in-java-term-seems-to-be-used-loosely
+ [Callback Sample]: https://stackoverflow.com/questions/3805474/what-is-a-closure-does-java-have-closures
+
+
+ ## `@Configurable` `@Configuration`
+
+ `@Configuration` 是配置类
+
+ `@Configurable` 它是一个bean所依赖的Aspect,并且不被Spring管理，但是可以自动注入
+
+ ## Spring Boot 如何自定义一个Event监听
+
+ *本案例使用到了`SpEL`(Spring Express Language)表达式*
+
+ 1. 定义自己的事件`MyEvent`
+
+ ```java
+ /**
+  * @Author: WhaleFall541
+  * @Date: 2021/7/12 21:38
+  */
+ public class MyEvent extends ApplicationEvent {
+     private final String address;
+     private final String content;
+     public MyEvent(Object source, String address, String content) {
+         super(source);
+         this.address = address;
+         this.content = content;
+     }
+     // getter and setter omit
+     @Override
+     public String toString() {
+         return "MyEvent{" +
+                 "address='" + address + '\'' +
+                 ", content='" + content + '\'' +
+                 '}';
+     }
+ }
+ ```
+
+ 2. 自定义事件发布类`MyEventPublish`
+
+ ```java
+ /**
+  * @Author: WhaleFall541
+  * @Date: 2021/7/12 21:41
+  */
+ @Component
+ public class MyEventPublish implements ApplicationEventPublisherAware {
+     private ApplicationEventPublisher publisher;
+ 
+     @Override
+     public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+         this.publisher = applicationEventPublisher;
+     }
+ 
+     public void publish(String address, String content) {
+         if ("aaa".equals(address)) {
+             publisher.publishEvent(new MyEvent(this, address, content));
+             return;
+         }
+     }
+ }
+ ```
+
+ 3. 编写事件监听类
+
+ ```java
+ /**
+  * @Author: WhaleFall541
+  * @Date: 2021/7/12 21:38
+  */
+ @Component
+ public class MyListener implements ApplicationEventPublisherAware {
+     private Log log = LogFactory.getLog(MyListener.class);
+ 
+     //@EventListener(condition = "#a0.content == 'foo'")//SpEL #a0 代表第一个入参
+     //@EventListener(condition = "#event.content == 'foo'")//SpEL #event  代表名称相同的参数
+     @EventListener(condition = "@testMethod.test().equals(#a0.content)")// 如果要表示一个对象要使用@XXX
+     //@EventListener({ContextStartedEvent.class, ContextRefreshedEvent.class})
+     public void process(MyEvent event) {
+         System.err.println("event test is ok " + event);
+     }
+ }
+ ```
+
+ `TestMethod` 类
+
+ ```java
+ /**
+  * @Author: WhaleFall541
+  * @Date: 2021/7/12 22:42
+  */
+ @Component
+ public class TestMethod {
+     public List<String> test() {
+         List<String> al = new ArrayList();
+         al.add("foo");
+         al.add("fool");
+         return al;
+     }
+ }
+ ```
+
+ 4. 测试类
+
+ 注意要引入依赖,此处列举`gradle`依赖配置 
+
+ `testImplementation 'org.springframework.boot:spring-boot-starter-test'`
+
+ ```java
+ @SpringBootTest
+ class Charter1Tests implements ApplicationContextAware {
+ 	@Test
+     void testApplicationEvent() {
+         MyEventPublish bean = context.getBean(MyEventPublish.class);
+         bean.publish("aaa", "foo");
+     }
+ }
+ ```
+
+ 
+
+ > <font color="red" >转载请注明 [原文地址](https://www.cnblogs.com/whalefall541/p/15270473.html)</font>

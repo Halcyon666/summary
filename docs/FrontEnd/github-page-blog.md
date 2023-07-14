@@ -1,3 +1,14 @@
+# Docusaurus github page
+
+## [refers article](https://juejin.cn/post/7115631818736402440)
+
+
+
+> besides: you need install yarn and run yarn install in your docs project
+
+[Docusaurus Deployment](https://docusaurus.io/docs/deployment#deploying-to-github-pages)
+
+```yml
 name: Deploy to GitHub Pages
 
 on:
@@ -36,3 +47,6 @@ jobs:
           # https://github.com/actions/checkout/issues/13#issuecomment-724415212
           # The GH actions bot is used by default if you didn't specify the two fields.
           # You can swap them out with your own user credentials.
+
+```
+

@@ -1,0 +1,442 @@
+[TOC]
+
+## 前言
+
+### 设备准备
+
+| 主机   | IP            | 系统 |
+| ------ | ------------- | ---- |
+| master | 192.168.3.162 | Centos 8 kernel 4.18.0-240.el8.x86_64 |
+|node-1    | 192.168.3.163             | Centos 8 kernel 4.18.0-240.el8.x86_64 |
+
+准备安装版本
+
+| k8s版本 | docker版本 |      |
+| ------- | ---------- | ---- |
+| 1.27.0  | 20.10.6    |      |
+|         |            |      |
+
+## 主流程
+
+### [docker删除](https://cloud.tencent.com/developer/article/2132469) 
+
+执行如下命令
+
+`yum list installed|grep docker | gawk -F ' ' '{ print $1 }' | xargs yum remove -y`
+
+### 相关教程
+
+[教程1.14](https://blog.51cto.com/u_15287666/5780765)
+
+[教程1.27](https://blog.csdn.net/weixin_45310323/article/details/130494823)
+
+> NOTES: 安装K8S 1.27版本 参考[教程1.27](https://blog.csdn.net/weixin_45310323/article/details/130494823)
+>
+> 参考原博客部分地方脚本有修改 优化
+
+### `hostname` 处理
+
+分别执行 162 master 163 node-1
+
+```shell
+hostnamectl set-hostname master-1 && bash
+hostnamectl set-hostname node-1 && bash
+```
+
+### 在所有机器上 关闭防火墙 网桥处理
+
+```shell
+# 关闭防火墙
+systemctl disable firewalld --now
+setenforce 0
+sed  -i -r 's/SELINUX=[ep].*/SELINUX=disabled/g' /etc/selinux/config
+swapoff -a
+sed -i '/swap/s/^\(.*\)$/#\1/g' /etc/fstab
+
+cat  >> /etc/hosts << EOF
+192.168.3.162 master-1
+192.168.3.163 node-1
+EOF
+
+ntpdate ntp1.aliyun.com
+echo "0 1 * * * ntpdate ntp1.aliyun.com" >> /var/spool/cron/root
+crontab -l
+
+# 网桥相关
+cat >> /etc/sysctl.d/kubernetes.conf <<EOF
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+net.ipv4.ip_forward = 1
+EOF
+
+sysctl -p /etc/sysctl.d/kubernetes.conf
+cat >> /etc/sysctl.d/kubernetes.conf <<EOF
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+net.ipv4.ip_forward = 1
+EOF
+
+sysctl -p /etc/sysctl.d/kubernetes.conf
+
+# 配置ipvs功能
+yum -y install ipset ipvsadm
+
+cat > /etc/sysconfig/modules/ipvs.modules <<EOF
+modprobe -- ip_vs
+modprobe -- ip_vs_rr
+modprobe -- ip_vs_wrr
+modprobe -- ip_vs_sh
+modprobe -- nf_conntrack_ipv4  
+EOF
+
+chmod +x /etc/sysconfig/modules/ipvs.modules 
+/etc/sysconfig/modules/ipvs.modules
+lsmod | grep -e ip_vs -e nf_conntrack_ipv4
+```
+
+### 在所有机器上安装 `Docker` 安装
+
+```shel
+
+# 安装Docker容器组件
+yum install -y yum-utils
+yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+yum install docker-ce-20.10.6 docker-ce-cli-20.10.6 -y
+
+
+cat <<EOF >  /etc/docker/daemon.json
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2",
+  "storage-opts": [
+    "overlay2.override_kernel_check=true"
+  ],
+  "registry-mirrors": ["https://docker.mirrors.ustc.edu.cn","https://igq6a6t6.mirror.aliyuncs.com","https://hub-mirror.c.163.com/","https://reg-mirror.qiniu.com"],
+  "data-root": "/data/docker"
+}
+EOF
+ 
+systemctl start docker && systemctl enable docker
+ps -ef|grep docker
+```
+
+
+
+
+
+### 在所有机器上安装 `cri-dockerd` 安装
+
+> 这里是不是只用安装`cri-dockerd`就可以 1.24.0 彻底移除`containerd-shim`
+
+```shell
+# cri-dockerd插件
+mv /usr/lib/systemd/system/cri-docker.service{,.default}
+cat <<EOF > /usr/lib/systemd/system/cri-docker.service 
+[Unit]
+Description=CRI Interface for Docker Application Container Engine
+Documentation=https://docs.mirantis.com
+After=network-online.target firewalld.service docker.service
+Wants=network-online.target
+Requires=cri-docker.socket
+[Service]
+Type=notify
+ExecStart=/usr/bin/cri-dockerd --network-plugin=cni --pod-infra-container-image=registry.aliyuncs.com/google_containers/pause:3.7
+ExecReload=/bin/kill -s HUP $MAINPID
+TimeoutSec=0
+RestartSec=2
+Restart=always
+StartLimitBurst=3
+StartLimitInterval=60s
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+TasksMax=infinity
+Delegate=yes
+KillMode=process
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl start cri-docker.service 
+
+systemctl daemon-reload ; systemctl enable cri-docker --now
+systemctl is-active cri-docker
+```
+
+### 在所有机器上安装 `kubeadmin` 安装
+
+```shell
+# kubeadmin
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+enabled=1
+gpgcheck=0
+EOF
+
+yum install -y kubelet-1.27.0 kubeadm-1.27.0 kubectl-1.27.0
+
+systemctl enable kubelet.service --now
+```
+
+### 在master上配置 `kubeadm` 及初始化
+
+```shell
+kubeadm config print init-defaults > kubeadm.yaml
+cat <<EOF > kubeadm.yaml
+apiVersion: kubeadm.k8s.io/v1beta3
+bootstrapTokens:
+- groups:
+  - system:bootstrappers:kubeadm:default-node-token
+  token: abcdef.0123456789abcdef
+  ttl: 24h0m0s
+  usages:
+  - signing
+  - authentication
+kind: InitConfiguration
+localAPIEndpoint:
+  advertiseAddress: 192.168.3.162
+  bindPort: 6443
+nodeRegistration:
+  criSocket: unix:///var/run/cri-dockerd.sock
+  imagePullPolicy: IfNotPresent
+  name: master-1
+  taints: null
+---
+apiServer:
+  timeoutForControlPlane: 4m0s
+apiVersion: kubeadm.k8s.io/v1beta3
+certificatesDir: /etc/kubernetes/pki
+clusterName: kubernetes
+controllerManager: {}
+dns: {}
+etcd:
+  local:
+    dataDir: /var/lib/etcd
+imageRepository: registry.cn-hangzhou.aliyuncs.com/google_containers
+kind: ClusterConfiguration
+kubernetesVersion: 1.27.0
+networking:
+  dnsDomain: cluster.local
+  podSubnet: 10.244.0.0/16
+  serviceSubnet: 10.96.0.0/12
+scheduler: {}
+---
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+kind: KubeProxyConfiguration
+mode: ipvs
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cgroupDriver: systemd
+EOF
+# 初始化k8s master
+kubeadm init --config=kubeadm.yaml --ignore-preflight-errors=SystemVerification
+```
+
+
+
+初始化输出
+
+```shell
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 192.168.3.162:6443 --token abcdef.0123456789abcdef \
+        --discovery-token-ca-cert-hash sha256:b277982a3a0f71f4f7aa586dcaa635006eb329621d357dc752122a08b7d44a58
+
+```
+
+初始化配置修改
+
+```shell
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+# dosome check
+kubectl get nodes
+
+```
+
+### node 节点 join
+
+在Master节点执行
+
+`kubeadm token create --print-join-command`命令输出
+
+```shell
+[root@master-1 ~]# kubeadm token create --print-join-command
+kubeadm join 192.168.3.162:6443 --token fqaz46.n8agq16nwsfxwyrm --discovery-token-ca-cert-hash sha256:b277982a3a0f71f4f7aa586dcaa635006eb329621d357dc752122a08b7d44a58
+```
+
+> 注意加上: `--cri-socket=unix:///var/run/cri-dockerd.sock`
+
+在Node节点执行
+
+```shell 
+kubeadm join 192.168.3.162:6443 --token fqaz46.n8agq16nwsfxwyrm --discovery-token-ca-cert-hash sha256:b277982a3a0f71f4f7aa586dcaa635006eb329621d357dc752122a08b7d44a58 --cri-socket=unix:///var/run/cri-dockerd.sock
+```
+
+
+### 在master节点 对node tag
+
+`kubectl label node node-1 node-role.kubernetes.io/worker=worker`
+
+```shell
+[root@master-1 ~]# kubectl get nodes
+NAME       STATUS     ROLES           AGE   VERSION
+master-1   NotReady   control-plane   18m   v1.27.0
+node-1     NotReady   <none>          12m   v1.27.0
+[root@master-1 ~]# kubectl label node node-1 node-role.kubernetes.io/worker=worker
+node/node-1 labeled
+[root@master-1 ~]# kubectl get nodes
+NAME       STATUS     ROLES           AGE   VERSION
+master-1   NotReady   control-plane   20m   v1.27.0
+node-1     NotReady   worker          14m   v1.27.0
+
+```
+
+### 在master上安装 calico 网络组件
+
+> 目前失败
+
+[calico.yaml](https://pan.baidu.com/s/1ethvBXllogBZq3mMrWr3gg?pwd=1111)
+
+
+```SHELL
+
+kubectl apply -f  calico.yaml
+kubectl get nodes
+
+```
+
+
+
+## 报错处理
+
+### 执行`yum -y update`报错1
+
+```shell
+[root@localhost ~]# yum -y update
+CentOS Linux 8 - AppStream                                 62  B/s |  38  B     00:00
+Error: Failed to download metadata for repo 'appstream': Cannot prepare internal mirrorlist: No URLs in mirrorlist
+```
+
+[解决方案](https://qiita.com/yamada-hakase/items/cb1b6124e11ca65e2a2b)
+
+`sed -i -e 's/^mirrorlist/#mirrorlist/g' -e 's/^#baseurl=http:\/\/mirror/baseurl=http:\/\/vault/g' /etc/yum.repos.d/CentOS-*repo`
+
+### 执行`yum -y update`报错2
+
+> 不更新kernel也是可以用的
+
+```shell
+You can remove cached packages by executing 'yum clean packages'.
+Error: Transaction test error:
+  installing package kernel-core-4.18.0-348.7.1.el8_5.x86_64 needs 35MB on the /boot filesystem
+
+Error Summary
+-------------
+Disk Requirements:
+   At least 35MB more space needed on the /boot filesystem.
+```
+
+[解决方案链接](https://haydenjames.io/fix-least-xmb-space-needed-boot-filesystem/)
+
+`dnf remove --oldinstallonly --setopt installonly_limit=2 kernel`
+
+### `kubeadm join`报错
+
+```shell
+[root@node-1 ~]# kubeadm join 192.168.3.162:6443 --token fqaz46.n8agq16nwsfxwyrm --discovery-token-ca-cert-hash sha256:b277982a3a0f71f4f7aa586dcaa635006eb329621d357dc752122a08b7d44a58 --cri-socket=unix:///var/run/cri-dockerd.sock
+[preflight] Running pre-flight checks
+error execution phase preflight: [preflight] Some fatal errors occurred:
+        [ERROR FileAvailable--etc-kubernetes-kubelet.conf]: /etc/kubernetes/kubelet.conf already exists
+        [ERROR FileAvailable--etc-kubernetes-bootstrap-kubelet.conf]: /etc/kubernetes/bootstrap-kubelet.conf already exists
+        [ERROR Port-10250]: Port 10250 is in use
+        [ERROR FileAvailable--etc-kubernetes-pki-ca.crt]: /etc/kubernetes/pki/ca.crt already exists
+[preflight] If you know what you are doing, you can make a check non-fatal with `--ignore-preflight-errors=...`
+To see the stack trace of this error execute with --v=5 or higher
+
+```
+
+
+
+```shell
+rm -rf /etc/kubernetes/kubelet.conf /etc/kubernetes/pki/ca.crt /etc/kubernetes/bootstrap-kubelet.conf
+netstat -plnt
+kill -9 ${PID}
+
+```
+
+### kubulet 重启机器后 启动失败
+
+`kubectl get pods -n kube-system -o wide`
+
+```shell
+[root@master-1 ~]# kubectl get pods -n kube-system -o wide
+The connection to the server 192.168.3.162:6443 was refused - did you specify the right host or port?
+```
+
+`journalctl -xeu kubelet`
+
+```shell
+[root@master-1 ~]# journalctl -xeu kubelet
+May 17 23:06:14 master-1 kubelet[7341]: W0517 23:06:14.626983    7341 logging.go:59] [core] [Channel #1 SubChannel #2] grpc: addrConn.createTransport failed to connect to {
+May 17 23:06:14 master-1 kubelet[7341]:   "Addr": "/var/run/cri-dockerd.sock",
+May 17 23:06:14 master-1 kubelet[7341]:   "ServerName": "/var/run/cri-dockerd.sock",
+May 17 23:06:14 master-1 kubelet[7341]:   "Attributes": null,
+May 17 23:06:14 master-1 kubelet[7341]:   "BalancerAttributes": null,
+May 17 23:06:14 master-1 kubelet[7341]:   "Type": 0,
+May 17 23:06:14 master-1 kubelet[7341]:   "Metadata": null
+May 17 23:06:14 master-1 kubelet[7341]: }. Err: connection error: desc = "transport: Error while dialing dial unix /var/run/cri-dockerd.sock: connect: no such file or directory"
+May 17 23:06:14 master-1 kubelet[7341]: E0517 23:06:14.627217    7341 run.go:74] "command failed" err="failed to run Kubelet: validate service connection: validate CRI v1 runtime API >
+May 17 23:06:14 master-1 systemd[1]: kubelet.service: Main process exited, code=exited, status=1/FAILURE
+May 17 23:06:14 master-1 systemd[1]: kubelet.service: Failed with result 'exit-code'.
+-- Subject: Unit failed
+-- Defined-By: systemd
+-- Support: https://access.redhat.com/support
+--
+-- The unit kubelet.service has entered the 'failed' state with result 'exit-code'.
+lines 467-507/
+```
+
+
+
+[查看方法](https://blog.csdn.net/weixin_38007578/article/details/117586266)
+
+```shell
+kubectl get pods -n kube-system -o wide
+
+journalctl -xeu kubelet
+
+systemctl status cri-docker
+# 发现  cri-docker 没有启动 注意 每台机器都可能有问题
+
+systemctl start cri-docker.service 
+systemctl restart kubelet
+
+
+```
+

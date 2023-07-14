@@ -1,0 +1,24 @@
+---
+title: "Everything 搜索使用"
+hidemeta: true
+---
+
+## 搜索指定后缀
+
+`ext:md;txt`
+
+## 搜索指定路径
+
+`c:\xxxx\xxx`
+
+## 搜索指定文件大小
+
+*大小单位有`kb mb gb`*
+
+`size:1kb-100kb` `size:1kb`
+
+## 指定最近修改日期
+
+`dm:20211230` `dm:<=20211230`
+## folder file
+`folder:` `file:`

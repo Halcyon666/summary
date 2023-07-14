@@ -1,0 +1,83 @@
+---
+title: "Mybatis Plus开始"
+hidemeta: true
+---
+此文章借鉴[MyBatis官网](https://baomidou.com/pages/226c21/#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%B7%A5%E7%A8%8B)，使用gradle构建项目，使用oracle数据库
+
+本文代码地址见[github仓库](https://github.com/whalefall541/mybatis-plus)
+
+**NOTES**：
+
+*在测试这个案例时碰到一个坑，就是数据库表名 与 核心表名重复的时候，查询会报错 **找不到表名**。此处修改`user`表为`users`表了*
+
+1. 在`build.gradle`文件中配置依赖
+
+```groovy
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation group: 'com.baomidou', name: 'mybatis-plus-boot-starter', version: '3.2.0'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+```
+
+
+
+2. 配置 `application.yml`
+
+```yml
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@192.168.3.161:1521:jc
+    username: jc
+    password: 123456
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    maximum-pool-size: 30
+```
+
+3. 编写实体类
+
+```java
+@Data
+public class Users {
+    private Long id;
+    private String name;
+    private Integer age;
+    private String email;
+}
+```
+
+4. 编写Mapper类
+
+```java
+@Mapper
+public interface UserMapper extends BaseMapper<Users> {
+}
+```
+
+5. 编写测试类
+
+```java
+@SpringBootTest(classes = App.class)
+public class SampleTest {
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Test
+    public void testSelect() {
+        System.out.println(("----- selectAll method test ------"));
+        List<Users> userList = userMapper.selectList(null);
+        Assert.isTrue(userList.size()==5, "结果集不为5条");
+        userList.forEach(System.out::println);
+    }
+}
+```
+
+项目结构：
+
+![image-20211219223218948](https://gitee.com/jack541/repo-for-pic-go/raw/master/img/image-20211219223218948.png)
+
+>  <font color="red" >转载请注明 [原文地址](https://www.cnblogs.com/whalefall541/p/15708938.html)</font>
