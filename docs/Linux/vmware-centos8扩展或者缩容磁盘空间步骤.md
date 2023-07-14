@@ -1,7 +1,4 @@
----
-title: "Linux 磁盘扩容转载"
-hidemeta: true
----
+
 [扩展磁盘参考文章][extend centos 8 disk]
 
 [extend centos 8 disk]: https://blog.csdn.net/qq_43743460/article/details/104463116

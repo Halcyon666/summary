@@ -1,7 +1,4 @@
----
-title: "SPRING AOP 1.0"
-hidemeta: true
----
+
 本文相关代码(来自[官方源码](https://github.com/spring-projects/spring-framework.git "官方源码")spring-test模块)请参见[spring-demysify](https://github.com/whalefall541/spring-demysify) org.springframework.mylearntest包下。
 
 ## AOP语言
@@ -1056,7 +1053,7 @@ proxyInterfaces：如果我们要采用基于接口的代理方式，那莪需�
 有一个autodetectInterfaces属性，该属性默认为true，如果没有明确指定要代理的接口类型，ProxyFactoryBean会自动检测目标对象实现的接口类型并进行代理。
 
 interceptorNames：通过该属性，我们可以指定多个将要织入到目标对象的Advice、拦截器以及Advisor，而再也不通过ProxyFactory那样的addAdvice或者addAdvisor
-方法添加，通常我们会使用配置元素<list>添加需要的拦截器名称。
+方法添加，通常我们会使用配置元素`<list>`添加需要的拦截器名称。
 
 * 如果没有设置目标对象，那么可以在interceptorNames的最后一个元素的位置，放置对象的Bean定义名称。建议直接定义目标对象，不采用前面的方法。
 * 通过指定的interceptorNames某个元素名称之后添加*通配符，可以让ProxyFactoryBean在容器中搜索符合条件的所有Advisro并应用到目标对象。

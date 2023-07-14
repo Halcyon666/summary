@@ -1,7 +1,4 @@
----
-title: "SPRIGN IOC"
-hidemeta: true
----
+
 本文相关代码(来自[官方源码](https://github.com/spring-projects/spring-framework.git "官方源码")spring-test模块)请参见[spring-demysify](https://github.com/whalefall541/spring-demysify) org.springframework.mylearntest包下。
 
 ## IoC三种注入方式
@@ -606,31 +603,35 @@ Spring容器提出了一种叫做方法注入（ Method Injection）的方式，
 * 新闻持久化类的定义
   
   ```java
-  package org.springframework.mylearntest.mthdinject;
+    package org.springframework.mylearntest.mthdinject;
+    
+  
+  import org.springframework.mylearntest.directcode.FXNewsBean;
+  import org.springframework.mylearntest.directcode.IFXNewsPersister;
+  
+  public class MockNewsPersister implements IFXNewsPersister {
+      private FXNewsBean newsBean;
+      public void persistNews(FXNewsBean bean) {
+          persistNews();
+      }
+      public void persistNews() {
+          System.out.println("persist bean:"+getNewsBean());
+      }
+      public FXNewsBean getNewsBean() {
+          return newsBean;
+      }
+  
+      public void setNewsBean(FXNewsBean newsBean) {
+          this.newsBean = newsBean;
+      }
+  
+  }
   ```
+  
+  
 
-import org.springframework.mylearntest.directcode.FXNewsBean;
-import org.springframework.mylearntest.directcode.IFXNewsPersister;
+```java
 
-public class MockNewsPersister implements IFXNewsPersister {
-    private FXNewsBean newsBean;
-    public void persistNews(FXNewsBean bean) {
-        persistNews();
-    }
-    public void persistNews() {
-        System.out.println("persist bean:"+getNewsBean());
-    }
-    public FXNewsBean getNewsBean() {
-        return newsBean;
-    }
-
-    public void setNewsBean(FXNewsBean newsBean) {
-        this.newsBean = newsBean;
-    }
-
-}
-
-```
 * 测试类(使用方法注入前)
 ```java
 package org.springframework.mylearntest.mthdinject;
@@ -1311,23 +1312,26 @@ public class PasswordDecodePostProcessor implements BeanPostProcessor {
    
    ```java
    package org.springframework.mylearntest.beanpostprocessor;
+     
+   
+   import org.springframework.context.ApplicationContext;
+   import org.springframework.context.support.ClassPathXmlApplicationContext;
+   
+   public class Test4BeanPostProcessor {
+       public static void main(String[] args) {
+           ApplicationContext beanFactory = new ClassPathXmlApplicationContext("beanpostprocessor/beanpostprocessor.xml");
+           DowJonesNewsListener dowJonesNewsListener = (DowJonesNewsListener) beanFactory.getBean("dowJonesNewsListener");
+           String encodedPassword = dowJonesNewsListener.getEncodedPassword();
+           System.out.println("encodedPassword = " + encodedPassword);// encodedPassword = 123sjfg@LL2mingwen
+       }
+   }
    ```
+   
+   
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class Test4BeanPostProcessor {
-    public static void main(String[] args) {
-        ApplicationContext beanFactory = new ClassPathXmlApplicationContext("beanpostprocessor/beanpostprocessor.xml");
-        DowJonesNewsListener dowJonesNewsListener = (DowJonesNewsListener) beanFactory.getBean("dowJonesNewsListener");
-        String encodedPassword = dowJonesNewsListener.getEncodedPassword();
-        System.out.println("encodedPassword = " + encodedPassword);// encodedPassword = 123sjfg@LL2mingwen
-    }
-}
 
 ```
-**实际上，有一种特殊类型的BeanPostProcessor我们没有提到，它的执行时机与通常的BeanPostProcessor不同。org.springframework.beans.factory.config
-.InstantiationAwareBeanPostProcessor接口可以在对象的实例化过程中导致某种类似于电路“短路”的效果。实际上，并非所有注册到Spring容器内的bean定义都是按照图4-10
+实际上，有一种特殊类型的BeanPostProcessor我们没有提到，它的执行时机与通常的BeanPostProcessor不同。org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor接口可以在对象的实例化过程中导致某种类似于电路“短路”的效果。实际上，并非所有注册到Spring容器内的bean定义都是按照图4-10
 的流程实例化的。在所有的步骤之前，也就是实例化bean对象步骤之前，容器会首先检查容器中是否注册有InstantiationAwareBeanPostProcessor类型的BeanPostProcessor
 。如果有，首先使用相应的InstantiationAwareBeanPostProcessor来构造对象实例。构造成功后直接返回造完成的对象实例，而不会按照“正规的流程”继续执行。这就是它可能造成“短路”的原因。**
 
@@ -1343,7 +1347,7 @@ void afterPropertiesSet() throws Exception;
 
 其作用在于，在对象实例化过程调用过“BeanPostProcessor的前置处理”之后，会接着检测当前对象是否实现了InitializingBean接口，如果是，则会调用其afterPropertiesSet()方法进一步调整对象实例的状态。比如，在有些情况下，某个业务对象实例化完成后，还不能处于可以使用状态。这个时候就可以让该业务对象实现该接口，并在方法afterPropertiesSet()中完成对该业务对象的后续处理。
 
-如果系统开发过程中规定：所有业务对象的自定义初始化操作都必须以init()命名，为了省去挨个<bean>的设置init-method这样的烦琐，我们还可以通过最顶层的<beans>的default-init-method统一指定这一init()方法名。
+如果系统开发过程中规定：所有业务对象的自定义初始化操作都必须以init()命名，为了省去挨个`<bean>`的设置init-method这样的烦琐，我们还可以通过最顶层的`<beans>`的default-init-method统一指定这一init()方法名。
 
 ## ApplicationContext
 
@@ -1456,94 +1460,90 @@ messages_en_US.properties
   
   ```java
   package org.springframework.mylearntest.eventpublication.event;
-  ```
-
-import java.util.EventObject;
-
-/**
-
-* 自定义事件类型
-  */
-  public class MethodExecutionEvent extends EventObject {
-   private static final long serialVersionUID = -71960369269303337L;
-   private String methodName;
+    
   
-   public MethodExecutionEvent(Object source) {
+  import java.util.EventObject;
   
-       super(source);
-  
-   }
-  
-   public MethodExecutionEvent(Object source, String methodName) {
-  
-       super(source);
-       this.methodName = methodName;
-  
-   }
-  
-   public String getMethodName() {
-  
-       return methodName;
-  
-   }
-  
-   public void setMethodName(String methodName) {
-  
-       this.methodName = methodName;
-  
-   }
-  }
+  /**
+    * 自定义事件类型
+    */
+    public class MethodExecutionEvent extends EventObject {
+     private static final long serialVersionUID = -71960369269303337L;
+     private String methodName;
+    
+     public MethodExecutionEvent(Object source) {
+    
+         super(source);
+    
+     }
+    
+     public MethodExecutionEvent(Object source, String methodName) {
+    
+         super(source);
+         this.methodName = methodName;
+    
+     }
+    
+     public String getMethodName() {
+    
+         return methodName;
+    
+     }
+    
+     public void setMethodName(String methodName) {
+    
+         this.methodName = methodName;
+    
+     }
+    }
   
   ```
   * 定义事件监听器接口以及实现类
   ```java
   package org.springframework.mylearntest.eventpublication.event;
+  import java.util.EventListener;
+  
+  /**
+    * 自定义事件监听器
+    */
+    public interface MethodExecutionEventListener extends EventListener {
+     /**
+      * 处理方法开始执行的时候发布的MethodExecutionEvent事件
+      */
+      void onMethodBegin(MethodExecutionEvent evt);
+        
+      /**
+      * 处理方法执行将结束时候发布的MethodExecutionEvent事件
+      */
+      void onMethodEnd(MethodExecutionEvent evt);
+      }
+    
   ```
-
-import java.util.EventListener;
-
-/**
-
-* 自定义事件监听器
-  */
-  public interface MethodExecutionEventListener extends EventListener {
-   /**
   
-  * 处理方法开始执行的时候发布的MethodExecutionEvent事件
-    */
-    void onMethodBegin(MethodExecutionEvent evt);
-    /**
+    
   
-  * 处理方法执行将结束时候发布的MethodExecutionEvent事件
-    */
-    void onMethodEnd(MethodExecutionEvent evt);
-    }
-    
-    ```
-    
-    ```
-
 * 自定义事件监听器实现
   
   ```java
   package org.springframework.mylearntest.eventpublication.event;
-  ```
-
-public class SimpleMethodExecutionEventListener implements MethodExecutionEventListener {
-
-    public void onMethodBegin(MethodExecutionEvent evt) {
-        String methodName = evt.getMethodName();
-        System.out.println("start to execute the method[" + methodName + "].");
-    }
     
-    public void onMethodEnd(MethodExecutionEvent evt) {
-        String methodName = evt.getMethodName();
-        System.out.println("finished to execute the method[" + methodName + "].");
-    }
+  
+  public class SimpleMethodExecutionEventListener implements MethodExecutionEventListener {
+  
+      public void onMethodBegin(MethodExecutionEvent evt) {
+          String methodName = evt.getMethodName();
+          System.out.println("start to execute the method[" + methodName + "].");
+      }
+      
+      public void onMethodEnd(MethodExecutionEvent evt) {
+          String methodName = evt.getMethodName();
+          System.out.println("finished to execute the method[" + methodName + "].");
+      }
+  
+  }
 
-}
 
-```
+```java
 * 定义事状态枚举类以及事件发布者
 ```java
 package org.springframework.mylearntest.eventpublication.event;
@@ -1554,59 +1554,58 @@ public enum MethodExecutionStatus {
 ```
 
 * 事件发布类
-  
-  ```java
-  package org.springframework.mylearntest.eventpublication.event;
-  ```
+
+```java
+package org.springframework.mylearntest.ioc.eventpublication.event;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MethodExeuctionEventPublisher {
-    private List<MethodExecutionEventListener> listeners = new
-            ArrayList<MethodExecutionEventListener>();
+	private List<MethodExecutionEventListener> listeners = new
+			ArrayList<MethodExecutionEventListener>();
 
-    public void methodToMonitor() {
-        MethodExecutionEvent event2Publish =
-                new MethodExecutionEvent(this, "methodToMonitor");
-        publishEvent(MethodExecutionStatus.BEGIN, event2Publish);
-        // 执行实际的方法逻辑
-        // ...
-        publishEvent(MethodExecutionStatus.END, event2Publish);
-    }
-    
-    // 为了避免事件处理期间事件监听器的注册或移除操作影响处理过程，我们对事件发布时点的监听器列表进行了一个安全复制（ safe-copy）
-    protected void publishEvent(MethodExecutionStatus status,
-                                MethodExecutionEvent methodExecutionEvent) {
-        List<MethodExecutionEventListener> copyListeners =
-                new ArrayList<MethodExecutionEventListener>(listeners);
-        for (MethodExecutionEventListener listener : copyListeners) {
-            if (MethodExecutionStatus.BEGIN.equals(status))
-                listener.onMethodBegin(methodExecutionEvent);
-            else
-                listener.onMethodEnd(methodExecutionEvent);
-        }
-    }
-    
-    public void addMethodExecutionEventListener(MethodExecutionEventListener listener) {
-        this.listeners.add(listener);
-    }
-    
-    public void removeListener(MethodExecutionEventListener listener) {
-        if (this.listeners.contains(listener))
-            this.listeners.remove(listener);
-    }
-    
-    public void removeAllListeners() {
-        this.listeners.clear();
-    }
+	public void methodToMonitor() {
+		MethodExecutionEvent event2Publish =
+				new MethodExecutionEvent(this, "methodToMonitor");
+		publishEvent(MethodExecutionStatus.BEGIN, event2Publish);
+		// 执行实际的方法逻辑
+		// ...
+		publishEvent(MethodExecutionStatus.END, event2Publish);
+	}
+
+	// 为了避免事件处理期间事件监听器的注册或移除操作影响处理过程，我们对事件发布时点的监听器列表进行了一个安全复制（ safe-copy）
+	protected void publishEvent(MethodExecutionStatus status,
+								MethodExecutionEvent methodExecutionEvent) {
+		List<MethodExecutionEventListener> copyListeners =
+				new ArrayList<MethodExecutionEventListener>(listeners);
+		for (MethodExecutionEventListener listener : copyListeners) {
+			if (MethodExecutionStatus.BEGIN.equals(status))
+				listener.onMethodBegin(methodExecutionEvent);
+			else
+				listener.onMethodEnd(methodExecutionEvent);
+		}
+	}
+
+	public void addMethodExecutionEventListener(MethodExecutionEventListener listener) {
+		this.listeners.add(listener);
+	}
+
+	public void removeListener(MethodExecutionEventListener listener) {
+		if (this.listeners.contains(listener))
+			this.listeners.remove(listener);
+	}
+
+	public void removeAllListeners() {
+		this.listeners.clear();
+	}
 
 }
-
 ```
+
 * 测试类
-```
 
+```java
 package org.springframework.mylearntest.eventpublication.event;
 
 public class Test4Event {
@@ -1619,11 +1618,13 @@ public class Test4Event {
         eventPublisher.removeAllListeners();
     }
 }
-
 ```
+
+
+
 在实现中，需要注意到，为了避免事件处理期间事件监听器的注册或移除操作影响处理过程，我们对事件发布时点的监听器列表进行了一个安全复制（ safe-copy）。另外，事件的发布是顺序执行，所以为了能够不影响处理性能，事件监听器的处理逻辑应该尽量简短。
 
-![](https://img2020.cnblogs.com/blog/2023890/202008/2023890-20200802021549273-218051801.png)
+![](https://gitee.com/jack541/repo-for-pic-go/raw/master/img/2023890-20200802021549273-218051801.png)
 
 * Spring 的容器内事件发布类结构分析
 Spring 的 ApplicationContext 容 器 内 部 允 许 以 org.springframework.context.ApplicationEvent的形式发布事件 ，容器内注册的org.springframework.context.ApplicationListener类型的bean定义会被ApplicationContext容器自动识别，它们负责监听容器内发布的所有ApplicationEvent类型的事件。
@@ -1635,6 +1636,7 @@ ApplicationEvent: Spring容器内自定义事件类型，继承自java.util.Even
 型。
 * RequestHandledEvent： Web请求处理后发布的事件，其有一子类ServletRequestHandledEvent提供特定于Java EE的Servlet相关事件。
 
+```java
 ```java
 package org.springframework.mylearntest.eventpublication.applicationevent;
 
@@ -1675,6 +1677,8 @@ public class MethodExecutionEvent extends ApplicationEvent {
 }
 ```
 
+
+
 ApplicationListener: ApplicationContext容器内使用的自定义事件监听器接口定义，继承自java.util.EventListener。 
 
 ApplicationContext: 容器在启动时，会自动识别并加载EventListener类型bean定义，一旦容器内有事件发布，将通知这些注册到容器的EventListener。
@@ -1698,7 +1702,7 @@ public class MethodExecutionEventListener implements ApplicationListener {
 
 ApplicationContext: 还记得ApplicationContext的定义吧？除了之前的ResourceLoader和MessageSource， ApplicationContext接口定义还继承了ApplicationEventPublisher接口，该接口提供了void publishEvent(ApplicationEvent event)方法定义。不难看出， ApplicationContext容器现在担当的就是事件发布者的角色。ApplicationContext容器的具体实现类在实现事件的发布和事件监听器的注册方面，并没事必躬亲，而是把这些活儿转包给了一个称作org.springframework.context.event.ApplicationEventMulticaster的接口。
 
-```
+```java
 package org.springframework.mylearntest.eventpublication.applicationevent;
 
 import org.springframework.context.ApplicationEventPublisher;

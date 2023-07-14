@@ -1,4 +1,4 @@
- ---
+---
 title: "SPRING CORE"
 hidemeta: true
 ---
@@ -257,10 +257,10 @@ hidemeta: true
  }
  ```
 
- [闭包]: https://zh.wikipedia.org/wiki/%E9%97%AD%E5%8C%85_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6)
- [回调]: https://zh.wikipedia.org/wiki/%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0
- [Callback Sample]: https://stackoverflow.com/questions/19405421/what-is-a-callback-method-in-java-term-seems-to-be-used-loosely
- [Callback Sample]: https://stackoverflow.com/questions/3805474/what-is-a-closure-does-java-have-closures
+[闭包]: https://zh.wikipedia.org/wiki/%E9%97%AD%E5%8C%85_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6)
+[回调]: https://zh.wikipedia.org/wiki/%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0
+[Callback Sample]: https://stackoverflow.com/questions/19405421/what-is-a-callback-method-in-java-term-seems-to-be-used-loosely
+[Callback Sample]: https://stackoverflow.com/questions/3805474/what-is-a-closure-does-java-have-closures
 
 
  ## `@Configurable` `@Configuration`
@@ -347,11 +347,7 @@ hidemeta: true
 
  `TestMethod` 类
 
- ```java
- /**
-  * @Author: WhaleFall541
-  * @Date: 2021/7/12 22:42
-  */
+```java
  @Component
  public class TestMethod {
      public List<String> test() {
@@ -361,7 +357,7 @@ hidemeta: true
          return al;
      }
  }
- ```
+```
 
  4. 测试类
 
