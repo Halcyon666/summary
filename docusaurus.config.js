@@ -3,7 +3,7 @@
 
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
-
+const algolia = require('@docusaurus/theme-search-algolia')
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'halcyon666 blog',
