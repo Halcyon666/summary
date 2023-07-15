@@ -1,5 +1,5 @@
 #!/bin/bash
-for file in `find ./docs/Algorithm/* -type f -print`  # 指定要遍历的目录
+for file in `find ./docs/* -type f -print`  # 指定要遍历的目录
 do
     if [ -f "$file" ]; then  # 检查是否为文件
 		# 重命名
