@@ -57,7 +57,7 @@ Open `docs/intro.md` (this page) and edit some lines: the site **reloads automat
 <details><summary>CLICK ME</summary>
 <p>
 
-#### We can hide anything, even code!
+We can hide anything, even code!
 
 ```ruby
    puts "Hello World"

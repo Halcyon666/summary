@@ -9,6 +9,9 @@ sidebar_position: 1
 
  `proxy-target-class` `default=true`使用CGlib进行代理; `default=false` 时使用JDK动态代理;
 
+<details><summary>xml配置</summary>
+<p>
+
  ```xml
  <!-- DefaultUserPreferences implements the UserPreferences interface -->
  <bean id="userPreferences" class="com.stuff.DefaultUserPreferences" scope="session">
@@ -19,7 +22,12 @@ sidebar_position: 1
  </bean>
  ```
 
- 2. 注解方式
+</p>
+</details>
+
+
+
+ 1. 注解方式
 
  CGLIB 方式：`@Scope(value="request", proxyMode= ScopedProxyMode.TARGET_CLASS)`
 
