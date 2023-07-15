@@ -1,0 +1,166 @@
+---
+title: Mybatis Plus代码生成
+sidebar_label: Mybatis Plus代码生成
+sidebar_position: 5
+---
+[本文代码来自MyBatis Plus官网](https://baomidou.com/pages/d357af/#%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B)
+
+1. 配置依赖
+
+```groovy
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-quartz'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation group: 'com.baomidou', name: 'mybatis-plus-boot-starter', version: '3.2.0'
+    implementation group: 'com.baomidou', name: 'mybatis-plus-generator', version: '3.2.0'
+    implementation group: 'freemarker', name: 'freemarker', version: '2.3.9'// 低于这个版本会报错
+    
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+```
+
+2. 编写生成器类(旧版)
+
+演示例子，执行 main 方法控制台输入 **模块名** **表名** 回车自动生成对应项目目录中
+
+```java
+public class CodeGenerator {
+
+    /**
+     * <p>
+     * 读取控制台内容
+     * </p>
+     */
+    public static String scanner(String tip) {
+        Scanner scanner = new Scanner(System.in);
+        StringBuilder help = new StringBuilder();
+        help.append("请输入" + tip + "：");
+        System.out.println(help.toString());
+        if (scanner.hasNext()) {
+            String ipt = scanner.next();
+            if (StringUtils.isNotBlank(ipt)) {
+                return ipt;
+            }
+        }
+        throw new MybatisPlusException("请输入正确的" + tip + "！");
+    }
+
+    public static void main(String[] args) {
+        // 代码生成器
+        AutoGenerator mpg = new AutoGenerator();
+
+        // 全局配置
+        GlobalConfig gc = new GlobalConfig();
+        String projectPath = System.getProperty("user.dir");
+        gc.setOutputDir(projectPath + "/src/main/java");
+        gc.setAuthor("jobob");
+        gc.setOpen(false);
+        // gc.setSwagger2(true); 实体属性 Swagger2 注解
+        mpg.setGlobalConfig(gc);
+
+        // 数据源配置
+        DataSourceConfig dsc = new DataSourceConfig();
+        dsc.setUrl("jdbc:oracle:thin:@192.168.3.161:1521:jc");
+        // dsc.setSchemaName("public");
+        dsc.setDriverName("oracle.jdbc.driver.OracleDriver");
+        dsc.setUsername("jc");
+        dsc.setPassword("123456");
+        mpg.setDataSource(dsc);
+
+        // 包配置
+        PackageConfig pc = new PackageConfig();
+        pc.setModuleName(scanner("模块名"));
+        pc.setParent("com.whalefall541.generator");
+        mpg.setPackageInfo(pc);
+
+        // 自定义配置
+        InjectionConfig cfg = new InjectionConfig() {
+            @Override
+            public void initMap() {
+                // to do nothing
+            }
+        };
+
+        // 如果模板引擎是 freemarker
+        String templatePath = "/templates/mapper.xml.ftl";
+        // 如果模板引擎是 velocity
+        // String templatePath = "/templates/mapper.xml.vm";
+
+        // 自定义输出配置
+        List<FileOutConfig> focList = new ArrayList<>();
+        // 自定义配置会被优先输出
+        focList.add(new FileOutConfig(templatePath) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
+                return projectPath + "/src/main/resources/mapper/" + pc.getModuleName()
+                        + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
+            }
+        });
+        /*
+        cfg.setFileCreate(new IFileCreate() {
+            @Override
+            public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
+                // 判断自定义文件夹是否需要创建
+                checkDir("调用默认方法创建的目录，自定义目录用");
+                if (fileType == FileType.MAPPER) {
+                    // 已经生成 mapper 文件判断存在，不想重新生成返回 false
+                    return !new File(filePath).exists();
+                }
+                // 允许生成模板文件
+                return true;
+            }
+        });
+        */
+        cfg.setFileOutConfigList(focList);
+        mpg.setCfg(cfg);
+
+        // 配置模板
+        TemplateConfig templateConfig = new TemplateConfig();
+
+        // 配置自定义输出模板
+        //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
+        // templateConfig.setEntity("templates/entity2.java");
+        // templateConfig.setService();
+        // templateConfig.setController();
+
+        templateConfig.setXml(null);
+        mpg.setTemplate(templateConfig);
+
+        // 策略配置
+        StrategyConfig strategy = new StrategyConfig();
+        strategy.setNaming(NamingStrategy.underline_to_camel);
+        strategy.setColumnNaming(NamingStrategy.underline_to_camel);
+        //strategy.setSuperEntityClass("你自己的父类实体,没有就不用设置!");
+        strategy.setEntityLombokModel(true);
+        strategy.setRestControllerStyle(true);
+        // 公共父类
+        //strategy.setSuperControllerClass("你自己的父类控制器,没有就不用设置!");
+        // 写于父类中的公共字段
+        strategy.setSuperEntityColumns("id");
+        strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
+        strategy.setControllerMappingHyphenStyle(true);
+        strategy.setTablePrefix(pc.getModuleName() + "_");
+        mpg.setStrategy(strategy);
+        mpg.setTemplateEngine(new FreemarkerTemplateEngine());
+        mpg.execute();
+    }
+}
+```
+
+
+:::tip 协议
+
+- 本作品代码部分采用 [Apache 2.0协议](https://www.apache.org/licenses/LICENSE-2.0)进行许可。遵循许可的前提下，你可以自由地对代码进行修改，再发布，可以将代码用作商业用途。但要求你：
+  - **署名**：在原有代码和衍生代码中，保留原作者署名及代码来源信息。
+  - **保留许可证**：在原有代码和衍生代码中，保留Apache 2.0协议文件。
+
+- 本作品文档部分采用[知识共享署名 4.0 国际许可协议](http://creativecommons.org/licenses/by/4.0/)进行许可。 遵循许可的前提下，你可以自由地共享，包括在任何媒介上以任何形式复制、发行本作品，亦可以自由地演绎、修改、转换或以本作品为基础进行二次创作。但要求你：
+  - **署名**：应在使用本文档的全部或部分内容时候，注明原作者及来源信息。
+  - **非商业性使用**：不得用于商业出版或其他任何带有商业性质的行为。如需商业使用，请联系作者。
+  - **相同方式共享的条件**：在本文档基础上演绎、修改的作品，应当继续以知识共享署名 4.0国际许可协议进行许可。
+
+:::

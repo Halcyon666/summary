@@ -5,6 +5,8 @@ tags:
   - 演示
   - 开始上手
 
+sidebar_class_name: green
+
 # sidebar_position: 2
 sidebar_label: Quick Start
 toc_min_heading_level: 2
