@@ -6,7 +6,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'my blog',
+  title: 'halcyon666 blog',
   tagline: 'Dinosaurs are cool',
   favicon: 'img/favicon.ico',
 
@@ -38,13 +38,14 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          routeBasePath: '/', // 把文档放在网络根目录
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/Halcyon666/summary',
+            'https://github.com/Halcyon666/summary/blob/main/',
         },
-
+        blog: false, // 可选：禁用博客插件
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
