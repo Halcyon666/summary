@@ -1,6 +1,6 @@
 ---
-title: W11更新 路过TPM
-sidebar_label: W11更新 路过TPM
+title: W11更新 跳过TPM
+sidebar_label: W11更新 跳过TPM
 sidebar_position: 4
 ---
 >升级后的截图
