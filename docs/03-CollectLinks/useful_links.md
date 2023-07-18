@@ -34,6 +34,8 @@ multiple deployment modes (SDK, Sidecar, and Agent)
 
 [Docusaurus建站（2）- 部署到GitHub Pages](https://juejin.cn/post/7115631818736402440)
 
+[@ConditionalOnProperty](https://blog.csdn.net/winterking3/article/details/114822929)
+
 ## 深入理解Apache Dubbo与实战
 
 - 第三章
