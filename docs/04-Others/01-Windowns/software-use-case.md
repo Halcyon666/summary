@@ -14,7 +14,7 @@ sidebar_position: 4
 
 ## idea 重置
 
-`C:\Users\chenglong\AppData\Roaming\JetBrains\IntelliJIdea2021.1\eval`
+`C:\Users\xxxx\AppData\Roaming\JetBrains\IntelliJIdea2021.1\eval`
 
 删除以上目录中的 `idea211.evaluation.key`
 
