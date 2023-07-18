@@ -80,12 +80,12 @@ const config = {
       },
       algolia: {
         // The application ID provided by Algolia
-        appId: 'FBASTC79MR',
+        appId: 'T5OO103S1G',
   
         // Public API key: it is safe to commit it
-        apiKey: '9db5537a659c116a73cd6b264ba7f9ba',
+        apiKey: '8980e7549b3164ed7f36a8394542f0eb',
   
-        indexName: 'halcyon666 Blog',
+        indexName: 'halcyon666',
   
         // Optional: see doc section below
         contextualSearch: true,
