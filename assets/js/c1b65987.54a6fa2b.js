@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmy_website=self.webpackChunkmy_website||[]).push([[7124],{5896:e=>{e.exports=JSON.parse('{"label":"\u5f00\u59cb\u4e0a\u624b","permalink":"/summary/tags/\u5f00\u59cb\u4e0a\u624b","allTagsPath":"/summary/tags","count":1,"items":[{"id":"intro","title":"\u76ee\u5f55\u9884\u89c8","description":"Getting Started","permalink":"/summary/"}]}')}}]);
