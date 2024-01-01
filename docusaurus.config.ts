@@ -67,7 +67,7 @@ const config: Config = {
       title: 'halcyon666 Blog',
       logo: {
         alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        src: 'img/favicon.png',
       },
       items: [
         {
