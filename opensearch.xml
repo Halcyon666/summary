@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
                        xmlns:moz="http://www.mozilla.org/2006/browser/search/">
-  <ShortName>halcyon666 blog</ShortName>
-  <Description>Search halcyon666 blog</Description>
+  <ShortName>halcyon666</ShortName>
+  <Description>Search halcyon666</Description>
   <InputEncoding>UTF-8</InputEncoding>
-  <Image width="16" height="16" type="image/x-icon">https://halcyon666.github.io/summary/img/favicon.ico</Image>
+  <Image width="16" height="16" type="image/x-icon">https://halcyon666.github.io/summary/img/favicon.png</Image>
   <Url type="text/html" method="get" template="https://halcyon666.github.io/summary/search?q={searchTerms}"/>
   <Url type="application/opensearchdescription+xml" rel="self" template="https://halcyon666.github.io/summary/opensearch.xml" />
   <moz:SearchForm>https://halcyon666.github.io/summary/</moz:SearchForm>
