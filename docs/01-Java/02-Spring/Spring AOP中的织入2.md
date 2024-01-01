@@ -1,0 +1,437 @@
+---
+title: Spring AOP的织入2
+sidebar_label: Spring AOP的织入2
+sidebar_position: 12
+---
+
+本文相关代码(来自[官方源码](https://github.com/spring-projects/spring-framework.git "官方源码")spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) org.springframework.mylearntest包下。
+
+## 加速织入自动化进程
+
+Spring AOP自动代理的实现建立在IoC容器的BeanPostProcessor概念之上，使用一个BeanPostProcessor，然后在BeanPostProcessor内部实现这样的逻辑，即当对象实例化的时候，为其生成代理对象并返回，而不是实例化后的目标对象本身，从而达到自动代理的目的。
+
+```java
+for(bean in IoC container){
+    // 检查当前bean定义是否满足拦截条件，是则拦截
+    if(isAssistentStatement){
+        Object proxy = createProxyFor(bean);
+        return proxy;
+    } else {
+        Object instance = createInstance(bean);
+        return instance;
+    }
+}
+```
+
+拦截条件
+
+* 通过外部配置文件传入这些拦截条件信息，比如我们在容器的配置文件中注册的有关Pointcut以及Advisor等就包括这些信息；
+
+* 还可以在具体类的定义文件中，通过元数据来知名具体的拦截条件是什么，比如可以通过Jakarta Commons Atrributes或者Java5的注解，直接在代码类中标注Pointcut等拦截信息。
+
+## Spring中可用的自动代理类
+
+Spring AOP在org.springframework.aop.framework.autoproxy包下提供了两个常用的AutoProxyCreator，即BeanNameAutoProxyCreator和DefaultAdvisorAutoProxyCreator。
+
+### BeanNameAutoProxyCreator
+
+使用BeanNameAutoProxyCreator可以通过指定一组容器内的目标对象对应的BeanName，将指定的一组拦截器应用到这些目标对象之上。
+
+<details>
+	<summary>XML配置案例</summary>
+
+```xml
+<beans>
+    <bean id="target1" class="..."/>
+    <bean id="target2" class="..."/>
+
+    <bean id="mockTask" class="..."/>
+    <bean id="fakeTask" class="..."/>
+
+    <bean id="taskThrowsAdvice" class="...TaskThrowsAdvice"/>
+    <bean id="performanceInterceptor" class="...PerformanceInterceptor">
+
+    <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <!--指定哪些bean自动生成代理对象-->
+        <property name="beanNames">
+            <list>
+                <value>target1</value>
+                <value>target2</value>
+            </list>
+        </property>
+
+        <!--指定将要应用到目标对象的拦截器、Advice或者Advisor等-->
+        <property name="interceptorNames">
+            <list>
+                <value>taskThrowsAdvice</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property name="beanNames">
+            <!--使用*号进行通配-->
+            <list>
+                <value>mockTask*</value>
+                <value>fakeTask*</value>
+            </list>
+        </property>
+        <property name="interceptorNames">
+            <list>
+                <value>performanceInterceptor</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property name="beanNames">
+            <!--对于*通配符的情况下，也可以使用逗号隔开-->
+            <list>
+                <value>target*,*Task,*service</value>
+            </list>
+        </property>
+        <property name="interceptorNames">
+            <list>
+                <value>performanceInterceptor</value>
+            </list>
+        </property>
+    </bean>
+</beans>
+```
+</details>
+
+### DefaultAdvisorAutoProxyCreator
+
+只需要在ApplicationContext中注册Bean即可，剩下的任务会由DefaultAdvisorAutoProxyCreator完成。将其注入容器之后，将会自动搜寻容器内的所有Advisor，然后根据各个Advisor所提供的拦截信息，为符合条件的容器中的目标对象生成相应的代理对象。
+
+DefaultAdvisorAutoProxyCreator只对Advisor有效，因为只有Advisor才既有Pointcut信息捕捉符合条件的目标对象，又有相应的Advice。
+
+<details>
+	<summary>XML配置案例</summary>
+
+```xml
+<beans>
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator">
+        <!--设置对象使用基于类的代理-->
+        <property name="proxyTargetClass">
+            <value>true</value>
+        </property>
+    </bean>
+
+    <bean id="target1" class="..."/>
+    <bean id="target2" class="..."/>
+
+    <bean id="mockTask" class="..."/>
+    <bean id="fakeTask" class="..."/>
+
+    <bean id="logAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+        <property name="pointcut">
+            ...
+        </property>
+        <property name="advice">
+            <bean id="performanceInterceptor"
+                  class="org.springframework.mylearntest.aop.advice.perclass.PerformanceMethodInterceptor"></bean>
+        </property>
+    </bean>
+
+    <bean id="logAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+        <property name="pointcut">
+            ...
+        </property>
+        <property name="advice">
+            <bean id="taskThrowsAdvice" class="...TaskThrowsAdvice"></bean>
+
+        </property>
+    </bean>
+</beans>
+```
+</details>
+
+### 扩展AutoProxyCreator
+
+可以在Spring AOP提供的AbstractAutoProxyCreator或者AbstractAdvisorAutoProxyCreator基础之上，实现相应的子类。
+
+Sprig AOP框架中有关自动代理的实现架构
+
+* 所有的AutoProxyCreator都是InstantiationAwareBeanPostProcessor，这种类型的BeanPostProcessor与普通的BeanPostProcessor有所不同。当Spring IoC
+  容器检测到有InstantiationAwareBeanPostProcessor类型的BeanPostProcessor的时候，会直接通过InstantiationAwareBeanPostProcessor中的逻辑构造对象实例返回，而不会走正常的对象实例化流程。也就是“短路”。这样AutoProxyCreator会直接构造目标对象的代理对象返回，而不是原来的目标对象。
+
+![](https://s2.loli.net/2023/07/15/cFmOoXVuqKtrklU.png)
+
+AspectJAwareAdvisorAutoProxyCreator是Spring 2.0之后的AutoProxyCreator实现，也算是一个AutoProxyCreator的自定义实现。它还有一个子类AnnotationAwareAspectJAutoProxyCreator，可以根据Java5的注解捕获信息以完成自动代理。
+
+Spring AOP还支持基于Jakarta Commons Atrributes的元数据的自动代理机制，来提供拦截信息。
+
+![](https://s2.loli.net/2023/07/15/1qdrvGiXQxtuZA2.png)
+
+TargetSource的作用
+
+TargetSource它是目标对象的容器，当每个针对目标对象的方法调用经过层层拦截而到达调用链的终点的时候，就该调用目标对象上定义的方法了，这时候不是直接调用这个目标对象上的方法，而是通过某个TargetSource与实际目标对象之间交互，然后再调用从TargetSource中取得的目标对象上的相应的方法。
+
+TargetSource的特性
+
+每次方法调用都会触发TargetSource的getTarget()方法，getTarget()方法将从相应的TargetSource实现类中取得具体的目标对象，这样，我们就可以控制每次方法调用作用到的具体对象实例。
+
+* 提供一个目标对象池，每次从TargetSource取得的目标对象都从这个目标对象池中取得。
+* 让一个TargetSource实现类持有多个目标对象的实例，然后按照某种规则，在每次方法调用时，返回相应的目标对象实例。
+
+还可以让TargetSource只持有一个目标对象，通常ProxyFactory或者ProyxFactoryBean处理目标对象的方式也是如此，它们内部会构造一个org.springframework.aop.target
+.SingletonTargetSource实例，而SingletonTargetSource则会针对每次方法调用返回同一个目标对象的实例引用。
+
+## TargetSource实现类
+
+### SingletonTargetSource
+
+org.springframework.aop.target.SingletonTargetSource是使用最多的TargetSource实现类，虽然我们可能并不知道。因为通过ProxyFactory的setTarget()设置完目标对象之后，ProxyFactory内部会自行使用一个SingletonTargetSource对设置的目标对象进行封装。
+
+![](https://s2.loli.net/2023/07/15/fhJjrdlpYBCIxMX.png)
+
+### PrototypeTargetSource
+
+<details>
+	<summary>PrototypeTargetSource使用</summary>
+
+```xml
+<beans>
+    <bean id="target" class="org.springframework.mylearntest.aop.weaver.baseoninterface.MockTask"
+          scope="prototype"/>
+
+    <bean id="prototypeTargetSource" class="org.springframework.aop.target.PrototypeTargetSource">
+        <property name="targetBeanName">
+            <value>target</value>
+        </property>
+    </bean>
+
+    <bean id="targetProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="targetSource">
+            <ref bean="prototypeTargetSource"/>
+        </property>
+        <property name="interceptorNames">
+            <list>
+                <value>anyInterceptor</value>
+            </list>
+        </property>
+    </bean>
+</beans>
+```
+</details>
+
+目标对象的bean定义声明必须为prototype。通过targetBeanName属性指定目标对象的bean定义名称，而不是引用。
+
+### HotSwappableTargetSource
+
+使用HotSwappableTargetSource封存目标对象，可以让我们在应用程序运行的时候，根据某种特定条件，动态地替换目标对象类的具体实现，比如，IService有多个实现类，如果程序启动之后，默认的IService实现类出现了问题，我们可以马上切换到Iservice的另一个实现上，而所有这些对于调用者来说都是透明的。
+
+<details>
+	<summary>xml配置</summary>
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="task" class="org.springframework.mylearntest.aop.weaver.baseoninterface.MockTask">
+
+    </bean>
+
+    <bean id="hotSwapTargetSource" class="org.springframework.aop.target.HotSwappableTargetSource">
+        <constructor-arg>
+            <ref bean="task"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="taskProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="targetSource" ref="hotSwapTargetSource"/>
+        <property name="interceptorNames">
+            <list>
+                <value>performanceMethodInterceptor</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="performanceMethodInterceptor"
+          class="org.springframework.mylearntest.aop.advice.perclass.PerformanceMethodInterceptor"/>
+
+</beans>
+```
+</details>
+
+<details>
+	<summary>Test4HotSwappableTargetSource</summary>
+
+```java
+package org.springframework.mylearntest.aop.weaver.hotswaptargetsource;
+
+import org.junit.Assert;
+import org.springframework.aop.framework.Advised;
+import org.springframework.aop.target.HotSwappableTargetSource;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.mylearntest.aop.weaver.baseoninterface.ITask;
+
+import java.util.Date;
+
+/**
+ * @Author: whalefall
+ * @Date: 2020/7/26 19:47
+ */
+public class Test4HotSwappableTargetSource {
+    public static void main(String[] args) throws Exception {
+        ApplicationContext context = new ClassPathXmlApplicationContext("hotswappabletargetsource\\hotSwappableTargetSource.xml");
+        Object proxy = context.getBean("taskProxy");
+        Object initTarget = ((Advised)proxy).getTargetSource().getTarget();
+
+        HotSwappableTargetSource hotSwappableTargetSource = (HotSwappableTargetSource)context.getBean(
+                "hotSwapTargetSource");
+        Object oldTarget = hotSwappableTargetSource.swap(new ITask() {
+            @Override
+            public void execute(Date date) {
+                System.out.println("old target generated by hotSwapTargetSource");
+            }
+        });
+
+        Object newTarget = ((Advised)proxy).getTargetSource().getTarget();
+
+        // initTarget = org.springframework.mylearntest.aop.weaver.baseoninterface.MockTask@72967906
+        // oldTarget = org.springframework.mylearntest.aop.weaver.baseoninterface.MockTask@72967906
+        // newTarget = org.springframework.mylearntest.aop.weaver.hotswaptargetsource
+        // .Test4HotSwappableTargetSource$1@5b8dfcc1
+
+        Assert.assertSame(initTarget, oldTarget);
+        Assert.assertNotSame(initTarget, newTarget);
+    }
+}
+```
+</details>
+
+### CommonsPoolTargetSource
+
+某些时候，我们可能想返回有限数目的目标对象实例，这些目标对象实例的地位是平等的，就好像数据库连接池中的那些Connection一样，我们可以提供一个目标对象的对象池，然后让某个TargetSource实现每次都从这个对象池中取得目标对象。
+
+如果不能使用Jakarta Commons Pool，那么也可以通过扩展org.springframework.aop.target.AbstractPoolingTargetSource类，实现相应的提供对象池化的功能的TargetSource。
+
+### ThreadLocalTargetSource
+
+如果想为不同的线程调用提供不同的目标对象，那么可以使用org.springframework.aop.target.ThreadLocalTargetSource。它可以保证各自线程上目标对象的调用，可以被分配到当前线程对应的那个目标对象的实例上。其实，ThreadLocalTargetSource无非就是对JDK标准的ThreadLocal进行了简单的封装而已。
+
+### 自定义TargetSource
+
+
+<details>
+	<summary>AlternativeTargetSource</summary>
+
+```java
+package org.springframework.mylearntest.aop.weaver.selfdefinetargetsource;
+
+import org.springframework.aop.TargetSource;
+import org.springframework.mylearntest.aop.weaver.baseoninterface.ITask;
+
+/**
+ * @Author: whalefall
+ * @Date: 2020/7/27 22:27
+ */
+@SuppressWarnings("rawtypes")
+public class AlternativeTargetSource implements TargetSource {
+    private ITask alternativeTask1;
+    private ITask alternativeTask2;
+
+    private int counter;
+
+    public AlternativeTargetSource(ITask task1, ITask task2) {
+        this.alternativeTask1 = task1;
+        this.alternativeTask2 = task2;
+    }
+
+    @Override
+    public Object getTarget() throws Exception {
+        try {
+            if (counter % 2 == 0)
+                return alternativeTask2;
+            else
+                return alternativeTask1;
+        } finally {
+            counter ++;
+        }
+    }
+
+    @Override
+    public  Class getTargetClass() {
+        return ITask.class;
+    }
+
+    @Override
+    public boolean isStatic() {
+        return false;
+    }
+
+    @Override
+    public void releaseTarget(Object arg0) throws Exception {
+
+    }
+}
+```
+</details>
+
+<details>
+	<summary>Test4AlternativeTargetSource</summary>
+
+```java
+package org.springframework.mylearntest.aop.weaver.selfdefinetargetsource;
+
+import org.springframework.aop.TargetSource;
+import org.springframework.aop.framework.ProxyFactory;
+import org.springframework.mylearntest.aop.weaver.baseoninterface.ITask;
+
+import java.util.Date;
+
+/**
+ * @Author: whalefall
+ * @Date: 2020/7/27 22:33
+ */
+public class Test4AlternativeTargetSource {
+    public static void main(String[] args) {
+        ITask task1 = new ITask() {
+            @Override
+            public void execute(Date date) {
+                System.out.println("execute in Task1");
+            }
+        };
+
+        ITask task2 = new ITask() {
+            @Override
+            public void execute(Date date) {
+                System.out.println("execute in Task2");
+            }
+        };
+
+        ProxyFactory pf = new ProxyFactory();
+        TargetSource targetSource = new AlternativeTargetSource(task1, task2);
+        pf.setTargetSource(targetSource);
+        Object proxy = pf.getProxy();
+        for (int i = 0; i < 100; i++) {
+            ((ITask)proxy).execute(new Date());
+        }
+    }
+}
+```
+</details>
+
+> 参考资料
+> 
+> 1. 书籍名称：Spring揭秘 作者：王福强
+> 2. [https://github.com/spring-projects/spring-framework.git](https://github.com/spring-projects/spring-framework.git)
+
+
+:::tip 协议
+
+- 本作品代码部分采用 [Apache 2.0协议](https://www.apache.org/licenses/LICENSE-2.0)进行许可。遵循许可的前提下，你可以自由地对代码进行修改，再发布，可以将代码用作商业用途。但要求你：
+  - **署名**：在原有代码和衍生代码中，保留原作者署名及代码来源信息。
+  - **保留许可证**：在原有代码和衍生代码中，保留Apache 2.0协议文件。
+
+- 本作品文档部分采用[知识共享署名 4.0 国际许可协议](http://creativecommons.org/licenses/by/4.0/)进行许可。 遵循许可的前提下，你可以自由地共享，包括在任何媒介上以任何形式复制、发行本作品，亦可以自由地演绎、修改、转换或以本作品为基础进行二次创作。但要求你：
+  - **署名**：应在使用本文档的全部或部分内容时候，注明原作者及来源信息。
+  - **非商业性使用**：不得用于商业出版或其他任何带有商业性质的行为。如需商业使用，请联系作者。
+  - **相同方式共享的条件**：在本文档基础上演绎、修改的作品，应当继续以知识共享署名 4.0国际许可协议进行许可。
+
+:::

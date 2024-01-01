@@ -1,0 +1,98 @@
+---
+title: integrate husky prettier etc
+sidebar_label: integrate husky prettier etc
+sidebar_position: 11
+---
+
+# Integrate husky prettier etc
+
+*You can use this command to install all the needed dependencies*
+
+> pnpm install husky lint-staged eslint prettier -D
+
+## Create Project with vite
+
+`pnpm create vite-app vue3-ts`
+
+## Install Dependencies
+
+`integrate husky prettier etc`
+
+## Configure prettier
+
+```json
+// .prettierrc.json
+{
+  "singleQuote": true,
+  "semi": true,
+  "printWidth": 100,
+  "trailingComma": "all",
+  "endOfLine": "auto"
+}
+```
+
+you can format code using `pnpx prettier --write .`
+
+## Configure eslint
+
+```shell
+# inialize eslint 
+pnpm create @eslint/config
+```
+
+The following optional, you can choose the same with me.
+
+![image-20231231160250767](https://s2.loli.net/2023/12/31/194DgcJLWNP2V5y.png)
+
+run the command `pnpx eslint .` to check eslint rules;
+
+## Install huskey and Configure it
+
+```shell
+# init hustky 
+pnpm husky install
+# Configure husky 
+pnpx husky add .husky/pre-commit "pnpm lint-staged"
+```
+
+after run the command above, see your project like this, a underline directory and a pre-commit file auto created.
+
+![image-20231231154728294](https://s2.loli.net/2023/12/31/NtE6ZeXCjAdHfGV.png)
+
+Wait a minute, another configuration need to configure.
+
+```shell
+// pakage.json
+  "scripts": {
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "prepare": "husky install",
+    "lint-staged": "lint-staged"
+  },
+ "lint-staged": {
+    "*.{js,ts,vue}": [
+      "eslint --fix"
+    ]
+  },
+```
+
+## Check the husky 
+
+Run the command following to commit some files
+
+```shell
+git add .
+
+git commit -m 'test for husky'
+```
+
+You will see this in the console:
+
+![image-20231231160344135](https://s2.loli.net/2023/12/31/f1Ap5UPsdYVjOMG.png)
+
+Congratulations, you succeed to use `git commit` trigger lint-stage.
+
+This conclude eslint fix code and prettier format code.
+
+## To the End 
+
+Thanks for your time, If you get something from my article, please give me clap, mean the while, feel free to ask question as you need.

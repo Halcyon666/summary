@@ -1,0 +1,67 @@
+---
+title: 插入排序
+sidebar_label: 插入排序
+sidebar_position: 5
+---
+
+**插入排序**
+将`i`元素插入到下标为`0`~`i-1`的位置上，逐个比较，如果发现前面的元素比`arr[i]`大
+则将该元素后移 否则将`i`元素放入到空位置上
+
+```java
+package whale.simpleAlgorithm;
+
+
+/**
+ * @Author: WhaleFall541
+ * @Date: 2021/4/4 16:08
+ */
+public class SimpleSort {
+
+    public static void main(String[] args) throws InterruptedException {
+
+        int[] arr = {-1111, 20, -3, -10, 100, -255};
+
+        insertSort(arr);
+        StringBuilder sb = new StringBuilder();
+        for (int i : arr)
+            sb.append(i).append(" ");
+        System.out.println("sb = " + sb);
+
+    }
+
+    // 插入排序
+    private static void insertSort(int[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            // 需要将i插入到前面子序列
+            if (arr[i] < arr[i - 1]) {
+                int k = arr[i], j;
+                // i为要插入的元素,j为i往前的元素
+                // 如果arr[j]比k大 则把arr[j]元素往后挪
+                // 如果arr[j]比k小则直接插入元素在空位上
+                for (j = i - 1; j >= 0 && arr[j] > k; j--)
+                    arr[j + 1] = arr[j];
+                // 将元素放到比k小的后面
+                arr[j + 1] = k;
+            }
+        }
+    }
+}
+
+```
+
+
+
+
+:::tip 协议
+
+- 本作品代码部分采用 [Apache 2.0协议](https://www.apache.org/licenses/LICENSE-2.0)进行许可。遵循许可的前提下，你可以自由地对代码进行修改，再发布，可以将代码用作商业用途。但要求你：
+  - **署名**：在原有代码和衍生代码中，保留原作者署名及代码来源信息。
+  - **保留许可证**：在原有代码和衍生代码中，保留Apache 2.0协议文件。
+
+- 本作品文档部分采用[知识共享署名 4.0 国际许可协议](http://creativecommons.org/licenses/by/4.0/)进行许可。 遵循许可的前提下，你可以自由地共享，包括在任何媒介上以任何形式复制、发行本作品，亦可以自由地演绎、修改、转换或以本作品为基础进行二次创作。但要求你：
+  - **署名**：应在使用本文档的全部或部分内容时候，注明原作者及来源信息。
+  - **非商业性使用**：不得用于商业出版或其他任何带有商业性质的行为。如需商业使用，请联系作者。
+  - **相同方式共享的条件**：在本文档基础上演绎、修改的作品，应当继续以知识共享署名 4.0国际许可协议进行许可。
+
+:::

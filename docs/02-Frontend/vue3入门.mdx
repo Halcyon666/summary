@@ -1,0 +1,620 @@
+---
+title: vue3 入门
+sidebar_label: vue3 入门
+sidebar_position: 7
+---
+
+## 前端工程化
+
+#### `SPA`、`SSR` 和 `SSG`（部署 渲染方式）
+
+1. **SPA (Single Page Application)**:
+   - **适用场景**: 适用于需要提供高度交互性和实时性的应用，例如Web应用程序、管理后台、社交媒体平台等。
+   - **优势**: 用户体验更接近传统桌面应用，可以更灵活地实现复杂的交互逻辑。
+   - **注意事项**: 初始加载可能较慢，对SEO的支持相对较差。
+2. **SSR (Server-Side Rendering)**:
+   - **适用场景**: 适用于需要更好的搜索引擎优化（SEO）和更快的首次加载速度的应用，例如博客、新闻网站等。
+   - **优势**: 提供更好的SEO，加快了页面的首次加载速度。
+   - **注意事项**: 服务器端渲染通常需要更多的服务器资源，因此成本可能较高。
+3. **SSG (Static Site Generation)**:
+   - **适用场景**: 适用于内容相对固定、不经常更改，并且主要是展示性内容的站点，例如公司官方网站、博客、文档网站等。
+   - **优势**: 提供非常快的加载速度，适用于不需要实时更新内容的站点。
+   - **注意事项**: 不适用于需要实时数据或动态内容的应用。
+
+#### nvm安装使用
+
+[原文地址](https://zhuanlan.zhihu.com/p/608604094)
+
+[download](https://github.com/coreybutler/nvm-windows/releases)
+
+配置
+
+```tex
+root: D:\software\nvm
+path: D:\software\nodejs
+
+node_mirror: https://npm.taobao.org/mirrors/node/
+npm_mirror: https://npm.taobao.org/mirrors/npm/
+```
+
+
+
+```powershell
+nvm list available
+nvm install 20.8.0
+nvm list
+nvm use 20.8.0
+
+nvm off                     # 禁用node.js版本管理(不卸载任何东西)
+nvm on                      # 启用node.js版本管理
+nvm install <version>       # 安装node.js的命名 version是版本号 例如：nvm install 8.12.0
+nvm uninstall <version>     # 卸载node.js是的命令，卸载指定版本的nodejs，当安装失
+# 败时卸载使用
+nvm ls                      # 显示所有安装的node.js版本
+nvm list available          # 显示可以安装的所有node.js的版本
+nvm use <version>           # 切换到使用指定的nodejs版本
+nvm v                       # 显示nvm版本
+nvm install stable          # 安装最新稳定版
+```
+
+#### babel
+
+[原文地址](https://www.ruanyifeng.com/blog/2016/01/babel.html)
+
+## 单组件页面
+
+### 响应式 API 之 reactive
+
+相对于 `ref` ，它的局限性在于只适合对象、数组。
+
+```ts
+const uids: number[] = reactive([1, 2, 3])
+
+/**
+ * 推荐使用这种方式，不会破坏响应性
+ */
+uids.length = 0
+
+//破坏响应性
+// uids = []
+
+// 异步获取数据后，模板可以正确的展示
+setTimeout(() => {
+  uids.push(1)
+}, 1000)
+```
+
+不要对 Reactive 数据进行 [ES6 的解构](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) 操作，因为解构后得到的变量会失去响应性。
+
+```ts
+import { defineComponent, reactive } from 'vue'
+
+interface Member {
+  id: number
+  name: string
+}
+
+export default defineComponent({
+  setup() {
+    // 定义一个带有响应性的对象
+    const userInfo: Member = reactive({
+      id: 1,
+      name: 'Petter',
+    })
+
+    // 在 2s 后更新 `userInfo`
+    setTimeout(() => {
+      userInfo.name = 'Tom'
+    }, 2000)
+
+    // 这个变量在 2s 后不会同步更新
+    const newUserInfo: Member = { ...userInfo }
+
+    // 这个变量在 2s 后不会再同步更新
+    const { name } = userInfo
+
+    // 这样 `return` 出去给模板用，在 2s 后也不会同步更新
+    return {
+      ...userInfo,
+    }
+  },
+})
+```
+
+### 响应式 API 之 toRef 与 toRefs
+
+#### toRef
+
+Vue 3 还推出了两个与之相关的 API ： `toRef` 和 `toRefs` ，都是用于 `reactive` 向 `ref` 转换。
+
+```ts
+const name = toRef(userInfo, 'name')
+console.log(name.value) // Petter
+```
+
+```ts
+interface Member {
+  id: number
+  name: string
+  // 类型上新增一个属性，因为是可选的，因此默认值会是 `undefined`
+  age?: number
+}
+
+// 声明变量时省略 `age` 属性
+const userInfo: Member = reactive({
+  id: 1,
+  name: 'Petter',
+})
+
+// 此时为了避免程序运行错误，可以指定一个初始值
+// 但初始值仅对 Ref 变量有效，不会影响 Reactive 字段的值
+const age = toRef(userInfo, 'age', 18)
+console.log(age.value)  // 18
+console.log(userInfo.age) // undefined
+
+// 除非重新赋值，才会使两者同时更新
+age.value = 25
+console.log(age.value)  // 25
+console.log(userInfo.age) // 25
+```
+
+#### toRefs
+
+```ts
+interface Member {
+  id: number
+  name: string
+}
+
+// 声明一个 Reactive 变量
+const userInfo: Member = reactive({
+  id: 1,
+  name: 'Petter',
+})
+
+// 传给 `toRefs` 作为入参
+const userInfoRefs = toRefs(userInfo)
+```
+
+```ts
+// 导入 `toRefs` API 的类型
+import type { ToRefs } from 'vue'
+
+// 上下文代码省略...
+
+// 将原来的类型传给 API 的类型
+const userInfoRefs: ToRefs<Member> = toRefs(userInfo)
+```
+
+或者
+
+```ts
+// 导入 `ref` API 的类型
+import type { Ref } from 'vue'
+
+// 上下文代码省略...
+
+// 新声明的类型每个字段都是一个 Ref 变量的类型
+interface MemberRefs {
+  id: Ref<number>
+  name: Ref<string>
+}
+
+// 使用新的类型进行声明
+const userInfoRefs: MemberRefs = toRefs(userInfo)
+```
+
+不要直接对reactive对象解构，可以先转化成ref对象再进行解构
+
+```ts
+// 为了提高开发效率，可以直接将 Ref 变量直接解构出来使用
+const { name } = toRefs(userInfo)
+console.log(name.value) // Petter
+
+// 此时对解构出来的变量重新赋值，原来的变量也可以同步更新
+name.value = 'Tom'
+console.log(name.value) // Tom
+console.log(userInfo.name) // Tom
+```
+
+`ref` API 虽然在 `<template />` 里使用起来方便，但是在 `<script />` 里进行读取 / 赋值的时候，要一直记得加上 `.value` ，否则 BUG 就来了。
+
+`reactive` API 虽然在使用的时候，因为知道它本身是一个对象，所以不会忘记通过 `foo.bar` 这样的格式去操作，但是在 `<template />` 渲染的时候，又因此不得不每次都使用 `foo.bar` 的格式去渲染。
+
+
+
+由于 `return` 出来的都是 Ref 变量，所以在模板里可以直接使用 `userInfo` 各个字段的 `key` ，不再需要写很长的 `userInfo.name` 了。
+
+```vue
+<template>
+  <ul class="user-info">
+    <li class="item">
+      <span class="key">ID:</span>
+      <span class="value">{{ id }}</span>
+    </li>
+
+    <li class="item">
+      <span class="key">name:</span>
+      <span class="value">{{ name }}</span>
+    </li>
+
+    <li class="item">
+      <span class="key">age:</span>
+      <span class="value">{{ age }}</span>
+    </li>
+
+    <li class="item">
+      <span class="key">gender:</span>
+      <span class="value">{{ gender }}</span>
+    </li>
+  </ul>
+</template>
+```
+
+
+
+此时它们在 `<template />` 里哪个会生效，取决于谁排在后面，因为 `return` 出去的其实是一个对象，在对象里，如果存在相同的 `key` ，则后面的会覆盖前面的。
+
+下面这种情况，会以单独的 `name` 为渲染数据：
+
+```ts
+return {
+  ...userInfoRefs,
+  name,
+}
+```
+
+### 侦听
+
+不能使用箭头函数来定义 Watcher 函数 (例如 `searchQuery: newValue => this.updateAutocomplete(newValue)` )。
+
+因为箭头函数绑定了父级作用域的上下文，所以 `this` 将不会按照期望指向组件实例， `this.updateAutocomplete` 将是 `undefined` 。
+
+
+
+#### reactive 和 ref 深度侦听?
+
+默认reactive会开启深度侦听，默认ref不会开启深度侦听
+
+```ts
+// 导入 isReactive API
+import { defineComponent, isReactive, reactive, ref } from 'vue'
+
+export default defineComponent({
+  setup() {
+    // 侦听这个数据时，会默认开启深度侦听
+    const foo = reactive({
+      name: 'Petter',
+      age: 18,
+    })
+    console.log(isReactive(foo)) // true
+
+    // 侦听这个数据时，不会默认开启深度侦听
+    const bar = ref({
+      name: 'Petter',
+      age: 18,
+    })
+    console.log(isReactive(bar)) // false
+  },
+})
+```
+
+#### 卸载并清理侦听
+
+```ts
+let unwatch: WatchStopHandle
+unwatch = watch(
+  message,
+  (newValue, oldValue, onCleanup) => {
+    // 需要在停止侦听之前注册好清理行为
+    onCleanup(() => {
+      console.log('侦听清理ing')
+      // 根据实际的业务情况定义一些清理操作 ...
+    })
+    // 然后再停止侦听
+    if (typeof unwatch === 'function') {
+      unwatch()
+    }
+  },
+  {
+    immediate: true,
+  }
+)
+```
+
+
+
+#### watchEffect 侦听多个数据
+
+```ts
+<script setup>
+import { ref, watchEffect } from 'vue';
+
+// 单独定义两个数据，后面用来分开改变数值
+const name = ref<string>('Petter');
+const age = ref<number>(18);
+
+// 定义一个调用这两个数据的函数
+const getUserInfo = (): void => {
+  console.log({
+    name: name.value,
+    age: age.value,
+  });
+};
+
+// 使用 watchEffect 直接侦听调用函数，在每个数据产生变化的时候，它都会自动执行
+watchEffect(getUserInfo);
+
+// 2s后改变第一个数据
+setTimeout(() => {
+  name.value = 'Tom';
+}, 2000);
+
+// 4s后改变第二个数据
+setTimeout(() => {
+  age.value = 20;
+}, 4000);
+</script>
+
+```
+
+#### `watchEffect` 和 `watch`区别
+
+`watchEffect` 是 `watch` 的一个简化操作，可以用来代替 [批量侦听](https://vue3.chengpeiquan.com/component.html#批量侦听) ，但它们也有一定的区别：
+
+1. `watch` 可以访问侦听状态变化前后的值，而 `watchEffect` 没有。
+2. `watch` 是在属性改变的时候才执行，而 `watchEffect` 则默认会执行一次，然后在属性改变的时候也会执行。
+
+### style module
+
+使用v-html绑定css样式
+
+```vue
+<template>
+  <div v-html="content"></div>
+</template>
+
+<script lang="ts">
+import { defineComponent, useCssModule } from 'vue'
+
+export default defineComponent({
+  setup() {
+    // 获取样式
+    const style = useCssModule('classes')
+
+    // 编写模板内容
+    const content = `<p class="${style.msg}">
+      <span class="${style.text}">Hello World! —— from v-html</span>
+    </p>`
+
+    return {
+      content,
+    }
+  },
+})
+</script>
+
+<style module="classes">
+.msg {
+  color: #ff0000;
+}
+.text {
+  font-size: 14px;
+}
+</style>
+```
+
+
+
+## pinia状态管理
+
+![image-20231216215448617](https://s2.loli.net/2023/12/16/POrZGAFyiBmMVKa.png)
+
+> [原文地址](https://vue3.chengpeiquan.com/pinia.html)
+> Vue3入门指南与实战案例
+
+### pinia `storeToRefs` 返回响应式数据
+
+```ts
+import { defineComponent } from 'vue'
+import { useStore } from '@/stores'
+
+// 记得导入这个 API
+import { storeToRefs } from 'pinia'
+
+export default defineComponent({
+  setup() {
+    const store = useStore()
+
+    // 通过 storeToRefs 来拿到响应性的 message
+    const { message } = storeToRefs(store)
+    console.log('message', message.value)
+
+    return {
+      message,
+    }
+  },
+})
+```
+
+```ts
+// 直接赋值即可
+message.value = 'New Message.'
+
+// store 上的数据已成功变成了 New Message.
+console.log(store.message)
+```
+
+
+
+###  toRef 
+
+```ts
+// 注意 toRef 是 vue 的 API ，不是 Pinia
+import { defineComponent, toRef } from 'vue'
+import { useStore } from '@/stores'
+
+export default defineComponent({
+  setup() {
+    const store = useStore()
+
+    // 遵循 toRef 的用法即可
+    const message = toRef(store, 'message')
+    console.log('message', message.value)
+
+    return {
+      message,
+    }
+  },
+})
+```
+
+
+
+### 等效类型声明
+
+```ts
+const imageListD = ref([] as ImageData[]);
+const imageListD = ref<ImageData[]>([]);
+
+```
+
+
+
+### pinia同时修改多个参数
+
+```ts
+// 继续用前面的数据，这里会打印出修改前的值
+console.log(JSON.stringify(store.$state))
+// 输出 {"message":"Hello World","randomMessages":[]}
+
+/**
+ * 注意这里，传入了一个对象
+ */
+store.$patch({
+  message: 'New Message',
+  randomMessages: ['msg1', 'msg2', 'msg3'],
+})
+
+// 这里会打印出修改后的值
+console.log(JSON.stringify(store.$state))
+// 输出 {"message":"New Message","randomMessages":["msg1","msg2","msg3"]}
+```
+
+### pinia传入一个函数
+
+```ts
+// 这里会打印出修改前的值
+console.log(JSON.stringify(store.$state))
+// 输出 {"message":"Hello World","randomMessages":[]}
+
+/**
+ * 注意这里，这次是传入了一个函数
+ */
+store.$patch((state) => {
+  state.message = 'New Message'
+
+  // 数组改成用追加的方式，而不是重新赋值
+  for (let i = 0; i < 3; i++) {
+    state.randomMessages.push(`msg${i + 1}`)
+  }
+})
+
+// 这里会打印出修改后的值
+console.log(JSON.stringify(store.$state))
+// 输出 {"message":"New Message","randomMessages":["msg1","msg2","msg3"]}
+```
+
+> 使用这个方式时，和 [传入一个对象](https://vue3.chengpeiquan.com/pinia.html#传入一个对象) 一样只能修改已定义的数据，并且另外需要注意，传进去的函数只能是同步函数，不可以是异步函数！
+
+### pinia重置state
+
+```ts
+// 这个 store 是上面定义好的实例
+store.$reset()
+```
+
+## 高效开发
+
+
+
+![image-20231216223025032](https://s2.loli.net/2023/12/16/keKYhV5nwWjXsMF.png)
+
+### script-setup
+
+在 Vue 3 的 Composition API 写法里，数据或函数如果需要在 `<template />` 中使用，就必须在 `setup` 里将其 `return` 出去，而仅在 `<script />` 里被调用的函数或变量，不需要渲染到模板则无需 `return` 。
+
+script-setup 的推出是为了让熟悉 Vue 3 的开发者可以更高效率地开发组件，减少编码过程中的心智负担，只需要给 `<script />` 标签添加一个 `setup` 属性，那么整个 `<script />` 就直接会变成 setup 函数，所有顶级变量、函数，均会自动暴露给模板使用（无需再一个个 return 了）。
+
+
+
+> 那么为什么 Vue 3 要舍弃 `Object.defineProperty` ，换成 `Proxy` 
+>
+> 1. 无法侦听数组下标的变化，通过 `arr[i] = newValue` 这样的操作无法实时响应
+> 2. 无法侦听数组长度的变化，例如通过 `arr.length = 10` 去修改数组长度，无法响应
+> 3. 只能侦听对象的属性，对于整个对象需要遍历，特别是多级对象更是要通过嵌套来深度侦听
+> 4. 使用 `Object.assign()` 等方法给对象添加新属性时，也不会触发更新
+
+### defineProps
+
+如果想对某个数据设置为可选，也是遵循 TS 规范，通过英文问号 `?` 来允许可选：
+
+```ts
+defineProps({
+  name: {
+    type: String,
+    required: false,
+    default: 'Petter',
+  },
+  userInfo: Object,
+  tags: Array,
+})
+```
+
+### defineEmits
+
+```ts
+// 获取 emit
+const emit = defineEmits(['update-name'])
+
+// 调用 emit
+emit('update-name', 'Tom')
+```
+
+### attrs 的接收方式变化
+
+```ts
+import { useAttrs } from 'vue'
+
+// 获取 attrs
+const attrs = useAttrs()
+
+// attrs 是个对象，和 props 一样，需要通过 `key` 来得到对应的单个 attr
+console.log(attrs.msg)
+```
+
+### 父组件使用子组件的数据
+
+在 script-setup 模式下，如果要调用子组件的数据，需要先在子组件显式的暴露出来，才能够正确的拿到，这个操作，就是由 defineExpose API 来完成。
+
+```ts
+<script setup lang="ts">
+const msg = 'Hello World!'
+
+// 通过该 API 显式暴露的数据，才可以在父组件拿到
+defineExpose({
+  msg,
+})
+</script>
+```
+
+### 命名说明
+
+页面名称 ,ts kebab-case 短横线风格命名
+
+组件  PascalCase 帕斯卡命名法，也就是大驼峰
+
+![image-20231216230639470](https://s2.loli.net/2023/12/16/UXMxtR7eQ3EFzqs.png)
+
+变量命名小写驼峰
+

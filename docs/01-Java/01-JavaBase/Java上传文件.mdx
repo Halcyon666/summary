@@ -1,0 +1,279 @@
+---
+title: Java上传文件
+sidebar_label: Java上传文件
+sidebar_position: 3
+---
+
+## Controller接口
+
+<details>
+	<summary>定义一个可以接收文件的Controller类</summary>
+
+```java
+package whalefall.filedownloadorup;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+/**
+ * @author: WhaleFall541
+ * @date: 2021/11/25 22:29
+ */
+@RestController
+@Slf4j
+public class Test4HtmlController {
+
+    @PostMapping("upload1")
+    public String upload1(@RequestParam("file") MultipartFile file, @RequestParam("test") String test) {
+        log.info("upload1 {} test {}", file.getOriginalFilename(), test);
+        return "OK";
+    }
+
+}
+
+```
+</details>
+
+## 使用 Resttemplate 上传文件
+
+使用Spring-Boot 时集成Resttemplate 无需额外导包
+
+
+<details>
+	<summary>使用 Resttemplate FileSystemResource 单元测试代码</summary>
+
+```java
+package whalefall.filedownloadorup;
+
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+
+import java.io.File;
+
+import static whalefall.filedownloadorup.TestHttpClientUpload1.FILE_PATH;
+import static whalefall.filedownloadorup.TestHttpClientUpload1.UPLOAD_URL;
+
+/**
+ * @author Halcyon
+ * @since 1.0.0
+ */
+public class TestRestTemplateUpload {
+    private static final Logger logger = LoggerFactory.getLogger(TestHttpClientUpload1.class);
+    @Test
+    public void testResttemplateUpload() {
+        File file = new File(FILE_PATH);
+
+        // 创建RestTemplate实例
+        RestTemplate restTemplate = new RestTemplate();
+
+        // 构建请求体
+        MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
+        // ByteArrayResource 也可以但是要覆盖getFilename方法 适用于byte字节文件
+        requestBody.add("file", new FileSystemResource(file)); // 添加文件
+        requestBody.add("test", "testResttemplateUpload test");
+
+        // 设置请求头
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        // 创建HttpEntity，将请求体和请求头封装进去
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+
+        // 发送POST请求
+        ResponseEntity<String> response = restTemplate.exchange(UPLOAD_URL, HttpMethod.POST, requestEntity, String.class);
+
+        // 获取服务器的响应状态码和响应体
+        int statusCode = response.getStatusCodeValue();
+        String responseBody = response.getBody();
+
+        Assertions.assertEquals(200, statusCode);
+        Assertions.assertEquals("OK", responseBody);
+    }
+}
+
+```
+</details>
+
+
+<details>
+	<summary>使用 Resttemplate ByteArrayResource 单元测试代码</summary>
+
+```java
+package whalefall.filedownloadorup;
+
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Objects;
+
+import static whalefall.filedownloadorup.TestHttpClientUpload1.FILE_PATH;
+import static whalefall.filedownloadorup.TestHttpClientUpload1.UPLOAD_URL;
+
+/**
+ * @author Halcyon
+ * @since 1.0.0
+ */
+public class TestRestTemplateUpload2 {
+    private static final Logger logger = LoggerFactory.getLogger(TestHttpClientUpload1.class);
+
+    public static byte[] readFileAsByteArray(String filePath) {
+        try (FileInputStream fis = new FileInputStream(filePath);
+             ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = fis.read(buffer)) != -1) {
+                bos.write(buffer, 0, bytesRead);
+            }
+            return bos.toByteArray();
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    @Test
+    public void testResttemplateUpload() throws IOException {
+
+        // 创建RestTemplate实例
+        RestTemplate restTemplate = new RestTemplate();
+
+        // 构建请求体
+        MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
+        requestBody.add("file", new ByteArrayResource(Objects.requireNonNull(readFileAsByteArray(FILE_PATH))) {
+            @Override
+            public String getFilename() {
+                return "test.xlsx";
+            }
+        });
+        requestBody.add("test", "testResttemplateUpload2 test");
+
+        // 设置请求头
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        // 创建HttpEntity，将请求体和请求头封装进去
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+
+        // 发送POST请求
+        ResponseEntity<String> response = null;
+        try {
+            response = restTemplate.exchange(UPLOAD_URL, HttpMethod.POST, requestEntity, String.class);
+            // 获取服务器的响应状态码和响应体
+            int statusCode = response.getStatusCodeValue();
+            String responseBody = response.getBody();
+
+            Assertions.assertEquals(200, statusCode);
+            Assertions.assertEquals("OK", responseBody);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+
+    }
+}
+
+```
+</details>
+
+
+
+## 使用 HttpClient 上传文件
+
+**导包**
+
+```groovy
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    implementation 'org.apache.httpcomponents:httpmime:4.5.13'
+```
+
+<details>
+	<summary>使用 HttpClient 单元测试代码</summary>
+
+```java
+package whalefall.filedownloadorup;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
+
+/**
+ * @author Halcyon
+ * @since 1.0.0
+ */
+public class TestHttpClientUpload1 {
+    // 替换为要发送的Excel文件路径
+    public static final String FILE_PATH = Objects.requireNonNull(TestHttpClientUpload1.class.getResource("/exceltemplet/priceListTemplate.xlsx")).getPath();// 替换为接收文件的服务器URL
+    public static final String UPLOAD_URL = "http://localhost:8080/upload1";
+    private static final Logger logger = LoggerFactory.getLogger(TestHttpClientUpload1.class);
+
+    @Test
+    public void testHttpClientUpload() {
+
+        File file = new File(FILE_PATH);
+
+        // 创建CloseableHttpClient实例
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+
+        // 创建HttpPost请求
+        HttpPost httpPost = new HttpPost(UPLOAD_URL);
+
+        // 创建Multipart实体
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        builder.addBinaryBody("file", file, ContentType.APPLICATION_OCTET_STREAM, file.getName());
+
+        // 添加其他参数
+        builder.addTextBody("test", "testHttpClientUpload test");
+
+        // 设置请求实体
+        HttpEntity entity = builder.build();
+        httpPost.setEntity(entity);
+        int statusCode = 500;
+        // 发送HttpPost请求，并获取服务器的响应
+        try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+            // 获取服务器的响应状态码
+            statusCode = response.getStatusLine().getStatusCode();
+
+            // 在这里可以处理服务器的响应，比如检查是否上传成功等
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+        Assertions.assertEquals(200, statusCode);
+    }
+
+}
+```
+</details>
