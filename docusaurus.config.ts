@@ -35,7 +35,6 @@ const config: Config = {
   },
   themes: ['@docusaurus/theme-mermaid'],
 
-
   presets: [
     [
       'classic',
