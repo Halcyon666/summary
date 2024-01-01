@@ -39,8 +39,8 @@ const config: Config = {
     [
       "classic",
       {
-        // @ts-ignore
         sitemap: {
+          // @ts-ignore
           changefreq: 'weekly',
           priority: 0.5,
           ignorePatterns: ['/tags/**'],
