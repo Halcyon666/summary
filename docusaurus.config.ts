@@ -66,7 +66,7 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'halcyon666 Blog',
+      title: 'halcyon666',
       logo: {
         alt: 'My Site Logo',
         src: 'img/favicon.png',
@@ -158,7 +158,7 @@ const config: Config = {
           ],
         },
       ], */
-      copyright: `Copyright © ${new Date().getFullYear()} My Blogs, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Halcyon666 Blog. Built with Docusaurus3.0.1`,
     },
     prism: {
       theme: prismThemes.github,
