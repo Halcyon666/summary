@@ -39,6 +39,13 @@ const config: Config = {
     [
       "classic",
       {
+        // @ts-ignore
+        sitemap: {
+          changefreq: 'weekly',
+          priority: 0.5,
+          ignorePatterns: ['/tags/**'],
+          filename: 'sitemap.xml',
+        },
         docs: {
           // put the docs to the rott directory
           routeBasePath: "/",
