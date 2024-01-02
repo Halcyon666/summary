@@ -2,7 +2,7 @@ import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
-import HomepageFeatures from "@site/src/components/HomepageFeatures";
+import Head from "@docusaurus/Head";
 import Heading from "@theme/Heading";
 
 import styles from "./index.module.css";
@@ -36,6 +36,14 @@ export default function Home(): JSX.Element {
       title={`${siteConfig.title}`}
       description="Description will go into a meta tag in <head />"
     >
+      <Head>
+        {/* Include Google Ads script in the head */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4872091594975928"
+          crossOrigin="anonymous"
+        ></script>
+      </Head>
       <HomepageHeader />
 
     </Layout>
