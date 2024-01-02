@@ -12,7 +12,7 @@ const config: Config = {
   url: "https://halcyon666.github.io",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/summary/",
+  baseUrl: "/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -80,8 +80,8 @@ const config: Config = {
     navbar: {
       title: "halcyon666",
       logo: {
-        alt: "My Site Logo",
-        src: "img/favicon.png",
+        alt: 'My Site Logo',
+        src: 'img/logo.svg',
       },
       items: [
         {
