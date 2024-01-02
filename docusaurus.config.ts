@@ -12,7 +12,7 @@ const config: Config = {
   url: "https://halcyon666.github.io",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/",
+  baseUrl: "/summary/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -92,7 +92,7 @@ const config: Config = {
         },
         // {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: "https://github.com/Halcyon666/summary",
+          href: "https://github.com/Halcyon666/summary/",
           label: "GitHub",
           position: "right",
         },
