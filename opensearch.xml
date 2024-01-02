@@ -4,8 +4,8 @@
   <ShortName>halcyon666</ShortName>
   <Description>Search halcyon666</Description>
   <InputEncoding>UTF-8</InputEncoding>
-  <Image width="16" height="16" type="image/x-icon">http://halcyon666.top/summary/img/favicon.png</Image>
-  <Url type="text/html" method="get" template="http://halcyon666.top/summary/search?q={searchTerms}"/>
-  <Url type="application/opensearchdescription+xml" rel="self" template="http://halcyon666.top/summary/opensearch.xml" />
-  <moz:SearchForm>http://halcyon666.top/summary/</moz:SearchForm>
+  <Image width="16" height="16" type="image/x-icon">http://halcyon666.top/img/favicon.png</Image>
+  <Url type="text/html" method="get" template="http://halcyon666.top/search?q={searchTerms}"/>
+  <Url type="application/opensearchdescription+xml" rel="self" template="http://halcyon666.top/opensearch.xml" />
+  <moz:SearchForm>http://halcyon666.top/</moz:SearchForm>
 </OpenSearchDescription>
