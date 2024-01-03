@@ -169,7 +169,7 @@ const config: Config = {
           ],
         },
       ], */
-      copyright: `Copyright © ${new Date().getFullYear()} Halcyon666 Blog. Built with Docusaurus3.0.1`,
+      copyright: `Copyright © ${new Date().getFullYear()} Halcyon666 Blog. Built with Docusaurus`,
     },
     prism: {
       theme: prismThemes.github,
