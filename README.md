@@ -1,3 +1,6 @@
+
+[![Crowdin](https://badges.crowdin.net/summary/localized.svg)](https://crowdin.com)
+
 # Website
 
 This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.

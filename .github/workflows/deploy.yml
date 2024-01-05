@@ -20,6 +20,8 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+      - name: Fetch I18n
+        run: yarn crowdin:sync
       - name: Build website
         run: yarn build
 
