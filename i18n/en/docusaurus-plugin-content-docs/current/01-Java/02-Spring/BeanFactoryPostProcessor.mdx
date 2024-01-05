@@ -1,0 +1,265 @@
+---
+title: BeanFactoryPostProcessor
+sidebar_label: BeanFactoryPostProcessor
+sidebar_position: 4
+---
+
+本文相关代码(来自[官方源码](https://github.com/spring-projects/spring-framework.git "官方源码")spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) org.springframework.mylearntest包下。
+
+容器启动阶段
+
+-   容器启动开始，首先会通过某种途径加载Configuration MetaData。除了代码方式比较直接，在大部分情况下，容器需要依赖某些工具类（BeanDefinitionReader）对加载的Configuration MetaData进行解析和分析，并将分析后的信息编组为相应的BeanDefinition，最后把这些保存了bean定义必要信息的BeanDefinition，注册到相应的BeanDefinitionRegistry，这样容器启动工作就完成了。
+
+Bean实例化阶段
+
+-   第一阶段: 现在所有的bean定义信息都通过BeanDefinition的方式注册到了BeanDefinitionRegistry中。
+
+-   第二阶段: 当某个请求方通过容器的getBean方法明确地请求某个对象时，或者因依赖关系容器需要隐式地调用getBean方法时。该阶段，容器会首先检查所请求的对象之前是否已经初始化。如果没有，则会根据注册的BeanDefinition所提供的信息实例化被请求对象，并为其注入依赖。如果该对象实现了某些回调接口，也会根据回调接口的要求来装配它。当该对象装配完毕之后，容器会立即将其返回请求方使用。
+
+## BeanFactoryPostProcessor
+
+Spring提供了一种叫做BeanFactoryPostProcessor的容器扩展机制。该机制允许我们在容器实例化相应对象之前，对注册到容器的BeanDefinition所保存的信息做相应的修改。这就相当于在容器实现的第一阶段最后加入一道工序，让我们对最终BeanDefinition做一些额外的操作，比如修改其中bean定义的某些属性，为bean定义增加其他信息等。
+
+如果要自定义实现BeanFactoryPostProcessor，通常我们需要实现`org.springframework.beans.factory.config.BeanFactoryPostProcessor`接口。这个时候可能需要实现类同时实现Spring的org.springframework.core.Ordered接口，以保证各个BeanFactoryPostProcessor可以按照预先设定的顺序执行（如果顺序紧要的话）。
+
+其中,`org.springframework.beans.factory.config.PropertyPlaceholderConfigurer`和`org.springframework.beans.factory.config.PropertyOverrideConfigurer`是两个比较常用的BeanFactoryPostProcessor。
+
+### PropertyPlaceholderConfigurer
+
+<details>
+	<summary>xml配置</summary>
+
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<!--	使用的BeanFactoryPostProcessor-->
+	<!--	使用PropertyPlaceholderConfigurer占位符的数据源配置-->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>../conf/jdbc.properties</value>
+				<value>../conf/mail.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+		<property name="url" value="${jdbc.url}"/>
+		<property name="driverClassName" value="${jdbc.driver}"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+		<property name="testOnBorrow" value="true"/>
+		<property name="testOnReturn" value="true"/>
+		<property name="testWhileIdle" value="true"/>
+		<property name="minEvictableIdleTimeMillis" value="180000"/>
+		<property name="timeBetweenEvictionRunsMillis" value="360000"/>
+		<property name="validationQuery" value="SELECT 1"/>
+		<property name="maxOpenPreparedStatements" value="100"/>
+	</bean>
+
+	<!--  使用PropertyOverrideConfigurer替换PropertyPlaceholderConfigurer中的配置-->
+	<bean class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">
+		<property name="location" value="../conf/pool-adjustment.properties"/>
+	</bean>
+</beans>
+```
+
+</details>
+
+<details>
+	<summary>jdbc.properties</summary>
+
+```properties
+jdbc.url=jdbc:mysql://server/MAIN?useUnicode=true&characterEncoding=ms932&failOverReadOnly=false&roundRobinLoadBalance=true
+jdbc.driver=com.mysql.jdbc.Driver
+jdbc.username=root
+jdbc.password=root
+```
+
+</details>
+
+如果`org.apache.commons.dbcp2.BasicDataSource`报错，则需要引入依赖`api("org.apache.commons:commons-dbcp2:2.1.1")`
+
+当BeanFactory在第一阶段加载完成所有配置信息时， BeanFactory中保存的对象的属性信息还只是以占位符的形式存在，如`${jdbc.url}`、 `${jdbc.driver}`。当PropertyPlaceholderConfigurer作为BeanFactoryPostProcessor被应用时，它会使用properties配置文件中的配置信息来替换相应BeanDefinition中占位符所表示的属性值。这样，当进入容器实现的第二阶段实例化bean时， bean定义中的属性值就是最终替换完成的了。
+
+-   PropertyPlaceholderConfigurer不单会从其配置的properties文件中加载配置项，同时还会检查Java的System类中的Properties，可以通过`setSystemPropertiesMode()`或者`setSystemPropertiesModeName()`来控制是否加载或者覆盖System相应Properties的行为。
+-   PropertyPlaceholderConfigurer提供了 SYSTEM_PROPERTIES_MODE_FALLBACK、 SYSTEM_PROPERTIES_MODE_NEVER 和 SYSTEM_PROPERTIES_MODE_OVERRIDE 三种模式。默认采用的是SYSTEM_PROPERTIES_ MODE_FALLBACK，果properties文件中找不到相应配置项，则到System的Properties中查找，我们还可以选择不检查System的Properties或者覆盖它。
+
+### PropertyOverrideConfigurer
+
+配置在properties文件中的信息通常都以明文表示，PropertyOverrideConfigurer 的父类 PropertyResourceConfigurer 提供了一个protected类型的方法convertPropertyValue，允许子类覆盖这个方法对相应的置项进行转换，如对加密后的字符串解密之后再覆盖到相应的bean定义中。当然，既然PropertyPlaceholderConfigurer也同样继承了 PropertyResourceConfigurer ，我们也可以针对PropertyPlaceholderConfigurer应用类似的功能。
+
+![image-20230722162007693](https://s2.loli.net/2023/07/22/xJKIuHdQwa19on5.png)
+
+```XML
+<bean class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">
+    <property name="location" value="pool-adjustment.properties"/>
+</bean>
+```
+
+```properties
+dataSource.minEvictableIdleTimeMillis=1000
+dataSource.maxOpenPreparedStatements=50
+```
+
+### CustomEditorConfigurer
+
+CustomEditorConfigurer是另一种类型的BeanFactoryPostProcessor实现，它只是辅助性地将后期会用到的信息注册到容器，对BeanDefinition没有做任何变动。
+
+Spring提供的部分`PropertyEditor: StringArrayPropertyEditor`。该PropertyEditor会将符合CSV格式的字符串转换成String\[]数组的形式，默认是以逗号（，）分隔的字符串，但可以指定自定义的字符串分隔符。ByteArrayPropertyEditor、CharArrayPropertyEditor等都属于类似功能的PropertyEditor，参照Javadoc可以取得相应的详细信息。
+
+-   ClassEditor。根据String类型的class名称，直接将其转换成相应的Class对象，相当于通过Class.forName(String)完成的功效。可以通过String\[]数组的形式传入需转换的值，以达到与提供ClassArrayEditor同样的目的。
+-   FileEditor。 Spring提供的对应java.io.File类型的PropertyEditor。同属于对资源进行定位的PropertyEditor还有InputStreamEditor、 URLEditor等。
+-   LocaleEditor。针对java.util.Locale类型的PropertyEditor，格式可以参照LocaleEditor和Locale的Javadoc说明。
+-   PatternEditor。针对Java SE 1.4之后才引入的java.util.regex.Pattern的PropertyEditor，格式可以参照java.util.regex.Pattern类的Javadoc。
+
+以上这些PropertyEditor，容器通常会默认加载使用，所以，即使我们不告诉容器应该如何对这些类型进行转换，容器同样可以正确地完成工作。但当我们需要指定的类型没有包含在以上所提到PropertyEditor之列的时候，就需要给出针对这种类型的PropertyEditor实现，并通过CustomEditorConfigurer告知容器，以便容器在适当的时机使用到适当的PropertyEditor。
+
+#### 自定义PropertyEditor
+
+对于Date类型，不同的Locale、不同的系统在表现形式上存在不同的需求。如系统这个部分需要以yyyy-MM-dd的形式表现日期，系统那个部分可能又需要以yyyyMMdd的形式对日期进行转换。
+
+<details>
+	<summary>DatePropertyEditor</summary>
+
+```java
+package org.springframework.mylearntest.beanfactorypostprocessor;
+
+import java.beans.PropertyEditorSupport;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+public class DatePropertyEditor extends PropertyEditorSupport {
+    private String datePattern;
+
+    @Override
+    public void setAsText(String text) throws IllegalArgumentException {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(getDatePattern());
+        LocalDate dateValue = LocalDate.parse(text,dateTimeFormatter);
+        setValue(dateValue);
+    }
+
+    @Override
+    public String getAsText() {
+        return super.getAsText();
+    }
+
+    public String getDatePattern() {
+        return datePattern;
+    }
+
+    public void setDatePattern(String datePattern) {
+        this.datePattern = datePattern;
+    }
+}
+```
+
+</details>
+
+如果仅仅是支持单向的从String到相应对象类型的转换，只要覆写方法setAsText(String)即可。如果想支持双向转换，需要同时考虑getAsText()方法的覆写。
+
+<details>
+	<summary>DatePropertyEditorRegistrar</summary>
+
+```java
+package org.springframework.mylearntest.beanfactorypostprocessor;
+
+import org.springframework.beans.PropertyEditorRegistrar;
+import org.springframework.beans.PropertyEditorRegistry;
+
+import java.beans.PropertyEditor;
+
+public class DatePropertyEditorRegistrar implements PropertyEditorRegistrar {
+    private PropertyEditor propertyEditor;
+
+    public PropertyEditor getPropertyEditor() {
+        return propertyEditor;
+    }
+
+    public void setPropertyEditor(PropertyEditor propertyEditor) {
+        this.propertyEditor = propertyEditor;
+    }
+
+    @Override
+    public void registerCustomEditors(PropertyEditorRegistry registry) {
+        registry.registerCustomEditor(java.util.Date.class, getPropertyEditor());
+    }
+}
+```
+
+</details>
+
+<details>
+	<summary>xml配置</summary>
+
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       xmlns:aop="http://www.springframework.org/schema/aop">
+
+    <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+        <property name="propertyEditorRegistrars">
+            <list>
+                <ref bean="datePropertyEditorRegistrar"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="datePropertyEditorRegistrar" class="org.springframework.mylearntest.beanfactorypostprocessor.DatePropertyEditorRegistrar">
+        <property name="propertyEditor">
+            <ref bean="datePropertyEditor"/>
+        </property>
+    </bean>
+
+    <bean id="datePropertyEditor" class="org.springframework.mylearntest.beanfactorypostprocessor.DatePropertyEditor">
+        <property name="datePattern">
+            <value>yyyy/MM/dd</value>
+        </property>
+    </bean>
+</beans>
+```
+
+</details>
+
+<details>
+	<summary>测试类</summary>
+
+```java
+package org.springframework.mylearntest.beanfactorypostprocessor;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test4DateProp {
+    public static void main(String[] args) {
+        // applicationContext
+        ApplicationContext context = new ClassPathXmlApplicationContext("datepropertyeditor2.xml");
+        DatePropertyEditor datePropertyEditor = (DatePropertyEditor) context.getBean("datePropertyEditor");
+        datePropertyEditor.setAsText("2020/06/21");
+    }
+}
+```
+
+</details>
+
+> 参考资料
+>
+> 1.  书籍名称：Spring揭秘 作者：王福强
+> 2.  <https://github.com/spring-projects/spring-framework.git>
+
+:::tip 协议
+
+-   本作品代码部分采用 [Apache 2.0协议](https://www.apache.org/licenses/LICENSE-2.0)进行许可。遵循许可的前提下，你可以自由地对代码进行修改，再发布，可以将代码用作商业用途。但要求你：
+    -   **署名**：在原有代码和衍生代码中，保留原作者署名及代码来源信息。
+    -   **保留许可证**：在原有代码和衍生代码中，保留Apache 2.0协议文件。
+
+-   本作品文档部分采用[知识共享署名 4.0 国际许可协议](http://creativecommons.org/licenses/by/4.0/)进行许可。 遵循许可的前提下，你可以自由地共享，包括在任何媒介上以任何形式复制、发行本作品，亦可以自由地演绎、修改、转换或以本作品为基础进行二次创作。但要求你：
+    -   **署名**：应在使用本文档的全部或部分内容时候，注明原作者及来源信息。
+    -   **非商业性使用**：不得用于商业出版或其他任何带有商业性质的行为。如需商业使用，请联系作者。
+    -   **相同方式共享的条件**：在本文档基础上演绎、修改的作品，应当继续以知识共享署名 4.0国际许可协议进行许可。
+
+:::
