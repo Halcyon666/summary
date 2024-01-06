@@ -1,0 +1,403 @@
+---
+title: java 面试题1
+sidebar_label: java 面试题1
+sidebar_position: 1
+---
+
+## 什么是面向对象？
+
+面向对象和面向过程的区别：
+
+-   面向过程更注重每一个步骤以及其顺序，面向对象更注重哪些对象，他们具有哪些能力
+-   面向过程比较直接，而面向对象更易于复用、扩展和维护
+
+**三大特性**：
+
+封装：内部细节隐藏 只提供对外的接口 
+
+> javabean属性只能通过set方法赋值，不能使用Classname.filed直接赋值。
+
+继承：子类共性的方法和属性在父类中体现出来，子类只需要做出特性的扩展即可。
+
+多态：继承，方法重写，父类引用指向子类
+
+## JVM 虚拟机栈
+
+![](https://s2.loli.net/2023/07/15/uYim8oFXnK3RHtN.png)
+
+java 栈
+[Oracle frame interpretation](https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-2.html#jvms-2.6.1)
+
+每一个方法被调用时，就有一个新的栈帧被创建。当方法调用完成时，不管是抛出异常还是正常返回栈帧都会被销毁。
+栈帧由java虚拟机栈中创建该栈帧的线程来分配。每个栈帧都有自己的本地变量，操作数栈，动态链接（返回方法的值或者抛出的异常）。
+
+局部变量表（Local Variables）：每个栈帧都有一个局部变量表（一个数组），可以存放类型为boolean, byte, 
+char, short, int, float, reference, or returnAddress。在32位JVM中long,double类型占用连续两个变量位置。
+每一个栈中的变量表从0号位开始，0号位为当前方法的调用者（this）,任何局部变量都是从变量表 1号位开始。
+
+操作数栈（Operand Stacks）：JVM提供指令加载常量或者值从本地方法列表或者属性到操作数栈。其他Java JVM
+可以对操作数栈中的值进行操作（计算），然后弹栈返回结果到操作数栈。操作数栈也用作方法参数的传递以及
+接收方法的返回值。 任何时候每个操作数栈都有自己的深度，long、double都要占用两个单元深度，其他的类型的值占用一个操作数单元。
+
+动态链接（Dynamic Linking）：每个栈帧都会引用一个支持动态链接到当前方法区方法的运行时常量池。被引用到的字节码方法会被调用，
+变量将可以通过符号引用进行访问。动态链接将这些符号链接翻译为具体的方法引用，加载还没有符号引用的的类，翻译变量的内存地址与运行时的内存地址将关联。
+
+如何判断对象是否成为垃圾？
+引用计数法：当有一个地方使用计数值+1，失效时-1，为0时是不可再被引用的对象
+缺点：循环引用时，某些对象将无法被回收掉
+
+## final 关键字
+
+1.  修饰成员变量
+    如果final修饰的是类变量，只能在静态初始化块中指定初始化值或者声明该类变量时指定初始值。
+    如果final修饰的是成员变量，可以在非静态块初始化，声明该变量或者构造器中执行初始化值。
+2.  修饰局部变量
+    一定要赋值且只赋值一次，变量地址不能再次赋值
+3.  为什么内部类只能访问带final的外部变量？
+    原因一：如果内部类的方法执行完成，但是内部类对象还存在，并且引用了一个无效的成员变量。
+    原因二：局部变量修改，和内部类的变量值在内部改变，那么也会出问题。
+    所以只能访问带final的外部变量。
+
+## hashCode 和 equals方法
+
+一般对象，如果有排序或者放入HashMap集合中，则需要重写hashCode和equals方法，并且保证两个方法实现的逻辑具有一致性。
+
+## 泛型extends super
+
+extends 指定了上限  `A<？ extends T>`
+
+super 指定了下限 `A<? super T>`
+
+## == 和 equals
+
+== 基本数据类型比较值，引用类型比较地址
+
+equals方法，要看具体对象的实现Object中equals是比较地址，而String类中是比较内容(地址值不同时才去比较内容)
+
+## StringBuilder StringBuffer String 区别
+
+String是final修饰的，不可变，每次操作都会产生新的对象。
+
+StringBuffer 和 StringBuilder 都是在原对象上操作，StringBuffer方法被sychronized加锁，效率降低。StringBuilder从JDK 5 开始，一般推荐使用StringBuilder。
+
+## 重载和重写
+
+重载：发生在同一个类中，方法名必须相同，参数类型不同、个数不同、顺序不同，方法的返回值和访问修饰符可以不同。
+
+重写：发生在父子类中，方法名，(一同两小一大)参数列表必须相同。返回值类型小于父类，抛出异常小于父类，访问修饰符大于父类；
+如果附列访问的修饰符位private则子类就不能重写该方法。静态的方法不能被重写，只能被隐藏。
+
+## 接口和抽象类的区别
+
+单继承多实现
+抽象类可以由具体方法，接口不可以有
+接口都是静态类属性public static final.
+
+抽象类可以集中实现公共的方法，这样写子类时只需要扩展特定的方法，提高了代码的复用性。
+接口是定义行为，不关心子类怎么实现。
+
+抽象类只能继承一个类，需要写出所有子类的所有共性，难度较高。
+而接口在功能上就会弱化很多，他们只是针对一个动作的描述，在设计时会降低难度。
+
+## List 和 Set 区别
+
+**List**: 有序可重复 允许多个null元素对象，可以使用iterator迭代器遍历元素，还可以使用下标遍历。
+**Set**: 无序，不可重复，最多允许一个null元素对象，取元素时只能使用迭代器进行遍历。
+
+## HashCode 和 equals
+
+hashcode 的作用是获取哈希码，可以用来确认该对象在哈希表中的索引位置。HashCode()定义在JDK的Object中，
+Java中的任何类都包含有HashCode()函数。散列表存储的是键值对，能根据键快速检索出对应的值。比较两个对
+象是否为同一对象，HashCode相同时，还会调用equals方法。
+
+注意：hashCode是对象在堆上产生的独特的值，如果没有重写hashCode()，则该class的两个对象始终不会相等。
+
+## ArrayList  和 LinkedList
+
+**ArrayList**  动态数组，连续内存存储，查询快，删除效率较低，但是在初始容量给得够的情况下尾部追加元素的的效率也是极高的。
+
+**LinkedList**链表，可以分散存储在内存中。适合做数据插入删除操作，不适合查询。
+使用for循环遍历，或者indexOf返回索引都是效率极低的，一般使用迭代器iterator进行遍历。
+
+## HashMap 和 Hashtable
+
+HashMap 线程不安全，HashTable 线程安全（方法都被sychronized加锁）
+
+HashMap 允许一个null键和多个null 值，而Hashtable则不允许。
+
+**底层数据结构** 数组+链表
+
+JDK8 开始链表高度为8 数组长度超过64 时链表会扭转为红黑树，元素以内部类Node节点存在。数组长度低于6时红黑树扭转为链表
+
+-   计算key的Hash值，二次hash然后对数组长度取模，对应到数组下标
+
+-   如果没有Hash冲突，创建Node存入数组
+
+-   如果产生Hash冲突，先进行equals比较，相同则取代该元素；不同，则判断链表的高度插入链表。
+
+-   key为null值，存在下标为0的位置。
+
+## ConcurrentHashMap jdk7 和 jdk8区别
+
+**jdk7**
+
+数据结构：ReentrantLock + segment + hashEntry, 一个Segment中包含一个HashEntry数组，每个HashEtry又是一个链表结构
+
+元素查找：二次Hash，第一次Hash定位到Segment位置，第二次Hash定位到元素所在的链表头部
+
+锁：Segment分段锁，Segment继承了Reentrantlock，锁定操作的Segment，其他的Segment 不受影响，
+并发度为Segment个数，可以通过构造函数指定，数组扩容不会影响其他的Segment。
+
+get方法无需加锁，volitile保证写都在主内存中。
+
+**jdk8**
+
+数据结构sychronized+CAS+红黑树 Node的val和next都用volatile修饰，保证对其他线程的可见性
+
+查找替换赋值都是用CAS
+
+锁：锁链表的head节点，不影响其他元素的读写，锁力度更细，效率更高，扩容时，阻塞所有的读写操作，并发扩容。
+
+读操作无锁：
+
+Node的val和next都用volatile修饰，保证对其他线程的可见性。
+
+数组采用volatile修饰是为了保证扩容时，对其他线程可见。
+
+## 如何实现一个IOC容器
+
+1.  配置文件配置、注解配置包扫描路径
+2.  递归包扫描获取.class文件，将所有被特定注解（@component）标记的类全路径名放到一个set集合中
+3.  遍历set集合，获取类上有指定注解的类，并将其交给IOC容器，定义一个安全的Map用来存储这些对象
+4.  遍历这个IOC容器，后去到每一个类的实例，判断里面是否有依赖注入的对象还没有注入，然后进行依赖注入。
+
+## 双亲委派模型
+
+三种类加载器
+**BootStrapClassLoader** 默认加载%JAVA_HOME%/lib 下jar包和class文件
+**ExtClassLoader** 负责加载%JAVA_HOME%/lib/ext 下jar包和class文件
+**AppClassLoader** 是自定义类加载器的父类（parent属性指向），负责加载classpath下的类文件
+
+向上委派  查找缓存
+向下查找  查找加载路径 该路径下有该类则加载 否则向下查找
+
+**安全性**：双亲委派 保证了类只会被加载一次 ，避免用户编写核心java类被加载。
+相同的类被不同的加载器加载就是不同的两个类。
+
+## java中的异常体系
+
+![](https://s2.loli.net/2023/07/15/vkW5E2aPQqblVCe.png)
+
+**Error** 异常是程序无法处理的会造成程序停止；Exception则不会造成程序停止
+**RuntimeException** 发生在程序运行过程中，会导致程序当前线程执行失败。
+**CheckedException** 发生在程序编译的过程中，会导致程序编译不通过。
+**Unchecked Exception** 包括Error和 RuntimeException,在运行时发生。
+
+## GC如何判断对象可以被回收
+
+引用计数法： 每个对象有一个引用计数属性，新增一个引用计数加1，释放一个引用计数键减1，计数为0时可以回收。
+
+可达性分析：通过一系列的称为`GC ROOTS`的对象作为起点，往下搜索（路径为引用链），
+当对象不与GC任何引用链相连时，则这些对象是不可达的。
+GC ROOTS对象包括：
+1.虚拟机栈中引用的对象
+2.方法区中静态属性或者常量引用的对象
+3.本地方法引用的对象
+
+可达性算法中不可达对象不是立即死亡的，对象拥有一次自我拯救的机会。
+
+对象被系统宣告死亡至少经历两次标记过程。第一次经过可达性分析发现没有与GC ROOTS 引用链相连，
+第二次是在虚拟机自动创建的Finalizer队列中判断是否需要执行finalize()方法。
+
+当对象变成不可达状态时，GC会判断该对象是否覆盖了_finalize_方法，未覆盖则直接将其回收，否则
+若对象未执行finalize方法，将其放入F-Queue队列，由低级优先线程执行该队列中对象的finalize方法。
+执行方法完毕后，GC会再次判断该对象是否可达，若不可达，则进行回收，否则，对象复活。
+
+finalize()方法运行的代价大，每个对象只能触发一次。一般被用来释放资源。
+
+## 线程的状态
+
+创建、就绪、运行、阻塞、死亡
+
+阻塞： 
+
+-   wait阻塞 通过notify(Object方法) 或者 notifyAll唤醒
+-   sychronize阻塞
+-   other 阻塞 ： sleep(Thread方法)或者join 或者发生了IO请求时，JVM会把该线程置为阻塞状态。
+
+## sleep wait join yield区别
+
+1.  sleep是Thread静态本地方法；wait是Ojbect类的本地方法
+2.  sleep不释放锁；wait释放锁，并加入到等待队列中
+3.  sleep不需要被唤醒；wait需要唤醒
+4.  sleep方法不依赖于synchronized关键字；但是wait需要依赖
+5.  sleep会让出CPU执行时间且强制切换上下文；而wait不一定，被notify之后还是有机会竞争到锁
+
+yield 执行后线程进入就绪状态，马上释放了CPU的执行权，但是依然保留了CPU的执行权。
+
+join执行后线程进入阻塞状态，在A线程中B.join则在执行完B之后在执行A。
+
+## ThreadLocal 的原因和使用场景
+
+每一个Thread对象均含有一个ThreadLocalMap类型的成员变量threadLocals变量
+`ThreadLocalMap` 由一个Entry对象构成，Entry对象继承自`WeakReference<ThreadLocal<?>>`
+一个Entry由ThreadLocal对象和Object构成; 当没有对象强引用ThreadLocal对象后,该key就会被垃圾
+收集器收集.
+
+_ThreadLocal 内部类-> ThreadLocalMap 内部类-> Entry_
+**_set方法_**
+
+```java
+	// ThreadLocal 方法
+	public void set(T value) {
+		// 获取当前线程对象
+        Thread t = Thread.currentThread();
+		// 获取t线程ThreadLocal对象的内部类对象ThreadLocalMap
+        ThreadLocalMap map = getMap(t);
+        if (map != null)
+			// 以ThreadLocal对象为键 入参为值
+            map.set(this, value);
+        else
+            createMap(t, value);
+    }
+	
+	// ThreadLocalMap 方法
+	private void set(ThreadLocal<?> key, Object value) {
+	
+        Entry[] tab = table;
+        int len = tab.length;
+        int i = key.threadLocalHashCode & (len-1);
+		
+		// 从计算后的i位置开始，逐个比较引用如果相同则替换掉value值
+		// 如果e的引用为空，则会替换掉相应的值，并且删除未被引用的值
+        for (Entry e = tab[i];
+             e != null;
+             e = tab[i = nextIndex(i, len)]) {
+            ThreadLocal<?> k = e.get();
+
+            if (k == key) {
+                e.value = value;
+                return;
+            }
+
+            if (k == null) {
+                replaceStaleEntry(key, value, i);
+                return;
+            }
+        }
+
+        tab[i] = new Entry(key, value);
+        int sz = ++size;
+        if (!cleanSomeSlots(i, sz) && sz >= threshold)
+            rehash();
+    }
+	
+```
+
+**_get方法_**
+
+```java
+	// ThreadLocal 方法
+	public T get() {
+        Thread t = Thread.currentThread();
+        ThreadLocalMap map = getMap(t);
+        if (map != null) {
+			// 获取Entry内部类
+            ThreadLocalMap.Entry e = map.getEntry(this);
+            if (e != null) {
+                @SuppressWarnings("unchecked")
+                T result = (T)e.value;
+                return result;
+            }
+        }
+		// 如果当前线程ThreadLocalMap属性值为空
+		// 则获取初始化值，并创建ThreadLocalMap
+        return setInitialValue();
+    }
+	
+	// ThreadLocalMap 方法
+	private Entry getEntry(ThreadLocal<?> key) {
+		// 使用key的Hashcode & Entry的数组长度
+		// 得到key在数组中的可能位置
+        int i = key.threadLocalHashCode & (table.length - 1);
+        Entry e = table[i];
+        if (e != null && e.get() == key)
+            return e;
+        else
+			// 	如果未命中 则从下面方法去获取
+            return getEntryAfterMiss(key, i, e);
+    }
+	
+	// ThreadLocalMap 方法
+	private Entry getEntryAfterMiss(ThreadLocal<?> key, int i, Entry e) {
+        Entry[] tab = table;
+        int len = tab.length;
+
+        while (e != null) {
+            ThreadLocal<?> k = e.get();
+			// e的引用和调用get()方法的线程为同一线程时返回该Entry
+            if (k == key) 
+                return e;
+			// 如果e的引用为空 则触发删除不被引用的Entry对象，
+			// 包括之前不被引用的其他Entry
+            if (k == null)
+                expungeStaleEntry(i);
+            else
+				// ((i + 1 < len) ? i + 1 : 0)
+				// 一定会有一个i命中i可能不是从0开始，所以上面超出数组长度时置位0
+                i = nextIndex(i, len);
+            e = tab[i];
+        }
+        return null;
+    }
+```
+
+**使用场景** 
+
+1.  当一些属性需要在很多层方法传递时 可以使用 避免一直传递参数
+2.  数据在线程之间的安全线，每个线程持有一个ThreadLocalMap对象
+3.  进行事务操作时，用于存储事务信息
+4.  数据库连接，Session会话管理
+
+四种引用类型 看下面的文章足以
+[参考博文_出处_](https://www.cnblogs.com/liyutian/p/9690974.html)
+
+## ThreadLocal内存泄漏如何避免
+
+ThreadLcoalMap中Entry的key置为null，被GC回收后，
+如果线程还持有对Entry中的value的引用就造成内存泄漏。
+
+key可以通过手动置为null或者使用弱引用；value可以调用set方法将value置为null
+或者remove方法将Entry置为null(还是会调用expungeStaleEntry())
+
+如果有get,set的时候有调用到ThreadLocalMap上expungeStaleEntry()，会将value和Entry置位null
+![](https://s2.loli.net/2023/07/15/XlydYtFsAv71gNh.png)
+
+**使用原则** 
+
+1.  使用完ThreadLocal之后，及时清除value值
+2.  定义ThreadLocal变量为private static变量，这样就一直存在ThreadLocal的强引用，方便使用和清除操作
+
+一个线程只有一个`ThreadLocalMap`，那为什么`ThreadLocalMap`中要维护一个`Entry[]`
+因为一个Thread中可以有多个`ThreadLocal`，Entry在数组中的位置由`key.threadLocalHashCode & (table.length - 1)`
+`ThreadLcoal`的hash值和数组的长度（数组长度超过threshold,并且没有清理掉过期的Entry，数组中的数据会转移到另
+一个长度更大的数组中）来确定
+
+## 参考资料
+
+1.  B站视频[地址](https://www.bilibili.com/video/BV1Eb4y1R7zd?)
+2.  JDK 8 ThreadLocal 部分源码
+3.  Oracle 官方网站[地址](https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-2.html#jvms-2.6.1)
+
+:::tip 协议
+
+-   本作品代码部分采用 [Apache 2.0协议](https://www.apache.org/licenses/LICENSE-2.0)进行许可。遵循许可的前提下，你可以自由地对代码进行修改，再发布，可以将代码用作商业用途。但要求你：
+    -   **署名**：在原有代码和衍生代码中，保留原作者署名及代码来源信息。
+    -   **保留许可证**：在原有代码和衍生代码中，保留Apache 2.0协议文件。
+
+-   本作品文档部分采用[知识共享署名 4.0 国际许可协议](http://creativecommons.org/licenses/by/4.0/)进行许可。 遵循许可的前提下，你可以自由地共享，包括在任何媒介上以任何形式复制、发行本作品，亦可以自由地演绎、修改、转换或以本作品为基础进行二次创作。但要求你：
+    -   **署名**：应在使用本文档的全部或部分内容时候，注明原作者及来源信息。
+    -   **非商业性使用**：不得用于商业出版或其他任何带有商业性质的行为。如需商业使用，请联系作者。
+    -   **相同方式共享的条件**：在本文档基础上演绎、修改的作品，应当继续以知识共享署名 4.0国际许可协议进行许可。
+
+:::
