@@ -3,13 +3,14 @@ for file in `find ./docs/* -type f -print`  # 指定要遍历的目录
 do
     if [ -f "$file" ]; then  # 检查是否为文件
 		# 重命名md->mdx
-        mv "$file" "$file"x 
+        #mv "$file" "$file"x 
 		# 重命名mdx->md
 		# mv "$file" "${file::-1}"
 		
 		# 删除 转载请注明 行
 		# sed -i '/转载请注明/d' "$file"
-		
+		#sed -i '/:::tip 协议/,/:::/d' "$file"
+
 		# 追加协议
 # 		echo -n '
 # :::tip 协议
