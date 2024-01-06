@@ -1,5 +1,5 @@
 
-[![Crowdin](https://badges.crowdin.net/summary/localized.svg)](https://crowdin.com)
+[![Crowdin](https://badges.crowdin.net/hy-summary/localized.svg)](https://crowdin.com/project/hy-summary)
 
 # Website
 
