@@ -1,0 +1,160 @@
+---
+title: JMM相关内容
+sidebar_position: 3
+sidebar_label: JMM相关内容
+---
+
+## JMM相关内容
+
+## 在x86架构下仅有StoreLoad屏障
+
+[详情请见](https://zhuanlan.zhihu.com/p/81555436)
+
+## JMM内存模型设计原则
+
+对于会改变程序执行结果的重排序，JMM要求编译器和处理器必须禁止这种重排序。
+
+对于不会改变程序执行结果的重排序，JMM对编译器和处理器不做要求（JMM允许这种重排序）。
+
+![](https://s2.loli.net/2023/07/15/8hkiCWZ7jDaoARU.png)
+
+## happens-before关系的定义
+
+1.  如果一个操作happens-before另一个操作，那么第一个操作的执行结果将对第二个操作可见，而且第一个操作的执行顺序排在第二个操作之前。
+
+2.  两个操作之间存在happens-before关系，并不意味着Java平台的具体实现必须要按照happens-before关系指定的顺序来执行。如果重排序之后的执行结果，与按happens-before
+    关系来执行的结果一致，那么这种重排序并不非法（也就是说，JMM允许这种重排序）。
+
+-   上面的1.是JMM对程序员的承诺。从程序员的角度来说，可以这样理解happens-before关系：如果A happens-before B，那么Java内存模型将向程序员保证——A操作的结果将对B可见，且A的执行顺序排在B
+    之前。注意，这只是Java内存模型向程序员做出的保证！
+-   上面的2.是JMM对编译器和处理器重排序的约束原则。正如前面所言，JMM其实是在遵循一个基本原则：只要不改变程序的执行结果（指的是单线程程序和正确同步的多线程程序），编译器和处理器怎么优化都行。JMM
+    这么做的原因是：程序员对于这两个操作是否真的被重排序并不关心，程序员关心的是程序执行时的语义不能被改变（即执行结果不能被改变）。因此，happens-before关系本质上和as-if-serial语义是一回事。
+
+## happens-before 和 as-if-serial 异同点
+
+相同点：
+
+-   as-if-serial语义和happens-before这么做的目的，都是为了在不改变程序执行结果的前提下，尽可能地提高程序执行的并行度。
+
+不同点：
+
+-   as-if-serial语义保证单线程内程序的执行结果不被改变，happens-before关系保证正确同步的多线程程序的执行结果不被改变。
+-   as-if-serial语义给编写单线程程序的程序员创造了一个幻境：单线程程序是按程序的顺序来执行的。happens-before关系给编写正确同步的多线程程序的程序员创造了一个幻境：正确同步的多线程程序是按happens
+    \-before指定的顺序来执行的。
+
+## happens-before规则
+
+1.  程序顺序规则：一个线程中的每个操作，happens-before于该线程中的任意后续操作。
+2.  监视器锁规则：对一个锁的解锁，happens-before于随后对这个锁的加锁。
+3.  volatile变量规则：对一个volatile域的写，happens-before于任意后续对这个volatile域的读。
+4.  传递性：如果A happens-before B，且B happens-before C，那么A happens-beforeC。
+5.  start()规则：如果线程A执行操作ThreadB.start()（启动线程B），那么A线程的ThreadB.start()操作happens-before于线程B中的任意操作。
+6.  join()规则：如果线程A执行操作ThreadB. join()并成功返回，那么线程B中的任意操作happens-before于线程A从ThreadB. join()操作成功返回。
+
+![](https://s2.loli.net/2023/07/15/rsJXG6e4DhLjVmW.png)
+
+-   1 happens-before 2和3 happens-before 4由程序顺序规则产生。由于编译器和处理器都要遵守as-if-serial语义，也就是说，as-if-serial
+    语义保证了程序顺序规则。因此，可以把程序顺序规则看成是对as-if-serial语义的“封装”。
+-   2 happens-before 3是由volatile规则产生。前面提到过，对一个volatile变量的读，总是能看到（任意线程）之前对这个volatile变量最后的写入。因此，volatile
+    的这个特性可以保证实现volatile规则。
+-   1 happens-before 4是由传递性规则产生的。这里的传递性是由volatile的内存屏障插入策略和volatile的编译器重排序规则共同来保证的。
+
+## 多线程并发初始化对象可能发生指令重排
+
+![](https://s2.loli.net/2023/07/15/mHqVA9pQaDjPr8Y.png)
+
+* * *
+
+![](https://s2.loli.net/2023/07/15/639NJO2xdsTVtjl.png)
+
+* * *
+
+![](https://s2.loli.net/2023/07/15/u1TI87E4Xj3ROeq.png)
+
+这里A2和A3虽然重排序了，但Java内存模型的intra-thread semantics将确保A2一定会排在A4前面执行。因此，线程A的intra-thread semantics没有改变，但A2和A3的重排序，将导致线程B在B1处判断出instance不为空，线程B接下来将访问instance引用的对象。此时，线程B将会访问到一个还未初始化的对象。
+
+在知晓了问题发生的根源之后，我们可以想出两个办法来实现线程安全的延迟初始化。
+
+-   不允许2和3重排序。
+-   允许2和3重排序，但不允许其他线程“看到”这个重排序。
+
+基于volatile的解决方案
+
+![](https://s2.loli.net/2023/07/15/dM7BZy5VlzsCkhf.png)
+
+* * *
+
+![](https://s2.loli.net/2023/07/15/z3orwgqmWOtPGvh.png)
+
+这个方案本质上是通过禁止图3-39中的2和3之间的重排序，来保证线程安全的延迟初始化
+
+基于类初始化的解决方案
+
+在执行类的初始化期间，JVM会去获取一个锁。这个锁可以同步多个线程对同一个类的初始化。
+
+![](https://s2.loli.net/2023/07/15/zY19HbjsKWfNayV.png)
+
+* * *
+
+![](https://s2.loli.net/2023/07/15/sCIdV7nUM9xitWr.png)
+
+## 在首次发生下列任意一种情况时，一个类或接口类型T将被立即初始化
+
+-   T是一个类，而且一个T类型的实例被创建。
+-   T是一个类，且T中声明的一个静态方法被调用。
+-   T中声明的一个静态字段被赋值。
+-   T中声明的一个静态字段被使用，而且这个字段不是一个常量字段。
+-   T是一个顶级类（Top Level Class，见Java语言规范的§7.6），而且一个断言语句嵌套在T内部被执行。
+
+## 类初始化过程
+
+第1阶段：通过在Class对象上同步（即获取Class对象的初始化锁），来控制类或接口的初始化。这个获取锁的线程会一直等待，直到当前线程能够获取到这个初始化锁。
+
+![](https://s2.loli.net/2023/07/15/EOH2Yjmk5G9buqy.png)
+
+* * *
+
+![](https://s2.loli.net/2023/07/15/6kCQf31gUr9vRLE.png)
+
+第2阶段：线程A执行类的初始化，同时线程B在初始化锁对应的condition上等待。
+
+![](https://s2.loli.net/2023/07/15/pQNSUy7f6TRHa42.png)
+
+* * *
+
+![](https://s2.loli.net/2023/07/15/dDaWkJe7LIwYEOs.png)
+
+第3阶段：线程A设置state=initialized，然后唤醒在condition中等待的所有线程。
+
+![](https://s2.loli.net/2023/07/15/6DeqC9QUvHIzfkw.png)
+
+* * *
+
+![](https://s2.loli.net/2023/07/15/kK7IjBDOGTr56co.png)
+
+第4阶段：线程B结束类的初始化处理。
+
+![](https://s2.loli.net/2023/07/15/hUYNfDTKIspRQOM.png)
+
+![](https://s2.loli.net/2023/07/15/B5ceYPOi2bCJ1GM.png)
+
+![](https://s2.loli.net/2023/07/15/ZyfwU7qXLEbdYG6.png)
+
+线程A在第2阶段的A1执行类的初始化，并在第3阶段的A4释放初始化锁；线程B在第4阶段的B1获取同一个初始化锁，并在第4阶段的B4之后才开始访问这个类。根据Java内存模型规范的锁规则，这里将存在如下的happens-before关系。这个happens-before关系将保证：线程A执行类的初始化时的写入操作（执行类的静态初始化和初始化类中声明的静态字段），线程B一定能看到。
+第5阶段：线程C执行类的初始化的处理。
+
+![](https://s2.loli.net/2023/07/15/woPNqEJTh4durWi.png)
+
+![](https://s2.loli.net/2023/07/15/cW9SGadHkCsyOuv.png)
+
+在第3阶段之后，类已经完成了初始化。因此线程C在第5阶段的类初始化处理过程相对简单一些（前面的线程A和B的类初始化处理过程都经历了两次锁获取-锁释放，而线程C的类初始化处理只需要经历一次锁获取-锁释放）。线程A在第2阶段的A1执行类的初始化，并在第3阶段的A4释放锁；线程C在第5阶段的C1获取同一个锁，并在在第5阶段的C4之后才开始访问这个类。根据Java内存模型规范的锁规则，将存在如下的happens-before关系。
+
+![](https://s2.loli.net/2023/07/15/uYt43fMHphDIbPd.png)
+
+通过对比基于volatile的双重检查锁定的方案和基于类初始化的方案，我们会发现基于类初始化的方案的实现代码更简洁。但基于volatile的双重检查锁定的方案有一个额外的优势：除了可以对静态字段实现延迟初始化外，还可以对实例字段实现延迟初始化。
+
+字段延迟初始化降低了初始化类或创建实例的开销，但增加了访问被延迟初始化的字段的开销。在大多数时候，正常的初始化要优于延迟初始化。如果确实需要对实例字段使用线程安全的延迟初始化，请使用上面介绍的基于volatile的延迟初始化的方案；如果确实需要对静态字段使用线程安全的延迟初始化，请使用上面介绍的基于类初始化的方案。
+
+> 参考资料
+>
+> 1.  书籍名称：《java并发编程的艺术》 作者：方腾飞 魏鹏 程晓明
