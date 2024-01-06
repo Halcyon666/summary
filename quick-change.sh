@@ -10,6 +10,9 @@ do
 		# 删除 转载请注明 行
 		# sed -i '/转载请注明/d' "$file"
 		#sed -i '/:::tip 协议/,/:::/d' "$file"
+		awk '/^:::tip 协议$/,/^:::$/ {next} 1' "$file" > temp_file && mv temp_file "$file"
+
+
 
 		# 追加协议
 # 		echo -n '
