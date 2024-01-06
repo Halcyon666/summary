@@ -1,0 +1,174 @@
+---
+title: idea使用docker部署
+sidebar_label: idea使用docker部署
+sidebar_position: 4
+---
+
+### linux中docker配置
+
+```shell
+systemctl disable firewalld --now
+setenforce 0
+sed  -i -r 's/SELINUX=[ep].*/SELINUX=disabled/g' /etc/selinux/config
+swapoff -a
+sed -i '/swap/s/^\(.*\)$/#\1/g' /etc/fstab
+
+cat <<EOF > /usr/lib/systemd/system/docker.service
+[Unit]
+Description=Docker Application Container Engine
+Documentation=https://docs.docker.com
+After=network-online.target firewalld.service containerd.service
+Wants=network-online.target
+Requires=docker.socket containerd.service
+
+[Service]
+Type=notify
+# the default is not to use systemd for cgroups because the delegate issues still
+# exists and systemd currently does not support the cgroup feature set required
+# for containers run by docker
+ExecStart=/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:2375 -H unix://var/run/docker.sock --containerd=/run/containerd/containerd.sock
+ExecReload=/bin/kill -s HUP $MAINPID
+TimeoutSec=0
+RestartSec=2
+Restart=always
+
+# Note that StartLimit* options were moved from "Service" to "Unit" in systemd 229.
+# Both the old, and new location are accepted by systemd 229 and up, so using the old location
+# to make them work for either version of systemd.
+StartLimitBurst=3
+
+# Note that StartLimitInterval was renamed to StartLimitIntervalSec in systemd 230.
+# Both the old, and new name are accepted by systemd 230 and up, so using the old name to make
+# this option work for either version of systemd.
+StartLimitInterval=60s
+
+# Having non-zero Limit*s causes performance problems due to accounting overhead
+# in the kernel. We recommend using cgroups to do container-local accounting.
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+
+# Comment TasksMax if your systemd version does not support it.
+# Only systemd 226 and above support this option.
+TasksMax=infinity
+
+# set delegate yes so that systemd does not reset the cgroups of docker containers
+Delegate=yes
+
+# kill only the docker process, not all processes in the cgroup
+KillMode=process
+OOMScoreAdjust=-500
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+
+### IDEA 配置截图
+
+![image-20230519011746636](https://s2.loli.net/2023/07/15/zYjAySuVTmbNCG1.png)
+
+* * *
+
+![image-20230519011658616](https://s2.loli.net/2023/07/15/MuEtIrFQCgDplvK.png)
+
+### DockerFile
+
+```dockerfile
+FROM openjdk:8u342-jdk
+
+WORKDIR /deployment
+
+# 将当前目录下的jar包复制到docker容器的/目录下
+ADD ./target/learncases-0.0.1-SNAPSHOT.jar app.jar
+RUN jar -xvf app.jar && rm -f app.jar
+# 声明服务运行在8080端口
+EXPOSE 8080
+# 指定docker容器启动时运行jar包
+ENTRYPOINT ["java","-cp","/deployment","-DSpring.profiles.active=default","org.springframework.boot.loader.JarLauncher"]
+
+```
+
+### dockerfile.run.xml
+
+```xml
+
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="dockerfile" type="docker-deploy" factoryName="dockerfile" editBeforeRun="true" singleton="false" server-name="Docker">
+    <deployment type="dockerfile">
+      <settings>
+        <option name="imageTag" value="learncase" />
+        <option name="containerName" value="learncase" />
+        <option name="portBindings">
+          <list>
+            <DockerPortBindingImpl>
+              <option name="containerPort" value="8080" />
+              <option name="hostIp" value="192.168.3.163" />
+              <option name="hostPort" value="8080" />
+            </DockerPortBindingImpl>
+          </list>
+        </option>
+        <option name="sourceFilePath" value="dockerfile" />
+      </settings>
+    </deployment>
+    <method v="2">
+      <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="clean package" />
+    </method>
+  </configuration>
+</component>
+```
+
+## idea使用docker-compose部署
+
+### docker-compose.yml
+
+```yml
+version: '2'
+services:
+  learn-cases1:
+    container_name: learn-cases1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: learncase:latest
+    ports:
+      - "8080:8080"
+  learn-cases2:
+    container_name: learn-cases2
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: learncase:latest
+# 外部端口8081 容器端口8080
+    ports:
+      - "8081:8080"
+  learn-cases3:
+    container_name: learn-cases3
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: learncase:latest
+    ports:
+      - "8082:8080"
+
+```
+
+### 下载docker-compose
+
+[下载地址](https://github.com/docker/compose/releases)
+
+配置Docker Compose executable 即可
+
+![image-20230519222216138](https://s2.loli.net/2023/07/15/m1OAeNiE9ZsCqGX.png)
+
+* * *
+
+![image-20230520001747099](https://s2.loli.net/2023/07/15/BpjWZl64f2wHQyJ.png)
+
+> 注意部署时直接run 可能没有拉起三个contaner,这个时候可以先down 然后再deploy
+
+## 访问
+
+192.168.3.163:8080
+
+![image-20230705233312670](https://s2.loli.net/2023/07/15/azqiL7VdEQXxYtC.png)

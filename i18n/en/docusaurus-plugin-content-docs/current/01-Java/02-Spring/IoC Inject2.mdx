@@ -1,0 +1,398 @@
+---
+title: IoC注入方式2
+sidebar_label: IoC注入方式2
+sidebar_position: 3
+---
+
+本文相关代码(来自[官方源码](https://github.com/spring-projects/spring-framework.git "官方源码")spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) org.springframework.mylearntest包下。
+
+## 自动绑定和手动绑定的区别
+
+自动绑定和手动明确绑定各有利弊。自动绑定的优点有如下两点。
+
+-   某种程度上可以有效减少手动敲入配置信息的工作量。
+-   某些情况下，即使为当前对象增加了新的依赖关系，但只要容器中存在相应的依赖对象，就不需要更改任何配置信息。
+
+自动绑定的缺点有如下几点。
+
+-   自动绑定不如明确依赖关系一目了然。我们可以根据明确的依赖关系对整个系统有一个明确的认识，但使用自动绑定的话，就可能需要在类定义以及配置文件之间，甚至各个配置文件之间来回转换以取得相应的信息。
+-   某些情况下，自动绑定无法满足系统需要，甚至导致系统行为异常或者不可预知。根据类型（ byType）匹配进行的自动绑定，如果系统中增加了另一个相同类型的bean定义，那么整个系统就会崩溃；根据名字（byName）匹配进行的自动绑定，如果把原来系统中相同名称的bean定义类型给换掉，就会造成问题，而这些可能都是在不经意间发生的。
+-   使用自动绑定，我们可能无法获得某些工具的良好支持，比如Spring IDE。与BeanFactory不同， ApplicationContext在容器启动的时候，就会马上对所有的“ singleton的bean定义” 进行实例化操作
+
+## 懒加载配置了是否一定会生效
+
+仅指定lazy-init-bean的lazy-init为true，并不意味着容器就一定会延迟初始化该bean的实例。如果某个非延迟初始化的bean定义依赖于lazy-init-bean，那么毫无疑问，按照依赖决计的顺序，容器还是会首先实例化lazy-init-bean，然后再实例化后者，如下代码演示了这种相互牵连导致延迟初始化失败的情况：
+
+<details>
+	<summary>懒加载配置失效情况</summary>
+
+```xml
+<!--非懒加载bean依赖一个懒加载的bean 由于要初始化非懒加载的bean因此依赖的懒加载的bean必须实例化-->
+<beans>
+    <bean id="lazy-init-bean" class="..." lazy-init="true"/> 
+    <bean id="not-lazy-init-bean" class="...">
+        <property name="propName">
+            <ref bean="lazy-init-bean"/> 
+        </property>
+    </bean>
+</beans>
+```
+
+</details>
+
+## abstract属性的使用
+
+如果你不想容器在初始化的时候实例化某些对象，那么可以将其abstract属性赋值true，以避免容器将其实例化。对于ApplicationContext容器尤其如此，因为默认情况下， ApplicationContext会在容器启动的时候就对其管理的所有bean进行实例化，只有标志为abstract的bean除外。
+
+## scope
+
+-   scope用来声明容器中的对象所应该处的限定场景或者说该对象的存活时间，即容器在对象进入其相应的scope之前，生成并装配这些对象，在该对象不再处于这些scope的限定之后，容器通常会销毁这些对象。
+-   Spring容器最初提供了两种bean的scope类型：singleton和prototype，但发布2.0之后，又引入了另外三种scope类型，即request、 session和global session类型。不过这三种类型有所限制，只能在Web应用中使用。也就是说，只有在支持Web应用的ApplicationContext中使用这三个scope才是合理的。
+-   global session只有应用在基于portlet的Web应用程序中才有意义，它映射到portlet的global范围的 session。如果在普通的基于servlet的Web应用中使用了这个类scope
+    ，容器会将其作为普通的session类型的scope对待。
+
+## 偷梁换柱之术
+
+#### 方法注入
+
+Spring容器提出了一种叫做方法注入（Method Injection）的方式，可以帮助我们解决上述问题。我们所要做的很简单，只要让getNewsBean方法声明符合规定的格式，并在配置文件中通知容器，当该方法被调用的时候，每次返回指定类型的对象实例即可。
+
+<details>
+	<summary>配置项XML</summary>
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="newsBean" class="org.springframework.mylearntest.directcode.FXNewsBean" scope="prototype">
+    </bean>
+    <bean id="mockPersister" class="org.springframework.mylearntest.mthdinject.MockNewsPersister">
+        <property name="newsBean">
+            <ref bean="newsBean"/>
+        </property>
+    </bean>
+</beans>
+```
+
+</details>
+
+<details>
+	<summary>MockNewsPersister</summary>
+
+```java
+package org.springframework.mylearntest.mthdinject;
+    
+import org.springframework.mylearntest.directcode.FXNewsBean;
+import org.springframework.mylearntest.directcode.IFXNewsPersister;
+
+public class MockNewsPersister implements IFXNewsPersister {
+    private FXNewsBean newsBean;
+    public void persistNews(FXNewsBean bean) {
+        persistNews();
+    }
+    public void persistNews() {
+        System.out.println("persist bean:"+getNewsBean());
+    }
+    public FXNewsBean getNewsBean() {
+        return newsBean;
+    }
+
+    public void setNewsBean(FXNewsBean newsBean) {
+        this.newsBean = newsBean;
+    }
+
+}
+```
+
+</details>
+
+<details>
+	<summary>测试类</summary>
+
+```java
+package org.springframework.mylearntest.mthdinject;
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test4MockNewsPersister {
+    public static void main(String[] args) {
+        BeanFactory container = new ClassPathXmlApplicationContext("mthdinject.xml");
+        MockNewsPersister persister = (MockNewsPersister)container.getBean("mockPersister");
+        persister.persistNews();
+        persister.persistNews();
+        // persist bean:org.springframework.mylearntest.directcode.FXNewsBean@5be6e01c
+        // persist bean:org.springframework.mylearntest.directcode.FXNewsBean@5be6e01c
+    }
+}
+```
+
+</details>
+
+<details>
+	<summary>方法注入配置</summary>
+
+```xml
+<beans>
+    <bean id="newsBean" class="..domain.FXNewsBean" singleton="prototype">
+    </bean>
+    <bean id="mockPersister" class="..impl.MockNewsPersister">
+    <!--通过<lookup-method>的name属性指定需要注入的方法名， bean属性指定需要注入的对象，
+    当getNewsBean方法被调用的时候，容器可以每次返回一个新的FXNewsBean类型的实例。-->
+        <lookup-method name="getNewsBean" bean="newsBean"/>
+    </bean>
+</beans>
+```
+
+</details>
+
+#### 通过实现BeanFactoryAware
+
+只要在实现getNewsBean()方法的时候，能够保证每次调用BeanFactory的`getBean("newsBean")`，就同样可以每次都取得新的FXNewsBean对象实例。
+
+<details>
+	<summary>MockNewsPersister1</summary>
+
+```java
+package org.springframework.mylearntest.beanfactorywareinject;
+
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.mylearntest.directcode.FXNewsBean;
+import org.springframework.mylearntest.directcode.IFXNewsPersister;
+
+public class MockNewsPersister1 implements IFXNewsPersister, BeanFactoryAware {
+    private BeanFactory beanFactory;
+
+    public void setBeanFactory(BeanFactory bf) throws BeansException {
+        this.beanFactory = bf;
+    }
+
+    public void persistNews(FXNewsBean bean) {
+        persistNews();
+    }
+
+    public void persistNews() {
+        System.out.println("persist bean:" + getNewsBean());
+    }
+
+    public FXNewsBean getNewsBean() {
+        return (FXNewsBean) beanFactory.getBean("newsBean");
+    }
+}
+```
+
+</details>
+
+<details>
+	<summary>XML配置</summary>
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="newsBean" class="org.springframework.mylearntest.directcode.FXNewsBean" scope="prototype">
+    </bean>
+    <bean id="mockPersister1" class="org.springframework.mylearntest.beanfactorywareinject.MockNewsPersister1">
+    </bean>
+
+</beans>
+```
+
+</details>
+
+<details>
+	<summary>Test4MockNewsPersister1测试类</summary>
+
+```java
+package org.springframework.mylearntest.beanfactorywareinject;
+
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.mylearntest.mthdinject.MockNewsPersister;
+
+public class Test4MockNewsPersister1 {
+    public static void main(String[] args) {
+        BeanFactory container = new ClassPathXmlApplicationContext("beanfactoryawareinject.xml");
+        MockNewsPersister1 persister = (MockNewsPersister1)container.getBean("mockPersister1");
+        persister.persistNews();
+        persister.persistNews();
+    }
+}
+```
+
+</details>
+
+#### 通过ObjectFactory
+
+ObjectFactoryCreatingFactoryBean是 Spring 提供的一个FactoryBean实现，它返回一个ObjectFactory实例。ObjectFactoryCreatingFactoryBean返回的这个ObjectFactory实例可以为我们返回容器管理的相关对象。实际上，ObjectFactoryCreatingFactoryBean实现BeanFactoryAware接口，它返回ObjectFactory实例只是特定于与Spring容器进行交互的一个实现而已。使用它的好处就是，隔离了客户端对象对BeanFactory的直接引用。
+
+<details>
+	<summary>MockNewsPersister2</summary>
+
+```java
+package org.springframework.mylearntest.objectfactoryinj;
+
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.mylearntest.directcode.FXNewsBean;
+import org.springframework.mylearntest.directcode.IFXNewsPersister;
+
+@SuppressWarnings({"rawtypes" })
+public class MockNewsPersister2 implements IFXNewsPersister {
+    private ObjectFactory newsBeanFactory;
+    public void persistNews(FXNewsBean bean) {
+        persistNews();
+    }
+    public void persistNews() {
+        System.out.println("persist bean:"+getNewsBean());
+    }
+    public FXNewsBean getNewsBean() {
+        return (FXNewsBean) newsBeanFactory.getObject();
+    }
+    public void setNewsBeanFactory(ObjectFactory newsBeanFactory) {
+        this.newsBeanFactory = newsBeanFactory;
+    }
+}
+```
+
+</details>
+
+<details>
+	<summary>XML配置</summary>
+
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="newsBean" class="org.springframework.mylearntest.directcode.FXNewsBean" scope="prototype">
+    </bean>
+    <bean id="newsBeanFactory" class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
+        <property name="targetBeanName">
+            <idref bean="newsBean"/>
+        </property>
+    </bean>
+
+    <bean id="mockPersister2" class="org.springframework.mylearntest.objectfactoryinj.MockNewsPersister2">
+        <property name="newsBeanFactory">
+            <ref bean="newsBeanFactory"/>
+        </property>
+    </bean>
+</beans>
+```
+
+</details>
+
+<details>
+	<summary>测试类</summary>
+
+```java
+package org.springframework.mylearntest.objectfactoryinj;
+
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test4MockNewsPersister2 {
+    public static void main(String[] args) {
+        BeanFactory container = new ClassPathXmlApplicationContext("objectfactoryinj.xml");
+        MockNewsPersister2 persister = (MockNewsPersister2)container.getBean("mockPersister2");
+        persister.persistNews();
+        persister.persistNews();
+    }
+}
+```
+
+</details>
+
+#### 方法替换
+
+使用FXNewsProviderMethodReplacer替换FXNewsProvider中的getAndPersistNews()方法
+
+<details>
+	<summary>FXNewsProviderMethodReplacer</summary>
+
+```java
+package org.springframework.mylearntest.methodreplacer;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.support.MethodReplacer;
+
+import java.lang.reflect.Method;
+
+public class FXNewsProviderMethodReplacer implements MethodReplacer {
+
+    private static final transient Log logger =
+            LogFactory.getLog(FXNewsProviderMethodReplacer.class);
+
+    public Object reimplement(Object target, Method method, Object[] args)
+            throws Throwable {
+        logger.info("before executing method["+method.getName()+
+                "] on Object["+target.getClass().getName()+"].");
+        System.out.println("sorry,We will do nothing this time.");
+        logger.info("end of executing method["+method.getName()+
+                "] on Object["+target.getClass().getName()+"].");
+        return null;
+    }
+}
+```
+
+</details>
+
+<details>
+	<summary>XML</summary>
+
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="FXNewsProvider" class="org.springframework.mylearntest.ioc.propconfig.FXNewsProvider">
+		<constructor-arg index="0" ref="djNewsListener"/>
+		<constructor-arg index="1" ref="djNewsPersister"/>
+		<replaced-method name="getAndPersistNews" replacer="providerReplacer">
+		</replaced-method>
+	</bean>
+
+	<bean id="djNewsListener" class="org.springframework.mylearntest.ioc.propconfig.DjNewsListener"/>
+	<bean id="djNewsPersister" class="org.springframework.mylearntest.ioc.propconfig.DjNewsPersister"/>
+	<bean id="providerReplacer"
+		  class="org.springframework.mylearntest.ioc.methodreplacer.FXNewsProviderMethodReplacer"/>
+</beans>
+```
+
+</details>
+
+<details>
+	<summary>测试类</summary>
+
+```java
+package org.springframework.mylearntest.methodreplacer;
+
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.mylearntest.propconfig.FXNewsProvider;
+
+public class Test4FXNewsProviderMethodReplacer {
+    public static void main(String[] args) {
+        BeanFactory container = new ClassPathXmlApplicationContext("methodreplacer.xml");
+        FXNewsProvider fxNewsProvider = (FXNewsProvider)container.getBean("FXNewsProvider");
+        fxNewsProvider.getAndPersistNews();
+    }
+}
+```
+
+</details>
+
+> 参考资料
+>
+> 1.  书籍名称：Spring揭秘 作者：王福强

@@ -1,0 +1,90 @@
+---
+title: jQuery选择器
+sidebar_label: jQuery选择器
+sidebar_position: 1
+---
+
+## JQuery选择器
+
+### Input元素中 对name属性进行筛选
+
+[Example From Here](https://api.jquery.com/attribute-not-equal-selector/)
+
+`$( "input[name!='newsletter']" )`
+
+`$("input").not("[name=newsletter]")`
+
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>attributeNotEqual demo</title>
+  <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+</head>
+<body>
+
+<div>
+  <input type="radio" name="newsletter" value="Hot Fuzz">
+  <span>name is newsletter</span>
+</div>
+<div>
+  <input type="radio" value="Cold Fusion">
+  <span>no name</span>
+</div>
+<div>
+  <input type="radio" name="accept" value="Evil Plans">
+  <span>name is accept</span>
+</div>
+
+<script>
+$( "input[name!='newsletter']" ).next().append( "<b>; not newsletter</b>" );
+</script>
+
+</body>
+</html>
+```
+
+![image-20211102230352413](https://s2.loli.net/2023/07/15/ogv7OYWx2DzkytS.png)
+
+### 选择属性取反操作
+
+选取form表单中，div元素id值不为a的子元素中的input
+
+`$( "form div:not(#a) input" )`
+
+`$( "form div:not([id='a']) input" )`
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>attributeNotEqual demo</title>
+  <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+</head>
+<body>
+
+<form class="">
+    <div id="a" class="form-floating mb-3">
+      <input type="email" class="form-control rounded-4" id="floatingInput" placeholder="name@example.com">
+      <label for="floatingInput">Email address</label>
+    </div>
+    <div id="b" class="form-floating mb-3">
+      <input type="password" class="form-control rounded-4" id="floatingPassword" placeholder="Password">
+      <label for="floatingPassword">Password</label>
+    </div>
+
+</form>
+
+<script>
+    $( "form div:not(#a) input" ).css("background-color","pink");
+</script>
+
+</body>
+</html>
+```
+
+![image-20211102231338241](https://s2.loli.net/2023/07/15/HsKBpjJUXtC2FwG.png)
+
+> 更多选择器用法请 [看这里](https://api.jquery.com/category/selectors/)
