@@ -26,7 +26,9 @@ sidebar_position: 1
 
 执行如下命令
 
-`yum list installed|grep docker | gawk -F ' ' '{ print $1 }' | xargs yum remove -y`
+```shell
+yum list installed | grep '^docker' | gawk -F ' ' '{ print $1 }' | xargs yum remove -y
+```
 
 ### 相关教程
 
