@@ -1,17 +1,17 @@
 ---
-title: use vue-route
-sidebar_label: use vue-route
+title: use vue route
+sidebar_label: use vue route
 sidebar_position: 6
 ---
 
-# How to use `vue-route` in `vue3` ts project?
+# 如何在Vue3 ts项目中使用 Vue Route
 
-**Before Beginning to do `vue-route`, some requirements needs:**
+在开始使用之前，你需要做这些准备：
 
-1.  Install `Nodejs`, the official website is [here](https://nodejs.org/en), recommend even version like `16.xxx` and `18.xxx` 
-2.  Install `pnpm` by following order, `npm install -g pnpm`
-3.  Create a `vite vue3 ts` project, using `pnpm create vite-app my-vue3-ts-project`
-4.  Install a editor tool, recommend is VS-CODE, download from [here](https://code.visualstudio.com/)
+1. 安装Nodejs, [官网地址](https://nodejs.org/en),推荐版本`16.xxx` 和 `18.xxx` ;
+2. 安装pnpm，按照以下命令安装：`npm install -g pnpm`。
+3. 创建一个vite vue3 ts项目，使用`pnpm create vite-app my-vue3-ts-project`。
+4. 安装编辑器工具，推荐使用VS Code，可从 [visualstudio](https://code.visualstudio.com/) 下载。
 
 ## Preview Project Structure
 
@@ -26,30 +26,25 @@ pnpm install @types/node20.10.6 -D
 pm install @vue/ts config -D
 ```
 
-1.  **`pnpm install vue-router@4.2.5`**:
+`pnpm install vue-router@4.2.5`
 
-    This command installs the Vue Router package at version 4.2.5.
+此命令安装Vue Router包的版本为4.2.5。Vue Router是用于Vue.js应用程序的库，它使得在不同组件之间导航、管理应用程序的URL以及提供导航历史变得更加容易。
 
-    Vue Router is a library for Vue.js applications that enables navigation between different components, managing the application's URL, and providing a navigation history.
+`pnpm install @vitejs/plugin-vue@5.0.2 -D`
 
-2.  **`pnpm install @vitejs/plugin-vue@5.0.2-D`**:
-    This command installs the Vite plugins for Vue.js at version 5.0.2.
+此命令安装Vue.js的Vite插件，版本为5.0.2。Vite是一个专为Vue.js优化的现代Web开发构建工具。此插件特别将Vue.js与Vite集成，允许在Vite项目中使用Vue组件。
 
-    Vite is a build tool for modern web development that is particularly optimized for Vue.js. This plugin specifically integrates Vue.js with Vite, allowing you to use Vue components in your Vite projects.
+`pnpm install @types/node@20.10.6 -D`
 
-3.  **`pnpm install @types/node@20.10.6-D`**:
+此命令安装Node.js的TypeScript类型定义，版本为20.10.6。在使用TypeScript时，为您使用的库定义类型是非常重要的，@types/node包为Node.js提供了这些定义。
 
-    This command installs TypeScript type definitions for Node.js at version 20.10.6.
+`pnpm install @vue/tsconfig -D`
 
-    When working with TypeScript, having defined types for the libraries you use is essential for regular type checks. The `@types/node` package provides these definitions for Node.js.
+此命令安装Vue.js TypeScript配置包。`@vue/tsconfig`包为Vue.js项目提供了默认的TypeScript配置。它包含了在Vue开发中常用且推荐使用的设置。
+该配置在项目的tsconfig.json文件中通过"extents"属性被引用。
 
-4.  **`pnpm install @vue/tsconfig -D`**:
 
-    This command installs the Vue.js TypeScript configuration package.
-
-    The `@vue/tsconfig` package provides a default TypeScript configuration for Vue.js projects. It includes settings that are commonly used and recommended for Vue. s development. The configuration is systematically referenced in the `tsconfig.json` file of your project with the "extents" property.
-
-## Configure `tsconfig.json`
+## `tsconfig.json`
 
 ```json
 {
@@ -73,31 +68,7 @@ pm install @vue/ts config -D
 }
 ```
 
-**\`extends: "@vue/tsconfig/tsconfig.json"**:
-
--   This line indicates that the current TypeScript configuration extends the settings from the `tsconfig. son` file provided by the `@vue/tsconfig` package. It's a way of importing a base configuration.
-
-**`compilerOptions`**:
-
--   **\`ignoreDepressions": "5.0"\`\`**: Specifications that the compiler should ignore predictions related to TypeScript version 5.0.
-
--   **`sourceMap": true`**: Generates source maps, which are useful for debugging TypeScript in development environments.
-
--   **\`baseUrl": "."**: Sets the base directory for resolving non-relative module names. In this case, it's set to the current directory.
-
--   **`paths`**: Configuration modules for easier import statements. For example, `@/` is aliased to `./src/`, allowing you to write imports like \`import Foo from @/components/Foo.vue'.
-
--   **`lib`: ["esnext", "dom"]**: Specifications the libraries that are available at runtime. \``esnext` includes the latest ECMAS features, and `dom` includes the DOM types.
-
-**`vueCompilerOptions`**:
-
--   **`nativeTags`: ["block", "component", "template", "slot"]**: Specifications which tags should be treated as native Vue. s tags. This is helpful for the Vue.js compiles to recognize certain customized elements in your Vue components.
-
--   **`include`: \["src/**/_.ts", "src/\*\*/_.d.ts", "src/**/\*.tsx", "src/**/\*.vue"]\*\*:
-
-    -   Listers the files that should be included in the TypeScript compilation process. In this case, it includes TypeScript files (`*). s`, `*.d.ts`, `*.tsx` and Vue files (`*.vue`) within the `src` directory and its subdirectories.
-
-## Configure `vite.config.mts`
+## `vite.config.mts`
 
 ```ts
 // vite.config.mts
@@ -116,19 +87,7 @@ export default defineConfig({
 
 ```
 
-**`export default defineConfig({`**:
-
--   Exports the configuration for the Vite project. The configuration is defined using the `defineConfig` function.
-
-**`resolve: LOs alias: LO'@: path.resoluve(_dirname, 'src') }`**:
-
--   Configures module aliasing for easier import statements. The `@` alias is set to point to the `src` directory, making it conventive to import files using `@/` as a prefix. For example, `import Foo from @/components/Foo.vue';`.
-
-**`plugins: [vue()]`**:
-
--   Configure the Vite plugins for the project. In this case, it includes the Vue.js plugins in initiated with `vue()`. This enabled Vite to handle Vue single-file components during the build process.
-
-## Write `main.ts`
+## `main.ts`
 
 ```ts
 import { createApp } from 'vue'
@@ -141,7 +100,7 @@ createApp(App).use(router).mount('#app')
 
 This code sets up a Vue. s application with a root component (`App`), uses the Vue Router plugin for navigation, and mounts the entire application to an HTML element with the ID 'app'. This is a common setup for Vue. s single-page applications where routing is managed by Vue Router, and the application is mounted to a specific DOM element.
 
-## Write `App.vue`
+## `App.vue`
 
 ```vue
 <!-- App.vue -->
@@ -153,9 +112,7 @@ This code sets up a Vue. s application with a root component (`App`), uses the V
 
 ```
 
-This `App.vue` component is designed to be the root component of a Vue.js application. It establishes the overall structure of the application by providing a root `<div>` with the ID `app` and includes a `<router-view>`movement to handle the dynamic of components based on the application's routes. This is a common structure for Vue.js single-page applications that use Vue Router for navigation.
-
-## Write `route.ts`
+## `route.ts`
 
 ```ts
 // router.ts
@@ -182,30 +139,6 @@ export default router
 
 ```
 
-**\`Import { createRouter, createWebHistory } from 'vue-router';**:
-
--   Import the `createRouter` and `createWebHistory` functions from the `vue-router` library. These functions are used to create a Vue Router instance.
-
-**\`Import { RouteRecordRaw } from 'vue-router';**:
-
--   Import the `RouteRecordRaw` type from the `vue-router` library. This type is used to define route configurations.
-
-**`const routes: RouteRecordRaw[]= [...]`**:
-
--   Define an array of route configurations. In this example, there is a single route configuration for the home page (\`'/'). It specializes the name, component, and meta information (in this case, the title) for the route.
-
-**`const router = createRouter (LOhistory: createWebHistory(), routes });`**:
-
--   Use the `createRouter` function to create a computer instance.
-
--   The `history` option is set to `createWebHistory()`, indicating that the computer should use the web history API for navigation. This enabled cleaner URLs without cash fragments.
-
--   The `routes` option is set to the array of route configurations defined earlier.
-
-**`export default router;`**:
-
--   Export the created computer instance, making it available for use in other parts of the application.
-
 ## write `MyPage.vue`
 
 ```vue
@@ -222,16 +155,14 @@ const inputText = ref<string>('hello')
 
 ```
 
-This creates a input text element, and binds the data to inputText variable, in the script-setup declare ref object refers to string 'hello'.
+## 访问
 
-## Access
-
-run the project with your script which defines in `package.json`, then visit the url, your will see as below picture;
+运行`pnpm dev`,在浏览器中访问`localhost:5173`
 
 ![Visited Page](https://s2.loli.net/2023/12/31/OkqPXf6ejuAgBL.png)
 
-## Conclusion
+## 总结
 
-In this user guide, there might be a tendency to make spelling misstakes or encounter issues with commands. It’s advisory able to directly copy the orders and paste them into your VS Code. You can download the code from my [GitHub Repository](https://github.com/Halcyon66/taco-shop)
+为了防止命令的拼写错误，建议直接复制指令并粘贴到您的VS Code中。您可以从 [GitHub](https://github.com/Halcyon666/taco-shop.git) 存储库 下载代码。
 
-Thank you for your time. If you find value in my article, please give it a clause. Also, feel free to ask any questions you may have.
+感谢您花费宝贵的时间来阅读文章。如果您觉得我的文章有用，请给予一点肯定。同时，随时提出您可能有的任何问题。

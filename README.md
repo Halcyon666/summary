@@ -1,5 +1,4 @@
 [![Deployment](https://github.com/Halcyon666/summary/actions/workflows/deploy.yml/badge.svg)](https://github.com/Halcyon666/summary/actions/workflows/deploy.yml)
-[![Crowdin](https://badges.crowdin.net/hy-summary/localized.svg)](https://crowdin.com/project/hy-summary)
 
 # Website
 

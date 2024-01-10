@@ -1,0 +1,596 @@
+---
+title: Vue 基础1
+sidebar_label: Vue 基础1
+sidebar_position: 2
+---
+
+> **<font color="red">本文所有内容均来自 书籍《vue.js实战》</font>**
+>
+> **[<font color="red">完整代码请查看github</font>](https://github.com/whalefall541/vue-learn)**
+
+## v-model
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Hello world</title>
+</head>
+<body>
+	<div id="app">
+		<input type="text" v-model="name" placeholder="your name">
+		<h1>Hello,{{ name }}</h1>
+	</div>
+	<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+	<script>
+		var app = new Vue({
+		<!-- #app为某个元素的id -->
+			el:'#app',
+			data: {
+				name: ''
+			}
+		})
+	</script>
+</body>
+</html>
+```
+
+> 为缩减篇幅，本文后面所有代码 都只给出body标签内的内容
+
+## v-html 、v-pre
+
+```html
+<div id="app">
+    <span v-html="link"></span>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data: {
+            link: '<a href="#">这是一个链接</a>'
+        }
+    })
+</script>
+```
+
+```html
+<div id="app">
+    <span v-pre>{{只为显示双大括号}}</span>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data: ''
+    })
+</script>
+```
+
+## 三元运算符，四则运算
+
+```html
+<div id="app">
+    <!-- Vue .js 只支持单个表达式，不支持语句和流控制 -->
+    {{ number / 10 }}
+    {{ isOK ? 'Y' : 'N' }}
+    {{ text.split(',').reverse().join(',') }}
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data: {
+            number: 100,
+            isOK: false,
+            text: '123,456'
+        }
+    })
+</script>
+```
+
+## 过滤器 
+
+```html
+<div id="app">
+    {{ date | formatDate}}<!-- 使用过滤器格式化时间 -->
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var padDate = function(value) {
+        return value < 10 ? '0' + value : value 
+    };
+    var app = new Vue({
+        el:'#app',
+        data: {
+            date : new Date()
+        },
+        filters: {
+            formatDate: function(value) {
+                var date = new Date(value);
+                var year = date.getFullYear();
+                var month = padDate(date.getMonth()+1);
+                var day = padDate(date.getDate());
+                var hours = padDate(date.getHours());
+                var minutes = padDate(date.getMinutes());
+                var seconds = padDate(date.getSeconds());
+                return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds
+            }
+        },
+        mounted: function() {
+            var _this = this;// 声明一个变量指向Vue实例this,保证作用域一致
+            this.timer = setInterval(function() {
+                _this.date = new Date(); // 修改数据
+            }, 1000);
+        },
+        beforeDestroy: function() {
+            if(this.timer) {
+                clearInterval(this.timer);
+            }
+        }
+    })
+</script>
+```
+
+> 过滤器应当用于处理简单的文本转换，如果要实现更为复杂的数据变换，应该使用计算属性
+
+## v-bind
+
+```html
+<div id="app">
+    <a v-bind:href="url">链接</a>
+    <img v-bind:src="imgUrl">
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data: {
+            url : 'https://www.github.com',
+            imgUrl : 'https://gitee.com/jack541/repo-for-pic-go/raw/master/img/image-20220102162032176.png'
+        }
+    })	
+</script>
+```
+
+以下两句等效：
+
+`<a v-bind:href="url">链接</a>`
+
+`<a :href="url">链接</a>`
+
+## v-on
+
+```html
+<div id="app">
+    <p v-if="show">这是一段文本</p>
+    <button v-on:click="handleClose">点击隐藏</button>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data: {
+            show : true
+        },
+        methods: {
+            handleClose: function(){
+                if (this.show == true)
+                    this.show = false;
+                else 
+                    this.show = true;
+            }
+        }
+    })	
+</script>
+```
+
+以下两句等效：
+
+`<button v-on:click="handleClose">点击隐藏</button>`
+
+`<button @click="handleClose">点击隐藏</button>`
+
+## computed属性用法
+
+```html
+<div id="app">
+    {{ reversedText }}
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data: {
+            text: '123,456'
+        },
+        computed: {
+            reversedText: function() {
+                return this.text.split(',').reverse().join(',');
+            }
+        }
+    })	
+</script>
+```
+
+```html
+<div id="app">
+    总价:{{ prices }}
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data: {
+            package1: [
+                {
+                    name: 'iPhone 13 128G',
+                    price: 5999,
+                    count: 3
+                },{
+                    name: 'iPad mini6',
+                    price: 3799,
+                    count: 5
+                }
+            ],
+            package2: [
+                {
+                    name: 'iPhone 13 pro 256G',
+                    price: 8999,
+                    count: 3
+                },{
+                    name: 'Mac Pro intel i9 1TB SDD 32G RAM',
+                    price: 21999,
+                    count: 1
+                }
+            ]
+        },
+        computed: {
+            prices : function() {
+                var prices = 0;
+                for (var i = 0; i < this.package1.length; i++) {
+                    prices += this.package1[i].price * this.package1[i].count;
+                }
+                for (var i = 0; i < this.package2.length; i++) {
+                    prices += this.package2[i].price * this.package2[i].count;
+                }
+                return prices;
+            }
+        }
+    })	
+</script>
+```
+
+## setter getter
+
+```html
+<div id="app">
+    姓名:{{ fullName }}
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data: {
+            firstName: 'jack',
+            lastName: 'green'
+        },
+        computed: {
+            fullName: {
+                //getter 用于读取
+                get: function () {
+                    return this.firstName + ' ' + this.lastName;
+                },
+                // setter 写入时出发
+                set: function (newValue) {
+                    var names = newValue.split(' ');
+                    this.firstName = names[0];
+                    this.lastName = names[names.length - 1];
+                } 
+            }
+        }
+    })	
+</script>
+```
+
+## 计算缓存
+
+计算属性是基于它的依赖缓存的。 一个计算属性所依赖的数据发生变化时，它才会重新取值。
+
+```html
+<div id="app">
+    <!-- 注意，这里的 reversedText是方法，所以要带()-->
+    {{ reversedText() }}
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data: {
+            text: '123,456'
+        },
+        methods: {
+            reversedText: function() {
+                return this.text.split(',').reverse().join(',');
+            }
+        }
+    })	
+</script>
+```
+
+## 使用 v-bind切换class属性
+
+```html
+<div id="app">
+    <div :class="{ 'active': isActive, 'error': isError }"></div>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data: {
+            isActive: true,
+            isError: false
+        }
+    })	
+</script>
+```
+
+当`:class `的表达式过长或逻辑复杂时，还可以绑定一个计算属性，这是一种很友好和常见的用法，一般当条件多于两个时，都可以使用data 或computed。
+
+```html
+<div id="app">
+    AA<div :class="classes"></div>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data: {
+            isActive: true,
+            error: null
+        },
+        computed: {
+            classes: function() {
+                return {
+                    active: this.isActive && !this.error,
+                    'text-fail': this.error && this.error.type === 'fail'
+                }
+            }
+        }
+    })	
+</script>
+```
+
+## 数组语法
+
+- data 定义
+
+```html
+<div id="app">
+    <div :class="[{ 'active' : isActive }, errorCls]"></div>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data: {
+            isActive: true,
+            errorCls: 'error'
+        },
+    })	
+</script>
+```
+
+- computed定义
+
+```html
+<div id="app">
+    <button :class="classes"></button>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data: {
+            size: 'large',
+            disabled: true
+        },
+        computed: {
+            classes: function() {
+                return [
+                    'btn',
+                    {
+                    // 定义btn大小，不为空的时候就为size的尺寸
+                        ['btn-' + this.size]: this.size != '',
+                    // 定义button是否可用
+                        ['btn-disabled']: this.disabled
+                    }
+                ]
+            }
+        }
+    })	
+</script>
+```
+
+> NOTES: 使用计算属性给元素动态设置类名，在业务中经常用到，尤其是在写复用的组件时，所以在开发过程中，如果表达式较长或逻辑复杂，应该尽可能地优先使用计算属性。
+
+## 绑定style
+
+```html
+<div id="app">
+    <div :style="styles">文本</div>
+    <!-- 应对多个对象时可以使用数组语法 styleA相当于一个data中的styles元素 -->
+    <!-- <div :style="[styleA, styleB] " >文本</d iv> -->
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data: {
+            styles :{
+                color: 'red',
+                fontSize: 14+'px'
+            }
+        }
+    })	
+</script>
+```
+
+> 在实际业务中，： style 的数组语法并不常用，因为往往可以写在一个对象里面；而较为常用的应当是计算属性。
+
+## v-cloak
+
+```html
+<div id="app" v-cloak>
+    {{ message }}
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data: {
+            message: '页面正在加载中……'
+        }
+    });
+
+</script>
+```
+
+## v-once
+
+作用是定义它的元素或组件只渲染一次，包括元素或组件的所有子节点。
+
+```html
+<div id="app">
+    <span v-once> {{ message }}</span>
+    <div v-once>
+        <span> {{ message }} </span>
+    </div>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data: {
+            message: '这是一段文本'
+        }
+    })
+</script>
+```
+
+##  v-if v-else-if v-else
+
+```html
+<div id="app">
+    <p v-if="status === 1"> 当status为1时显示该行</p>
+    <p v-else-if="status === 2"> 当status为2时显示该行</p>
+    <p v-else>否则显示该行</p>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data: {
+            status: 1
+        }
+    })
+</script>
+```
+
+> v-else-if 要紧跟v-if, v-else 要紧跟v-else-if 或v-if, 表达式的值为真时，当前元素／组件及所
+> 有子节点将被渲染，为假时被移除
+
+## template 复用元素
+
+```html
+<div id="app">
+    <template v-if="type === 'name'">
+        <label>用户名：</label>
+        <input placeholder="输入用户名">
+    </template>
+    <template v-else>
+        <label>邮箱：</label>
+        <input placeholder="输入邮箱">
+    </template> 
+    <button @click="handleToggleClick">切换输入类型</button>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data: {
+            type: 'name'
+        },
+        methods: {
+            handleToggleClick: function () {
+                this.type = this.type === 'name' ? 'mail' : 'name';
+            }
+        }
+    })
+</script>
+```
+
+如果不希望复用input框，可以使用Vue.js 提供的key 属性，它可以让你自己决定是否要复用元素， key 的值必须是唯一的。
+
+```html
+<template v-if="type === 'name'">
+    <label>用户名：</label>
+    <input placeholder="输入用户名" key="name-input">
+</template>
+<template v-else>
+    <label>邮箱：</label>
+    <input placeholder="输入邮箱" key="mail-input">
+</template>
+```
+
+## v-show 
+
+```html
+<div id="app">
+    <p v-show="status === 1">当status为1时显示该行</p>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el:'#app',
+        data: {
+            status: 2
+        }
+    })
+</script>
+```
+
+> v-show 不能在`<template>`上使用。
+>
+> 若表达式`v-if`初始值为false, 则一开始元素／组件并不会渲染，只有当条件第一次变为真时才开始编译。而`v-show `只是简单的CSS属性切换，无论条件真与否，都会被编译。相比之下， `v-if `更适合条件不经常改变的场景，因为它切换开销相对较大， 而v-show 适用千频繁切换条件。
+
+##  v-for
+
+```html
+<div id="app">
+    <ul>
+        <li v-for="book in books">{{ book.name }}</li>
+        <!-- <li v-for="book of books">{{ book.name }}</li> -->
+    </ul>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            books: [
+                {name : '《Vue.js实战》'},
+                {name : '《JavaScript 语言精粹》'},
+                {name : '《JavaScript 高级程序设计》'}
+            ]
+        }
+    })
+</script>
+
+```
+
+> 参考文献：**<font color="red">书籍《vue.js实战》</font>**
+
+
