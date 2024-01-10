@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.1.0">
 <title data-rh="true">计算机组成原理 | halcyon666</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="http://halcyon666.top/en/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="http://halcyon666.top/en/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="http://halcyon666.top/en/ReadBook/Computor theory/Computer Composition Theory"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" property="og:locale:alternate" content="zh"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="计算机组成原理 | halcyon666"><meta data-rh="true" name="description" content="概论"><meta data-rh="true" property="og:description" content="概论"><link data-rh="true" rel="icon" href="/en/img/favicon.png"><link data-rh="true" rel="canonical" href="http://halcyon666.top/en/ReadBook/Computor theory/Computer Composition Theory"><link data-rh="true" rel="alternate" href="http://halcyon666.top/ReadBook/Computor theory/Computer Composition Theory" hreflang="zh"><link data-rh="true" rel="alternate" href="http://halcyon666.top/en/ReadBook/Computor theory/Computer Composition Theory" hreflang="en"><link data-rh="true" rel="alternate" href="http://halcyon666.top/ReadBook/Computor theory/Computer Composition Theory" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://T5OO103S1G-dsn.algolia.net" crossorigin="anonymous"><link rel="search" type="application/opensearchdescription+xml" title="halcyon666" href="/en/opensearch.xml"><link rel="stylesheet" href="/en/assets/css/styles.4465e961.css">
-<script src="/en/assets/js/runtime~main.0eb46ad0.js" defer="defer"></script>
+<script src="/en/assets/js/runtime~main.1eb8eed1.js" defer="defer"></script>
 <script src="/en/assets/js/main.e3b71422.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -100,7 +100,7 @@ CPU在T1  上升沿发出地址信息；在T2上升沿发出读命令；在T3上
 <ul>
 <li>磁盘 光盘 磁带</li>
 </ul>
-<p>Cache</p>
+<p>缓存</p>
 <ul>
 <li>cache</li>
 </ul>
@@ -123,7 +123,7 @@ CPU在T1  上升沿发出地址信息；在T2上升沿发出读命令；在T3上
 <p>地址线的连接：通常将CPU地址线的低位与存储芯的低位相连。CPU的高位用于存储芯扩充，片选线等</p>
 <p>数据线的连接：必须对存储芯片扩位，使其数据位数与CPU相等</p>
 <p>读写命令线的连接：CPU的读写命令线一般直接和存储芯片的读写端相连，通常高电平位读，低电平位写。</p>
-<p>片选线的连接：存储器由许多存储芯片组成，哪一  片被选中完全取决于该存储芯片的片选控制端是否接收到来自CPU的片选有效信号；且片选有效信号和访存控制信号有关（若访问I/O，则访存控制信号位高电平，表示不要求存储器工作）；CPU中没有与存储芯片连接的高位地址线必须和访存控制信号共同产生存储芯片的片选信号。</p>
+<p>片选线的连接：存储器由许多存储芯片组成，哪一 片被选中完全取决于该存储芯片的片选控制端是否接收到来自CPU的片选有效信号；且片选有效信号和访存控制信号有关（若访问I/O，则访存控制信号位高电平，表示不要求存储器工作）；CPU中没有与存储芯片连接的高位地址线必须和访存控制信号共同产生存储芯片的片选信号。</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="存储器的校验">存储器的校验<a href="#存储器的校验" class="hash-link" aria-label="Direct link to 存储器的校验" title="Direct link to 存储器的校验">​</a></h3>
 <p>二进制位数为n，需要校验k位，组成n+k位代码满足：<code>2^k &gt;= n + k +1</code></p>
 <p>汉明码偶校验：只需⊕ <code>1, 3, 5, 7</code> <code>2, 3, 6, 7</code> <code>4, 5, 6, 7</code>得到 C1, C2, C3</p>
