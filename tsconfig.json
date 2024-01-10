@@ -3,11 +3,5 @@
   "extends": "@docusaurus/tsconfig",
   "compilerOptions": {
     "baseUrl": "."
-  },
-  "exclude": [
-    "node_modules",
-    "build",
-    "docs"
-    // Add more directories or files to exclude as needed
-  ]
+  }
 }
