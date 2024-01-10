@@ -41,3 +41,16 @@ $ GIT_USER=<Your GitHub username> yarn deploy
 ```
 
 If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+
+## git i18n 
+
+[git i18n giude](https://docusaurus.io/docs/i18n/git)
+
+My source essaies is Chinese, and the tanslation is English. Using the following script to test the translate code. 
+
+```shell
+# inint
+yarn write-translations --locale en
+# start locally
+yarn run start --locale en
+```
