@@ -9,10 +9,10 @@ const config: Config = {
   favicon: "img/favicon.png",
 
   // Set the production url of your site here
-  url: "http://halcyon666.top/",
+  url: "https://halcyon666.github.io/summary/",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/",
+  baseUrl: "/summary/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -52,7 +52,7 @@ const config: Config = {
           sidebarPath: "./sidebars.ts",
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          // editUrl: "https://github.com/Halcyon666/summary/blob/main/",
+          editUrl: "https://github.com/Halcyon666/summary/blob/main/",
         },
         blog: {
           showReadingTime: true,
