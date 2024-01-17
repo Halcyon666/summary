@@ -1,14 +1,9 @@
 # hadoop
 
-## 大数据
-
-### 
-
-### 
-
 ## hadoop版本
 
-### 1. Hadoop1.0：包括Common、HDFS、MapReduce
+1. Hadoop1.0：包括Common、HDFS、MapReduce
+
 2. Hadoop2.0：包括Common、HDFS、MapReduce、YARN。Hadoop1.0和Hadoop2.0不兼容。从Hadoop2.7版本开始，包含了Ozone，从Hadoop2.10版本开始，包含了Submarine
 3. Hadoop3.0：包括了Common、HDFS、MapReduce、YARN以及Ozone模块，最新的Hadoop3.0版本中包含了Submarine
 
@@ -47,16 +42,16 @@
 - 元数据
 
 	- a. 文件的存储路径
-b. 文件的权限
-c. 文件大小
-d. Block大小
-e. 文件和BlockID的映射关系
-f. BlockID和DataNode的映射关系
-g. 副本数量
+	b. 文件的权限
+	c. 文件大小
+	d. Block大小
+	e. 文件和BlockID的映射关系
+	f. BlockID和DataNode的映射关系
+	g. 副本数量
 	- 元数据和文件中的具体内容无关
 	- 元数据大小是130~180B
 	- a. 维系在内存中的目的是为了读写快
-b. 维系在磁盘中的目的是为了崩溃恢复
+	b. 维系在磁盘中的目的是为了崩溃恢复
 
 		- 在磁盘上的存储文件
 
@@ -99,7 +94,7 @@ b. 维系在磁盘中的目的是为了崩溃恢复
 		- 存储Block，将Block存储在DataNode的磁盘上
 
 	- DataNode会定时向NameNode发送心跳信号
-Block在磁盘上的存储位置由hadoop.tmp.dir来决定
+	Block在磁盘上的存储位置由hadoop.tmp.dir来决定
 	- 默认为128M,通过dfs.blocksize(hdfs-site.xml)属性来配置，单位是字节
 	- 如果一个文件不足一个Block的默认大小，那么这个文件大小为实际大小
 	- HDFS会对每一个Block分配一个全局递增的编号 - Block ID: 1073741825
@@ -192,8 +187,8 @@ fsimage.xxx.md5是对fsimage.xxx来进行校验
 - VERSION
 
 	- a. clusterID：集群编号，用于校验
-b. storageType：标记当前节点的类型
-c. blockpoolID：块池编号
+	b. storageType：标记当前节点的类型
+	c. blockpoolID：块池编号
 	- 
 
 ### 读取流程
@@ -276,8 +271,8 @@ b. 为了减少节点之间的数据传输，JobTracker在分配任务的时候�
 	- 	a. 如果文件为空，则整个文件作为一个切片处理
 	b. 在MapReduce中，文件存在可切和不可切。如果文件不可切，则整个文件作为一个切片处理
 	c. 如果需要调大切片，需要调节minSize；如果需要调小切片，需要调节maxSize。MapReduce中并没有提供直接调节切片的方法
-//默认 minSize 1byte maxSize 9223372036854775807L
-return Math.max(minSize, Math.min(maxSize, blockSize));
+	//默认 minSize 1byte maxSize 9223372036854775807L
+	return Math.max(minSize, Math.min(maxSize, blockSize));
 	d.在切片过程中，需要注意切片阈值：1.1，即当文件剩余的字节数量/切片大小>1.1的时候才会按照切片大小来进行切分；如果剩余的字节数量/切片大小`<=1.1`，则剩余的字节整个作为一个切片处理
 
 ### job提交流程
@@ -384,7 +379,7 @@ d. TaskTracker下载jar包之后，会在本节点上去开启一个JVM子进程
 	a. FCFS(First come first serve) - 先到先得 - ResourceSchedular默认采用也是这种策略
 	b. 优先级策略 - 优先级越高，优先分配资源
 	c. 短任务优先 - 在任务时间差别特别明显的情况下，考虑让短任务先执行
-轮询 - 时间片是轮着的
+	轮询 - 时间片是轮着的
 - 执行流程图
 
 	- 
@@ -424,5 +419,4 @@ reduce任务数的阀值，如果一个application包含的reduce数小于该值
 
 mapreduce.job.ubertask.maxbytes
 application的输入大小的阀值。默认为dfs.block.size的值。当实际的输入大小部小于该值的设定，便会认为该application为一个小的application。
-
 
