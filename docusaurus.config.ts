@@ -8,6 +8,11 @@ const config: Config = {
   tagline: "Enjoy writing, Happy a nice day!",
   favicon: "img/favicon.png",
 
+  // custom domain config
+  /* https: "https://halcyon666.top/",
+  baseUrl: "/summary", */
+
+  // github domain
   // Set the production url of your site here
   url: "https://halcyon666.github.io/",
   // Set the /<baseUrl>/ pathname under which your site is served
@@ -41,10 +46,10 @@ const config: Config = {
       {
         sitemap: {
           // @ts-ignore
-          changefreq: 'weekly',
+          changefreq: "weekly",
           priority: 0.5,
-          ignorePatterns: ['/tags/**'],
-          filename: 'sitemap.xml',
+          ignorePatterns: ["/tags/**"],
+          filename: "sitemap.xml",
         },
         docs: {
           // put the docs to the rott directory
@@ -79,8 +84,8 @@ const config: Config = {
     navbar: {
       title: "halcyon666",
       logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.png',
+        alt: "My Site Logo",
+        src: "img/logo.png",
       },
       items: [
         {
@@ -96,20 +101,19 @@ const config: Config = {
           position: "right",
         },
         {
-          type: 'localeDropdown',
-          position: 'left',
+          type: "localeDropdown",
+          position: "left",
         },
       ],
     },
     algolia: {
-      // docSearch for  https://halcyon666.github.io/summary/ 
+      // docSearch for  https://halcyon666.github.io/summary/
       // The application ID provided by Algolia
       appId: "T5OO103S1G",
       // Public API key: it is safe to commit it
       apiKey: "8980e7549b3164ed7f36a8394542f0eb",
       indexName: "halcyon666",
       // docSearch for  https://halcyon666.top/
-
 
       // Optional: see doc section below
       contextualSearch: true,
