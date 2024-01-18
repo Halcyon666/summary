@@ -1,11 +1,26 @@
-# tailwind
+#  taco shop project written by tailwind and vue
 
-## install dependencies
+*Happy news,You can visit my deploy page [here](https://halcyon666.github.io/taco-shop/)*
 
+### Prerequisite
 
+- [mdn Cascading Style Sheets](https://developer.mozilla.org/en-US/docs/Web/CSS)
+
+- [The css course learned from](https://youtu.be/OXGznpKZ_sA?si=KTPSZgU2-h7IHr_d)
+
+- [Official Vue Website](https://vuejs.org/)
+
+- [typescript](https://www.typescriptlang.org/)
+
+### Learn Background
+
+First I learned a basic [css course](https://youtu.be/OXGznpKZ_sA?si=KTPSZgU2-h7IHr_d) given by ***\*Dave Gray\****(Thanks for you), second the thought throw out when I learning, I can rewrite this by other technology that htm replace by vue and ts, css replace by tailwind css. 
+
+So this article the summay to record all of the key point, you will get great beneficial from here.
+
+### Install
 
 ```shell
-pnpx tailwindcss -i ./src/style/input.css -o ./src/style/output.css --watch
 
 [tutorial](https://tailwindcss.com/docs/guides/vite#vue)
 
@@ -19,5 +34,26 @@ pnpm install -D postcss-nesting
 pnpm install -D autoprefixer
 ```
 
+#### text-shadow
 
+```html
+[text-shadow:2px_2px_5px_#333]
+```
+
+#### fontFamily
+
+```ts
+extend: {
+  fontFamily: {
+    content: ['Nunito', 'sans-serif'],
+    headings: ['Fugaz One', 'cursive'],
+  },
+},
+```
+
+
+
+```html
+font-headings
+```
 
