@@ -1,3 +1,10 @@
+---
+title: tailwind usage
+sidebar_label: tailwind usage
+sidebar_position: 12
+description: taco shop project written by tailwind and vue
+---
+
 #  taco shop project written by tailwind and vue
 
 *Happy news,You can visit my deploy page [here](https://halcyon666.github.io/taco-shop/)*
@@ -14,46 +21,205 @@
 
 ### Learn Background
 
-First I learned a basic [css course](https://youtu.be/OXGznpKZ_sA?si=KTPSZgU2-h7IHr_d) given by ***\*Dave Gray\****(Thanks for you), second the thought throw out when I learning, I can rewrite this by other technology that htm replace by vue and ts, css replace by tailwind css. 
+First I learned a basic [css course](https://youtu.be/OXGznpKZ_sA?si=KTPSZgU2-h7IHr_d) given by ***\*Dave Gray\****(Thanks for you), second the thought throw out when I learning, I can rewrite this by other technology that html replace by vue and ts, css replace by tailwind css. 
 
-So this article the summay to record all of the key point, you will get great beneficial from here.
+So this article the summary to record all of the key point, you will get great beneficial from here.
 
-### Install
+### Install Tailwind Css
+
+If you wanna initiate a new project, you can read [this](https://halcyon666.github.io/summary/Frontend/Integrate%20husky%20prettier%20etc), then install the tailwind Css by reading [this tutorial](https://tailwindcss.com/docs/guides/vite#vue).
+
+Also you can skip all steps above, just execute the following command,
 
 ```shell
-
-[tutorial](https://tailwindcss.com/docs/guides/vite#vue)
-
-
-
 pnpm install -D tailwindcss postcss autoprefixer
-pnpx tailwindcss init -p --ts
-
 pnpm install -D postcss-nesting
-
+pnpm install -D postcss-preset-env
 pnpm install -D autoprefixer
+# this will initiate will create typescript config file
+pnpx tailwindcss init -p --ts
+# also you can execute witout --ts will create js config file
+pnpx tailwindcss init -p 
 ```
+
+### Tailwind Usage
+
+In this section, First I will give some basic usage, and then focus on tough issues.
+
+
+
+#### **margin-bottom**
+
+- custom css
+
+```css
+.mb-4 {
+    margin-bottom: 1rem/* 16px */;
+}
+```
+
+```css
+m-[clamp(1em,2.5vh,1.5em)_0] 
+```
+
+
+
+- tailwind css
+
+Below cases will not show the present tailwind css on the html element.
+
+```html
+<div class="mb-4">
+      <!--  ... -->
+</div>
+```
+
+
 
 #### text-shadow
 
-```html
-[text-shadow:2px_2px_5px_#333]
+- custom css
+
+```css
+.my-shadow {
+    text-shadow: 2px 2px 5px #333;
+}
 ```
 
-#### fontFamily
+- tailwind css
+
+#### font-family
+
+If you wanna set font family, custom Css is below 
+
+```css
+.font-headings {
+    font-family: Fugaz One, cursive;
+}
+```
+
+In tailwind css, you need put config into you `tailwind.config.ts`
 
 ```ts
-extend: {
-  fontFamily: {
-    content: ['Nunito', 'sans-serif'],
-    headings: ['Fugaz One', 'cursive'],
+export default {
+  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        content: ['Nunito', 'sans-serif'],
+        headings: ['Fugaz One', 'cursive'],
+      },
+    },
   },
-},
+  plugins: [],
+} satisfies Config
 ```
 
 
 
-```html
-font-headings
+#### **animate**
+
+custom css
+
+```css
+export default {
+  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      keyframes: {
+        showWelcome: {
+          '0%': {
+            top: '-20px',
+            transform: 'skew(0deg, -5deg) scaleY(0)',
+          },
+
+          '80%': {
+            top: '30px',
+            transform: 'skew(10deg, -5deg) scaleY(1.2)',
+          },
+
+          '100%': {
+            top: '20px',
+            transform: 'skew(-10deg, -5deg) scaleY(1)',
+          },
+        },
+      },
+    },
+  },
+  plugins: [],
+} satisfies Config
+```
+
+tail windcss
+
+#### 
+
+```css
+animate-[showWelcome_0.5s_ease-in-out_1s_forwards]
+
+last:min-h-[calc(100vh-20rem)]
+
+
+hover:text-black/[.6]
+
+
+dark:hover:text-orange-500
+
+
+
+@media screen and (min-width: 576px) {
+    .header__h1::before {
+        content: '🌮 '
+    }
+
+    .header__h1::after {
+        content: ' 🌮'
+    }
+
+    .menu__header,
+    .menu__cr,
+    .menu__sf,
+    .menu__cs {
+        font-size: 125%;
+    }
+}
+min-[576px]:before:content-['🌮'] min-[576px]:after:content-['🌮']
+
+text-shadow: 2px 2px 5px var(--BORDER-COLOR);
+[text-shadow:2px_2px_5px_#333] dark:[text-shadow:2px_2px_5px_white]
+
+
+box-shadow: 0 6px 5px -5px var(--BORDER-COLOR);
+shadow-[0_0_10px_#333] dark:shadow-[0_0_10px_whitesmoke]
+
+
+shadow-[0_6px_5px_-5px_rgba(0,0,0,0.3)] dark:shadow-[0_6px_5px_-5px_rgba(255,255,255,0.3)]
+
+use text-[rgba(0, 0, 0, 0.6)] not support, instead of text-black/[.6] 
+if the color is rgba(52, 178, 52, 0.75), only can use text-[#34b234bf]
+```
+
+
+
+> '🌮' must need single quote
+
+### Problems Fix
+
+I used static picture in my vue file, Once I deploy to github page picture disappear, because `vite` don't include the png in `src/assets/img/tacos_delicioso_1000x667.png`, I check the solution on the [vite official website](https://vitejs.dev/guide/assets.html), both of this ways below works, just choose one you prefer. [Here](https://github.com/Halcyon666/taco-shop/commit/ae52cfc97ea40a73a5a32e9fd86ed971cb535ebf) is solution of commit change.
+
+- First
+
+```ts
+const img = new URL('@/assets/img/tacos_delicioso_1000x667.png', import.meta.url).href
+```
+
+- seconde
+
+```ts
+// but this will get a error hint, so I prefer to the first method
+// Cannot find module '@/assets/img/tacos_and_drink_1000x667.png' or its corresponding type declarations.
+import img from '@/assets/img/tacos_delicioso_1000x667.png'
 ```
 
