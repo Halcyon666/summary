@@ -6,7 +6,7 @@ sidebar_position: 6
 
 # 如何在Vue3 ts项目中使用 Vue Route
 
-在开始使用之前，你需要做这些准备：
+## Prerequisite
 
 1. 安装Nodejs, [官网地址](https://nodejs.org/en),推荐版本`16.xxx` 和 `18.xxx` ;
 2. 安装pnpm，按照以下命令安装：`npm install -g pnpm`。
@@ -98,7 +98,7 @@ createApp(App).use(router).mount('#app')
 
 ```
 
-This code sets up a Vue. s application with a root component (`App`), uses the Vue Router plugin for navigation, and mounts the entire application to an HTML element with the ID 'app'. This is a common setup for Vue. s single-page applications where routing is managed by Vue Router, and the application is mounted to a specific DOM element.
+这段代码设置了一个 Vue. 带有根组件（App）的应用程序，使用 Vue Router 插件进行导航，并将整个应用程序挂载到 ID 为“app”的 HTML 元素。 这是 Vue 的常见设置。 单页应用程序，其中路由由 Vue Router 管理，并且应用程序安装到特定的 DOM 元素。
 
 ## `App.vue`
 
@@ -139,7 +139,7 @@ export default router
 
 ```
 
-## write `MyPage.vue`
+## `MyPage.vue`
 
 ```vue
 <template>
@@ -155,13 +155,13 @@ const inputText = ref<string>('hello')
 
 ```
 
-## 访问
+## Visit
 
 运行`pnpm dev`,在浏览器中访问`localhost:5173`
 
 ![visited Page](https://s2.loli.net/2023/12/31/ONkqPXf6ejuAgBL.png)
 
-## 总结
+## Conclusion
 
 为了防止命令的拼写错误，建议直接复制指令并粘贴到您的VS Code中。您可以从 [GitHub](https://github.com/Halcyon666/taco-shop.git) 存储库 下载代码。
 
