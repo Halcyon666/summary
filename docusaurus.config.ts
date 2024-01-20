@@ -3,6 +3,7 @@ import "@docusaurus/theme-search-algolia";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 
+const DefaultLocale = 'zh';
 const config: Config = {
   title: "halcyon666",
   tagline: "Enjoy writing, Happy a nice day!",
@@ -57,7 +58,15 @@ const config: Config = {
           sidebarPath: "./sidebars.ts",
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl: "https://github.com/Halcyon666/summary/blob/main/",
+          // editUrl: "https://github.com/Halcyon666/summary/blob/main/",
+          editUrl: ({locale, docPath}) => {
+            // Link to Crowdin for French docs
+            if (locale !== DefaultLocale) {
+              return `https://github.com/Halcyon666/summary/blob/main/i18n/${locale}/docusaurus-plugin-content-docs/current/${docPath}`;
+            }
+            // Link to GitHub for English docs
+            return `https://github.com/Halcyon666/summary/blob/main/${docPath}`;
+          },
         },
         blog: {
           showReadingTime: true,

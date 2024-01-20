@@ -185,6 +185,7 @@ dark:hover:text-orange-500
         font-size: 125%;
     }
 }
+'🌮' must need single quote
 min-[576px]:before:content-['🌮'] min-[576px]:after:content-['🌮']
 
 text-shadow: 2px 2px 5px var(--BORDER-COLOR);
@@ -203,9 +204,9 @@ if the color is rgba(52, 178, 52, 0.75), only can use text-[#34b234bf]
 
 
 
-> '🌮' must need single quote
-
 ### Problems Fix
+
+1. Picture not display
 
 I used static picture in my vue file, Once I deploy to github page picture disappear, because `vite` don't include the png in `src/assets/img/tacos_delicioso_1000x667.png`, I check the solution on the [vite official website](https://vitejs.dev/guide/assets.html), both of this ways below works, just choose one you prefer. [Here](https://github.com/Halcyon666/taco-shop/commit/ae52cfc97ea40a73a5a32e9fd86ed971cb535ebf) is solution of commit change.
 
@@ -221,5 +222,30 @@ const img = new URL('@/assets/img/tacos_delicioso_1000x667.png', import.meta.url
 // but this will get a error hint, so I prefer to the first method
 // Cannot find module '@/assets/img/tacos_and_drink_1000x667.png' or its corresponding type declarations.
 import img from '@/assets/img/tacos_delicioso_1000x667.png'
+```
+
+2. My page loss all the styles
+
+Because of making mistake in `postcss.config.js`, I delete the line `tailwindcss: { config: './tailwind.config.ts' },`;
+
+You can see the official [guide](https://tailwindcss.com/docs/configuration#creating-your-configuration-file)
+
+```js
+module.exports = {
+  plugins: {
+    // config location, defaullt is tailwind.config.js,here must indicate the file name
+    tailwindcss: { config: './tailwind.config.ts' },
+    autoprefixer: {},
+    cssnano: {},
+    // nest css
+    'tailwindcss/nesting': 'postcss-nesting',
+    'postcss-preset-env': {
+      features: { 'nesting-rules': false },
+    },
+    // optimizing for production, compres css
+    ...(process.env.NODE_ENV === 'production' ? { cssnano: {} } : {}),
+  },
+}
+
 ```
 
