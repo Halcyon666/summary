@@ -346,10 +346,6 @@ d. TaskTracker下载jar包之后，会在本节点上去开启一个JVM子进程
 
 ## hadoop架构
 
-### 
-
-### 
-
 ## yarn
 
 ### YARN（Yet Another Resource Negotiator - 至今另一个资源协调者），从Hadoop2.0出现，导致Hadoop2.0和Hadoop1.0是不兼容
