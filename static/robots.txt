@@ -5,4 +5,4 @@ User-agent: *
 Allow: /
 
 # robots.txt file of https://halcyon666.github.io/summary/
-Sitemap: https://halcyon666.github.io/summary/sitemap.xml
+Sitemap: https://halcyon666.top/sitemap.xml
