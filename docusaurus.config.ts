@@ -43,7 +43,6 @@ const config: Config = {
     mermaid: true,
   },
   themes: ["@docusaurus/theme-mermaid"],
-
   presets: [
     [
       "classic",
