@@ -84,6 +84,10 @@ const config: Config = {
   ],
 
   themeConfig: {
+     // Declare some <meta> tags
+     metadata: [
+      {name: 'google-site-verification', content: 'vagj8ng2T0VN92-bvbq6xTnbbGF0_ZJXDvV0E_Yu3jY'},
+    ],
     docs: {
       sidebar: {
         hideable: true,
