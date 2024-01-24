@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           pnpm install --frozen-lockfile
-      - name: Build vue taco shop
+      - name: Build Summary Blog
         run: |
           pnpm build
 
