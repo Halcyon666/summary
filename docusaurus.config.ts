@@ -86,6 +86,7 @@ const config: Config = {
      // Declare some <meta> tags
      metadata: [
       {name: 'google-site-verification', content: 'vagj8ng2T0VN92-bvbq6xTnbbGF0_ZJXDvV0E_Yu3jY'},
+      {name: 'google-adsense-account', content: 'ca-pub-4872091594975928'},
     ],
     docs: {
       sidebar: {
