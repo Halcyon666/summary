@@ -13,15 +13,15 @@ const config: Config = {
   favicon: "img/favicon.png",
 
   // custom domain config
-  /* https: "https://halcyon666.top/",
-  baseUrl: "/summary", */
+  // url: "https://halcyon666.top/",
+  baseUrl: "/",
 
   // github domain
   // Set the production url of your site here
   url: "https://halcyon666.github.io/",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/summary/",
+  // baseUrl: "/summary/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
