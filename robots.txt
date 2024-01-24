@@ -1,2 +1,8 @@
+User-agent: Googlebot
+Disallow: /nogooglebot/
+
+User-agent: *
+Allow: /
+
 # robots.txt file of https://halcyon666.github.io/summary/
 sitemap: https://halcyon666.github.io/summary/sitemap.xml
