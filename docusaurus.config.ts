@@ -130,7 +130,7 @@ const config: Config = {
       indexName: "halcyon666", */
       // docSearch for  https://halcyon666.top/
       appId: "L275Z6TKIP",
-      apiKey: "b97f0b3e89803595b362d3f85f35b7a0",
+      apiKey: "079effc53c1845b2f995ab9f8f9e27a0",
       indexName: "halcyon666top",
 
       // Optional: see doc section below
