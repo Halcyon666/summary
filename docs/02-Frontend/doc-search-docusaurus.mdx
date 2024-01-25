@@ -1,0 +1,58 @@
+# how to handle url be ignored problem?
+
+### Background
+
+url be ignored 
+
+Today
+
+```react
+new Crawler({
+  sitemaps: [],
+  ignoreCanonicalTo: false,
+
+});
+```
+
+
+
+```react
+  
+new Crawler({
+  sitemaps: ["https://halcyon666.top/sitemap.xml"],
+  ignoreCanonicalTo: true,
+
+});
+```
+
+resolve Invalid Application-ID or API key
+
+https://support.algolia.com/hc/en-us/articles/11217017604497-Why-am-I-getting-403-error-message-Invalid-Application-ID-or-API-key-status-403-with-DocSearch
+
+
+
+has result in Search Preview, but not in my site
+
+facetFilters=["language:zh",["docusaurus_tag:default","docusaurus_tag:docs-default-current"]]
+
+```ts
+  contextualSearch: true,
+  searchParameters: {},
+```
+
+
+
+```ts
+ contextualSearch: false,
+  searchParameters: {
+      // maybe yours is en
+    facetFilters: ["zh"],
+  },
+```
+
+
+
+
+
+
+
