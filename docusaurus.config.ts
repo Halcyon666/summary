@@ -47,6 +47,10 @@ const config: Config = {
     [
       "classic",
       {
+        gtag: {
+          trackingID: 'G-62NRN6R4XB',
+          anonymizeIP: true,
+        },
         sitemap: {
           // @ts-ignore
           changefreq: "weekly",
@@ -86,7 +90,6 @@ const config: Config = {
      // Declare some <meta> tags
      metadata: [
       {name: 'google-site-verification', content: 'vagj8ng2T0VN92-bvbq6xTnbbGF0_ZJXDvV0E_Yu3jY'},
-      {name: 'google-adsense-account', content: 'ca-pub-4872091594975928'},
     ],
     docs: {
       sidebar: {
@@ -128,6 +131,7 @@ const config: Config = {
       // Public API key: it is safe to commit it
       apiKey: "8980e7549b3164ed7f36a8394542f0eb",
       indexName: "halcyon666", */
+      
       // docSearch for  https://halcyon666.top/
       appId: "L275Z6TKIP",
       apiKey: "079effc53c1845b2f995ab9f8f9e27a0",
@@ -137,7 +141,7 @@ const config: Config = {
       contextualSearch: false,
       searchParameters: {
         // todo need dynamic locale
-        facetFilters: ["zh-CN"],
+        facetFilters: ["zh"],
       },
 
       // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
@@ -156,7 +160,7 @@ const config: Config = {
     },
     footer: {
       style: "dark",
-      /*      links: [
+/*      links: [
         {
           title: 'Docs',
           items: [
@@ -208,6 +212,16 @@ const config: Config = {
       maxHeadingLevel: 5,
     },
   } satisfies Preset.ThemeConfig,
+  scripts: [
+    // String format.
+    'https://docusaurus.io/script.js',
+    // Object format.
+    {
+      src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4872091594975928',
+      async: true,
+      crossorigin: true
+    },
+  ],
 };
 
 export default config;
