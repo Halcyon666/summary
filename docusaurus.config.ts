@@ -99,7 +99,13 @@ const config: Config = {
     },
     // Replace with your project's social card
     image: "img/docusaurus-social-card.jpg",
+    colorMode: {
+      defaultMode: 'light',
+      disableSwitch: false,
+      respectPrefersColorScheme: true,
+    },
     navbar: {
+      hideOnScroll: true,
       title: "halcyon666",
       logo: {
         alt: "My Site Logo",
@@ -219,7 +225,7 @@ const config: Config = {
     {
       src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4872091594975928',
       async: true,
-      crossorigin: true
+      crossorigin: 'anonymous',
     },
   ],
 };
