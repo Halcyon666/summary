@@ -40,9 +40,11 @@ pnpm install -D tailwindcss postcss autoprefixer
 pnpm install -D postcss-nesting
 pnpm install -D postcss-preset-env
 pnpm install -D autoprefixer
+# this will use postcss-preset-env to compile css
+pnpm install -D cssnano postcss 
 # this will initiate will create typescript config file
 pnpx tailwindcss init -p --ts
-# also you can execute witout --ts will create js config file
+# also you can execute without --ts will create js config file
 pnpx tailwindcss init -p 
 ```
 
@@ -141,6 +143,21 @@ and use in html,
 <div class="font-headings">
       <!--  ... -->
 </div>
+```
+#### `border`
+
+The custom border composite css 
+
+```css
+.div {
+  border: 1px solid #999;
+}
+```
+
+but there is not composite tailwind css style, define by sevaral field
+
+```html
+<div class="border-solid border border-black"></div>
 ```
 
 #### `animate`
@@ -379,7 +396,18 @@ tailwind css,
       <!--  ... -->
 </div>
 ```
+sometimes you can define in seperate way, more details plz check [here](https://tailwindcss.com/docs/box-shadow),
 
+and below I give a tailwind css example in react, relative style `shadow-lg shadow-cyan-500/50 opacity-85`, define `box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);`
+
+and border color, box opacity.
+
+```jsx
+<div className="text-center text-2xl font-bold mt-4 p-2 border border-purple-400 border-solid shadow-lg shadow-cyan-500/50 bg-cyan-500 opacity-85">
+  {" "}
+  {tips}
+</div>
+```
 
 
 ### Problems Fix
