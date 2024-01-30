@@ -24,8 +24,8 @@ dependencies:
     specifier: ^3.1.0
     version: 3.1.0(@algolia/client-search@4.22.1)(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0)(search-insights@2.13.0)(typescript@5.3.3)
   '@docusaurus/theme-classic':
-    specifier: ^3.1.0
-    version: 3.1.0(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
+    specifier: ^3.1.1
+    version: 3.1.1(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
   '@docusaurus/theme-mermaid':
     specifier: ^3.1.1
     version: 3.1.1(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
@@ -2728,6 +2728,60 @@ packages:
       - webpack-cli
     dev: false
 
+  /@docusaurus/theme-classic@3.1.1(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-GiPE/jbWM8Qv1A14lk6s9fhc0LhPEQ00eIczRO4QL2nAQJZXkjPG6zaVx+1cZxPFWbAsqSjKe2lqkwF3fGkQ7Q==}
+    engines: {node: '>=18.0'}
+    peerDependencies:
+      react: ^18.0.0
+      react-dom: ^18.0.0
+    dependencies:
+      '@docusaurus/core': 3.1.1(@docusaurus/types@3.1.1)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
+      '@docusaurus/mdx-loader': 3.1.1(@docusaurus/types@3.1.1)(react-dom@18.2.0)(react@18.2.0)
+      '@docusaurus/module-type-aliases': 3.1.1(react-dom@18.2.0)(react@18.2.0)
+      '@docusaurus/plugin-content-blog': 3.1.1(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
+      '@docusaurus/plugin-content-docs': 3.1.1(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
+      '@docusaurus/plugin-content-pages': 3.1.1(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
+      '@docusaurus/theme-common': 3.1.1(@docusaurus/types@3.1.1)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
+      '@docusaurus/theme-translations': 3.1.1
+      '@docusaurus/types': 3.1.1(react-dom@18.2.0)(react@18.2.0)
+      '@docusaurus/utils': 3.1.1(@docusaurus/types@3.1.1)
+      '@docusaurus/utils-common': 3.1.1(@docusaurus/types@3.1.1)
+      '@docusaurus/utils-validation': 3.1.1(@docusaurus/types@3.1.1)
+      '@mdx-js/react': 3.0.0(@types/react@18.2.48)(react@18.2.0)
+      clsx: 2.1.0
+      copy-text-to-clipboard: 3.2.0
+      infima: 0.2.0-alpha.43
+      lodash: 4.17.21
+      nprogress: 0.2.0
+      postcss: 8.4.33
+      prism-react-renderer: 2.3.1(react@18.2.0)
+      prismjs: 1.29.0
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-router-dom: 5.3.4(react@18.2.0)
+      rtlcss: 4.1.1
+      tslib: 2.6.2
+      utility-types: 3.11.0
+    transitivePeerDependencies:
+      - '@parcel/css'
+      - '@rspack/core'
+      - '@swc/core'
+      - '@swc/css'
+      - '@types/react'
+      - bufferutil
+      - csso
+      - debug
+      - esbuild
+      - eslint
+      - lightningcss
+      - supports-color
+      - typescript
+      - uglify-js
+      - utf-8-validate
+      - vue-template-compiler
+      - webpack-cli
+    dev: false
+
   /@docusaurus/theme-common@3.1.0(@docusaurus/types@3.1.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3):
     resolution: {integrity: sha512-YGwEFALLIbF5ocW/Fy6Ae7tFWUOugEN3iwxTx8UkLAcLqYUboDSadesYtVBmRCEB4FVA2qoP7YaW3lu3apUPPw==}
     engines: {node: '>=18.0'}
@@ -2901,6 +2955,14 @@ packages:
 
   /@docusaurus/theme-translations@3.1.0:
     resolution: {integrity: sha512-DApE4AbDI+WBajihxB54L4scWQhVGNZAochlC9fkbciPuFAgdRBD3NREb0rgfbKexDC/rioppu/WJA0u8tS+yA==}
+    engines: {node: '>=18.0'}
+    dependencies:
+      fs-extra: 11.2.0
+      tslib: 2.6.2
+    dev: false
+
+  /@docusaurus/theme-translations@3.1.1:
+    resolution: {integrity: sha512-xvWQFwjxHphpJq5fgk37FXCDdAa2o+r7FX8IpMg+bGZBNXyWBu3MjZ+G4+eUVNpDhVinTc+j6ucL0Ain5KCGrg==}
     engines: {node: '>=18.0'}
     dependencies:
       fs-extra: 11.2.0
