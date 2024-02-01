@@ -207,7 +207,7 @@ const config: Config = {
           ],
         },
       ], */
-      copyright: `Copyright © ${new Date().getFullYear()} Halcyon666 Blog. Built with Docusaurus`,
+      copyright: `Copyright © ${new Date().getFullYear()} Halcyon666 Blog. Built with Docusaurus 3.1.1`,
     },
     prism: {
       theme: prismThemes.github,
