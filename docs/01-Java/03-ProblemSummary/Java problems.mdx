@@ -138,7 +138,7 @@ export LANG="zh_CN.UTF-8"
 export LC_ALL="zh_CN.UTF-8"
 ```
 
-## how to solve mojibake chinese characters
+## mojibake chinese characters in Resttemplate
 
 When you use Spring Boot mvc, provide a api endpoint,
 
@@ -223,7 +223,7 @@ MockBean使用时，String 入参，int返回值，传入参数为实际调用�
 
 ### lombok使用的坑
 
-`@Data` 注解生成的getters,setters和`jackson-databind`中的不一致导致反序列化时，对象的属性没有值。
+`@Data` 注解生成的`getters`, `setters` 和`jackson-databind`中的不一致导致反序列化时，对象的属性没有值。
 
 ### 动态数据源问题
 
@@ -237,7 +237,7 @@ MockBean使用时，String 入参，int返回值，传入参数为实际调用�
 
 ### netty响应速度问题
 
-在关闭资源时，`group.shutdownGracefully().sync()`，去掉.sync()调用就不会阻塞。
+在关闭资源时，`group.shutdownGracefully().sync()`，去掉`.sync()`调用就不会阻塞。
 
 
 ### 屏蔽某个方法中的日志
@@ -268,6 +268,37 @@ boolean 改为Boolean值，某些场景（netty 不响应请求)会有问题
 ### @Value default value can’t be present on annotations @ConditionalOnExpression or @ConditionalOnProperty.
 
 处理：在yml中配置相应的参数
+
+
+
+### Hutool中的ExcelUtil,写入的类型处理
+
+使用Hutool中的`cn.hutool.poi.excel.ExcelUtil`时，如果想输出什么类型到相应的单元格，则需要定义相应的内容为相应的类型;
+
+1. **基本数据类型：**
+
+   - Java中的`int`、`long`、`float`、`double`等基本数据类型对应Excel中的**数字**类型。
+
+2. **字符串类型：**
+
+   - Java中的`String`类型对应Excel中的**文本**类型。
+
+3. **日期类型：**
+
+   - Java中的`java.util.Date`类型通常对应Excel中的**日期**类型。
+   - 在Hutool中，你可以使用 `DateTime` 类型，它对日期和时间的处理更为灵活。
+
+4. **布尔类型：**
+
+   - Java中的`boolean`类型通常对应Excel中的**布尔**类型。
+
+5. **其他特殊类型：**
+
+   - Hutool提供了一些转换方法，例如`cn.hutool.core.convert.Convert.toStr(obj)` 可以将对象转换为字符串，然后写入Excel。
+
+> 如果使用模板中的定义了样式，单元格的内容可以使用，但是具体单元格格式会被覆盖。
+>
+> 如果Hutool中的ExcelUtil不够用时，还请使用POI原生的API。
 
 
 
