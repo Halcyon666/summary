@@ -59,6 +59,7 @@ const config: Config = {
           filename: "sitemap.xml",
         },
         docs: {
+          showLastUpdateTime: true,
           // put the docs to the rott directory
           routeBasePath: "/",
           sidebarPath: "./sidebars.ts",
