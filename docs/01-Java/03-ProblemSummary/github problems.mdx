@@ -17,9 +17,9 @@ git config --global --unset https.proxy
 
 ```
 
-real time interactive
+RealTime interactive
 
-```[url "https://ghproxy.com/https://github.com"]
+```shell
 PS D:\project\taco-shop> git push
 fatal: unable to access 'https://github.com/Halcyon666/taco-shop.git/': Failed to connect to github.com port 443 after 21090 ms: Couldn't connect to server
 PS D:\project\taco-shop> git config --global --unset http.proxy
@@ -33,6 +33,7 @@ Total 11 (delta 8), reused 0 (delta 0), pack-reused 0
 remote: Resolving deltas: 100% (8/8), completed with 7 local objects.
 To https://github.com/Halcyon666/taco-shop.git
    2670324..332beb2  main -> main
+[url "https://ghproxy.com/https://github.com"]
 ```
 
 
