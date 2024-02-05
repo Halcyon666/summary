@@ -5,7 +5,6 @@ import Layout from "@theme/Layout";
 import Heading from "@theme/Heading";
 
 import styles from "./index.module.css";
-import { Timeline, Progress } from 'antd';
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
@@ -26,25 +25,6 @@ function HomepageHeader() {
   );
 }
 
-function MyTimeLine() {
-  return  (
-    // here is a warning
-    <Timeline style={{ marginTop: '10px', color: 'pink' }}
-    mode="alternate"
-    items={[
-      {
-        children: 'Create a services site 2023-07-14',
-      },
-      {
-        children: 'Starting learn React 2024-01-22',
-        color: 'green',
-      }
-    ]}
-  />
-  
-  );
-}
-
 export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
   return (
@@ -53,7 +33,6 @@ export default function Home(): JSX.Element {
       description="Welcome to halcyon666's blog"
     >
       <HomepageHeader />
-      <MyTimeLine  />
       <div
       style={{
         display: 'flex',
@@ -61,7 +40,6 @@ export default function Home(): JSX.Element {
         alignItems: 'center',
       }}
     >
-      <Progress type="circle" percent={0} size={50} style={{ margin: '10px' }} />
     </div>
     </Layout>
   );
