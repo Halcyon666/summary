@@ -1,6 +1,12 @@
+---
+title: py replacement
+sidebar_label: py replacement
+sidebar_position: 2
+---
+
+
+
 # 在多个文件中替换多个相应的内容
-
-
 
 ### `main.py`
 
@@ -65,7 +71,7 @@ for filename in file_list:
 
 
 
-`rules_module.py`
+### `rules_module.py`
 
 ```python
 # rules_module.py
