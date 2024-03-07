@@ -23,3 +23,29 @@ sidebar_position: 4
 ## 浏览HEIC图片工具
 
 [copytrans](https://copytrans.studio/copytrans-heic-is-now-part-of-copytrans-studio/)
+
+
+
+### PicGo 上传图片问题
+
+当使用PicGo(app) 或者 PicList时，出现如下报错 `"message": "getaddrinfo ENOTFOUND smms",` 
+
+![image-20240307234840371](https://s2.loli.net/2024/03/07/wNRUFiyEqLblzJv.png)
+
+
+
+只需切换到`PicGo-Core(command line)`， 请修改 `～/.picgo/config.json`文件，
+
+```json
+{
+  "picBed": {
+    "uploader": "smms",
+    "current": "smms",
+	"smms": {
+      "token": "put your token here"
+    }
+  },
+  "picgoPlugins": {}
+}
+```
+
