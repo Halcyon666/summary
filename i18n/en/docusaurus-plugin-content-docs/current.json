@@ -94,5 +94,9 @@
   "sidebar.tutorialSidebar.category.CnblogsThemeConfiguration": {
     "message": "CnblogsThemeConfiguration",
     "description": "The label for category CnblogsThemeConfiguration in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.AI And BD": {
+    "message": "AI And BD",
+    "description": "The label for category AI And BD in sidebar tutorialSidebar"
   }
 }

@@ -10,6 +10,8 @@ sidebar_position: 3
 
 ### write config file for redis 
 
+> remember to replace the ip 192.168.3.163 to your real ip address
+
 ```shell script
 cd /docker/redis
 
@@ -25,7 +27,7 @@ cluster-config-file nodes.conf
 # 超时
 cluster-node-timeout 5000
 # 集群节点IP host模式为宿主机IP
-cluster-announce-ip 192.168.3.162
+cluster-announce-ip 192.168.3.163
 # 集群节点端口 7001 - 7006
 cluster-announce-port ${PORT}
 cluster-announce-bus-port 1${PORT}
@@ -51,16 +53,17 @@ for port in `seq 7001 7006`; do \
   && PORT=${port} envsubst < ./redis-cluster.tmpl > ./redis-cluster/${port}/conf/redis.conf \
   && mkdir -p ./redis-cluster/${port}/data; \
 done
-
+EOF
 chmod 777 redis-cluster-config.sh
 ./redis-cluster-config.sh
+
 ```
 
 
 ###  create docker-compose file 
 
 ```shell script
-tee docker-compose-redis-cluster.yml <<- 'EOF'
+tee docker-compose.yml <<- 'EOF'
 
 version: '3.7'
 
@@ -159,13 +162,16 @@ services:
     environment:
       # 设置时区为上海，否则时间会有问题
       - TZ=Asia/Shanghai
+EOF
 ```
 
 ### launch redis cluster
 
 `docker-compose -f docker-compose-redis-cluster.yml up`
 
-sotp to use this command down including Removing network rediscluster_default
+
+
+stop to use this command down including Removing network rediscluster_default
 
 `docker-compose -f docker-compose-redis-cluster.yml down`
 
@@ -173,7 +179,11 @@ sotp to use this command down including Removing network rediscluster_default
 
 ### arrange slots
 
-`docker exec -it redis7001 redis-cli -p 7001 --cluster create 192.168.3.162:7001 192.168.3.162:7002 192.168.3.162:7003 192.168.3.162:7004 192.168.3.162:7005 192.168.3.162:7006 --cluster-replicas 1`
+```shell
+docker exec -it redis7001 redis-cli -p 7001 --cluster create 192.168.3.163:7001 192.168.3.163:7002 192.168.3.163:7003 192.168.3.163:7004 192.168.3.163:7005 192.168.3.163:7006 --cluster-replicas 1
+```
+
+
 
 If slots not served，here some resolutions:
 
@@ -301,4 +311,5 @@ EOF
 
 
 
+## Redis sentinel
 
