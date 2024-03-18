@@ -15,7 +15,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@ant-design/icons": "^5.3.1",
+    "@ant-design/icons": "^5.3.4",
     "@docsearch/js": "^3.6.0",
     "@docusaurus/core": "^3.1.1",
     "@docusaurus/plugin-google-gtag": "^3.1.1",
