@@ -1,6 +1,6 @@
 {
   "name": "summary",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
@@ -17,13 +17,13 @@
   "dependencies": {
     "@ant-design/icons": "^5.3.1",
     "@docsearch/js": "^3.6.0",
-    "@docusaurus/core": "^3.1.1",
-    "@docusaurus/plugin-google-gtag": "^3.1.1",
-    "@docusaurus/plugin-sitemap": "^3.1.1",
-    "@docusaurus/preset-classic": "^3.1.1",
-    "@docusaurus/theme-classic": "^3.1.1",
-    "@docusaurus/theme-mermaid": "^3.1.1",
-    "@docusaurus/types": "^3.1.1",
+    "@docusaurus/core": "^3.2.1",
+    "@docusaurus/plugin-google-gtag": "^3.2.1",
+    "@docusaurus/plugin-sitemap": "^3.2.1",
+    "@docusaurus/preset-classic": "^3.2.1",
+    "@docusaurus/theme-classic": "^3.2.1",
+    "@docusaurus/theme-mermaid": "^3.2.1",
+    "@docusaurus/types": "^3.2.1",
     "@mdx-js/react": "^3.0.0",
     "antd": "^5.15.2",
     "clsx": "^2.1.0",
@@ -32,8 +32,8 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.1.1",
-    "@docusaurus/tsconfig": "^3.1.1",
+    "@docusaurus/module-type-aliases": "^3.2.1",
+    "@docusaurus/tsconfig": "^3.2.1",
     "@types/node": "^20.11.26",
     "@types/react": "^18.2.65",
     "typescript": "~5.4.2"

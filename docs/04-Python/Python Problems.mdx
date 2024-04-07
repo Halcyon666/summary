@@ -1,0 +1,91 @@
+---
+title: Python使用问题
+sidebar_label: Python使用问题
+sidebar_position: 1
+---
+
+## Python 使用问题
+
+### pip 源设置 
+
+在 `C:\Users\xxx\pip`下创建 `pip.ini`文件，内容如下
+
+
+```ini
+[global]
+index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+extra-index-url =
+    https://mirrors.aliyun.com/pypi/simple/
+    https://mirror.baidu.com/pypi/simple
+```
+
+> [原文地址](https://zhuanlan.zhihu.com/p/623325525?utm_id=0&wd=&eqid=f10d0e060019cf940000000665767cd2)
+
+### 如何使用python虚拟环境
+
+- **使用 venv**
+
+```shell
+python3 -m venv myenv
+```
+
+- **使用virtualenv**
+
+```shell
+pip install virtualenv
+virtualenv myenv
+```
+
+- **激活虚拟环境**
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+<TabItem value="windows">
+
+```powershell
+myenv\Scripts\activate
+```
+
+</TabItem>
+
+<TabItem value="macOS or Linux">
+
+```shell
+source myenv/bin/activate
+```
+
+</TabItem>
+</Tabs>
+
+- 安装依赖
+
+```shell
+pip install package_name
+```
+
+- 退出虚拟环境
+
+  
+
+<Tabs>
+<TabItem value="windows">
+
+```powershell
+myenv\Scripts\deactivate.bat
+```
+
+</TabItem>
+
+<TabItem value="macOS or Linux">
+
+```shell
+deactivate
+```
+
+</TabItem>
+</Tabs>
+
+
+

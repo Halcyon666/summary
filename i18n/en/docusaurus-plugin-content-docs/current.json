@@ -98,5 +98,9 @@
   "sidebar.tutorialSidebar.category.AI And BD": {
     "message": "AI And BD",
     "description": "The label for category AI And BD in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.middleware": {
+    "message": "middleware",
+    "description": "The label for category middleware in sidebar tutorialSidebar"
   }
 }
