@@ -23,7 +23,7 @@
     "@docusaurus/preset-classic": "^3.2.1",
     "@docusaurus/theme-classic": "^3.2.1",
     "@docusaurus/theme-mermaid": "^3.2.1",
-    "@docusaurus/types": "^3.2.1",
+    "@docusaurus/types": "^3.3.2",
     "@mdx-js/react": "^3.0.0",
     "antd": "^5.17.3",
     "clsx": "^2.1.0",
