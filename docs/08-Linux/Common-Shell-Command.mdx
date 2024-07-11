@@ -75,6 +75,20 @@ ntpdate 3.asia.pool.ntp.org
 
 ### 查询当前目录结构前n级目录树
 
-`tree -L n`
 
 
+显示 第一级目录 `for /d %i in (*) do @echo %i`
+
+
+
+![image-20240525230752153](https://s2.loli.net/2024/05/25/cVOMKZuHvI4RfiQ.png)
+
+### 安装 lrzsz
+
+`yum install -y lrzsz`
+
+sz 下载 rz 上传
+
+### linux关闭java进程
+
+`kill -9 $(ps -ef | grep -w "xxx-1.0.jar" |  grep -v "grep" | awk '{print $2}')`
