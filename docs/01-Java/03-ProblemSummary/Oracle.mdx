@@ -76,3 +76,23 @@ alter user syste identified by 123456;
 
 
 
+Mybtis主键自增处理
+
+**oracle**
+
+```java
+@Bean
+public IKeyGenerator keyGenerator() {
+    return new H2KeyGenerator();
+}
+
+@TableId(type=IdType.INPUT)
+prive Long primaryKey;
+```
+
+**mysql**
+
+```java
+@TableId(type=IdType.AUTO)
+```
+
