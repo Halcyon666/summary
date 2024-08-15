@@ -17,7 +17,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
     "@docsearch/js": "^3.6.0",
-    "@docusaurus/core": "^3.2.1",
+    "@docusaurus/core": "^3.5.2",
     "@docusaurus/plugin-google-gtag": "^3.2.1",
     "@docusaurus/plugin-sitemap": "^3.2.1",
     "@docusaurus/preset-classic": "^3.2.1",
