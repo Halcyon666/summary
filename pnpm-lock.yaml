@@ -16,7 +16,7 @@ importers:
         version: 3.6.0(@algolia/client-search@4.22.1)(@types/react@18.2.65)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.13.0)
       '@docusaurus/core':
         specifier: ^3.5.2
-        version: 3.5.2(@docusaurus/types@3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@mdx-js/react@3.0.1(@types/react@18.2.65)(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.4.5)
+        version: 3.5.2(@docusaurus/types@3.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@mdx-js/react@3.0.1(@types/react@18.2.65)(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.4.5)
       '@docusaurus/plugin-google-gtag':
         specifier: ^3.2.1
         version: 3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.4.5)
@@ -33,8 +33,8 @@ importers:
         specifier: ^3.2.1
         version: 3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.4.5)
       '@docusaurus/types':
-        specifier: ^3.2.1
-        version: 3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        specifier: ^3.5.2
+        version: 3.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@mdx-js/react':
         specifier: ^3.0.0
         version: 3.0.1(@types/react@18.2.65)(react@18.2.0)
@@ -5938,7 +5938,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 7.23.5
       '@babel/helper-validator-option': 7.23.5
-      browserslist: 4.22.2
+      browserslist: 4.23.3
       lru-cache: 5.1.1
       semver: 6.3.1
 
@@ -6822,7 +6822,7 @@ snapshots:
       - vue-template-compiler
       - webpack-cli
 
-  '@docusaurus/core@3.5.2(@docusaurus/types@3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@mdx-js/react@3.0.1(@types/react@18.2.65)(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.4.5)':
+  '@docusaurus/core@3.5.2(@docusaurus/types@3.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@mdx-js/react@3.0.1(@types/react@18.2.65)(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.4.5)':
     dependencies:
       '@babel/core': 7.23.7
       '@babel/generator': 7.23.6
@@ -6836,10 +6836,10 @@ snapshots:
       '@babel/traverse': 7.23.7
       '@docusaurus/cssnano-preset': 3.5.2
       '@docusaurus/logger': 3.5.2
-      '@docusaurus/mdx-loader': 3.5.2(@docusaurus/types@3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.4.5)
-      '@docusaurus/utils': 3.5.2(@docusaurus/types@3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(typescript@5.4.5)
-      '@docusaurus/utils-common': 3.5.2(@docusaurus/types@3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))
-      '@docusaurus/utils-validation': 3.5.2(@docusaurus/types@3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(typescript@5.4.5)
+      '@docusaurus/mdx-loader': 3.5.2(@docusaurus/types@3.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.4.5)
+      '@docusaurus/utils': 3.5.2(@docusaurus/types@3.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(typescript@5.4.5)
+      '@docusaurus/utils-common': 3.5.2(@docusaurus/types@3.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))
+      '@docusaurus/utils-validation': 3.5.2(@docusaurus/types@3.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(typescript@5.4.5)
       '@mdx-js/react': 3.0.1(@types/react@18.2.65)(react@18.2.0)
       autoprefixer: 10.4.17(postcss@8.4.33)
       babel-loader: 9.1.3(@babel/core@7.23.7)(webpack@5.90.0)
@@ -6974,11 +6974,11 @@ snapshots:
       - uglify-js
       - webpack-cli
 
-  '@docusaurus/mdx-loader@3.5.2(@docusaurus/types@3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.4.5)':
+  '@docusaurus/mdx-loader@3.5.2(@docusaurus/types@3.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.4.5)':
     dependencies:
       '@docusaurus/logger': 3.5.2
-      '@docusaurus/utils': 3.5.2(@docusaurus/types@3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(typescript@5.4.5)
-      '@docusaurus/utils-validation': 3.5.2(@docusaurus/types@3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(typescript@5.4.5)
+      '@docusaurus/utils': 3.5.2(@docusaurus/types@3.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(typescript@5.4.5)
+      '@docusaurus/utils-validation': 3.5.2(@docusaurus/types@3.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(typescript@5.4.5)
       '@mdx-js/mdx': 3.0.0
       '@slorber/remark-comment': 1.0.0
       escape-html: 1.0.3
@@ -7552,11 +7552,11 @@ snapshots:
     optionalDependencies:
       '@docusaurus/types': 3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
 
-  '@docusaurus/utils-common@3.5.2(@docusaurus/types@3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))':
+  '@docusaurus/utils-common@3.5.2(@docusaurus/types@3.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))':
     dependencies:
       tslib: 2.6.2
     optionalDependencies:
-      '@docusaurus/types': 3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@docusaurus/types': 3.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
 
   '@docusaurus/utils-validation@3.2.1(@docusaurus/types@3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))':
     dependencies:
@@ -7574,11 +7574,11 @@ snapshots:
       - uglify-js
       - webpack-cli
 
-  '@docusaurus/utils-validation@3.5.2(@docusaurus/types@3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(typescript@5.4.5)':
+  '@docusaurus/utils-validation@3.5.2(@docusaurus/types@3.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(typescript@5.4.5)':
     dependencies:
       '@docusaurus/logger': 3.5.2
-      '@docusaurus/utils': 3.5.2(@docusaurus/types@3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(typescript@5.4.5)
-      '@docusaurus/utils-common': 3.5.2(@docusaurus/types@3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))
+      '@docusaurus/utils': 3.5.2(@docusaurus/types@3.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(typescript@5.4.5)
+      '@docusaurus/utils-common': 3.5.2(@docusaurus/types@3.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))
       fs-extra: 11.2.0
       joi: 17.12.0
       js-yaml: 4.1.0
@@ -7623,10 +7623,10 @@ snapshots:
       - uglify-js
       - webpack-cli
 
-  '@docusaurus/utils@3.5.2(@docusaurus/types@3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(typescript@5.4.5)':
+  '@docusaurus/utils@3.5.2(@docusaurus/types@3.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(typescript@5.4.5)':
     dependencies:
       '@docusaurus/logger': 3.5.2
-      '@docusaurus/utils-common': 3.5.2(@docusaurus/types@3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))
+      '@docusaurus/utils-common': 3.5.2(@docusaurus/types@3.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))
       '@svgr/webpack': 8.1.0(typescript@5.4.5)
       escape-string-regexp: 4.0.0
       file-loader: 6.2.0(webpack@5.90.0)
@@ -7646,7 +7646,7 @@ snapshots:
       utility-types: 3.11.0
       webpack: 5.90.0
     optionalDependencies:
-      '@docusaurus/types': 3.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@docusaurus/types': 3.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
     transitivePeerDependencies:
       - '@swc/core'
       - esbuild
@@ -8653,7 +8653,7 @@ snapshots:
   caniuse-api@3.0.0:
     dependencies:
       browserslist: 4.23.3
-      caniuse-lite: 1.0.30001580
+      caniuse-lite: 1.0.30001651
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
 
@@ -8848,7 +8848,7 @@ snapshots:
 
   core-js-compat@3.35.1:
     dependencies:
-      browserslist: 4.22.2
+      browserslist: 4.23.3
 
   core-js-pure@3.35.1: {}
 
@@ -9993,7 +9993,7 @@ snapshots:
 
   history@4.10.1:
     dependencies:
-      '@babel/runtime': 7.24.5
+      '@babel/runtime': 7.25.0
       loose-envify: 1.4.0
       resolve-pathname: 3.0.0
       tiny-invariant: 1.3.1
@@ -11376,7 +11376,7 @@ snapshots:
 
   postcss-colormin@5.3.1(postcss@8.4.33):
     dependencies:
-      browserslist: 4.22.2
+      browserslist: 4.23.3
       caniuse-api: 3.0.0
       colord: 2.9.3
       postcss: 8.4.33
@@ -11400,7 +11400,7 @@ snapshots:
 
   postcss-convert-values@5.1.3(postcss@8.4.33):
     dependencies:
-      browserslist: 4.22.2
+      browserslist: 4.23.3
       postcss: 8.4.33
       postcss-value-parser: 4.2.0
 
@@ -11516,7 +11516,7 @@ snapshots:
 
   postcss-merge-rules@5.1.4(postcss@8.4.33):
     dependencies:
-      browserslist: 4.22.2
+      browserslist: 4.23.3
       caniuse-api: 3.0.0
       cssnano-utils: 3.1.0(postcss@8.4.33)
       postcss: 8.4.33
@@ -11576,7 +11576,7 @@ snapshots:
 
   postcss-minify-params@5.1.4(postcss@8.4.33):
     dependencies:
-      browserslist: 4.22.2
+      browserslist: 4.23.3
       cssnano-utils: 3.1.0(postcss@8.4.33)
       postcss: 8.4.33
       postcss-value-parser: 4.2.0
@@ -11720,7 +11720,7 @@ snapshots:
 
   postcss-normalize-unicode@5.1.1(postcss@8.4.33):
     dependencies:
-      browserslist: 4.22.2
+      browserslist: 4.23.3
       postcss: 8.4.33
       postcss-value-parser: 4.2.0
 
@@ -11797,7 +11797,7 @@ snapshots:
 
   postcss-reduce-initial@5.1.2(postcss@8.4.33):
     dependencies:
-      browserslist: 4.22.2
+      browserslist: 4.23.3
       caniuse-api: 3.0.0
       postcss: 8.4.33
 
@@ -12365,7 +12365,7 @@ snapshots:
 
   react-helmet-async@1.3.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
-      '@babel/runtime': 7.24.5
+      '@babel/runtime': 7.25.0
       invariant: 2.2.4
       prop-types: 15.8.1
       react: 18.2.0
@@ -12475,7 +12475,7 @@ snapshots:
 
   regenerator-transform@0.15.2:
     dependencies:
-      '@babel/runtime': 7.24.5
+      '@babel/runtime': 7.25.0
 
   regexpu-core@5.3.2:
     dependencies:
@@ -12932,7 +12932,7 @@ snapshots:
 
   stylehacks@5.1.1(postcss@8.4.33):
     dependencies:
-      browserslist: 4.22.2
+      browserslist: 4.23.3
       postcss: 8.4.33
       postcss-selector-parser: 6.0.15
 
@@ -12973,7 +12973,7 @@ snapshots:
       css-select: 4.3.0
       css-tree: 1.1.3
       csso: 4.2.0
-      picocolors: 1.0.0
+      picocolors: 1.0.1
       stable: 0.1.8
 
   svgo@3.3.2:
@@ -12984,7 +12984,7 @@ snapshots:
       css-tree: 2.3.1
       css-what: 6.1.0
       csso: 5.0.5
-      picocolors: 1.0.0
+      picocolors: 1.0.1
 
   tapable@1.1.3: {}
 
@@ -13299,7 +13299,7 @@ snapshots:
       '@webassemblyjs/wasm-parser': 1.11.6
       acorn: 8.11.3
       acorn-import-assertions: 1.9.0(acorn@8.11.3)
-      browserslist: 4.22.2
+      browserslist: 4.23.3
       chrome-trace-event: 1.0.3
       enhanced-resolve: 5.15.0
       es-module-lexer: 1.4.1
