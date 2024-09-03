@@ -86,6 +86,7 @@ public IKeyGenerator keyGenerator() {
     return new H2KeyGenerator();
 }
 
+@KeySequence(value="xxx_sequence)
 @TableId(type=IdType.INPUT)
 prive Long primaryKey;
 ```
