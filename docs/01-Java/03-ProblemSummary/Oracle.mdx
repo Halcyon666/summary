@@ -97,3 +97,9 @@ prive Long primaryKey;
 @TableId(type=IdType.AUTO)
 ```
 
+```java
+// 在Mapper上面写
+@Insert(xxx)
+@Options(useGeneratedKeys=true, keyProperty="id")
+int insertOne(XxxPo po)
+```
