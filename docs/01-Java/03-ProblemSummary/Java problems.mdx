@@ -24,6 +24,29 @@ Could not find artifact lifecycle-mapping:lifecycle-mapping:jar:sources:1.0.0
 
 ![image-20230728021351697](https://s2.loli.net/2023/07/28/UzsD4BnrPYSbo1T.png)
 
+### logback相关
+
+- 启动控制台日志没有颜色 
+
+在spring-logback.xml中引入
+```xml
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <logger name="org.springframework.web" level="INFO"/>
+    <logger name="org.springboot.sample" level="TRACE"/>
+```
+- logback 修改日志打印内容
+
+代码: extends ThrowableHandlingConverter
+impl convert 方法
+
+logback配置
+```xml
+<conversionRule convertionWord=“someKeyMsg” convertClass=“com.xxx.xxx.Xclass”/>
+```
+### mapstruct相关
+
+一直使用unmappedTargetPolicy Error, 可以避免很多问题。
+
 ## maven相关问题
 
 ### 处理Maven远程仓库下载不到jar包问题
