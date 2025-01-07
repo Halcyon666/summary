@@ -3,8 +3,8 @@ import "@docusaurus/theme-search-algolia";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 
-const DefaultLocale = 'zh';
-const baseGithubUrl = 'https://github.com/Halcyon666/summary/edit/main';
+const DefaultLocale = "zh";
+const baseGithubUrl = "https://github.com/Halcyon666/summary/edit/main";
 
 // @ts-ignore
 const config: Config = {
@@ -13,15 +13,15 @@ const config: Config = {
   favicon: "img/favicon.png",
 
   // custom domain config
-  url: "https://halcyon666.top/",
-  baseUrl: "/",
+  // url: "https://halcyon666.top/",
+  // baseUrl: "/",
 
   // github domain
   // Set the production url of your site here
-  // url: "https://halcyon666.github.io/",
+  url: "https://halcyon666.github.io/",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  // baseUrl: "/summary/",
+  baseUrl: "/summary/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -48,7 +48,7 @@ const config: Config = {
       "classic",
       {
         gtag: {
-          trackingID: 'G-62NRN6R4XB',
+          trackingID: "G-62NRN6R4XB",
           anonymizeIP: true,
         },
         sitemap: {
@@ -65,8 +65,8 @@ const config: Config = {
           sidebarPath: "./sidebars.ts",
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl: ({locale, docPath}) => {
-                        // Link to Crowdin for French docs
+          editUrl: ({ locale, docPath }) => {
+            // Link to Crowdin for French docs
             if (locale !== DefaultLocale) {
               return `${baseGithubUrl}/i18n/${locale}/docusaurus-plugin-content-docs/current/${docPath}`;
             }
@@ -88,9 +88,12 @@ const config: Config = {
   ],
 
   themeConfig: {
-     // Declare some <meta> tags
-     metadata: [
-      {name: 'google-site-verification', content: 'vagj8ng2T0VN92-bvbq6xTnbbGF0_ZJXDvV0E_Yu3jY'},
+    // Declare some <meta> tags
+    metadata: [
+      {
+        name: "google-site-verification",
+        content: "vagj8ng2T0VN92-bvbq6xTnbbGF0_ZJXDvV0E_Yu3jY",
+      },
     ],
     docs: {
       sidebar: {
@@ -101,7 +104,7 @@ const config: Config = {
     // Replace with your project's social card
     image: "img/docusaurus-social-card.jpg",
     colorMode: {
-      defaultMode: 'light',
+      defaultMode: "light",
       disableSwitch: false,
       respectPrefersColorScheme: true,
     },
@@ -134,11 +137,11 @@ const config: Config = {
     algolia: {
       // docSearch for  https://halcyon666.github.io/summary/
       // The application ID provided by Algolia
- /*      appId: "T5OO103S1G",
+      /*      appId: "T5OO103S1G",
       // Public API key: it is safe to commit it
       apiKey: "8980e7549b3164ed7f36a8394542f0eb",
       indexName: "halcyon666", */
-      
+
       // docSearch for  https://halcyon666.top/
       appId: "L275Z6TKIP",
       apiKey: "079effc53c1845b2f995ab9f8f9e27a0",
@@ -167,7 +170,7 @@ const config: Config = {
     },
     footer: {
       style: "dark",
-/*      links: [
+      /*      links: [
         {
           title: 'Docs',
           items: [
@@ -221,12 +224,12 @@ const config: Config = {
   } satisfies Preset.ThemeConfig,
   scripts: [
     // String format.
-    'https://docusaurus.io/script.js',
+    "https://docusaurus.io/script.js",
     // Object format.
     {
-      src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4872091594975928',
+      src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4872091594975928",
       async: true,
-      crossorigin: 'anonymous',
+      crossorigin: "anonymous",
     },
   ],
 };
