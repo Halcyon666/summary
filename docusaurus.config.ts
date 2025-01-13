@@ -137,15 +137,15 @@ const config: Config = {
     algolia: {
       // docSearch for  https://halcyon666.github.io/summary/
       // The application ID provided by Algolia
-      /*      appId: "T5OO103S1G",
       // Public API key: it is safe to commit it
+      appId: "T5OO103S1G",
       apiKey: "8980e7549b3164ed7f36a8394542f0eb",
-      indexName: "halcyon666", */
+      indexName: "halcyon666",
 
       // docSearch for  https://halcyon666.top/
-      appId: "L275Z6TKIP",
-      apiKey: "079effc53c1845b2f995ab9f8f9e27a0",
-      indexName: "halcyon666top",
+      // appId: "L275Z6TKIP",
+      // apiKey: "079effc53c1845b2f995ab9f8f9e27a0",
+      // indexName: "halcyon666top",
 
       // Optional: see doc section below
       contextualSearch: false,
