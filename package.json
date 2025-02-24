@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.2",
-    "@docsearch/js": "^3.8.2",
+    "@docsearch/js": "^3.9.0",
     "@docusaurus/core": "^3.7.0",
     "@docusaurus/plugin-google-gtag": "^3.7.0",
     "@docusaurus/plugin-sitemap": "^3.7.0",
