@@ -215,7 +215,7 @@ let hasDragged = false;
 
 const handleMouseMove = (e) => {
   if (!isDragging) return;
-  
+  // 🟢 It means: “Only proceed if the left mouse button is being held down during mouse movement.”
   if (e.buttons !== 1) {
     stopDragging();
     return;
@@ -230,6 +230,7 @@ const handleMouseMove = (e) => {
 
 // Reset flag on mouse down
 container.addEventListener('mousedown', (e) => {
+  // 🟢 It means: “Only proceed if the left mouse button was clicked to start.”
   if (e.button !== 0) return;
   isDragging = true;
   hasDragged = false; // Reset drag flag
