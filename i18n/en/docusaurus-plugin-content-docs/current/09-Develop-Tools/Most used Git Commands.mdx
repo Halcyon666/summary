@@ -1,0 +1,250 @@
+---
+title: Most Comprehensive Git Command Collection
+sidebar_label: Most Comprehensive Git Command Collection
+sidebar_position: 1
+---
+
+## Configuration Commands
+
+```shell
+ssh-keygen
+git config --global user.name "whalefall541"
+git config --global user.email "jackchen541@sina.com"
+git config --global alias.ll "log --graph --pretty=format:'%C(yellow)%h%Creset -%C(cyan)%d%Creset %s %Cgreen(%an, %cr)' --abbrev-commit"
+git config --global alias.a '!git add -A && git commit -m'
+```
+
+## Configure Global .gitignore
+
+```shell
+# It's best to write absolute path here, sometimes it might not work
+git config --global core.excludesfile D:/project/.gitignore 
+
+# .gitignore can only ignore files that were not tracked originally. If some files have been included in version management, modifying .gitignore is invalid.
+# The solution is to first delete the local cache (change to untracked state), then commit:
+
+git rm -r --cached .
+git add .
+```
+
+## View Commands
+
+```shell
+# View 
+git log --graph --pretty=format:'%C(yellow)%h%Creset -%C(cyan)%d%Creset %s %Cgreen(%an, %cr)' --abbrev-commit
+# View xxx commit content
+git show <commit-id>
+# View reference records
+git reflog
+# View file differences
+git diff filename
+
+# View differences that are added but not committed
+git diff --staged
+git diff --cached
+# View summary statistics only
+git diff --stat branch1 branch2
+
+# View differences of a certain file between two commits. The first is the starting hash, which should be one earlier than the current view
+git diff <commit> <commit> xxx.java
+# View specific differences between two branches
+git diff dev st 
+
+
+# Diff all modified file contents at once, can also redirect to a certain file
+git status | awk -F "modified:" '{if($2 != "") print $2}' | xargs git diff
+
+# View records that are committed but not pushed
+git cherry -v
+
+# View who modified a certain line of file
+git blame -L 58,100 filename
+git blame -L 57,+10 filename
+```
+
+## Undo Commands
+
+```shell
+# Undo all files at once
+git reset . 
+git checkout .
+
+# Undo modify status
+git checkout <filename>
+# Undo added files (if it's a new file it becomes untracked status, otherwise modify status)
+git restore --staged test.txt
+git rm --cached test.txt
+
+# Undo add commit modify (delete commit records completely, use with caution)
+git reset --hard <commit-id>
+# Undo add, commit (change commit records to modify status)
+git reset --mixed <commit-id>
+# Only undo commit (change commit records to add status)
+git reset --soft <commit-id>
+
+# Undo one commit content
+git revert <commit-id>git
+
+# Delete all local untracked records
+git clean -df
+```
+
+## Create or Delete Related Commands
+
+```shell
+# Associate local repository to remote repository
+git remote add origin git@github.com:whalefall541/rebase-learn.git
+# Delete association
+git remote rm origin
+
+# Delete remote branch
+git push origin -d <branch-name>
+
+# Create local branch
+git branch <branch-name>
+# Create and switch
+git checkout -b <branch-name>
+# Delete local branch
+git branch -D  <branch-name>
+```
+
+## Merge Commands
+
+```shell
+# Turn off automatic merge
+git merge --no-ff -m "merge with no-ff" dev
+
+# Automatic rebase - replay another branch on current branch 
+git rebase [<branch-name> | <commit-id> | <head~n>]
+
+# Interactive rebase
+git rebase -i <commit-id> <commit-id> 
+
+`Generally use p s combination to merge multiple commits into one` 
+# Note: when rebasing, commit id is left-open interval, right-closed interval;
+# Be very careful that the id after rebase should be the last one, unless you don't want the commit records after that id, never do this,
+# If you accidentally did it, pull from remote again
+
+# Commands:
+# p, pick <commit> = use commit
+# r, reword <commit> = use commit, but edit the commit message
+# e, edit <commit> = use commit, but stop for amending
+# s, squash <commit> = use commit, but meld into previous commit
+# f, fixup [-C | -c] <commit> = like "squash" but keep only the previous
+#                    commit's log message, unless -C is used, in which case
+#                    keep only this commit's message; -c is same as -C but
+#                    opens the editor
+
+
+# Rebase base branch content to current branch - rebase is moving HEAD pointer
+git rebase <base-branch> <current-branch>
+
+# rebase --onto can rebase a branch located on a sub-branch to the main branch
+# Before rebase: current-upstream-branch is a sub-branch of base-branch 
+# and current-branch is a sub-branch of current-upstream-branch
+# After rebase: current-upstream-branch and current-branch are each sub-branches of base-branch
+git rebase --onto <base-branch> <current-upstream-branch> <current-branch>
+
+# Copy a certain commit from other branches to another branch
+git cherry-pick <commit-id>
+```
+
+## Stash Content Commands
+
+```shell
+git stash
+git stash list
+git pop
+
+# Stash partial files
+git stash push filename
+
+# Interactive stash files
+git stash -p
+```
+
+How to stash partial files [stash part][stash part]
+
+[stash part]: https://www.jianshu.com/p/fe4d54cb6244
+
+## Commit Related Commands
+
+```shell
+echo "# 123" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+# Modify the comment pointed to by HEAD; notes: Don't amend public commits
+git commit --amend -m "an updated commit message" --no-edit
+
+git branch -M main
+git remote add origin git@github.com:whalefall541/123.git
+git push -u origin main
+
+# Push directly from dev branch to all other branches, push from branch1 to branch2
+git push origin refs/heads/branch1:branch2
+```
+
+## Tag Commands
+
+```shell
+# Tag on current branch current commit:
+git tag v1.0
+
+# If you want to tag on a specific historical commit:
+git tag v0.9 f52c633
+git tag -a <tagname> -m "<message>"
+
+# You can view tag information with the following command:
+git show v0.1
+
+# If the tag is wrong, you can also delete it:
+git tag -d v0.1
+
+# If you want to push a certain tag to remote, use command git push origin <tagname>
+git push origin v1.0
+# Or, push all local tags that haven't been pushed to remote at once:
+git push origin --tags    
+# If the tag has been pushed to remote, deleting remote tag is more troublesome, first delete locally:
+git tag -d v0.9    
+# Then, delete from remote. Delete command is also push, but in the following format:
+git push origin :refs/tags/v0.9
+```
+
+## Update Commands
+
+[You can refer to this website](https://cloud.tencent.com/developer/section/1138793)
+
+```shell
+# Pull all branches
+git fetch --all
+# Update a certain branch, if it's an aggregated project need to add --recurse-submodules=no 
+git fetch origin main:main --progress --prune
+ 
+# Rebase when pulling code - fetch and rebase 
+git pull -r origin main
+
+```
+
+## How to Sync GitHub Fork Repository
+
+1. Configure forked repository
+   [configuring-a-remote-for-a-fork](https://docs.github.com/en/github/collaborating-with-pull-requests/working-with-forks/configuring-a-remote-for-a-fork)
+2. Merging an upstream repository into your fork
+   [syncing-a-fork](https://docs.github.com/en/github/collaborating-with-pull-requests/working-with-forks/syncing-a-fork)
+
+
+
+
+:::tip License
+
+- The code part of this work is licensed under [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0). Under the premise of following the license, you can freely modify and republish the code, and use the code for commercial purposes. But it requires you to:
+  - **Attribution**: In original code and derivative code, retain original author attribution and code source information.
+  - **Retain License**: In original code and derivative code, retain Apache 2.0 license file.
+
+- The documentation part of this work is licensed under [Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/). Under the premise of following the license, you can freely share, including copying and distributing this work in any medium or format, and you can also freely adapt, modify, transform or create derivative works based on this work. But it requires you to:
+  - **Attribution**: When using all or part of this document, indicate the original author and source information.
+  - **Non-commercial Use**: Cannot be used for commercial publication or any other commercial activities. For commercial use, please contact the author.
+  - **Share Alike**: Works adapted and modified based on this document should continue to be licensed under Creative Commons Attribution 4.0 International License.
+
+:::

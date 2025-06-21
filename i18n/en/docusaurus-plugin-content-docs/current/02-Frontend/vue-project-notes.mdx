@@ -1,0 +1,160 @@
+---
+title: Vue Project Notes
+sidebar_label: Vue Project Notes
+sidebar_position: 5
+---
+
+**Note: The project knowledge notes in this article are from [Bilibili Shangguigu Video](https://www.bilibili.com/video/BV1Vf4y1T7bw?p=10&spm_id_from=pageDriver)**
+
+## How to Install Vue-cli
+
+```bash
+# Install cnpm - domestic yarn?
+npm install -g cnpm --registry=https://registry.npm.taobao.org
+
+npm config set registry https://registry.npm.taobao.org
+
+
+
+# Install vue cli  
+cnpm install -g @vue/cli # -g means global installation
+# Check vue cli version
+vue -V
+
+vue create vue_xxx
+
+```
+
+## [Python Environment Variable Configuration Invalid Issue](https://zhuanlan.zhihu.com/p/431747120)
+
+![image-20220115145506444](https://s2.loli.net/2023/07/15/INyuG4bdKnh5jMf.png)
+
+## Project Structure Description
+
+ components - place non-route files
+
+views/pages - place route files
+
+## Project Knowledge Points Notes
+
+### Important Points
+
+1. After copying html style, pay attention to the paths corresponding to images (there may be images in both html and style)
+
+### Permission Control in Router Route Configuration
+
+Permission can be controlled through meta configuration in route;
+
+```json
+{
+    path:'/home',
+    name:'home',
+    component: () => import('@/pages/Home/'),
+    meta: {isShow: true}
+}
+```
+
+### param query Parameter Passing
+
+```js
+    // 1.0 String form
+    this.$router.push('/search/'+ this.wd + "?k="+ this.wd)
+    // 2.0 Template string
+    this.$router.push(`/search/${this.wd}?k=${this.wd.toUpperCase()}`)
+    // 3.0 Object writing
+    this.$router.push({
+        name:"search",
+        params:{
+            wd: this.wd,
+        },
+        query:{
+            k:this.wd.toUpperCase(),
+        }
+    })
+
+    // Interview Question 1: Can path be used together with params in route parameter passing (object writing)?
+    // When route jumping passes parameters, object writing can be path or name, but path writing does not support params parameter passing
+    this.$router.push({
+        path: '/search',
+        params:{
+            wd: this.wd,
+        },
+        query:{
+            k:this.wd.toUpperCase(),
+        }
+    })
+
+    // Interview Question 2: How to specify that params parameters can be passed or not passed
+    // Router has configured placeholder, but just don't pass params parameters, path is missing http://localhost:8080/#/?k=KJKJ
+    // If you want to pass or not pass, add a question mark when placeholder path:'/search/:wd?'
+    this.$router.push({
+        name:"search",
+        query: {
+            k: this.wd.toUpperCase(),
+        }
+    })
+
+    // Interview Question 3: params parameters can be passed or not passed, but how to handle if an empty string is passed
+    // Use undefined: when params parameters can be passed or not passed, the problem of passing empty strings
+    this.$router.push({
+        name:"search",
+        params:{wd:'' || undefined},
+        query: {
+            k: this.wd.toUpperCase(),
+        }
+    })
+
+	{
+		path:'/search/:wd?',
+		name:'search',
+		component: () => import('@/pages/Search'),
+		meta: {isShow: true},
+		// Interview Question 4: Can route components pass props data
+		// Method 1: Boolean writing and can only pass params parameters
+		// props: true
+		// Method 2: Object writing
+		// props: {a:1,b:2,wd:'aaa'}
+		// Method 3: Function writing can pass param parameters and query parameters to route components through props
+		props:($route) => ({wd:$route.params.wd, k:$route.query.k})  
+    }
+```
+
+### NavigationDuplicated Handling
+
+```js
+// Error handling Uncaught (in promise) NavigationDuplicated
+// Declarative navigation doesn't have this problem because it's handled at the bottom level, while programmatic navigation has problems
+// By passing corresponding success and failure functions to the push method, you can capture the current error, but it's treating symptoms not the root cause
+// You still need to handle it when using it elsewhere
+// this.$router.push({
+//   name:"search",
+//   params:{
+//     wd: this.wd,
+//   },
+//   query:{
+//     k:this.wd.toUpperCase(),
+//   }
+// },()=>{},(error)=>{});
+
+
+// Error handling Uncaught (in promise) NavigationDuplicated
+// First save the push of VueRouter prototype object 
+let originPush = VueRouter.prototype.push;
+// Rewrite push/replace 
+VueRouter.prototype.push = function (location, resolve, reject) {
+    if (resolve && reject) {
+        // call/apply can both call function once, tamper with function context once
+        // call passes parameters separated by commas, apply method execution passes array
+        // Here this ensures context is Router instance
+        originPush.call(this, location, resolve, reject);
+    } else {
+        originPush.call(this, location, () => { }, () => { });
+    }
+}
+```
+
+### Throttling and Debouncing
+
+Debouncing: When users operate frequently, execute only once;
+
+Throttling: When users operate frequently, restrain the frequency of user execution;

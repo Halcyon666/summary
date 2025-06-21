@@ -3,14 +3,14 @@ title: Spring Core
 sidebar_label: Spring Core
 sidebar_position: 1
 ---
- ## 在生命周期长的Bean中指定一个短的
+ ## Specifying a Short-lived Bean in a Long-lived Bean
 
- 1. xml配置方式
+ 1. XML Configuration Method
 
- `proxy-target-class` `default=true`使用CGlib进行代理; `default=false` 时使用JDK动态代理;
+ `proxy-target-class` `default=true` uses CGlib for proxying; `default=false` uses JDK dynamic proxy;
 
 <details>
-	<summary>xml配置</summary>
+	<summary>XML Configuration</summary>
 
  ```xml
  <!-- DefaultUserPreferences implements the UserPreferences interface -->
@@ -26,19 +26,19 @@ sidebar_position: 1
 
 
 
-2. 注解方式
+2. Annotation Method
 
 ```java
- // CGLIB 方式
+ // CGLIB method
  @Scope(value="request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 
- // JDK动态代理 方式
+ // JDK dynamic proxy method
  @Scope(value="request", proxyMode = ScopedProxyMode.INTERFACES)
 ```
 
- ## 单例Bean中的有原型bean
+ ## Prototype Bean in Singleton Bean
 
- 方法一：`lookup`,通过lookup会自动去查找类型一样的bean进行注入；注意使用lookup的方法必须为抽象方法；
+ Method 1: `lookup`, through lookup it will automatically search for beans of the same type for injection; note that methods using lookup must be abstract methods;
 
  ```java
  @Component("AAA")
@@ -64,11 +64,11 @@ sidebar_position: 1
  }
  ```
 
- 方法二：实现`ApplicationContextAware`拿到`beanFactory`对象，每次方法调用的时候都会获取到一个新的单例bean
+ Method 2: Implement `ApplicationContextAware` to get the `beanFactory` object, each method call will get a new singleton bean
 
- ## `@Autowired` field底层实现
+ ## `@Autowired` Field Underlying Implementation
 
- `@Autowired`先会按类型注入，如果有多个类型，则按照名字注入；在源码中设置值是通过反射实现`org.springframework.beans.DirectFieldAccessor.FieldPropertyHandler#setValue`
+ `@Autowired` first injects by type, if there are multiple types, then injects by name; in the source code, setting values is implemented through reflection `org.springframework.beans.DirectFieldAccessor.FieldPropertyHandler#setValue`
 
  ```java
  @Override
@@ -83,9 +83,9 @@ sidebar_position: 1
  }
  ```
 
- ## `@Autowired`或者`@Resource`指定实现类
+ ## `@Autowired` or `@Resource` Specifying Implementation Classes
 
- 1. 在某一个子实现类上使用`@Primary`指定要注入的Bean为当前的bean, 以下注入方式二选一
+ 1. Use `@Primary` on a specific sub-implementation class to specify the Bean to be injected as the current bean, choose one of the following injection methods
 
  ```java
  @Primary
@@ -102,7 +102,7 @@ sidebar_position: 1
  }
  ```
 
- 2. 使用`@Qualifier("xxx")`注解 指定要注入的bean的类型
+ 2. Use `@Qualifier("xxx")` annotation to specify the type of bean to be injected
 
  ```java
  @Qualifier("protoBeanImpl2")
@@ -117,26 +117,26 @@ sidebar_position: 1
  }
  ```
 
- 3. 使用`@Resource`
+ 3. Use `@Resource`
 
  ```java
  @Resource(name="protoBeanImpl2")
  private ProtoBean protoBean;
- // 和下面写法等同，不指定name，默认为变量名
+ // Equivalent to the following, if name is not specified, defaults to variable name
  @Resource
  private ProtoBean protoBeanImpl2;
  ```
 
-## 构造器注入
+## Constructor Injection
 
-- using constructor inject,do not need other annotation if all the properties is base type ,using
+- Using constructor inject, do not need other annotation if all the properties is base type, using
    `@ConstructorProperties({"xxx","xxx",...})` to inject the value
 
-- if just one constructor here, need' not `@Autowired`
+- If just one constructor here, need not `@Autowired`
 
-- only one multi-argument constructor can be set `@Autowired(required = true)`
+- Only one multi-argument constructor can be set `@Autowired(required = true)`
 
-- if one more constructor are annotationed with ` @Autowired(required = false)`
+- If one more constructor are annotated with ` @Autowired(required = false)`
   The constructor with the greatest number of dependencies that can be satisfied
    by matching beans in the Spring container will be chosen
 
@@ -144,17 +144,17 @@ sidebar_position: 1
   BeanPostProcessor implementations
 
 
- ## 使用AspectJ注解进行AOP配置好还是xml
+ ## Using AspectJ Annotations for AOP Configuration vs XML
 
- 使用xml配置时，将AOP配置分散了，一部分在xml中，一部分在后台的class类中。不符合DRY原则。
+ When using XML configuration, AOP configuration is scattered, part in XML and part in backend class files. This doesn't follow the DRY principle.
 
- 使用`@AspectJ`，则将整个AOP的配置放在一个配置类中，`@AspectJ`支持额外的实例模型更丰富的组合，是每个切面成为一个模型单元。
- 同时，`@AspectJ` 能被 Spring AOP 和AspectJ 解析，你可以使用AspectJ的语法去实现更加复杂的切面逻辑
+ Using `@AspectJ`, the entire AOP configuration is placed in one configuration class. `@AspectJ` supports additional instance models with richer combinations, making each aspect a model unit.
+ At the same time, `@AspectJ` can be parsed by both Spring AOP and AspectJ, allowing you to use AspectJ syntax to implement more complex aspect logic
 
- ## 闭包 和 回调
+ ## Closures and Callbacks
 
- 闭包:闭包和匿名函数经常被用作同义词。但严格来说，匿名函数就是字面意义上没有被赋予名称的函数，而闭包则实际上是一个函数的实例，也就是说是存在于内存里的某个结构体。如果从实现上来看的话，匿名函数如果没有捕捉自由变量，那么它其实可以被实现为一个**函数指针**，或者直接内联到调点，如果它捕捉了自由变量那么它将是一个闭包；而闭包则意味着同时包括函数指针和环境两个关键元素。[参考出处][闭包]
- [Closure Sample][闭包]
+ Closure: Closures and anonymous functions are often used as synonyms. But strictly speaking, an anonymous function is literally a function that has not been given a name, while a closure is actually an instance of a function, that is, a structure that exists in memory. From an implementation perspective, if an anonymous function doesn't capture free variables, it can actually be implemented as a **function pointer**, or directly inlined to the call site. If it captures free variables, then it will be a closure; while a closure means including both function pointer and environment as two key elements. [Reference][Closure]
+ [Closure Sample][Closure]
 
  ```java
  public interface Adder {
@@ -170,7 +170,7 @@ sidebar_position: 1
  }
  ```
 
- 回调：在计算机程序设计中，回调函数，或简称回调（Callback 即call then back 被主函数调用运算后会返回主函数），是指通过参数将函数传递到它代码的，某一块可执行代码的引用[参考出处][回调]
+ Callback: In computer programming, a callback function, or simply callback (Callback i.e., call then back - called by the main function and returns to the main function after computation), refers to passing a function through parameters to its code, a reference to some executable code [Reference][Callback]
  [Callback Sample][Callback Sample] 
 
  ```java
@@ -243,23 +243,22 @@ sidebar_position: 1
  }
  ```
 
-[闭包]: https://zh.wikipedia.org/wiki/%E9%97%AD%E5%8C%85_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6)
-[回调]: https://zh.wikipedia.org/wiki/%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0
+[Closure]: https://en.wikipedia.org/wiki/Closure_(computer_science)
+[Callback]: https://en.wikipedia.org/wiki/Callback_(computer_programming)
 [Callback Sample]: https://stackoverflow.com/questions/19405421/what-is-a-callback-method-in-java-term-seems-to-be-used-loosely
-[Callback Sample]: https://stackoverflow.com/questions/3805474/what-is-a-closure-does-java-have-closures
 
 
  ## `@Configurable` `@Configuration`
 
- `@Configuration` 是配置类
+ `@Configuration` is a configuration class
 
- `@Configurable` 它是一个bean所依赖的Aspect,并且不被Spring管理，但是可以自动注入
+ `@Configurable` is an Aspect that a bean depends on, and is not managed by Spring, but can be auto-injected
 
- ## Spring Boot自定义一个Event发布
+ ## Spring Boot Custom Event Publishing
 
- *本案例使用到了`SpEL`(Spring Express Language)表达式*
+ *This example uses `SpEL` (Spring Expression Language) expressions*
 
- 1. 定义自己的事件`MyEvent`
+ 1. Define your own event `MyEvent`
 
 
  ```java
@@ -287,7 +286,7 @@ sidebar_position: 1
  ```
 
 
- 2. 自定义事件发布类`MyEventPublish`
+ 2. Custom event publishing class `MyEventPublish`
 
 
  ```java
@@ -298,12 +297,12 @@ sidebar_position: 1
  @Component
  public class MyEventPublish implements ApplicationEventPublisherAware {
      private ApplicationEventPublisher publisher;
- 
+
      @Override
      public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
          this.publisher = applicationEventPublisher;
      }
- 
+
      public void publish(String address, String content) {
          if ("aaa".equals(address)) {
              publisher.publishEvent(new MyEvent(this, address, content));
@@ -313,7 +312,7 @@ sidebar_position: 1
  }
  ```
 
- 3. 编写事件监听类
+ 3. Write event listener class
 
 
  ```java
@@ -324,16 +323,16 @@ sidebar_position: 1
  @Component
  public class MyListener implements ApplicationEventPublisherAware {
      private Log log = LogFactory.getLog(MyListener.class);
- 
-     // SpEL #a0 代表第一个入参
+
+     // SpEL #a0 represents the first parameter
      // @EventListener(condition = "#a0.content == 'foo'")
-     
-     // SpEL #event  代表名称相同的参数
+
+     // SpEL #event represents parameter with the same name
      // @EventListener(condition = "#event.content == 'foo'")
-     
-     // 如果要表示一个对象要使用@XXX testMethod为容器中bean的名字
+
+     // If you want to represent an object, use @XXX testMethod is the bean name in the container
      @EventListener(condition = "@testMethod.test().equals(#a0.content)")
-     
+
      // @EventListener({ContextStartedEvent.class, ContextRefreshedEvent.class})
      public void process(MyEvent event) {
          System.err.println("event test is ok " + event);
@@ -341,9 +340,9 @@ sidebar_position: 1
  }
  ```
 
- 
 
-`TestMethod` 类
+
+`TestMethod` class
 
 
 ```java
@@ -358,9 +357,9 @@ sidebar_position: 1
  }
 ```
 
- 4. 测试类
+ 4. Test class
 
- 注意要引入依赖,此处列举`gradle`依赖配置 `testImplementation 'org.springframework.boot:spring-boot-starter-test'`
+ Note that you need to import dependencies, here is the `gradle` dependency configuration `testImplementation 'org.springframework.boot:spring-boot-starter-test'`
 
 ```java
 @SpringBootTest
@@ -372,5 +371,3 @@ class Charter1Tests implements ApplicationContextAware {
  }
 }
 ```
-
-
