@@ -4,8 +4,6 @@ sidebar_label: py replacement
 sidebar_position: 2
 ---
 
-
-
 # 在多个文件中替换多个相应的内容
 
 ### `main.py`
@@ -69,8 +67,6 @@ for filename in file_list:
         output_file.write(final_modified_content)
 ```
 
-
-
 ### `rules_module.py`
 
 ```python
@@ -89,3 +85,10 @@ rules = [
 
 ```
 
+### 替换所有空行
+
+`^\s*$\n+`
+
+### 替换包含 ABC 的行为空行
+
+`ABC(.*)\s*`

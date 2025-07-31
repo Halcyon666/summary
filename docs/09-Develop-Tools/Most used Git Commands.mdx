@@ -137,13 +137,55 @@ git rebase -i <commit-id> <commit-id>
 
 
 # 将base分支的内容变基到当前分支 rebase 就是移动HEAD指针
-git rebase <base-branch> <current-branch>
+git rebase <base-branch>
+
+示例
+A---B---C  main
+         \
+          D---E  feature
+
+git checkout feature
+git rebase main
+
+A---B---C  main
+             \
+              D'--E'  feature
+
+「想要谁“跟上”谁，就在谁上面执行 rebase，目标是“基底”」
+“开发用 rebase，合并用 merge，主干不可 rebase，干净不出事。”
+
+feature 想跟上 main → 在 feature 上执行 git rebase main
+
+main 想跟上 feature（不推荐）→ 在 main 上执行 git rebase feature
 
 # rebase --onto 可以将一个位于子分支的分支变基到主分支上
 # 变基前：current-upsteam-branch 是base-branch的一个子分支 
 # 而 current-branch 又是 current-upsteam-branch的一个子分支
 # 变基后 current-upsteam-branch current-branch 各自为base-branch 的子分支
+# I.E. git rebase --onto
 git rebase --onto <base-branch> <current-upsteam-branch> <current-branch>
+
+示例
+A---B---C  main
+         \
+          D---E---F  feature
+     \
+      X---Y  experiment
+
+git checkout experiment
+git rebase --onto feature A
+
+A---B---C  main
+         \
+          D---E---F  feature
+                    \
+                     X'--Y'  experiment
+速记：
+剪：从 B 后
+
+贴：到 A 后
+
+操作：--onto A B
 
 # 从其他分支复制某个提交到另一个分支
 git cherry-pick <commit-id>
@@ -224,6 +266,11 @@ git fetch origin main:main --progress --prune
 # 拉取代码时变基 fetch and rebase 
 git pull -r origin main
 
+git fetch origin 
+git pull 
+
+git pull -r
+
 ```
 
 ## 如何同步github fork仓库
@@ -234,7 +281,43 @@ git pull -r origin main
    [syncing-a-fork](https://docs.github.com/en/github/collaborating-with-pull-requests/working-with-forks/syncing-a-fork)
 
 
+## 原则问题
 
+1. git rebase 原则：同步并保持历史整洁：
+
+✅ 用于将当前分支的更改，转移到目标分支的最新状态之后
+
+✅ 保持线性提交历史，避免合并冲突树
+
+✅ 更适合 feature 分支同步主干：git rebase main
+
+⚠️ 使用前请确保工作区干净（git status 应无改动）
+
+❌ 不建议对共享历史的分支强推（除非团队允许）
+
+2. git pull --rebase 原则：简化 fetch + rebase
+✅ 是 git fetch + git rebase 的快捷方式
+
+✅ 推荐设为默认策略，避免产生 merge commit
+
+3. 分支同步推荐模式（双向同步场景）
+假设你在 dev 和 feature-x 两个分支间交替开发：
+
+🔁 同步主干进 feature 分支：
+
+git checkout feature-x
+
+git fetch origin
+
+git rebase origin/dev  # 或 git rebase dev
+
+⬆️ 将 feature-x 回同步回 dev：
+
+git checkout dev
+
+git rebase feature-x  # 或者 git merge --ff-only feature-x
+
+⚠️ 如果团队共享 dev，建议使用 merge 以免强制推送
 
 
 :::tip 协议
