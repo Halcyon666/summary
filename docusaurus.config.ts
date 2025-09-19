@@ -37,6 +37,10 @@ const config: Config = {
   i18n: {
     defaultLocale: "zh",
     locales: ["zh", "en"],
+    localeConfigs: {
+      zh: { label: "中文" },
+      en: { label: "English" }, // 不要加 path: '/summary'
+    },
   },
 
   markdown: {
@@ -227,11 +231,11 @@ const config: Config = {
     // String format.
     "https://docusaurus.io/script.js",
     // Object format.
-    {
-      src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4872091594975928",
-      async: true,
-      crossorigin: "anonymous",
-    },
+    // {
+    //   src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4872091594975928",
+    //   async: true,
+    //   crossorigin: "anonymous",
+    // },
   ],
 };
 
