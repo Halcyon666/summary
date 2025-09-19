@@ -66,11 +66,6 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl: ({ locale, docPath }) => {
-            // Link to Crowdin for French docs
-            if (locale !== DefaultLocale) {
-              return `${baseGithubUrl}/i18n/${locale}/docusaurus-plugin-content-docs/current/${docPath}`;
-            }
-            // Link to GitHub for English docs
             return `${baseGithubUrl}/docs/${docPath}`;
           },
         },
