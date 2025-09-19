@@ -36,11 +36,7 @@ const config: Config = {
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: "zh",
-    locales: ["zh", "en"],
-    localeConfigs: {
-      zh: { label: "中文" },
-      en: { label: "English" }, // 不要加 path: '/summary'
-    },
+    locales: ["zh"],
   },
 
   markdown: {
@@ -132,10 +128,10 @@ const config: Config = {
           label: "GitHub",
           position: "right",
         },
-        {
-          type: "localeDropdown",
-          position: "left",
-        },
+        // {
+        //   type: "localeDropdown",
+        //   position: "left",
+        // },
       ],
     },
     algolia: {
