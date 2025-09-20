@@ -89,6 +89,18 @@ const config: Config = {
   ],
 
   themeConfig: {
+    zoom: {
+      selector: ".markdown :not(em) > img",
+      background: {
+        light: "rgba(255,255,255,0.95)",
+        dark: "rgba(20,20,20,0.95)",
+      },
+      config: {
+        margin: 24,
+        scrollOffset: 40,
+        metaClick: true,
+      },
+    },
     // Declare some <meta> tags
     metadata: [
       {
@@ -241,7 +253,7 @@ const config: Config = {
       crossorigin: "anonymous",
     },
   ],
-  plugins: ["@docusaurus/theme-live-codeblock"],
+  plugins: ["@docusaurus/theme-live-codeblock", "docusaurus-plugin-image-zoom"],
 };
 
 export default config;
