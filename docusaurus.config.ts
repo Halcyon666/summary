@@ -71,6 +71,7 @@ const config: Config = {
         },
         docs: {
           showLastUpdateTime: true,
+          showLastUpdateAuthor: true,
           // put the docs to the rott directory
           routeBasePath: "",
           sidebarPath: "./sidebars.ts",
@@ -79,12 +80,6 @@ const config: Config = {
           editUrl: ({ locale, docPath }) => {
             return `https://github.com/Halcyon666/summary/edit/main/docs/${docPath}`;
           },
-        },
-        blog: {
-          showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          // editUrl: "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
         },
         theme: {
           customCss: "./src/css/custom.css",
@@ -126,7 +121,7 @@ const config: Config = {
           type: "docSidebar",
           sidebarId: "tutorialSidebar",
           position: "left",
-          label: "blog",
+          label: "docs",
         },
         // {to: '/blog', label: 'Blog', position: 'left'},
         {
@@ -230,6 +225,13 @@ const config: Config = {
       minHeadingLevel: 2,
       maxHeadingLevel: 5,
     },
+    liveCodeBlock: {
+      /**
+       * The position of the live playground, above or under the editor
+       * Possible values: "top" | "bottom"
+       */
+      playgroundPosition: "bottom",
+    },
   } satisfies Preset.ThemeConfig,
   scripts: [
     // Object format.
@@ -239,6 +241,7 @@ const config: Config = {
       crossorigin: "anonymous",
     },
   ],
+  plugins: ["@docusaurus/theme-live-codeblock"],
 };
 
 export default config;
