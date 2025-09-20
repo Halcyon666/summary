@@ -91,3 +91,5 @@ rules = [
 ### 替换包含 ABC 的行为空行
 
 `ABC(.*)\s*`
+
+<TailProtocal />

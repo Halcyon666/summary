@@ -89,3 +89,5 @@ public class SampleTest {
 ```java
 usersMapper.selectOne(new QueryWrapper<JwtUserPO>().lambda().apply("USERNAME = {0,jdbcType=CHAR,typeHandler=" + TrimmedStringTypeHandler.class.getCanonicalName() + "}", username));
 ```
+
+<TailProtocal />
