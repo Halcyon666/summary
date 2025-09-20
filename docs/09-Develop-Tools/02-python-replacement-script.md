@@ -92,4 +92,6 @@ rules = [
 
 `ABC(.*)\s*`
 
+import TailProtocal from "@site/src/components/TailProtocal";
+
 <TailProtocal />
