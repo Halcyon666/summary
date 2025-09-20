@@ -231,16 +231,14 @@ const config: Config = {
       maxHeadingLevel: 5,
     },
   } satisfies Preset.ThemeConfig,
-  // scripts: [
-  // String format.
-  // "https://docusaurus.io/script.js",
-  // Object format.
-  // {
-  //   src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4872091594975928",
-  //   async: true,
-  //   crossorigin: "anonymous",
-  // },
-  // ],
+  scripts: [
+    // Object format.
+    {
+      src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4872091594975928",
+      async: true,
+      crossorigin: "anonymous",
+    },
+  ],
 };
 
 export default config;

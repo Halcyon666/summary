@@ -1,3 +1,4 @@
+import React, { JSX } from "react";
 import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
@@ -28,19 +29,18 @@ function HomepageHeader() {
 export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <Layout  
+    <Layout
       title={`${siteConfig.title}`}
       description="Welcome to halcyon666's blog"
     >
       <HomepageHeader />
       <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-    </div>
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      ></div>
     </Layout>
   );
 }
