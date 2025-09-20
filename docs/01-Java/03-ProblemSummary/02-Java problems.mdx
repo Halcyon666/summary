@@ -1,18 +1,20 @@
+# Java问题汇总
 
+## Spring Boot相关问题
 
-# SpringBoot相关问题
+### 启动问题
 
-### Springboot启动时报错 org.springframework.boot不存在
+#### Springboot启动时报错 org.springframework.boot不存在
 
 ***建议采用方法二在终端中输入`mvn idea:idea`，方法一在Spring Boot 项目中，运行其他Main方法测试类的时候会重新启动SpringBoot 工程，如果你还从ApplicationContext中获取，那么将会收到报错容器已经关闭。***
 [参见博客](https://blog.csdn.net/qq_35456400/article/details/107190640)
 
-### spring boot源码运行SpringApplication时报错
+#### spring boot源码运行SpringApplication时报错
 
 Could not find artifact lifecycle-mapping:lifecycle-mapping:jar:sources:1.0.0
 [参见博客 已经要付费看了！无语](https://blog.csdn.net/awecoder/article/details/101159870)
 
-### gradle spring boot 3.0 导入报错
+#### gradle spring boot 3.0 导入报错
 
 [无效的源发行版: 17](https://stackoverflow.com/questions/69696321/intellij-invalid-source-release-17)
 
@@ -20,30 +22,68 @@ Could not find artifact lifecycle-mapping:lifecycle-mapping:jar:sources:1.0.0
 
 ![image-20230728021351697](https://s2.loli.net/2023/07/28/UzsD4BnrPYSbo1T.png)
 
-### logback相关
+### 日志相关
 
-- 启动控制台日志没有颜色 
+#### 启动控制台日志没有颜色
 
 在spring-logback.xml中引入
 ```xml
-    <include resource="org/springframework/boot/logging/logback/base.xml"/>
-    <logger name="org.springframework.web" level="INFO"/>
-    <logger name="org.springboot.sample" level="TRACE"/>
+<include resource="org/springframework/boot/logging/logback/base.xml"/>
+<logger name="org.springframework.web" level="INFO"/>
+<logger name="org.springboot.sample" level="TRACE"/>
 ```
-- logback 修改日志打印内容
+
+#### logback 修改日志打印内容
 
 代码: extends ThrowableHandlingConverter
 impl convert 方法
 
 logback配置
 ```xml
-<conversionRule convertionWord=“someKeyMsg” convertClass=“com.xxx.xxx.Xclass”/>
+<conversionRule convertionWord="someKeyMsg" convertClass="com.xxx.xxx.Xclass"/>
 ```
-### mapstruct相关
 
-一直使用unmappedTargetPolicy Error, 可以避免很多问题。
+### 打包问题
 
-## maven相关问题
+#### after run the packaged jar occurs this unable to find main class
+
+方法1. 替换插件
+```xml
+<!--<plugin>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-maven-plugin</artifactId>
+	<configuration>
+		<mainClass>none</mainClass>
+		<classifier>execute</classifier>
+	</configuration>
+	<executions>
+		<execution>
+			<goals>
+				<goal>repackage</goal>
+			</goals>
+		</execution>
+	</executions>
+</plugin>-->
+<plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-source-plugin</artifactId>
+	<version>3.0.1</version>
+	<executions>
+		<execution>
+			<id>attach-sources</id>
+			<goals>
+				<goal>jar</goal>
+			</goals>
+		</execution>
+	</executions>
+</plugin>
+```
+
+方法2: 去掉spring-boot parent，再使用spring boot plugin 打包
+
+---
+
+## Maven相关问题
 
 ### 处理Maven远程仓库下载不到jar包问题
 
@@ -51,53 +91,11 @@ logback配置
 
 *去下载目录下执行如下命令，注意替换掉-DgroupId，-DartifactId，-Dversion，-Dfile*
 
-```shell 
+```shell
 mvn install:install-file -DgroupId=io.confluent -DartifactId=kafka-schema-registry-client -Dversion=4.1.0 -Dpackaging=jar  -Dfile=kafka-schema-registry-client-4.1.0.jar
 ```
 
-## 使用Tomcat启动服务出现依赖冲突问题
-
-1. 解决方案 查看报错信息 根据提示找到冲突的类，定位到对应的jar中（直接搜索类名就行了 including no-project items）
-2. 去tomcat lib目下查看相关jar；去项目导入的依赖中找到jar。
-3. 首先要确定 jar的版本 与当前工程相关的东西是否匹配，如果匹配，则可以进行去除一边的jar包进行测验。一般都能解决问题
-
-### after run the packaged jar occurs this unable to find main class
-
-方法1. 替换插件
-```xml
-<!--<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<mainClass>none</mainClass>     &lt;!&ndash; 取消查找本项目下的Main方法：为了解决Unable to find main class的问题 &ndash;&gt;
-					<classifier>execute</classifier>    &lt;!&ndash; 为了解决依赖模块找不到此模块中的类或属性 &ndash;&gt;
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>repackage</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>-->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>3.0.1</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-```
-
-方法2: 去掉spring-boot parent，再使用spring boot plugin 打包
-
-##  mvnw clean occurs Some Enforcer rules have failed. 
+### mvnw clean occurs Some Enforcer rules have failed
 
 ```log
 Failed to execute goal org.apache.maven.plugins:maven-enforcer-plugin:1.4.1:enforce
@@ -108,13 +106,11 @@ specific messages explaining why the rule failed. -> [Help 1]
 [not solved! stackoverflow  website](https://stackoverflow.com/questions/45337558/failed-to-execute-goal-org-apache-maven-pluginsmaven-enforcer-plugin?newreg=4546ba2b3da24e02908324ea31452cb8)
 
 To skip enforcer (not always working)
-
 ```bash
 mvn clean install -Denforcer.skip=true
 ```
 
 To continue the build if error
-
 ```bash
 mvn clean install -Denforcer.fail=false
 ```
@@ -123,15 +119,16 @@ mvn clean install -Denforcer.fail=false
 ./mvnw clean install -DskipDistribution=true  -Denforcer.skip=true
 ```
 
+---
 
-## Mybatis相关
+## MyBatis相关问题
 
 ### SQL查询时 null值封装回int类型报 UncategorizedSQLException
 
 将BO属性从int改为Integer类型
 
 ```
-rg.springframework.jdbc.UncategorizedSQLException: SqlMapClient operation; 
+org.springframework.jdbc.UncategorizedSQLException: SqlMapClient operation; 
 uncategorized SQLException for SQL []; SQL state [null]; error code [0];
 ```
 
@@ -145,7 +142,9 @@ mysql 不要使用字段类型tinyint 可能你更新的1会变成49哦
 
 [参见文章](https://baomidou.com/pages/f84a74/#%E5%87%BA%E7%8E%B0-invalid-bound-statement-not-found-%E5%BC%82%E5%B8%B8)
 
-## idea使用相关
+---
+
+## IDEA使用相关问题
 
 ### idea terminal 中文乱码问题
 
@@ -157,233 +156,18 @@ export LANG="zh_CN.UTF-8"
 export LC_ALL="zh_CN.UTF-8"
 ```
 
-## 其他（不便归类）
+---
 
-### jasper后台，如果打印的模板需要动态区太多，以前封装的框架不够用，怎么办？
-
-这个时候重写框架 ，可能太令人f**k了。当然你也可以找新的版本的POI框架 看看有没有相应的扩展点。
-
-此处不讨论新POI框架的内容；采取只修改jasper文件的方案：
-
-1. 选择文本框一定要是`text field` 不能是`static text`
-   ![](https://s2.loli.net/2023/07/15/NkCXDGsSVzqTUMm.png)
-2. 在框内写上三元表达式，然后勾选上`remove line when blank` and `blank when null`
-   ![](https://s2.loli.net/2023/07/15/vK4etqMGoj2zh69.png)
-3. 预览效果 此处是表达式为`1==2?"a":null`的效果图
-   ![](https://s2.loli.net/2023/07/15/dMH1Velm5DrwOYg.png)
-
-### 如何配置生成日志文件
-```xml
- <!--日志文件主目录：这里${user.home}为当前服务器用户主目录-->
-    <property name="LOG_HOME" value="log"/>
-
-
-    <!--配置日志文件(File)-->
-    <appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!--设置策略-->
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <!--日志文件路径：这里%d{yyyyMMdd}表示按天分类日志-->
-            <FileNamePattern>${LOG_HOME}/%d{yyyyMMdd}.%i.log</FileNamePattern>
-            <maxFileSize>30MB</maxFileSize>
-            <!--<maxHistory>100</maxHistory>-->
-            <!--<totalSizeCap>5GB</totalSizeCap>-->
-        </rollingPolicy>
-        <!--设置格式-->
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
-            <!-- 或者使用默认配置 -->
-            <!--<pattern>${FILE_LOG_PATTERN}</pattern>-->
-            <charset>utf8</charset>
-        </encoder>
-
-        <!--日志文件最大的大小-->
-        <!--<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">-->
-            <!--<MaxFileSize>1KB</MaxFileSize>-->
-        <!--</triggeringPolicy>-->
-    </appender>
-    <root level="info">
-        <appender-ref ref="rollingFile" />
-    </root>
-```
-
-### MockBean使用问题
-
-MockBean使用时，String 入参，int返回值，传入参数为实际调用的方法时，thenReturn为期望值，否则当传入字符串时始终为0；
-
-### lombok使用的坑
-
-`@Data` 注解生成的`getters`, `setters` 和`jackson-databind`中的不一致导致反序列化时，对象的属性没有值。
+## 其他问题
 
 ### 动态数据源问题
 
 如果所用的操作有事务，则需要在Dao层之前，对数据源进行设置，在Dao或者Mybatis-plus中的带dao的service都会切换数据源失效。
 
-### override by no-compatible bean instance of type[com.sun.Proxy.$Proxy227
-
-原因：JDK代理和CGlib代理混用的问题
-
-解决：注入接口，而不是某个实现类
-
-### netty响应速度问题
-
-在关闭资源时，`group.shutdownGracefully().sync()`，去掉`.sync()`调用就不会阻塞。
-
-
-### 屏蔽某个方法中的日志
-
-配置`logging.level.com.xxx.xx`,com.xxx.xx为类全路径名称
-
-### 使用mybatis-plus 主键自增问题
-
-```sql
-select SEQUENCE_NAME.nextval from dual;
-insert into xxx() values (xx.nextval, #{tssnbr, jdbcType=CHAR})
-```
-
-> notes:
-> 1. 字段大小写要一致
-> 2. 字段最好指定jdbcType
-
 ### boolean改为Boolean可能遇到的问题
 
-代码优化时，原始类型改成包装类型时，如果是Spring 注入的方式，注意默认值会有变化，boolean默认值为false，包装类为null，可能会造成空指针异常
+代码优化时，原始类型改成包装类型时，如果是Spring 注入的方式，注意默认值会有变化，boolean默认值为false，包装类为null，可能会造成空指针异常。
 
-boolean 改为Boolean值，某些场景（netty 不响应请求)会有问题
-
-问题：boolean 改为Boolean值，某些场景（netty 不响应请求)会有问题
+boolean 改为Boolean值，某些场景（netty 不响应请求)会有问题。
 
 处理：给Boolean类赋值false
-
-### @Value default value can’t be present on annotations @ConditionalOnExpression or @ConditionalOnProperty.
-
-处理：在yml中配置相应的参数
-
-
-
-### Hutool中的ExcelUtil,写入的类型处理
-
-使用Hutool中的`cn.hutool.poi.excel.ExcelUtil`时，如果想输出什么类型到相应的单元格，则需要定义相应的内容为相应的类型;
-
-1. **基本数据类型：**
-
-   - Java中的`int`、`long`、`float`、`double`等基本数据类型对应Excel中的**数字**类型。
-
-2. **字符串类型：**
-
-   - Java中的`String`类型对应Excel中的**文本**类型。
-
-3. **日期类型：**
-
-   - Java中的`java.util.Date`类型通常对应Excel中的**日期**类型。
-   - 在Hutool中，你可以使用 `DateTime` 类型，它对日期和时间的处理更为灵活。
-
-4. **布尔类型：**
-
-   - Java中的`boolean`类型通常对应Excel中的**布尔**类型。
-
-5. **其他特殊类型：**
-
-   - Hutool提供了一些转换方法，例如`cn.hutool.core.convert.Convert.toStr(obj)` 可以将对象转换为字符串，然后写入Excel。
-
-> 如果使用模板中的定义了样式，单元格的内容可以使用，但是具体单元格格式会被覆盖。
->
-> 如果Hutool中的ExcelUtil不够用时，还请使用POI原生的API。
-
-
-
-
-
-### org.springframework.jdbc.UncategorizedSQLException
-
-Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception 
-[Request processing failed; nested exception is org.springframework.jdbc.UncategorizedSQLException: x.xx.x.insert
- (batch index #1) failed. Cause: java.sql.BatchUpdateException: The MySQL server is running with the --read-only 
- option so it cannot execute this statement; uncategorized SQLException; SQL state [HY000]; error code [1290]; 
- The MySQL server is running with the --read-only option so it cannot execute this statement; nested exception 
- is java.sql.BatchUpdateException:
-
-
-solution:
-
-the error configuration, the url miss connect port, mislead phonomenone sometimes maybe right, sometimes occurs error above.
-
-
-
-### fetch all the data once but not paginate.
-
-the relative code below,
-
-```java
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import java.util.List;
-
-@Service
-public class DataMigrationService {
-   @Autowired
-   private SourceEntityMapper sourceEntityMapper;
-   @Autowired
-   private TargetEntityMapper targetEntityMapper;
-   public void migrateData() {
-       int pageSize = 100;  // Adjust the page size according to your needs
-       int currentPage = 1;
-       while (true) {
-           // Fetch data from the source database in chunks using MyBatis Plus
-           List<SourceEntity> sourceEntities = sourceEntityMapper.selectPage(
-                   new Page<>(currentPage, pageSize),
-                   new QueryWrapper<>()
-           ).getRecords();
-
-           if (sourceEntities.isEmpty()) {
-               break;  // No more data to fetch
-           }
-           // Process and insert data into the target database
-           processAndInsertData(sourceEntities);
-           currentPage++;
-       }
-   }
-
-   private void processAndInsertData(List<SourceEntity> sourceEntities) {
-       List<TargetEntity> targetEntities = convertToTargetEntities(sourceEntities);
-       // Batch insert into the target database using MyBatis Plus
-       targetEntityMapper.insertBatchSomeColumn(targetEntities);
-   }
-
-
-
-   private List<TargetEntity> convertToTargetEntities(List<SourceEntity> sourceEntities) {
-       // Implement logic to convert SourceEntity to TargetEntity
-       // ...
-       return targetEntities;
-   }
-
-}
-```
-
-solution:
-
-when you want migrate the data paginate and you need config this bean.
-
-```java
-@Bean
-public MybatisPlusInterceptor mybatisPlusInterceptor() {
-   MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-   interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.ORACLE));
-   return interceptor;
-} 
-```
-
-### validated not work in groups 
-
-solution 
-
-1. write check annotation in entity
-2. write @Validated(Group1.class)
-3. write @Valid before the parameter which you wanna check 
-
->  Do not use one more check in one class
-
-<TailProtocal />
