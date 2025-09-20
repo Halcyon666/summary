@@ -3,8 +3,19 @@ import "@docusaurus/theme-search-algolia";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 
-const DefaultLocale = "zh";
-const baseGithubUrl = "https://github.com/Halcyon666/summary/edit/main";
+import fs from "fs";
+import path from "path";
+// 示例：获取 @docusaurus/core 实际安装版本
+function getInstalledVersion(pkgName: string): string {
+  try {
+    const pkgPath = require.resolve(path.join(pkgName, "package.json"));
+    const pkgJson = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
+    return pkgJson.version;
+  } catch (e) {
+    console.error(`Failed to read version for ${pkgName}`, e);
+    return "unknown";
+  }
+}
 
 // @ts-ignore
 const config: Config = {
@@ -35,8 +46,8 @@ const config: Config = {
   // metadata like html lang. For example, if your site is Chinese, you may want
   // to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: "zh",
-    locales: ["zh"],
+    defaultLocale: "zh-Hans",
+    locales: ["zh-Hans"],
   },
 
   markdown: {
@@ -66,7 +77,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl: ({ locale, docPath }) => {
-            return `${baseGithubUrl}/docs/${docPath}`;
+            return `https://github.com/Halcyon666/summary/edit/main/docs/${docPath}`;
           },
         },
         blog: {
@@ -97,7 +108,7 @@ const config: Config = {
       },
     },
     // Replace with your project's social card
-    image: "img/docusaurus-social-card.jpg",
+    image: "img/docusaurus.png",
     colorMode: {
       defaultMode: "light",
       disableSwitch: false,
@@ -207,27 +218,29 @@ const config: Config = {
           ],
         },
       ], */
-      copyright: `Copyright © ${new Date().getFullYear()} Halcyon666 Blog. Built with Docusaurus 3.1.1`,
+      copyright: `Copyright © ${new Date().getFullYear()} Halcyon666 Blog. Built with Docusaurus ${getInstalledVersion(
+        "@docusaurus/core"
+      )}`,
     },
     prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      theme: prismThemes.vsLight,
+      darkTheme: prismThemes.vsDark,
     },
     tableOfContents: {
       minHeadingLevel: 2,
       maxHeadingLevel: 5,
     },
   } satisfies Preset.ThemeConfig,
-  scripts: [
-    // String format.
-    "https://docusaurus.io/script.js",
-    // Object format.
-    // {
-    //   src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4872091594975928",
-    //   async: true,
-    //   crossorigin: "anonymous",
-    // },
-  ],
+  // scripts: [
+  // String format.
+  // "https://docusaurus.io/script.js",
+  // Object format.
+  // {
+  //   src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4872091594975928",
+  //   async: true,
+  //   crossorigin: "anonymous",
+  // },
+  // ],
 };
 
 export default config;
