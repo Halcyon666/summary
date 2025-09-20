@@ -1,7 +1,6 @@
 ---
 title: py replacement
 sidebar_label: py replacement
-sidebar_position: 2
 ---
 
 # 在多个文件中替换多个相应的内容
