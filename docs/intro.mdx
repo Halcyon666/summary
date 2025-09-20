@@ -1,6 +1,8 @@
 # intro
 
-欢迎来到我的博客
+import Hello from '@site/src/components/Hello';
+
+<Hello />
 
 ```jsx live
 function Clock(props) {
@@ -24,6 +26,44 @@ function Clock(props) {
   );
 }
 ```
-import Hello from '@site/src/components/Hello';
 
-<Hello />
+1. Tabs/TabItem 组件实现多标签内容 
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+  <TabItem value="java" label="Java">
+    ```java
+    System.out.println("Hello, Java!");
+    ```
+  </TabItem>
+  <TabItem value="python" label="Python">
+    ```python
+    print("Hello, Python!")
+    ```
+  </TabItem>
+</Tabs>
+
+2. Admonition 提示块
+
+import Admonition from '@theme/Admonition';
+
+<Admonition type="note" title="注意">
+  这是一个提示块，可以用来高亮重要信息。
+</Admonition>
+
+3. CodeBlock 高亮代码块
+
+import CodeBlock from '@theme/CodeBlock';
+
+<CodeBlock language="js" title="hello.js">
+{`console.log("Hello, world!");`}
+</CodeBlock>
+
+4. details 折叠内容
+
+<details>
+  <summary>点击展开详细内容</summary>
+  这里是可折叠的内容，可以放更多说明或代码。
+</details>
