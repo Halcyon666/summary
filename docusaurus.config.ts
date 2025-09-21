@@ -33,7 +33,7 @@ const config: Config = {
   },
 
   title: "halcyon666",
-  tagline: "Enjoy writing, Happy a nice day!",
+  tagline: "Enjoy writing, have a nice day!",
   favicon: "img/favicon.png",
 
   // custom domain config

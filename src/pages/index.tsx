@@ -4,6 +4,7 @@ import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
 import Heading from "@theme/Heading";
+import Hello from "@site/src/components/Hello";
 
 import styles from "./index.module.css";
 
@@ -41,6 +42,8 @@ export default function Home(): JSX.Element {
           alignItems: "center",
         }}
       ></div>
+
+      <Hello />
     </Layout>
   );
 }
