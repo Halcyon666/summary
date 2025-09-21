@@ -1,7 +1,4 @@
----
-title: 史上最全git命令集
-sidebar_label: 史上最全git命令集
----
+# 常用 Git 命令
 
 ## 配置化命令
 
@@ -318,6 +315,73 @@ git rebase feature-x  # 或者 git merge --ff-only feature-x
 
 ⚠️ 如果团队共享 dev，建议使用 merge 以免强制推送
 
+## 碰到问题记录
+
+### 场景在IDEA中PS terminal中使用`git rebase -i`时无法退出
+
+If `rebase -i` , vim exit exceptionally
+
+**Do not close terminal directly,  press `esc` and input `:q!` .**
+
+**The first way**
+
+I understand this is frustrating. Let's try a more comprehensive approach to recover your repository:
+
+1. Let's first check the overall Git status:
+    
+    ```
+    git status
+    
+    ```
+    
+2. If the above command still shows errors, let's try a full reset using ORIG_HEAD:
+    
+    ```
+    git reset --hard ORIG_HEAD
+    
+    ```
+    
+3. If that doesn't work, we can try checking what branches exist:
+    
+    ```
+    git branch -a
+    
+    ```
+    
+4. Then try to get back to your main/master branch:
+    
+    ```
+    git checkout main
+    
+    ```
+    
+    (or `git checkout master` if that's your primary branch name)
+    
+5. If all else fails, we might need a more drastic approach. First, back up any uncommitted changes you care about manually. Then:
+    
+    ```
+    # Create or update a reference to your current HEAD
+    git update-ref HEAD $(git rev-parse HEAD) 2>/dev/null
+    
+    # Clean up all Git temporary files
+    rm -f .git/MERGE_HEAD .git/MERGE_MODE .git/MERGE_MSG
+    rm -rf .git/rebase-merge .git/rebase-apply
+    
+    # Reset the index and working tree
+    git reset --hard
+    
+    ```
+    
+
+If none of these approaches work, please let me know what specific error messages you're seeing now, and we can try a different recovery method.
+
+**the second way**
+
+firstly push the local commit to the remote, even though your broken repository in rebase status.
+
+secondly clone a new copy repository to a different directory, then open with the idea
+
+if idea occurs Cannot resolve symbol ‘xxx’, just Invalidate caches and restart the project, project will run normally.
 
 
 import TailProtocal from "@site/src/components/TailProtocal";
