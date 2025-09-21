@@ -5,7 +5,7 @@ import Hello from '@site/src/components/Hello';
 
 <Hello />
 
-1. React 组件 live code
+## React 组件 live code
 
 ```jsx live
 function Clock(props) {
@@ -30,7 +30,7 @@ function Clock(props) {
 }
 ```
 
-2. Tabs/TabItem 组件实现多标签内容 
+## Tabs/TabItem 组件实现多标签内容 
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -48,7 +48,7 @@ import TabItem from '@theme/TabItem';
   </TabItem>
 </Tabs>
 
-3. Admonition 提示块
+## Admonition 提示块
 
 import Admonition from '@theme/Admonition';
 
@@ -56,7 +56,7 @@ import Admonition from '@theme/Admonition';
   这是一个提示块，可以用来高亮重要信息。
 </Admonition>
 
-4. CodeBlock 高亮代码块
+## CodeBlock 高亮代码块
 
 import CodeBlock from '@theme/CodeBlock';
 
@@ -64,7 +64,7 @@ import CodeBlock from '@theme/CodeBlock';
 {`console.log("Hello, world!");`}
 </CodeBlock>
 
-5. Details 折叠内容
+## Details 折叠内容
 
 <details>
 	<summary>点击展开详细内容</summary>
@@ -72,8 +72,14 @@ import CodeBlock from '@theme/CodeBlock';
 </details>
 
 
-6. 页面申明 
+## 页面申明 
 
 import TailProtocal from "@site/src/components/TailProtocal";
 
 <TailProtocal />
+
+## 支持背景色高亮，字体颜色 
+
+import MyHighlight from "@site/src/components/MyHighLight";
+
+<MyHighlight color="white" background="red">红底白字</MyHighlight>
