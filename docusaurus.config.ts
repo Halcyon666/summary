@@ -19,6 +19,12 @@ function getInstalledVersion(pkgName: string): string {
 
 // @ts-ignore
 const config: Config = {
+  // Docusaurus Faster
+  future: {
+    experimental_faster: true,
+    v4: true,
+  },
+
   title: "halcyon666",
   tagline: "Enjoy writing, Happy a nice day!",
   favicon: "img/favicon.png",

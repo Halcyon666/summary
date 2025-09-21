@@ -18,6 +18,7 @@
     "@ant-design/icons": "^6.0.2",
     "@docsearch/js": "^4.0.1",
     "@docusaurus/core": "^3.8.1",
+    "@docusaurus/faster": "^3.8.1",
     "@docusaurus/preset-classic": "^3.8.1",
     "@docusaurus/theme-live-codeblock": "^3.8.1",
     "@docusaurus/theme-mermaid": "^3.8.1",
