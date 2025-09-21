@@ -317,13 +317,11 @@ git rebase feature-x  # 或者 git merge --ff-only feature-x
 
 ## 碰到问题记录
 
-### 场景在IDEA中PS terminal中使用`git rebase -i`时无法退出
+### 在IDEA中PS Terminal中使用`git rebase -i`时无法退出
 
-If `rebase -i` , vim exit exceptionally
+If `rebase -i` , vim exit exceptionally, **Do not close terminal directly,  press `esc` and input `:q!` .**
 
-**Do not close terminal directly,  press `esc` and input `:q!` .**
-
-**The first way**
+***The first way***
 
 I understand this is frustrating. Let's try a more comprehensive approach to recover your repository:
 
@@ -375,7 +373,7 @@ I understand this is frustrating. Let's try a more comprehensive approach to rec
 
 If none of these approaches work, please let me know what specific error messages you're seeing now, and we can try a different recovery method.
 
-**the second way**
+***the second way***
 
 firstly push the local commit to the remote, even though your broken repository in rebase status.
 
