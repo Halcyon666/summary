@@ -1,0 +1,41 @@
+# windows系统中常用软件
+
+## windows 下使用 dbeaver 连接 mysql调整字体大小
+
+[DBeaver中如何调整SQL编辑器的字体大小](https://www.cnblogs.com/guolaoshi/p/11750723.html)
+
+
+## VS Code中使用`git bash` terminal
+
+在vscode设置界面，搜索`terminal.integrated.profiles.windows`,然后edit in setting.json.
+
+![image-20250921132552404](https://s2.loli.net/2025/09/21/ahpwFIRPrqTKZ9z.png)
+
+在json文件中搜索`terminal.integrated.profiles.windows`,修改`terminal.integrated.profiles.windows`对应的值，并追加一个属性`terminal.integrated.defaultProfile.windows`。
+
+```json
+"terminal.integrated.profiles.windows": {
+  "PowerShell": {
+    "source": "PowerShell",
+    "icon": "terminal-powershell"
+  },
+  "Command Prompt": {
+    "path": [
+      "${env:windir}\\Sysnative\\cmd.exe",
+      "${env:windir}\\System32\\cmd.exe"
+    ],
+    "args": [],
+    "icon": "terminal-cmd"
+  },
+  "Git Bash": {
+    "path": "D:\\software\\Git\\bin\\bash.exe",
+    "icon": "terminal-bash"
+  }
+},
+"terminal.integrated.defaultProfile.windows": "Git Bash"
+
+```
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

@@ -1,11 +1,11 @@
----
-title: Java上传文件
-sidebar_label: Java上传文件
----
+# Java 文件相关
 
-## Controller接口
+## 使用 RestTemplate 上传文件
 
-定义一个可以接收文件的Controller类
+使用 Spring-Boot 时集成 Resttemplate 无需额外导包<br/>
+
+<details>
+    <summary>Controller</summary>
 
 ```java
 package whalefall.filedownloadorup;
@@ -34,12 +34,10 @@ public class Test4HtmlController {
 
 ```
 
-## 使用 Resttemplate 上传文件
+</details>
 
-使用Spring-Boot 时集成Resttemplate 无需额外导包
-
-
-使用 Resttemplate FileSystemResource 单元测试代码
+<details>
+    <summary>使用 Resttemplate FileSystemResource 单元测试代码</summary>
 
 ```java
 package whalefall.filedownloadorup;
@@ -100,6 +98,9 @@ public class TestRestTemplateUpload {
 
 ```
 
+</details>
+
+推荐使用这种
 
 <details>
 	<summary>使用 Resttemplate ByteArrayResource 单元测试代码</summary>
@@ -190,13 +191,12 @@ public class TestRestTemplateUpload2 {
 }
 
 ```
+
 </details>
-
-
 
 ## 使用 HttpClient 上传文件
 
-**导包**
+导包
 
 ```groovy
     implementation 'org.apache.httpcomponents:httpclient:4.5.13'
@@ -225,54 +225,63 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-/**
- * @author Halcyon
- * @since 1.0.0
- */
-public class TestHttpClientUpload1 {
-    // 替换为要发送的Excel文件路径
-    public static final String FILE_PATH = Objects.requireNonNull(TestHttpClientUpload1.class.getResource("/exceltemplet/priceListTemplate.xlsx")).getPath();// 替换为接收文件的服务器URL
-    public static final String UPLOAD_URL = "http://localhost:8080/upload1";
-    private static final Logger logger = LoggerFactory.getLogger(TestHttpClientUpload1.class);
+/\*\*
 
-    @Test
-    public void testHttpClientUpload() {
+- @author Halcyon
+- @since 1.0.0
+  \*/
+  public class TestHttpClientUpload1 {
+  // 替换为要发送的 Excel 文件路径
+  public static final String FILE_PATH = Objects.requireNonNull(TestHttpClientUpload1.class.getResource("/exceltemplet/priceListTemplate.xlsx")).getPath();// 替换为接收文件的服务器 URL
+  public static final String UPLOAD_URL = "http://localhost:8080/upload1";
+  private static final Logger logger = LoggerFactory.getLogger(TestHttpClientUpload1.class);
 
-        File file = new File(FILE_PATH);
+      @Test
+      public void testHttpClientUpload() {
 
-        // 创建CloseableHttpClient实例
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-
-        // 创建HttpPost请求
-        HttpPost httpPost = new HttpPost(UPLOAD_URL);
-
-        // 创建Multipart实体
-        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-        builder.addBinaryBody("file", file, ContentType.APPLICATION_OCTET_STREAM, file.getName());
-
-        // 添加其他参数
-        builder.addTextBody("test", "testHttpClientUpload test");
-
-        // 设置请求实体
-        HttpEntity entity = builder.build();
-        httpPost.setEntity(entity);
-        int statusCode = 500;
-        // 发送HttpPost请求，并获取服务器的响应
-        try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
-            // 获取服务器的响应状态码
-            statusCode = response.getStatusLine().getStatusCode();
-
-            // 在这里可以处理服务器的响应，比如检查是否上传成功等
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-        }
-        Assertions.assertEquals(200, statusCode);
-    }
+          File file = new File(FILE_PATH);
+          // 创建CloseableHttpClient实例
+          CloseableHttpClient httpClient = HttpClients.createDefault();
+          // 创建HttpPost请求
+          HttpPost httpPost = new HttpPost(UPLOAD_URL);
+          // 创建Multipart实体
+          MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+          builder.addBinaryBody("file", file, ContentType.APPLICATION_OCTET_STREAM, file.getName());
+          // 添加其他参数
+          builder.addTextBody("test", "testHttpClientUpload test");
+          // 设置请求实体
+          HttpEntity entity = builder.build();
+          httpPost.setEntity(entity);
+          int statusCode = 500;
+          // 发送HttpPost请求，并获取服务器的响应
+          try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+              // 获取服务器的响应状态码
+              statusCode = response.getStatusLine().getStatusCode();
+              // 在这里可以处理服务器的响应，比如检查是否上传成功等
+          } catch (IOException e) {
+              logger.error(e.getMessage(), e);
+          }
+          Assertions.assertEquals(200, statusCode);
+      }
 
 }
+
 ```
+
 </details>
 
+## 使用 Vfs2 上传文件报错
+
+报错方法：org.apache.commons.vfs2.impl.StandardFileSystemManager#init
+
+部署环境报错：<br />
+Failed Could not load VFS configuration from
+"jar:file:/opt/deployments/BOOT-INF/lib/commons-vfs2-2.9.0.jar!/org/apache/commons/vfs2/impl/providers.xml".
+
+本地调试报错: <br />
+Connection timed out: connect
+
+已经验证，确实是网络连通性造成的这个报错。
 
 import TailProtocal from "@site/src/components/TailProtocal";
 

@@ -90,6 +90,33 @@ public class SampleTest {
 usersMapper.selectOne(new QueryWrapper<JwtUserPO>().lambda().apply("USERNAME = {0,jdbcType=CHAR,typeHandler=" + TrimmedStringTypeHandler.class.getCanonicalName() + "}", username));
 ```
 
+## 使用自定义多数据源
+<p>
+在自定义多数据源场景中，tomcat连接池想全既有共用配置，又特有配置，不可实现。<br/>
+因为tomcat org.apache.tomcat.jdbc.pool.PoolProperties有些字段有默认值，<br/>
+当进行覆盖时，不知道特有对像中是特有值，还是默认值，无法进行精确覆盖。
+</p>
+
+<p>数据库多数据源的，必须被Primary标记，继承`AbstractRoutingDataSource`</p>
+
+<p>不要试图从已经配置好的tomcat连接池数据源中获取数据库密码。可以直接拿之前配置好的datasource，或则从自定义配置里面取</p>
+
+## 打印tomcat数据库密码
+
+```java {3}
+@SuppressWarnings("all")
+public void printTomcatDataSourceCredentials(DataSource ds) {
+    if (ds instanceof org.apache.tomcat.jdbc.pool.DataSource) {
+        org.apache.tomcat.jdbc.pool.DataSource dataSource = (org.apache.tomcat.jdbc.pool.DataSource) ds;
+        PoolConfiguration config = dataSource.getPoolProperties();
+        String username = config.getUsername();
+        String password = config.getPassword(); // ⚠️调试用
+
+        log.info("✅ 数据源用户名: {}", username);
+        log.info("✅ 数据源密码: {}", password != null ? password : "(null)");
+    }
+}
+```
 
 import TailProtocal from "@site/src/components/TailProtocal";
 

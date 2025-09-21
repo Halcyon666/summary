@@ -1,16 +1,12 @@
----
-title: shell基础命令
-sidebar_label: shell基础命令
----
+# shell基础命令
 
-## 常用shell 命令整理
+## 快速写入文件
 
-### 快速写入文件
 1. 方法一
 ```shell script
-	cat > a.txt << 'EOF'
-	afasdf
-	EOF
+cat > a.txt << 'EOF'
+afasdf
+EOF
 ```
 
 2. 方法二
@@ -21,7 +17,7 @@ tee a.txt <<- 'EOF'
 	EOF	
 ```
 
-### linux系统 定时同步网络时间
+## linux系统 定时同步网络时间
 
 [参考文章](https://www.cnblogs.com/jichuang/p/13542177.html)
 
@@ -58,40 +54,237 @@ ntpdate 3.asia.pool.ntp.org
 | Day of week  | 是       | 0–7 or SUN–SAT  | `*``,``-``?``L``#` | `?``L``#`只有部分软件实现了 Linux和Spring的允许值为0-7，0和7为周日 Quartz的允许值为1-7，1为周日 |
 | Year         | 否       | 1970–2099       | `*``,``-`          | 标准实现不支持此字段。                                       |
 
-### vmware 设置网络
+## vmware 设置网络
 
 注意最好使用 vmware 15, vmware 16的版本网络好像有问题。
 
 ![image-20211216221256892](https://s2.loli.net/2023/07/15/FPTm7eqMnoli6Yr.png)
 
-
-
 ![image-20211216221335326](https://s2.loli.net/2023/07/15/OpiwWHFrGackYZL.png)
 
-### 查询当前文件夹总大小
+## 查询当前文件夹总大小
 
-`du -sh ./`
+```sehll
+du -sh ./
+```
 
-### 查询当前目录结构前n级目录树
-
-
+## 查询当前目录结构前n级目录树
 
 显示 第一级目录 `for /d %i in (*) do @echo %i`
 
-
-
-![image-20240525230752153](https://s2.loli.net/2024/05/25/cVOMKZuHvI4RfiQ.png)
-
-### 安装 lrzsz
+## 安装 lrzsz
 
 `yum install -y lrzsz`
 
 sz 下载 rz 上传
 
-### linux关闭java进程
+## linux关闭java进程
 
 `kill -9 $(ps -ef | grep -w "xxx-1.0.jar" |  grep -v "grep" | awk '{print $2}')`
 
+
+## grep命令
+
+### 1️⃣ 基本命令
+
+```
+grep [options] PATTERN FILE
+```
+
+- 搜索文件中包含 `PATTERN` 的行
+- 常用选项：
+  - `-i` → 忽略大小写
+  - `-v` → 反向匹配（不包含 PATTERN 的行）
+  - `-n` → 显示行号
+  - `-r` / `-R` → 递归搜索目录
+  - `-E` → 启用 **扩展正则表达式**（ERE）
+
+------
+
+### 2️⃣ 基本示例
+
+2.1 匹配关键字
+
+```
+grep "error" logfile.txt
+```
+
+匹配包含 `"error"` 的行
+
+------
+
+2.2 忽略大小写
+
+```
+grep -i "error" logfile.txt
+```
+
+匹配 `"error"`、`"Error"`、`"ERROR"` 等
+
+------
+
+2.3 显示行号
+
+```
+grep -n "error" logfile.txt
+```
+
+输出行号 + 行内容
+
+------
+
+2.4 反向匹配
+
+```shell
+# 输出**不包含 `error`** 的行
+grep -v "error" logfile.txt
+# 包含a不含b的行记录
+awk '/a/ && !/b/' logfile.txt
+grep "a" logfile.txt | grep -v "b"
+```
+
+------
+
+2.5 递归搜索目录
+
+```
+grep -r "TODO" ./src
+```
+
+搜索 `src` 目录及子目录的所有文件
+
+------
+
+### 3️⃣ `grep -E` 扩展正则
+
+- 支持更强大的正则语法：
+  - `|` → 或
+  - `+` → 前一个字符 1 次或多次
+  - `?` → 前一个字符 0 次或 1 次
+  - `()` → 分组
+- 无需像普通 grep 那样使用反斜杠转义
+
+------
+
+3.1 匹配多个关键字
+
+```
+grep -E "error|fail|fatal" logfile.txt
+```
+
+匹配 `"error"`、`"fail"` 或 `"fatal"`
+
+------
+
+3.2 匹配重复字符
+
+```
+echo -e "aaa\naa\nb" | grep -E "a+"
+```
+
+匹配 1 个或以上连续 `a`
+ 输出：
+
+```
+aaa
+aa
+```
+
+------
+
+3.3 可选字符
+
+```
+echo -e "color\ncolour" | grep -E "colou?r"
+```
+
+`u?` → `u` 可出现 0 或 1 次
+ 输出：
+
+```
+color
+colour
+```
+
+------
+
+3.4 分组匹配
+
+```
+echo -e "cat\nbat\nrat" | grep -E "(c|b)at"
+```
+
+匹配 `"cat"` 或 `"bat"`
+ 输出：
+
+```
+cat
+bat
+```
+
+------
+
+3.5 行号 + 忽略大小写
+
+```
+grep -Eni "error|fail" logfile.txt
+```
+
+- `-n` → 行号
+- `-i` → 忽略大小写
+- `-E` → 扩展正则
+
+------
+
+3.6 复杂示例
+
+```
+grep -E '(error|fail|fatal) [0-9]{3}' logfile.txt
+```
+
+解析：
+
+- `(error|fail|fatal)` → 匹配 `error`、`fail` 或 `fatal`
+- ` ` → 空格
+- `[0-9]{3}` → 匹配 **三位数字**
+- 输出整行匹配内容
+
+------
+
+### 4️⃣ 匹配 pip list 示例（结合扩展正则）
+
+假设你有 Python 包列表：
+
+```
+pip list | grep -E "sentence"
+# 输出：
+# sentence-transformers                    5.1.0
+```
+
+如果想匹配 `sentence-transformers`，用 `.*` 通配：
+
+```
+pip list | grep -E "sentence.*transformers"
+```
+
+------
+
+### 5️⃣ 小技巧
+
+1. 模式用单引号 `'...'` 包裹，避免 shell 转义
+2. 匹配整个单词：`\bpattern\b`
+3. 匹配数字：`[0-9]+`
+4. 匹配任意字符：`.`
+5. 匹配重复字符：`+` / `{n,m}`
+
+------
+
+✅ **总结**
+
+- `grep` → 基础搜索
+- `grep -E` → 扩展正则，支持 `|`, `+`, `?`, `()`
+- 可组合选项：`-i`, `-v`, `-n`, `-r`
+- 常用技巧：单引号包裹、`.*` 通配、`[- ]` 匹配多种分隔
 
 import TailProtocal from "@site/src/components/TailProtocal";
 

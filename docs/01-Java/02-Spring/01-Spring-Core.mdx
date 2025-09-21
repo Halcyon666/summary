@@ -1,12 +1,18 @@
----
-title: Spring Core
-sidebar_label: Spring Core
----
- ## 在生命周期长的Bean中指定一个短的
+# Spring Core
+
+## 在生命周期长的Bean中指定一个短的
 
  1. xml配置方式
 
- `proxy-target-class` `default=true`使用CGlib进行代理; `default=false` 时使用JDK动态代理;
+proxy-target-class=true：强制使用 CGLib 代理
+
+proxy-target-class=false：Spring 会根据情况自动选择代理方式.
+
+import MyHighlight from "@site/src/components/MyHighLight";
+
+<MyHighlight color="yellow">两种代理方式的区别：</MyHighlight><br/>
+<MyHighlight color="yellow">JDK 动态代理：只能代理实现了接口的类,基于接口创建代理对象,性能较好，但有接口限制</MyHighlight><br/>
+<MyHighlight color="yellow">CGLib 代理：可以代理没有接口的类,通过继承目标类创建代理对象,功能更强大，但性能相对较低</MyHighlight>
 
 <details>
 	<summary>xml配置</summary>

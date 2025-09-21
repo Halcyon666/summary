@@ -1,9 +1,9 @@
----
-title: 设计模式
-sidebar_label: 设计模式
----
+# 设计模式
 
 ## 异常处理 方法
+
+<details>
+	<summary>全局异常处理类ExceptionHandlingController</summary>
 ```java
 package com.whalefall.learncases.exception;
 
@@ -49,12 +49,14 @@ public class ExceptionHandlingController {
     }
 
 }
-
 ```
+</details>
+
 
 ## 基于接口设计
 
-1. 接口类
+<details>
+    <summary>接口类</summary>
 ```java
 package com.whalefall.learncases.design;
 
@@ -73,8 +75,10 @@ public interface IService {
 }
 
 ```
+</details>
 
-2. 接口实现类
+<details>
+    <summary>接口实现类</summary>
 ```java
 package com.whalefall.learncases.design;
 
@@ -114,12 +118,14 @@ public class AService implements IService {
     }
 }
 ```
+</details>
 
-3. 核心流程封装 
-> 可以使用单例设计模式 
-- 方法1单例设计模式
+核心流程封装<br/>
+1. 单例模板设计模式
 
-```java 
+<details>
+    <summary>单例模板设计模式</summary>
+```java
 package com.whalefall.learncases.design;
 
 import lombok.extern.slf4j.Slf4j;
@@ -181,10 +187,12 @@ public class SProcessService {
 }
 
 ```
+</details>
 
-- 方法2 注入容器中
+2. 注入容器中
 
-
+<details>
+    <summary>注入容器中</summary>
 ```java
 package com.whalefall.learncases.design;
 
@@ -237,12 +245,12 @@ public class ProcessService {
     }
 }
 
-
 ```
+</details>
 
-4. 调用案例
 
-
+<details>
+    <summary>调用类</summary>
 ```java
 
 package com.whalefall.learncases.design;
@@ -274,12 +282,36 @@ public class ControllerA {
     }
 }
 ```
+</details>
 
 [完整代码](https://github.com/Halcyon666/learn-cases/tree/main/learncases/src/main/java/com/whalefall/learncases/design)
 
 ## DDD
 
 实体对象不能直接赋值，领域对象不能直接new出来，应该使用工厂方法，建造者模式来实现。
+
+## Jar file FunctionalInterface can be extended by user implement class
+
+```java showLineNumbers title="FunctionalInterface.java"
+    @Resource
+    private Custom customImpl;
+
+    /**
+     * 在Jar包中定义{@link FunctionalInterface}<br/>
+     * 当然Jar中的使用类是实现ApplicationContextAware,然后拿到对应用注入对象，接着写好函数在哪里触发<br/>
+     * 用户定义实现类，并注入到容器中。<br/>
+     * @param str function入参
+     */
+    public void custom(String str) {
+        // highlight-next-line
+        // highlight-start
+        Consumer<Custom> consumer = custom -> custom.custom(str);
+        consumer.accept(customImpl);
+        // highlight-end
+    }
+```
+
+[Jar file FunctionalInterface can be extended by user implement class](https://github.com/Halcyon666/learn-cases/commit/d0cfaf64166eb7b84361238180577b4847702d84)
 
 
 
