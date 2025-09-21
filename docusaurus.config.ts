@@ -19,9 +19,16 @@ function getInstalledVersion(pkgName: string): string {
 
 // @ts-ignore
 const config: Config = {
-  // Docusaurus Faster
+  // Docusaurus Faster https://docusaurus.io/blog/releases/3.6#adoption-strategy
   future: {
-    experimental_faster: true,
+    experimental_faster: {
+      swcJsLoader: true,
+      swcJsMinimizer: true,
+      swcHtmlMinimizer: true,
+      lightningCssMinimizer: true,
+      rspackBundler: true,
+      mdxCrossCompilerCache: true,
+    },
     v4: true,
   },
 
