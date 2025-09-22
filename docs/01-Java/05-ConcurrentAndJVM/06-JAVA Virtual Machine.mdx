@@ -1,9 +1,9 @@
----
-title: JAVA虚拟机
-sidebar_label: JAVA虚拟机
----
+# JAVA虚拟机
+
 
 ## 类加载过程
+
+![20250922223849](https://s2.loli.net/2025/09/22/EN7Pan6oDrVgqXh.png)
 
 ### 加载
 
@@ -168,11 +168,28 @@ G1(将整个堆划分为一个个小块，1-32M,RememberSet指向块的内存地
 <center>G1垃圾收集过程图</center>
 
 
-> 参考文献
-> ^1 周志明 《深入理解JAVA虚拟机》 第二版
-> TIPS: 转载必须注明原文地址 和 引用参考文献部分
-> `</init>` `</clinit>`
+## 内存区域
 
+### String类型
+
+- 所有通过字面量（如 `"hello"`）创建的字符串会被放入字符串常量池中，以便复用。`String hello = "hello";`
+- 但是这样是在堆中创建新的对象 `String hello1 = new String(”hello”);`
+- 所以这`hello` 和 `hello1`的是不同引用
+
+### 其它类型
+
+- **`Integer`** 缓存 `-128` 到 `127` 范围内的整数。
+- **`Character`** 缓存常用字符（通常是 `\u0000` 到 `\u007F`）。
+- **`Long`**, **`Short`**, **`Byte`** 等也会缓存小范围的数值 `-128` 到 `127`。
+- **`Boolean`** 缓存 `Boolean.TRUE` 和 `Boolean.FALSE`。
+
+> `\u0000` 到 `\u007F`通常用于表示基本的控制字符、数字、字母和一些常见符号
+>
+
+
+:::info
+ 周志明 《深入理解JAVA虚拟机》 第二版
+:::
 
 
 import TailProtocal from "@site/src/components/TailProtocal";

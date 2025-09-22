@@ -88,3 +88,48 @@ export LC_ALL="zh_CN.UTF-8"
 boolean 改为Boolean值，某些场景（netty 不响应请求)会有问题。
 
 处理：给Boolean类赋值false
+
+### jackson序列化问题
+
+错误信息:
+```java
+Java 8 date/time type java.time.LocalDateTime not supported by default:
+add Module "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" to enable
+handling (through reference chain: java.util.ArrayList[0]->xxx.xxx.xxx.xxx.XxxxPo["updatetime"])
+```
+
+先排查是哪里报的
+
+1. 如果是可扩展Spring Boot的：直接扩展`ObjectMapper`
+```java
+@Configuration
+public class JacksonConfig implements WebMvcConfigurer {
+    @Override
+    public void extendMessageConverters(final List<HttpMessageConverter<?>> converters) {
+        MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        objectMapper.registerModule(new JavaTimeModule());
+        messageConverter.setObjectMapper(objectMapper);
+        converters.add(0, messageConverter);
+    }
+}
+```
+
+2. 如果无法扩展，考虑跳过`Bean`序列化步骤，比如用其实转化Bean为Map的方法
+3. 实在没有办法，改用`Fastjson`或者`Gjson`
+
+## 数据库连接池配置问题
+
+使用Druid 连接池时, 配置参数 `validationInterval`必须小于 `timeBetweenEvictionRunMillis`, 保证数据库连接一直是可用的。
+
+## API接口规范
+- 查询数据量、
+- 入参参数检查、
+- 响应报文中大整数，浮点数字段使用字符串类型
+- 入参类型不为基本类型
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

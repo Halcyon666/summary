@@ -103,6 +103,14 @@ logback配置
 
 ---
 
+## 单元测试问题
+
+同一个类中单元测试方法之间相关影响，very调用次数本来是一次，前面的一个测试方法会影响后面的方法，需要在单元测试类上面加这个。
+
+```java
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METH
+```
+
 
 import TailProtocal from "@site/src/components/TailProtocal";
 
