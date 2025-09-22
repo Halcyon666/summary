@@ -272,16 +272,33 @@ import java.util.Objects;
 
 ## 使用 Vfs2 上传文件报错
 
+### Could not load VFS configuration from
 报错方法：org.apache.commons.vfs2.impl.StandardFileSystemManager#init
 
 部署环境报错：<br />
-Failed Could not load VFS configuration from
+```
+Could not load VFS configuration from
 "jar:file:/opt/deployments/BOOT-INF/lib/commons-vfs2-2.9.0.jar!/org/apache/commons/vfs2/impl/providers.xml".
+```
 
 本地调试报错: <br />
 Connection timed out: connect
 
 已经验证，确实是网络连通性造成的这个报错。
+
+### could not find file object
+
+when use vfs2 upload file both in windows and linux , you must use `/` instead of `\`,  otherwise it  may occur errors.
+
+## read resource file
+
+Read from `resource/a/a.properties`, here are  two scenes，`FileInputStream` Api can be used.
+
+read from local project, just use file path of `a/a.properties`
+
+just use `/BOOT-INF/classe/a/a.properties`, may be another path, you need to use of which your `application.yml`  located.
+
+
 
 import TailProtocal from "@site/src/components/TailProtocal";
 

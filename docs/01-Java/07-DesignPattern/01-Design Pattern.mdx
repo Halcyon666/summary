@@ -290,6 +290,28 @@ public class ControllerA {
 
 实体对象不能直接赋值，领域对象不能直接new出来，应该使用工厂方法，建造者模式来实现。
 
+应用层职责：
+- 基本数据验证
+- 数据转化
+- 安全认证
+- 权限校验
+- 事务控制
+- 消息发送
+
+原则：
+1. 如果不好拆分，可以先将代码写到appliaiton service
+2. 如果无法确认是实体还是值对象，可以先按实体来处理，
+3. 实体（有唯一标识、状态可变，有生命周期）
+4. 值对象（地址、金额、度量、日期、时间、颜色、交易快照）
+5. 实体不要依赖Spring容器
+
+领域对象关系处理
+1. 组合、聚合关系：一个包含另一个；每个对象是一个整体
+2. 关联关系：非组合、聚合的关联关系
+3. 泛化关系：继承
+
+SupportImpl中只能报出业务异常
+
 ## Jar file FunctionalInterface can be extended by user implement class
 
 ```java showLineNumbers title="FunctionalInterface.java"

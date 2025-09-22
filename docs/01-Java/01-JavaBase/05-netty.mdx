@@ -1,0 +1,25 @@
+# netty 
+
+## 源码分析：为什么要先设置 newCtx 的 prev 和 next，再把它加到链表里？
+
+![20250922233019](https://s2.loli.net/2025/09/22/NmiBwZOqyFnj3KQ.png)
+
+![20250922233035](https://s2.loli.net/2025/09/22/bi6RxrGKVFOldJT.png)
+
+`io.netty.channel.DefaultChannelPipeline#addLast0`
+
+You're **modifying the linked list pointers** to include `newCtx` **before** fully initializing its `prev` and `next`. <br/>
+If anything (like another thread or debugging breakpoint) tries to traverse the list at this point — `newCtx` is in the chain, 
+but not fully initialized yet. That could lead to nulls or broken state during traversal.
+
+While **your order may work in some cases**, it is **unsafe and not recommended**.
+
+:::warning
+❗ The safe pattern is always:
+- ***Initialize the new node's pointers***
+- ***Then hook it into the list***
+:::
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

@@ -1,0 +1,56 @@
+# Java类描述
+
+## 重载和重写
+
+重载：同一个类，方法名相同，其它部分不同
+
+重写：父子类，方法名相同，（一同两小一大）相同参数列表，返回值、异常类型，修饰符
+
+## 接口和抽象类
+
+| 特性 | 抽象类 | 接口 |
+| --- | --- | --- |
+| **继承** | 只能继承一个抽象类 | 可以实现多个接口 |
+| **方法实现** | 可以有已实现的方法和抽象方法 | 方法默认是抽象的，可以有默认方法和静态方法 |
+| **成员变量** | 可以有实例变量和静态变量 | 只能有常量（`public static final`） |
+| **构造方法** | 可以有构造方法 | 不能有构造方法 |
+| **访问修饰符** | 可以有多种访问修饰符 | 方法默认是 `public` *（Java 9 引入 private)* |
+| **使用场景** | 适合共享代码，提供基础实现 | 适合表示行为规范，支持多实现 |
+
+- 代码来自： https://www.cnblogs.com/zimug/p/13806592.html
+
+<details>
+<summary>Java 8 接口新特性</summary>
+```java title="CustomInterface.java"
+
+interface CustomInterface {
+
+    void abstractMethod();  //抽象方法不能是私有的
+
+    static void staticMethod() {
+        privateStaticMethod(); //public静态方法可以调用private静态方法
+        System.out.println("静态方法被调用");
+    }
+
+    default void defaultMethod() {
+        privateMethod(); //可以调用接口中的私有方法
+        privateStaticMethod(); //可以调用接口中的私有静态方法
+        System.out.println("普通方法被调用");
+    }
+
+    // this only can use java 9 or later version
+    private void privateMethod() {
+        System.out.println("private私有方法被调用");
+    }
+
+    // this only can use java 9 or later version
+    private static void privateStaticMethod() {
+        System.out.println("private私有静态方法被调用");
+    }
+}
+```
+</details>
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

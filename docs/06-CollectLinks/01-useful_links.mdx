@@ -36,55 +36,19 @@ multiple deployment modes (SDK, Sidecar, and Agent)
 
 [@ConditionalOnProperty](https://blog.csdn.net/winterking3/article/details/114822929)
 
+[系统开了代理之后，pip 安装不了 package](https://blog.csdn.net/2301_78292787/article/details/147771426)
+
 ## 深入理解Apache Dubbo与实战
 
 - 第三章
 FailbackRegistry又继承了 AbstractRegistry,重写了父类的注册、订阅、查询和通知等 方法，并且添加了重试机制。此外，还添加了四个未实现的抽象模板方法。
 
-虽然每种注册中心都有自己具体的工厂类，但是在什么地方判断，应该调用哪个工厂类实 现呢?代码中并没有看到显式的判断。答案就在RegistryFactory接口中，该接口里有一个 Registry getRegistry(URL url)方法，该方法上有@Adaptive({"protocol"})注解。
+虽然每种注册中心都有自己具体的工厂类，但是在什么地方判断，应该调用哪个工厂类实 现呢?代码中并没有看到显式的判断。<br/>
+答案就在RegistryFactory接口中，该接口里有一个 Registry getRegistry(URL url)方法，该方法上有@Adaptive({"protocol"})注解。
 
 Dubbo良好的扩展性与两个方面是密不可分的，一是整个框架中针对不同的场景，恰到好 处地使用了各种设计模式，二就是本章要介绍的加载机制。
 
 
-
-## mermaid示例
-
-> [this code from](https://juejin.cn/post/7038144693867118629)
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
-# Mermaid in tabs
-  
-<!-- [start] add this to avoid the possible bug. Note: the empty line before [```] is necessary -->
-```mermaid
-flowchart TD
-
-```
-<!-- [end] add this to avoid the possible bug -->
-
-
-<Tabs>
-<TabItem value="tab-a">
-
-```mermaid
-graph LR
-  a ---> c(10)
-  b ---> c(10)
-```
-
-</TabItem>
-
-<TabItem value="tab-b">
-
-```mermaid
-graph LR
-  d ---> z(42)
-  e ---> z(42)
-```
-
-</TabItem>
-</Tabs>
 
 
 import TailProtocal from "@site/src/components/TailProtocal";
