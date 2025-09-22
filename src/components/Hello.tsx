@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useColorMode } from "@docusaurus/theme-common";
 
+// ============================
+// 类型定义
+// ============================
 interface HitokotoResponse {
   id: number;
   uuid: string;
@@ -16,45 +19,70 @@ interface HitokotoResponse {
   length: number;
 }
 
-export default function Hello() {
+// ============================
+// 自定义 Hook：管理一言数据
+// ============================
+function useHitokoto() {
   const [quote, setQuote] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
   const [source, setSource] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
-  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [error, setError] = useState<string>("");
 
-  // 获取当前主题模式
-  const { colorMode } = useColorMode();
-  const isDark = colorMode === "dark";
+  const fetchQuote = useCallback(async () => {
+    try {
+      setStatus("loading");
+      setError("");
 
-  // 主题样式配置
-  const themeStyles = {
+      const response = await fetch(
+        "https://v1.hitokoto.cn/?c=a&c=b&c=c&c=d&c=e&c=f&c=g&c=h&c=i&c=j&c=k&c=l"
+      );
+
+      if (!response.ok) {
+        throw new Error("获取失败");
+      }
+
+      const data: HitokotoResponse = await response.json();
+      setQuote(data.hitokoto);
+      setSource(data.from);
+      setAuthor(data.from_who || "");
+      setStatus("success");
+    } catch (err) {
+      console.error("Error fetching quote:", err);
+      setError("获取每日一言失败，请稍后重试");
+      setStatus("error");
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchQuote();
+  }, [fetchQuote]);
+
+  return { quote, author, source, status, error, fetchQuote };
+}
+
+// ============================
+// 样式生成函数
+// ============================
+function useThemeStyles(isDark: boolean) {
+  return {
     container: {
       textAlign: "center" as const,
-      padding: "0",
-      margin: "0",
-      width: "100%",
       color: isDark ? "#ffffff" : "#333333",
       backgroundColor: isDark ? "#1b1b1d" : "#ffffff",
+      width: "100%",
     },
     card: {
-      maxWidth: "100%",
       width: "100%",
-      margin: "0",
       padding: "40px 20px",
       backgroundColor: isDark ? "#2f3136" : "#f8f9fa",
-      borderRadius: "0",
-      boxShadow: "none",
-      border: "none",
-      minHeight: "60px",
       display: "flex",
       flexDirection: "column" as const,
-      justifyContent: "center",
       alignItems: "center",
     },
     title: {
-      color: isDark ? "#ffffff" : "#333333",
       marginBottom: "15px",
     },
     quote: {
@@ -85,17 +113,12 @@ export default function Hello() {
       cursor: "pointer",
       fontSize: "14px",
       transition: "background-color 0.2s ease",
-      opacity: refreshing ? 0.6 : 1,
-      pointerEvents: refreshing ? ("none" as const) : ("auto" as const),
-    },
-    buttonHover: {
-      backgroundColor: isDark ? "#4752c4" : "#005fa3",
     },
     errorBox: {
       color: isDark ? "#ff6b6b" : "#d73a49",
       margin: "20px 0",
       padding: "10px",
-      border: isDark ? "1px solid #ff6b6b" : "1px solid #ff6b6b",
+      border: "1px solid #ff6b6b",
       borderRadius: "5px",
       backgroundColor: isDark ? "#3c2c2c" : "#ffe0e0",
     },
@@ -104,102 +127,46 @@ export default function Hello() {
       fontStyle: "italic" as const,
     },
   };
+}
 
-  const fetchQuote = async () => {
-    try {
-      setError("");
+// ============================
+// 主组件
+// ============================
+export default function Hello() {
+  const { colorMode } = useColorMode();
+  const isDark = colorMode === "dark";
+  const styles = useThemeStyles(isDark);
 
-      // 使用一言API
-      const response = await fetch(
-        "https://v1.hitokoto.cn/?c=a&c=b&c=c&c=d&c=e&c=f&c=g&c=h&c=i&c=j&c=k&c=l"
-      );
-
-      if (!response.ok) {
-        throw new Error("获取名言失败");
-      }
-
-      const data: HitokotoResponse = await response.json();
-
-      setQuote(data.hitokoto);
-      setSource(data.from);
-      setAuthor(data.from_who || "");
-    } catch (err) {
-      setError("获取每日一言失败，请稍后重试");
-      console.error("Error fetching quote:", err);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchQuote();
-  }, []);
-
-  const handleRefresh = () => {
-    setRefreshing(true);
-    fetchQuote();
-  };
-
-  // 初次加载时显示简单的加载状态
-  if (loading) {
-    return (
-      <div style={themeStyles.container}>
-        <div style={themeStyles.card}>
-          <h3 style={themeStyles.title}>每日一言</h3>
-          <div style={themeStyles.quote}>
-            <span style={themeStyles.loadingText}>正在获取每日一言...</span>
-          </div>
-          <div style={themeStyles.attribution}></div>
-          <button
-            style={{
-              ...themeStyles.button,
-              opacity: 0.6,
-              pointerEvents: "none",
-            }}
-          >
-            换一句
-          </button>
-        </div>
-      </div>
-    );
-  }
+  const { quote, author, source, status, error, fetchQuote } = useHitokoto();
 
   return (
-    <div style={themeStyles.container}>
-      <div style={themeStyles.card}>
-        <h3 style={themeStyles.title}>每日一言</h3>
+    <div style={styles.container}>
+      <div style={styles.card}>
+        <h3 style={styles.title}>每日一言</h3>
 
-        <div style={themeStyles.quote}>
-          {refreshing ? (
-            <span style={themeStyles.loadingText}>正在获取新的一言...</span>
-          ) : error ? (
-            <div style={themeStyles.errorBox}>{error}</div>
-          ) : (
-            <span>"{quote}"</span>
+        <div style={styles.quote}>
+          {status === "loading" && (
+            <span style={styles.loadingText}>正在获取...</span>
+          )}
+          {status === "error" && <div style={styles.errorBox}>{error}</div>}
+          {status === "success" && <span>"{quote}"</span>}
+        </div>
+
+        <div style={styles.attribution}>
+          {status === "success" && (
+            <>
+              {author && <span>—— {author} </span>}
+              {source && <span>《{source}》</span>}
+            </>
           )}
         </div>
 
-        <div style={themeStyles.attribution}>
-          {!refreshing && !error && author && <span>—— {author} </span>}
-          {!refreshing && !error && source && <span>《{source}》</span>}
-        </div>
-
         <button
-          onClick={handleRefresh}
-          style={themeStyles.button}
-          onMouseOver={(e) => {
-            if (!refreshing) {
-              (e.target as HTMLButtonElement).style.backgroundColor =
-                themeStyles.buttonHover.backgroundColor;
-            }
-          }}
-          onMouseOut={(e) => {
-            (e.target as HTMLButtonElement).style.backgroundColor =
-              themeStyles.button.backgroundColor;
-          }}
+          style={styles.button}
+          disabled={status === "loading"}
+          onClick={fetchQuote}
         >
-          {refreshing ? "获取中..." : "换一句"}
+          {status === "loading" ? "获取中..." : "换一句"}
         </button>
       </div>
     </div>
