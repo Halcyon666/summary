@@ -238,7 +238,7 @@ const config: Config = {
           ],
         },
       ], */
-      copyright: `Copyright © ${new Date().getFullYear()} Halcyon666 Blog. Built with Docusaurus ${getInstalledVersion(
+      copyright: `Copyright © ${new Date().getFullYear()} Halcyon666 Built with Docusaurus ${getInstalledVersion(
         "@docusaurus/core"
       )}`,
     },
