@@ -263,7 +263,7 @@ git fetch origin main:main --progress --prune
 git pull -r origin main
 
 git fetch origin 
-git pull 
+git rebase origin/main
 
 git pull -r
 
@@ -322,6 +322,12 @@ git rebase feature-x  # 或者 git merge --ff-only feature-x
 import MyHighlight from "@site/src/components/MyHighLight";
 
 `git rebase -i` 强制要求必须使用<MyHighlight color="white" background="red">git rebase</MyHighlight> 来执行。
+
+按i进入编辑模式之后，如果esc无法退出，请使用ctr+c, :q!
+
+:::tip
+IDEA Ultimate 2021.3.1有出现过问题
+:::
 
 ***The first way***
 
