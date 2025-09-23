@@ -30,7 +30,9 @@
     "docusaurus-plugin-image-zoom": "^3.0.1",
     "prism-react-renderer": "^2.4.1",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "rehype-katex": "7",
+    "remark-math": "6"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.8.1",

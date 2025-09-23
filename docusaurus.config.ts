@@ -2,6 +2,8 @@ import { themes as prismThemes } from "prism-react-renderer";
 import "@docusaurus/theme-search-algolia";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 
 import fs from "fs";
 import path from "path";
@@ -83,6 +85,8 @@ const config: Config = {
           filename: "sitemap.xml",
         },
         docs: {
+          remarkPlugins: [remarkMath],
+          rehypePlugins: [rehypeKatex],
           showLastUpdateTime: true,
           showLastUpdateAuthor: true,
           // put the docs to the rott directory
@@ -99,6 +103,16 @@ const config: Config = {
         },
       } satisfies Preset.Options,
     ],
+  ],
+
+  stylesheets: [
+    {
+      href: "https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css",
+      type: "text/css",
+      integrity:
+        "sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM",
+      crossorigin: "anonymous",
+    },
   ],
 
   themeConfig: {
