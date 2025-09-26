@@ -88,6 +88,57 @@ import MyHighlight from "@site/src/components/MyHighLight";
  }
  ```
 
+ ## static @Bean
+
+
+<details>
+    <summary>static @Bean 示例</summary>
+```java
+@Configuration
+public class InfraConfig {
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Bean
+    public static MyService myService(Dependency dep) {
+        // 通过方法参数注入
+        return new MyService(dep);
+    }
+}
+```
+</details>
+
+import MyHighLight from '@site/src/components/MyHighLight';
+
+
+特点：
+- 方法不依赖配置类实例，可以在配置类实例化之前，被调用。
+- <MyHighLight color="red">不能使用配置类字段注入</MyHighLight>。
+- 默认仍是<MyHighLight color="red">单例</MyHighLight>，Spring会缓存对象，下次获取直接复用。
+- 静态方法减少CGLIB开销。
+- 只能使用构造方法或者`ApplicationContext.getBean(...)`来获取。
+
+:::tip
+适用场景：
+早基础设施Bean 如PropetySourcePlaceholerConfigurer<br/>
+避免循环依赖<br/>
+轻量初始化 不使用CBLIB，不依赖配置类字段
+:::
+
+| 特性          | 普通 @Bean          | static @Bean           |
+| ----------- | ----------------- | ---------------------- |
+| 配置类依赖       | 依赖实例化后的配置类字段      | 不依赖配置类实例               |
+| 可用字段注入      | ✅ 可以              | ❌ 不可以                  |
+| 调用时机        | 配置类实例化后           | 配置类实例化前                |
+| Spring 单例缓存 | ✅ 单例              | ✅ 单例                   |
+| 适用场景        | 业务 Bean、普通依赖 Bean | 基础设施 Bean、早期初始化、避免循环依赖 |
+| CGLIB 代理开销  | 有                 | 没有                     |
+
+
+
  ## `@Autowired`或者`@Resource`指定实现类
 
  1. 在某一个子实现类上使用`@Primary`指定要注入的Bean为当前的bean, 以下注入方式二选一
