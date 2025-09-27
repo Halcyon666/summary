@@ -59,6 +59,7 @@ const config: Config = {
     hooks: {
       onBrokenMarkdownLinks: "warn", // or 'throw' or 'ignore'
     },
+    mermaid: true,
   },
 
   // Even if you don't use internalization, you can use this field to set useful
@@ -69,9 +70,6 @@ const config: Config = {
     locales: ["zh-Hans"],
   },
 
-  markdown: {
-    mermaid: true,
-  },
   themes: ["@docusaurus/theme-mermaid"],
   presets: [
     [
