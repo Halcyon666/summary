@@ -40,7 +40,7 @@ $$
 ![20250923224444](https://s2.loli.net/2025/09/23/v359tc2lEYnyF8k.png)
 
 $$
-Swish: f(x)=x⋅σ(x)=x⋅\frac{1}{1 + e^{-x}}​
+Swish: f(x)=x⋅δ(x)=x⋅\frac{1}{1 + e^{-x}}
 $$
 
 ## `MLP` 原理
@@ -57,7 +57,7 @@ $z=Wx+b$
 
 **激活函数**
 
-$ReLU:f(z)=max⁡(0,z)$
+$ReLU:f(z)=max(0,z)$
 
 $Sigmoid:f(z)=\frac{1}{1 + e^{-z}}$
 
@@ -67,7 +67,7 @@ SoftMax 省略，转化数据为概率分布
 
 **反向传播**
 $$
-W=W−α⋅\frac{∂L}{∂W}​
+W=W-α⋅\frac{∂L}{∂W}
 $$
 
 其中α 是学习率
