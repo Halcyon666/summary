@@ -31,13 +31,19 @@ dependencies:
     version: 3.9.1(@docusaurus/faster@3.9.1)(@docusaurus/plugin-content-docs@3.9.1)(@mdx-js/react@3.1.1)(@swc/core@1.13.19)(react-dom@19.1.1)(react@19.1.1)(typescript@5.9.2)
   '@docusaurus/theme-mermaid':
     specifier: ^3.9.1
-    version: 3.9.1(@docusaurus/faster@3.9.1)(@docusaurus/plugin-content-docs@3.9.1)(@mdx-js/react@3.1.1)(@swc/core@1.13.19)(react-dom@19.1.1)(react@19.1.1)(typescript@5.9.2)
+    version: 3.9.1(@docusaurus/faster@3.9.1)(@docusaurus/plugin-content-docs@3.9.1)(@mdx-js/react@3.1.1)(@mermaid-js/layout-elk@0.1.9)(@swc/core@1.13.19)(react-dom@19.1.1)(react@19.1.1)(typescript@5.9.2)
   '@docusaurus/types':
     specifier: ^3.9.1
     version: 3.9.1(@swc/core@1.13.19)(react-dom@19.1.1)(react@19.1.1)
   '@mdx-js/react':
     specifier: ^3.1.1
     version: 3.1.1(@types/react@19.1.14)(react@19.1.1)
+  '@mermaid-js/layout-elk':
+    specifier: ^0.1.9
+    version: 0.1.9(mermaid@11.12.0)
+  add:
+    specifier: ^2.0.6
+    version: 2.0.6
   antd:
     specifier: ^5.27.4
     version: 5.27.4(react-dom@19.1.1)(react@19.1.1)
@@ -47,6 +53,9 @@ dependencies:
   docusaurus-plugin-image-zoom:
     specifier: ^3.0.1
     version: 3.0.1(@docusaurus/theme-classic@3.9.1)
+  pnpm:
+    specifier: ^10.17.1
+    version: 10.17.1
   prism-react-renderer:
     specifier: ^2.4.1
     version: 2.4.1(react@19.1.1)
@@ -3020,7 +3029,7 @@ packages:
       - webpack-cli
     dev: false
 
-  /@docusaurus/theme-mermaid@3.9.1(@docusaurus/faster@3.9.1)(@docusaurus/plugin-content-docs@3.9.1)(@mdx-js/react@3.1.1)(@swc/core@1.13.19)(react-dom@19.1.1)(react@19.1.1)(typescript@5.9.2):
+  /@docusaurus/theme-mermaid@3.9.1(@docusaurus/faster@3.9.1)(@docusaurus/plugin-content-docs@3.9.1)(@mdx-js/react@3.1.1)(@mermaid-js/layout-elk@0.1.9)(@swc/core@1.13.19)(react-dom@19.1.1)(react@19.1.1)(typescript@5.9.2):
     resolution: {integrity: sha512-aKMFlQfxueVBPdCdrNSshG12fOkJXSn1sb6EhI/sGn3UpiTEiazJm4QLP6NoF78mqq8O5Ar2Yll+iHWLvCsuZQ==}
     engines: {node: '>=20.0'}
     peerDependencies:
@@ -3036,6 +3045,7 @@ packages:
       '@docusaurus/theme-common': 3.9.1(@docusaurus/plugin-content-docs@3.9.1)(@swc/core@1.13.19)(react-dom@19.1.1)(react@19.1.1)
       '@docusaurus/types': 3.9.1(@swc/core@1.13.19)(react-dom@19.1.1)(react@19.1.1)
       '@docusaurus/utils-validation': 3.9.1(@swc/core@1.13.19)(react-dom@19.1.1)(react@19.1.1)
+      '@mermaid-js/layout-elk': 0.1.9(mermaid@11.12.0)
       mermaid: 11.12.0
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
@@ -3449,6 +3459,16 @@ packages:
       '@types/mdx': 2.0.13
       '@types/react': 19.1.14
       react: 19.1.1
+    dev: false
+
+  /@mermaid-js/layout-elk@0.1.9(mermaid@11.12.0):
+    resolution: {integrity: sha512-HuvaqFZBr6yT9PpWYockvKAZPJVd89yn/UjOYPxhzbZxlybL2v+2BjVCg7MVH6vRs1irUohb/s42HEdec1CCZw==}
+    peerDependencies:
+      mermaid: ^11.0.2
+    dependencies:
+      d3: 7.9.0
+      elkjs: 0.9.3
+      mermaid: 11.12.0
     dev: false
 
   /@mermaid-js/parser@0.6.2:
@@ -4881,6 +4901,10 @@ packages:
     resolution: {integrity: sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg==}
     engines: {node: '>=0.4.0'}
     hasBin: true
+
+  /add@2.0.6:
+    resolution: {integrity: sha512-j5QzrmsokwWWp6kUcJQySpbG+xfOBqqKnup3OIk1pz+kB/80SLorZ9V8zHFLO92Lcd+hbvq8bT+zOGoPkmBV0Q==}
+    dev: false
 
   /address@1.2.2:
     resolution: {integrity: sha512-4B/qKCfeE/ODUaAUpSwfzazo5x29WD4r3vXiWsB7I2mSDAihwEqKO+g8GELZUQSSAo5e1XTYh3ZVfLyxBc12nA==}
@@ -6624,6 +6648,10 @@ packages:
 
   /electron-to-chromium@1.5.224:
     resolution: {integrity: sha512-kWAoUu/bwzvnhpdZSIc6KUyvkI1rbRXMT0Eq8pKReyOyaPZcctMli+EgvcN1PAvwVc7Tdo4Fxi2PsLNDU05mdg==}
+
+  /elkjs@0.9.3:
+    resolution: {integrity: sha512-f/ZeWvW/BCXbhGEf1Ujp29EASo/lk1FDnETgNKwJrsVvGZhUWCZyg3xLJjAsxfOmt8KjswHmI5EwCQcPMpOYhQ==}
+    dev: false
 
   /emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -9548,6 +9576,12 @@ packages:
       confbox: 0.2.2
       exsolve: 1.0.7
       pathe: 2.0.3
+    dev: false
+
+  /pnpm@10.17.1:
+    resolution: {integrity: sha512-F8Vg/KSGeulHOjiZrYSogzSRTzeb5G1FXL+S5c9LOdNJhdRS0lg7rxmWf6dstcF7yeJFUp0LmHRXIapyAOyveg==}
+    engines: {node: '>=18.12'}
+    hasBin: true
     dev: false
 
   /points-on-curve@0.2.0:

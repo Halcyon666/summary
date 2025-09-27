@@ -91,11 +91,11 @@ usersMapper.selectOne(new QueryWrapper<JwtUserPO>().lambda().apply("USERNAME = {
 ```
 
 ## 使用自定义多数据源
-<p>
+
 在自定义多数据源场景中，tomcat连接池想全既有共用配置，又特有配置，不可实现。<br/>
 因为tomcat org.apache.tomcat.jdbc.pool.PoolProperties有些字段有默认值，<br/>
 当进行覆盖时，不知道特有对像中是特有值，还是默认值，无法进行精确覆盖。
-</p>
+
 
 <p>数据库多数据源的，必须被Primary标记，继承`AbstractRoutingDataSource`</p>
 
