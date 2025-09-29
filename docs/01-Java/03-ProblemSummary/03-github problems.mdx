@@ -7,7 +7,8 @@ sidebar_label: github相关问题处理
 
 just execute this will be ok.
 
-```shell
+
+```shell title="handler method"
 
 git config --global https.proxy http://127.0.0.1:7890
 git config --global https.proxy http://127.0.0.1:7890
@@ -17,11 +18,11 @@ git config --global --unset https.proxy
 
 ```
 
-RealTime interactive
+![20250930012835](https://s2.loli.net/2025/09/30/IUqaHADRL6f8Qsc.png)<br/>
+如果还是没用，可以试试使用vscode提交其它项目。然后再来操作失败的项目。
 
 
-
-```shell
+```shell title="RealTime interactive"
 PS D:\project\taco-shop> git push
 fatal: unable to access 'https://github.com/Halcyon666/taco-shop.git/': Failed to connect to github.com port 443 after 21090 ms: Couldn't connect to server
 PS D:\project\taco-shop> git config --global --unset http.proxy
