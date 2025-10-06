@@ -54,8 +54,8 @@ dependencies:
     specifier: ^3.0.1
     version: 3.0.1(@docusaurus/theme-classic@3.9.1)
   pnpm:
-    specifier: ^10.17.1
-    version: 10.17.1
+    specifier: ^10.18.1
+    version: 10.18.1
   prism-react-renderer:
     specifier: ^2.4.1
     version: 2.4.1(react@19.1.1)
@@ -3514,8 +3514,8 @@ packages:
       '@module-federation/sdk': 0.18.0
     dev: false
 
-  /@napi-rs/wasm-runtime@1.0.5:
-    resolution: {integrity: sha512-TBr9Cf9onSAS2LQ2+QHx6XcC6h9+RIzJgbqG3++9TUZSH204AwEy5jg3BTQ0VATsyoGj4ee49tN/y6rvaOOtcg==}
+  /@napi-rs/wasm-runtime@1.0.6:
+    resolution: {integrity: sha512-DXj75ewm11LIWUk198QSKUTxjyRjsBwk09MuMk5DGK+GDUtyPhhEHOGP/Xwwj3DjQXXkivoBirmOnKrLfc0+9g==}
     requiresBuild: true
     dependencies:
       '@emnapi/core': 1.5.0
@@ -3780,7 +3780,7 @@ packages:
     cpu: [wasm32]
     requiresBuild: true
     dependencies:
-      '@napi-rs/wasm-runtime': 1.0.5
+      '@napi-rs/wasm-runtime': 1.0.6
     dev: false
     optional: true
 
@@ -9578,8 +9578,8 @@ packages:
       pathe: 2.0.3
     dev: false
 
-  /pnpm@10.17.1:
-    resolution: {integrity: sha512-F8Vg/KSGeulHOjiZrYSogzSRTzeb5G1FXL+S5c9LOdNJhdRS0lg7rxmWf6dstcF7yeJFUp0LmHRXIapyAOyveg==}
+  /pnpm@10.18.1:
+    resolution: {integrity: sha512-d6iEoWXLui2NHBnjtIgO7m0vyr0Nh5Eh4oIZa4AEI1HV6zygk1+lmdodxRJlzGiBatK93Sot5eqf35KtvsfNNA==}
     engines: {node: '>=18.12'}
     hasBin: true
     dev: false
