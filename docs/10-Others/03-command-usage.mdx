@@ -18,6 +18,13 @@ netstat -ano | findstr :8080
 taskkill /PID 1234 /F
 ```
 
+## 临时设置Java Home为另一个路径
+```powershell
+$env:JAVA_HOME="D:\software\Java\jdk-17.0.7"
+$env:PATH="$env:JAVA_HOME\bin;$env:PATH"
+
+./gradlew test --daemon
+```
 
 
 import TailProtocal from "@site/src/components/TailProtocal";
