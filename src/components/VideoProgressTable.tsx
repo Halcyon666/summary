@@ -4,7 +4,7 @@ import { Table, Progress, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
 export interface Video {
-  key: string;
+  id: string;
   name: string;
   totalTime: string; // HH:MM:SS 或 MM:SS
   watchedTime: string; // HH:MM:SS 或 MM:SS
@@ -45,7 +45,6 @@ const VideoProgressTable: React.FC<VideoProgressTableProps> = ({ videos }) => {
       watchedSeconds,
       percent,
       isCompleted,
-      completedDate: isCompleted ? today : v.completedDate || null,
     };
   });
 
