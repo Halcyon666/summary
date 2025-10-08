@@ -1,13 +1,13 @@
 // src/components/VideoProgressTable.tsx
-import React from "react";
-import { Table, Progress, Tag } from "antd";
+import React, { useEffect, useState } from "react";
+import { Table, Progress, Tag, ConfigProvider, theme as antTheme } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
 export interface Video {
   id: string;
   name: string;
-  totalTime: string; // HH:MM:SS 或 MM:SS
-  watchedTime: string; // HH:MM:SS 或 MM:SS
+  totalTime: string;
+  watchedTime: string;
   completedDate?: string | null;
 }
 
@@ -31,7 +31,28 @@ const parseTimeToSeconds = (timeStr: string): number => {
 };
 
 const VideoProgressTable: React.FC<VideoProgressTableProps> = ({ videos }) => {
-  const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+  const [isDark, setIsDark] = useState(false);
+
+  // 检测 Docusaurus 主题模式
+  useEffect(() => {
+    // 初始检测
+    const checkTheme = () => {
+      const htmlElement = document.documentElement;
+      const currentTheme = htmlElement.getAttribute("data-theme");
+      setIsDark(currentTheme === "dark");
+    };
+
+    checkTheme();
+
+    // 监听主题变化
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const processedData: VideoWithProgress[] = videos.map((v) => {
     const totalSeconds = parseTimeToSeconds(v.totalTime);
@@ -49,12 +70,29 @@ const VideoProgressTable: React.FC<VideoProgressTableProps> = ({ videos }) => {
   });
 
   const columns: ColumnsType<VideoWithProgress> = [
-    { title: "视频名称", dataIndex: "name", key: "name" },
-    { title: "总时长", dataIndex: "totalTime", key: "totalTime" },
-    { title: "已观看", dataIndex: "watchedTime", key: "watchedTime" },
+    {
+      title: "视频名称",
+      dataIndex: "name",
+      key: "name",
+      width: "25%",
+      ellipsis: true,
+    },
+    {
+      title: "总时长",
+      dataIndex: "totalTime",
+      key: "totalTime",
+      width: "12%",
+    },
+    {
+      title: "已观看",
+      dataIndex: "watchedTime",
+      key: "watchedTime",
+      width: "12%",
+    },
     {
       title: "完成时间",
       key: "completedDate",
+      width: "15%",
       render: (_, record) =>
         record.isCompleted ? (
           <Tag color="green">{record.completedDate}</Tag>
@@ -65,18 +103,37 @@ const VideoProgressTable: React.FC<VideoProgressTableProps> = ({ videos }) => {
     {
       title: "当前进度",
       key: "percent",
-      render: (_, record) => <Progress percent={record.percent} size="small" />,
+      width: "31%",
+      render: (_, record) => (
+        <Progress
+          percent={record.percent}
+          size="small"
+          strokeColor={record.isCompleted ? "#52c41a" : "#1890ff"}
+        />
+      ),
     },
   ];
 
   return (
-    <Table
-      columns={columns}
-      dataSource={processedData}
-      pagination={false}
-      style={{ width: "100%" }}
-      // scroll={{ x: "max-content" }}
-    />
+    <ConfigProvider
+      theme={{
+        algorithm: isDark ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
+        token: {
+          colorPrimary: "#00b96b",
+          borderRadius: 4,
+        },
+      }}
+    >
+      <div style={{ width: "100%", overflowX: "auto" }}>
+        <Table
+          columns={columns}
+          dataSource={processedData}
+          pagination={false}
+          scroll={{ x: 800 }}
+          rowKey="id"
+        />
+      </div>
+    </ConfigProvider>
   );
 };
 
