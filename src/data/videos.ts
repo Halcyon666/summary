@@ -10,7 +10,7 @@ export const videos1 = [
     key: "2",
     name: "Section 2 – Travel Journal Project",
     totalTime: "02:15:04",
-    watchedTime: "01:22:53",
+    watchedTime: "01:34:29",
   },
   {
     key: "3",
