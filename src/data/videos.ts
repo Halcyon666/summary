@@ -10,13 +10,14 @@ export const videos1 = [
     key: "2",
     name: "Section 2 – Travel Journal Project",
     totalTime: "02:15:04",
-    watchedTime: "01:34:29",
+    watchedTime: "02:15:04",
+    completedDate: "2025-10-08",
   },
   {
     key: "3",
     name: "Section 3 – Chef Claude Project",
     totalTime: "05:10:55",
-    watchedTime: "",
+    watchedTime: "00:12:56",
   },
   {
     key: "4",
