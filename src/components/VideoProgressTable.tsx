@@ -1,6 +1,8 @@
 // src/components/VideoProgressTable.tsx
 import React, { useEffect, useState } from "react";
-import { Table, Progress, Tag, ConfigProvider, theme as antTheme } from "antd";
+import { Table, Progress, Tag } from "antd";
+import ConfigProvider from "antd/es/config-provider";
+import theme from "antd/es/theme";
 import type { ColumnsType } from "antd/es/table";
 
 export interface Video {
@@ -117,7 +119,7 @@ const VideoProgressTable: React.FC<VideoProgressTableProps> = ({ videos }) => {
   return (
     <ConfigProvider
       theme={{
-        algorithm: isDark ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
+        algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
         token: {
           colorPrimary: "#00b96b",
           borderRadius: 4,
