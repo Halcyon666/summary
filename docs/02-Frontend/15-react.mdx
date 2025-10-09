@@ -12,6 +12,36 @@ npm run dev
 ```
 ![](https://s2.loli.net/2025/10/07/hW3iwvBKxSORsHf.png)
 
+## spread and destruturing array or object
+
+1. spread array
+```ts 
+const arr = [1, 2, 3];
+const copy = [...arr];
+console.log(copy); // [1, 2, 3]
+```
+
+2. spread object 
+```ts
+const obj = { a: 1, b: 2 };
+const copy = { ...obj };
+console.log(copy); // { a: 1, b: 2 }
+```
+
+3. array destruturing
+```ts
+const [a, b] = [10, 20];
+console.log(a); // 10
+console.log(b); // 20
+```
+
+4. object destruturing
+```ts
+const person = { name: "Alice", age: 25 };
+const { name, age } = person;
+console.log(name, age); // Alice 25
+```
+
 ## Updating a nested object
 
 consider the object construct like this,
@@ -70,66 +100,6 @@ or use `useImmer` instead of `useState`
 
 [usage from official website](https://react.dev/learn/updating-objects-in-state)
 
-## Dynamic call a function or update a value 
-
-```typescript
-  for (let update of queue) {
-    if (typeof update === 'function') {
-      // Apply the updater function.
-      finalState = update(finalState);
-    } else {
-      // Replace the next state.
-      finalState = update;
-    }
-  }
-```
-
-## Updating Arrays in State
-
-```typescript
-setArtists( // Replace the state
-  [ // with a new array
-    ...artists, // that contains all the old items
-    { id: nextId++, name: name } // and one new item at the end
-  ]
-);
-```
-
-## Change the value in array 
-
-data construct
-
-```json
-const initialProducts = [{
-  id: 0,
-  name: 'Baklava',
-  count: 1,
-}, {
-  id: 1,
-  name: 'Cheese',
-  count: 5,
-}, {
-  id: 2,
-  name: 'Spaghetti',
-  count: 2,
-}];
-```
-
-how
-
-```typescript
-   setProducts(products.map(product => {
-      if (product.id === productId) {
-        return {
-          ...product,
-          count: product.count + 1
-        };
-      } else {
-        return product;
-      }
-    }))
-```
-
 ## 箭头函数
 
 | 写法                          | 含义                               | 是否需要写 `return` |
@@ -183,7 +153,98 @@ function App() {
 
 ## 向react组件传递参数
 
-[code here](https://github.com/Halcyon666/react-daily-learn/commit/e87a2e1e8d009760ac679b86762cea55530310b8)
+```tsx title="Contact.txs" showLineNumbers {5-11}
+import phoneIcon from "./images/phone-icon.png";
+import mailIcon from "./images/mail-icon.png";
+import type ContactInfo from "./ContactInfo";
+
+export default function Contact({
+  img,
+  imgAlt,
+  name,
+  phoneNumber,
+  email,
+}: ContactInfo) {
+  return (
+    //这是 不对的，因为 key 只能用在 父组件 map 渲染列表的元素上，而不是子组件内部。
+    // <article className="contact-card" key={id}>
+    <article className="contact-card">
+      <img src={img} alt={imgAlt} />
+      <h3>{name}</h3>
+      <div className="info-group">
+        <img src={phoneIcon} alt="phone icon" />
+        <p>{phoneNumber}</p>
+      </div>
+      <div className="info-group">
+        <img src={mailIcon} alt="mail icon" />
+        <p>{email}</p>
+      </div>
+    </article>
+  );
+}
+```
+
+```tsx title="App.tsx" showLineNumbers {8}
+import "./index.css";
+import Contact from "./Contact";
+import { contacts } from "./ContactInfo";
+function App() {
+  return (
+    <div className="contacts">
+      {contacts.map((contact) => (
+        <Contact key={contact.id} {...contact} />
+      ))}
+    </div>
+  );
+}
+export default App;
+```
+
+## useState function
+
+```tsx title="Main.tsx" showLineNumbers {1,5-9,16}
+import { useState } from "react";
+
+export default function Main() {
+  // Array destructuring
+  const [ingredients, setIngredients] = useState<string[]>([
+    "Chicken",
+    "Oregano",
+    "Tomatoes",
+  ]);
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    // the key is the name of input
+    const newIngredient = formData.get("ingredient");
+    if (typeof newIngredient === "string" && newIngredient?.trim() !== "") {
+      setIngredients((prev) => [...prev, newIngredient]);
+    } else {
+      console.warn("No ingredient provided");
+    }
+  };
+
+  return (
+    <main>
+      <form className="add-ingredient-form" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="ingredient"
+          aria-label="Add ingredient"
+          placeholder="e.g. oregano"
+        ></input>
+        <button>Add ingredient</button>
+      </form>
+      <h1>Ingrredients on hand:</h1>
+      <ul className="ingredient-ul">
+        {ingredients.map((ingredient) => (
+          <li key={ingredient}>{ingredient}</li>
+        ))}
+      </ul>
+    </main>
+  );
+}
+```
 
 import TailProtocal from "@site/src/components/TailProtocal";
 
