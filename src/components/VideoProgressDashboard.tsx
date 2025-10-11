@@ -44,6 +44,16 @@ const parseTimeToSeconds = (timeStr?: string): number => {
   return 0;
 };
 
+/** 工具函数：秒转时间字符串 (HH:MM:SS) */
+const formatSecondsToTime = (seconds: number): string => {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+  return [hours, minutes, secs]
+    .map(v => v.toString().padStart(2, '0'))
+    .join(':');
+};
+
 /** Hook：计算视频统计数据 */
 const useVideoStats = (videos: Video[]) =>
   useMemo(() => {
@@ -60,13 +70,13 @@ const useVideoStats = (videos: Video[]) =>
     const inProgressVideos = processed.filter(
       (v) => v.percent > 0 && !v.isCompleted
     ).length;
-    // 总体进度 = 累加每个视频的百分比 / 总视频数
-    const overallProgress =
-      totalVideos > 0
-        ? Math.round(
-            processed.reduce((sum, v) => sum + v.percent, 0) / totalVideos
-          )
-        : 0;
+    
+    // 🔥 修复：总体进度 = 所有已观看时长总和 / 所有视频时长总和
+    const totalWatchedSeconds = processed.reduce((sum, v) => sum + v.watched, 0);
+    const totalDurationSeconds = processed.reduce((sum, v) => sum + v.total, 0);
+    const overallProgress = totalDurationSeconds > 0 
+      ? Math.round((totalWatchedSeconds / totalDurationSeconds) * 100)
+      : 0;
 
     return {
       processed,
@@ -74,6 +84,8 @@ const useVideoStats = (videos: Video[]) =>
       completedVideos,
       inProgressVideos,
       overallProgress,
+      totalWatchedSeconds,
+      totalDurationSeconds,
     };
   }, [videos]);
 
@@ -109,6 +121,7 @@ type StatCardProps = {
   color?: string;
   suffix?: string;
   progress?: number;
+  description?: string; // 新增：用于显示额外信息
 };
 const StatCard: React.FC<StatCardProps> = ({
   title,
@@ -117,6 +130,7 @@ const StatCard: React.FC<StatCardProps> = ({
   color,
   suffix,
   progress,
+  description,
 }) => (
   <Card>
     <Statistic
@@ -126,6 +140,11 @@ const StatCard: React.FC<StatCardProps> = ({
       suffix={suffix}
       valueStyle={color ? { color } : undefined}
     />
+    {description && (
+      <div style={{ fontSize: 12, color: '#8c8c8c', marginTop: 8 }}>
+        {description}
+      </div>
+    )}
     {progress !== undefined && (
       <Progress percent={progress} showInfo={false} strokeColor={color} />
     )}
@@ -221,6 +240,7 @@ const VideoProgressDashboard: React.FC<VideoProgressDashboardProps> = ({
       color: "#1890ff",
       suffix: "%",
       progress: stats.overallProgress,
+      description: `${formatSecondsToTime(stats.totalWatchedSeconds)} / ${formatSecondsToTime(stats.totalDurationSeconds)}`,
     },
     {
       title: "总视频数",
