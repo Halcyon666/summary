@@ -33,7 +33,7 @@
     "docusaurus-plugin-image-zoom": "^3.0.1",
     "pnpm": "^10.18.1",
     "prism-react-renderer": "^2.4.1",
-    "react": "^19.1.1",
+    "react": "^19.2.0",
     "react-dom": "^19.1.1",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0"
@@ -42,7 +42,7 @@
     "@docusaurus/module-type-aliases": "^3.9.1",
     "@docusaurus/tsconfig": "^3.9.1",
     "@types/node": "^24.7.0",
-    "@types/react": "^19.1.14",
+    "@types/react": "^19.2.2",
     "typescript": "~5.9.3"
   },
   "browserslist": {
