@@ -30,7 +30,6 @@ export type Video = {
   key: string;
   name: string;
   totalTime?: string;
-  watchedTime?: string;
   watchRecords?: WatchRecord[];
 };
 
@@ -61,12 +60,14 @@ const formatSecondsToTime = (seconds: number): string => {
     .join(":");
 };
 
-/** Hook：计算视频统计 */
+/** Hook：计算视频统计（watched 取 watchRecords 最后一条） */
 const useVideoStats = (videos: Video[]) =>
   useMemo(() => {
     const processed: ProcessedVideo[] = videos.map((v) => {
       const total = parseTimeToSeconds(v.totalTime);
-      const watched = parseTimeToSeconds(v.watchedTime);
+      // watched 从 watchRecords 最后一条计算
+      const lastRecord = v.watchRecords?.[v.watchRecords.length - 1];
+      const watched = parseTimeToSeconds(lastRecord?.watchedTime);
       const percent = total > 0 ? Math.round((watched / total) * 100) : 0;
       const isCompleted = watched >= total && total > 0;
       return { ...v, total, watched, percent, isCompleted };
@@ -198,7 +199,6 @@ const ProgressWithDates: React.FC<{
           backgroundColor: "#d9d9d9",
         }}
       >
-        {/* 蓝色进度条 */}
         <div
           style={{
             position: "absolute",
@@ -215,7 +215,6 @@ const ProgressWithDates: React.FC<{
         />
       </div>
 
-      {/* 日期标记 */}
       <div style={{ position: "relative", height: 20, marginTop: 3 }}>
         {markers.map((m, i) => (
           <div
@@ -351,7 +350,11 @@ const VideoList: React.FC<{
                 总时长: {video.totalTime || "未知"}
               </span>
               <span style={{ whiteSpace: "nowrap" }}>
-                已观看: {video.watchedTime || "00:00:00"}
+                已观看:{" "}
+                {video.watchRecords?.length
+                  ? video.watchRecords[video.watchRecords.length - 1]
+                      .watchedTime
+                  : "00:00:00"}
               </span>
             </div>
 
