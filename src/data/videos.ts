@@ -4,14 +4,14 @@ export const videos1 = [
     name: "Section 1 – React Basics",
     totalTime: "02:17:58",
     watchedTime: "02:17:58",
-    completedDate: "2025-10-06",
+    watchRecords: [{ date: "2025-10-08", watchedTime: "02:17:58" }],
   },
   {
     key: "2",
     name: "Section 2 – Travel Journal Project",
     totalTime: "02:15:04",
     watchedTime: "02:15:04",
-    completedDate: "2025-10-08",
+    watchRecords: [{ date: "2025-10-08", watchedTime: "02:15:04" }],
   },
   {
     key: "3",
