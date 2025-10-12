@@ -17,7 +17,7 @@ export const videos1 = [
     key: "3",
     name: "Section 3 – Chef Claude Project",
     totalTime: "05:10:55",
-    watchedTime: "3:04:36",
+    watchedTime: "4:02:56",
   },
   {
     key: "4",
