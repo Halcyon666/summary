@@ -8,8 +8,6 @@ import {
   List,
   Tag,
   Space,
-  Tooltip,
-  Collapse,
   theme as antTheme,
   ConfigProvider,
 } from "antd";
@@ -33,7 +31,6 @@ export type Video = {
   name: string;
   totalTime?: string;
   watchedTime?: string;
-  completedDate?: string;
   watchRecords?: WatchRecord[];
 };
 
@@ -107,6 +104,8 @@ const WatchRecordsCollapse: React.FC<{
   records?: WatchRecord[];
   totalSeconds: number;
 }> = ({ records, totalSeconds }) => {
+  const [expanded, setExpanded] = useState(false);
+
   if (!records || records.length === 0) return null;
 
   const recordsWithProgress = useMemo(() => {
@@ -127,43 +126,49 @@ const WatchRecordsCollapse: React.FC<{
   }, [records, totalSeconds]);
 
   return (
-    <Collapse
-      ghost
-      size="small"
-      items={[
-        {
-          key: "1",
-          label: (
-            <span style={{ fontSize: 12, color: "#8c8c8c" }}>
-              <CalendarOutlined /> 观看记录 ({records.length} 次)
-            </span>
-          ),
-          children: (
-            <Space direction="vertical" size={4} style={{ width: "100%" }}>
-              {recordsWithProgress.map((r, i) => (
-                <div
-                  key={i}
-                  style={{
-                    fontSize: 12,
-                    color: "#595959",
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <span>{r.date}</span>
-                  <span>
-                    <span style={{ color: "#1890ff", fontWeight: 500 }}>
-                      {r.thisTimeFormatted}
-                    </span>
-                    &nbsp;观看到 <strong>{r.progressPercent}%</strong>
-                  </span>
-                </div>
-              ))}
-            </Space>
-          ),
-        },
-      ]}
-    />
+    <div style={{ marginTop: 8 }}>
+      <div
+        onClick={() => setExpanded(!expanded)}
+        style={{
+          fontSize: 12,
+          color: "#8c8c8c",
+          cursor: "pointer",
+          userSelect: "none",
+          padding: "4px 0",
+        }}
+      >
+        <CalendarOutlined /> 观看记录 ({records.length} 次)
+        <span style={{ marginLeft: 8 }}>{expanded ? "▼" : "▶"}</span>
+      </div>
+      {expanded && (
+        <Space
+          direction="vertical"
+          size={4}
+          style={{ width: "100%", marginTop: 8 }}
+        >
+          {recordsWithProgress.map((r, i) => (
+            <div
+              key={i}
+              style={{
+                fontSize: 12,
+                color: "#595959",
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "4px 0",
+              }}
+            >
+              <span>{r.date}</span>
+              <span>
+                <span style={{ color: "#1890ff", fontWeight: 500 }}>
+                  {r.thisTimeFormatted}
+                </span>
+                &nbsp;观看到 <strong>{r.progressPercent}%</strong>
+              </span>
+            </div>
+          ))}
+        </Space>
+      )}
+    </div>
   );
 };
 
@@ -211,29 +216,33 @@ const ProgressWithDates: React.FC<{
       </div>
 
       {/* 日期标记 */}
-      <div style={{ position: "relative", height: 26, marginTop: 3 }}>
+      <div style={{ position: "relative", height: 20, marginTop: 3 }}>
         {markers.map((m, i) => (
-          <Tooltip key={i} title={`${m.date} - ${m.watchedTime}`}>
+          <div
+            key={i}
+            title={`${m.date} - ${m.watchedTime}`}
+            style={{
+              position: "absolute",
+              left: `calc(${m.position}% - 1px)`,
+              top: 0,
+              transform: "translateX(-50%)",
+              textAlign: "center",
+            }}
+          >
             <div
               style={{
-                position: "absolute",
-                left: `calc(${m.position}% - 1px)`,
-                top: 0,
-                transform: "translateX(-50%)",
-                textAlign: "center",
+                width: 2,
+                height: 10,
+                backgroundColor: "#1890ff",
+                margin: "0 auto 2px",
               }}
+            />
+            <div
+              style={{ fontSize: 10, color: "#8c8c8c", whiteSpace: "nowrap" }}
             >
-              <div
-                style={{
-                  width: 2,
-                  height: 10,
-                  backgroundColor: "#1890ff",
-                  margin: "0 auto 3px",
-                }}
-              />
-              <div style={{ fontSize: 10, color: "#8c8c8c" }}>{m.label}</div>
+              {m.label}
             </div>
-          </Tooltip>
+          </div>
         ))}
       </div>
     </div>
@@ -334,10 +343,16 @@ const VideoList: React.FC<{
                 justifyContent: "space-between",
                 fontSize: 12,
                 color: "#8c8c8c",
+                flexWrap: "nowrap",
+                gap: 16,
               }}
             >
-              <span>总时长: {video.totalTime || "未知"}</span>
-              <span>已观看: {video.watchedTime || "00:00:00"}</span>
+              <span style={{ whiteSpace: "nowrap" }}>
+                总时长: {video.totalTime || "未知"}
+              </span>
+              <span style={{ whiteSpace: "nowrap" }}>
+                已观看: {video.watchedTime || "00:00:00"}
+              </span>
             </div>
 
             <WatchRecordsCollapse
