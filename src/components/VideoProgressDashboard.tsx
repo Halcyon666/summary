@@ -23,26 +23,26 @@ import {
 
 /** 观看记录类型 */
 export type WatchRecord = {
-  date: string; // 观看日期，如 "2025-10-01"
-  watchedTime: string; // 截止当天的累计观看时长，如 "00:45:00"
+  date: string;
+  watchedTime: string;
 };
 
-/** 原始视频类型（从 props 传入） */
+/** 原始视频类型 */
 export type Video = {
   key: string;
   name: string;
-  totalTime?: string; // 总时长字符串，如 "02:17:58"
-  watchedTime?: string; // 已观看时长字符串
-  completedDate?: string; // 完成日期，可选
-  watchRecords?: WatchRecord[]; // 观看记录数组
+  totalTime?: string;
+  watchedTime?: string;
+  completedDate?: string;
+  watchRecords?: WatchRecord[];
 };
 
-/** 处理后视频类型（计算出进度相关字段） */
+/** 处理后视频类型 */
 export type ProcessedVideo = Video & {
-  total: number; // 总秒数
-  watched: number; // 已观看秒数
-  percent: number; // 已观看百分比
-  isCompleted: boolean; // 是否完成
+  total: number;
+  watched: number;
+  percent: number;
+  isCompleted: boolean;
 };
 
 /** 工具函数：时间字符串转秒 */
@@ -54,7 +54,7 @@ const parseTimeToSeconds = (timeStr?: string): number => {
   return 0;
 };
 
-/** 工具函数：秒转时间字符串 (HH:MM:SS) */
+/** 工具函数：秒转时间字符串 */
 const formatSecondsToTime = (seconds: number): string => {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
@@ -64,7 +64,7 @@ const formatSecondsToTime = (seconds: number): string => {
     .join(":");
 };
 
-/** Hook：计算视频统计数据 */
+/** Hook：计算视频统计 */
 const useVideoStats = (videos: Video[]) =>
   useMemo(() => {
     const processed: ProcessedVideo[] = videos.map((v) => {
@@ -81,7 +81,6 @@ const useVideoStats = (videos: Video[]) =>
       (v) => v.percent > 0 && !v.isCompleted
     ).length;
 
-    // 总体进度 = 所有已观看时长总和 / 所有视频时长总和
     const totalWatchedSeconds = processed.reduce(
       (sum, v) => sum + v.watched,
       0
@@ -103,34 +102,26 @@ const useVideoStats = (videos: Video[]) =>
     };
   }, [videos]);
 
-/** 🔥 观看记录折叠面板（加入本次观看时长） */
+/** 观看记录折叠面板 */
 const WatchRecordsCollapse: React.FC<{
   records?: WatchRecord[];
   totalSeconds: number;
 }> = ({ records, totalSeconds }) => {
   if (!records || records.length === 0) return null;
 
-  // watchedTime 是累计时长，计算每次观看时长和百分比
   const recordsWithProgress = useMemo(() => {
-    let previousSeconds = 0; // 上一次的累计秒数
-
-    return records.map((record) => {
-      const cumulativeSeconds = parseTimeToSeconds(record.watchedTime); // 累计时长（秒）
-      const thisTimeSeconds = cumulativeSeconds - previousSeconds; // 本次观看时长（秒）
-      const thisTimeFormatted = formatSecondsToTime(thisTimeSeconds); // 本次时长格式化
-      const progressPercent =
-        totalSeconds > 0
-          ? Math.round((cumulativeSeconds / totalSeconds) * 100)
-          : 0;
-
-      previousSeconds = cumulativeSeconds; // 更新为当前累计秒数
-
+    let prev = 0;
+    return records.map((r) => {
+      const cumulative = parseTimeToSeconds(r.watchedTime);
+      const diff = cumulative - prev;
+      prev = cumulative;
       return {
-        ...record,
-        cumulativeSeconds,
-        thisTimeSeconds,
-        thisTimeFormatted,
-        progressPercent,
+        ...r,
+        thisTimeFormatted: formatSecondsToTime(diff),
+        progressPercent: Math.min(
+          Math.round((cumulative / totalSeconds) * 100),
+          100
+        ),
       };
     });
   }, [records, totalSeconds]);
@@ -149,32 +140,22 @@ const WatchRecordsCollapse: React.FC<{
           ),
           children: (
             <Space direction="vertical" size={4} style={{ width: "100%" }}>
-              {recordsWithProgress.map((record, index) => (
+              {recordsWithProgress.map((r, i) => (
                 <div
-                  key={index}
+                  key={i}
                   style={{
                     fontSize: 12,
                     color: "#595959",
                     display: "flex",
                     justifyContent: "space-between",
-                    alignItems: "center",
-                    padding: "4px 0",
                   }}
                 >
-                  <span>{record.date}</span>
-                  <span
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                    }}
-                  >
+                  <span>{r.date}</span>
+                  <span>
                     <span style={{ color: "#1890ff", fontWeight: 500 }}>
-                      {record.thisTimeFormatted}
+                      {r.thisTimeFormatted}
                     </span>
-                    <span>
-                      观看到 <strong>{record.progressPercent}%</strong>
-                    </span>
+                    &nbsp;观看到 <strong>{r.progressPercent}%</strong>
                   </span>
                 </div>
               ))}
@@ -186,89 +167,80 @@ const WatchRecordsCollapse: React.FC<{
   );
 };
 
-/** 🔥 带日期标记的进度条（watchedTime 是累计时长） */
+/** 修复版：日期标记进度条 */
 const ProgressWithDates: React.FC<{
   percent: number;
   isCompleted: boolean;
   records?: WatchRecord[];
   totalSeconds: number;
 }> = ({ percent, isCompleted, records, totalSeconds }) => {
-  // 计算每个观看记录在进度条上的位置
   const markers = useMemo(() => {
     if (!records || records.length === 0 || totalSeconds === 0) return [];
-
-    return records.map((record) => {
-      const cumulativeSeconds = parseTimeToSeconds(record.watchedTime); // 累计时长
-      const position = Math.min((cumulativeSeconds / totalSeconds) * 100, 100);
-      return {
-        ...record,
-        position,
-        cumulativePercent: Math.round(position),
-      };
+    return records.map((r) => {
+      const cumulative = parseTimeToSeconds(r.watchedTime);
+      const pos = Math.min((cumulative / totalSeconds) * 100, 100);
+      return { ...r, position: pos, label: r.date.slice(5) };
     });
   }, [records, totalSeconds]);
 
   return (
-    <div style={{ position: "relative" }}>
-      <Progress
-        percent={percent}
-        size="small"
-        strokeColor={
-          isCompleted
-            ? { "0%": "#52c41a", "100%": "#73d13d" }
-            : { "0%": "#1890ff", "100%": "#40a9ff" }
-        }
-      />
-
-      {/* 在进度条上方显示日期标记 */}
-      {markers.length > 0 && (
+    <div style={{ position: "relative", marginTop: 6 }}>
+      <div
+        style={{
+          position: "relative",
+          height: 8,
+          borderRadius: 4,
+          backgroundColor: "#d9d9d9",
+        }}
+      >
+        {/* 蓝色进度条 */}
         <div
           style={{
-            position: "relative",
-            height: 20,
-            marginTop: 4,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            height: 8,
+            borderRadius: 4,
+            background: isCompleted
+              ? "linear-gradient(90deg, #52c41a, #73d13d)"
+              : "linear-gradient(90deg, #1890ff, #40a9ff)",
+            width: `${percent}%`,
+            transition: "width 0.4s ease",
           }}
-        >
-          {markers.map((marker, index) => (
-            <Tooltip
-              key={index}
-              title={`${marker.date}: 观看到 ${marker.cumulativePercent}%`}
+        />
+      </div>
+
+      {/* 日期标记 */}
+      <div style={{ position: "relative", height: 26, marginTop: 3 }}>
+        {markers.map((m, i) => (
+          <Tooltip key={i} title={`${m.date} - ${m.watchedTime}`}>
+            <div
+              style={{
+                position: "absolute",
+                left: `calc(${m.position}% - 1px)`,
+                top: 0,
+                transform: "translateX(-50%)",
+                textAlign: "center",
+              }}
             >
               <div
                 style={{
-                  position: "absolute",
-                  left: `${marker.position}%`,
-                  transform: "translateX(-50%)",
-                  cursor: "pointer",
+                  width: 2,
+                  height: 10,
+                  backgroundColor: "#1890ff",
+                  margin: "0 auto 3px",
                 }}
-              >
-                <div
-                  style={{
-                    width: 2,
-                    height: 8,
-                    backgroundColor: isCompleted ? "#52c41a" : "#1890ff",
-                    marginBottom: 2,
-                  }}
-                />
-                <div
-                  style={{
-                    fontSize: 10,
-                    color: "#8c8c8c",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {marker.date.slice(5)} {/* 只显示月-日 */}
-                </div>
-              </div>
-            </Tooltip>
-          ))}
-        </div>
-      )}
+              />
+              <div style={{ fontSize: 10, color: "#8c8c8c" }}>{m.label}</div>
+            </div>
+          </Tooltip>
+        ))}
+      </div>
     </div>
   );
 };
 
-/** 状态标签组件，根据视频进度显示不同状态 */
+/** 状态标签 */
 const StatusTag: React.FC<{ percent: number; isCompleted: boolean }> = ({
   percent,
   isCompleted,
@@ -292,8 +264,8 @@ const StatusTag: React.FC<{ percent: number; isCompleted: boolean }> = ({
   );
 };
 
-/** 统计卡片组件 */
-type StatCardProps = {
+/** 统计卡片 */
+const StatCard: React.FC<{
   title: string;
   value: number | string;
   prefix: React.ReactNode;
@@ -301,16 +273,7 @@ type StatCardProps = {
   suffix?: string;
   progress?: number;
   description?: string;
-};
-const StatCard: React.FC<StatCardProps> = ({
-  title,
-  value,
-  prefix,
-  color,
-  suffix,
-  progress,
-  description,
-}) => (
+}> = ({ title, value, prefix, color, suffix, progress, description }) => (
   <Card>
     <Statistic
       title={title}
@@ -330,12 +293,11 @@ const StatCard: React.FC<StatCardProps> = ({
   </Card>
 );
 
-/** 视频列表组件 */
-type VideoListProps = {
+/** 视频列表 */
+const VideoList: React.FC<{
   videos: ProcessedVideo[];
   isDark: boolean;
-};
-const VideoList: React.FC<VideoListProps> = ({ videos, isDark }) => (
+}> = ({ videos, isDark }) => (
   <Card title="📚 课程列表" variant="borderless">
     <List
       dataSource={videos}
@@ -348,7 +310,6 @@ const VideoList: React.FC<VideoListProps> = ({ videos, isDark }) => (
           }}
         >
           <Space direction="vertical" style={{ width: "100%" }} size="small">
-            {/* 视频标题和状态 */}
             <div
               style={{
                 display: "flex",
@@ -360,7 +321,6 @@ const VideoList: React.FC<VideoListProps> = ({ videos, isDark }) => (
               <StatusTag {...video} />
             </div>
 
-            {/* 带日期标记的进度条 */}
             <ProgressWithDates
               percent={video.percent}
               isCompleted={video.isCompleted}
@@ -368,7 +328,6 @@ const VideoList: React.FC<VideoListProps> = ({ videos, isDark }) => (
               totalSeconds={video.total}
             />
 
-            {/* 时间信息 */}
             <div
               style={{
                 display: "flex",
@@ -381,7 +340,6 @@ const VideoList: React.FC<VideoListProps> = ({ videos, isDark }) => (
               <span>已观看: {video.watchedTime || "00:00:00"}</span>
             </div>
 
-            {/* 观看记录折叠面板（默认折叠） */}
             <WatchRecordsCollapse
               records={video.watchRecords}
               totalSeconds={video.total}
@@ -393,31 +351,26 @@ const VideoList: React.FC<VideoListProps> = ({ videos, isDark }) => (
   </Card>
 );
 
-/** 主仪表盘组件 */
-type VideoProgressDashboardProps = {
-  videos?: Video[];
-};
-const VideoProgressDashboard: React.FC<VideoProgressDashboardProps> = ({
+/** 主组件 */
+const VideoProgressDashboard: React.FC<{ videos?: Video[] }> = ({
   videos = [],
 }) => {
   const [isDark, setIsDark] = useState(false);
   const stats = useVideoStats(videos);
 
-  // 监听系统主题变化
   useEffect(() => {
     const checkTheme = () =>
       setIsDark(document.documentElement.getAttribute("data-theme") === "dark");
     checkTheme();
-    const observer = new MutationObserver(checkTheme);
-    observer.observe(document.documentElement, {
+    const obs = new MutationObserver(checkTheme);
+    obs.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ["data-theme"],
     });
-    return () => observer.disconnect();
+    return () => obs.disconnect();
   }, []);
 
-  // 配置统计卡数据，复用 StatCard 组件
-  const statCards: StatCardProps[] = [
+  const statCards = [
     {
       title: "总体进度",
       value: stats.overallProgress,
@@ -455,8 +408,7 @@ const VideoProgressDashboard: React.FC<VideoProgressDashboardProps> = ({
         token: { colorPrimary: "#00b96b", borderRadius: 8 },
       }}
     >
-      <div style={styles.container}>
-        {/* 顶部统计区 */}
+      <div style={{ padding: 24, maxWidth: 1000, margin: "0 auto" }}>
         <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
           {statCards.map((card) => (
             <Col xs={24} sm={12} md={6} key={card.title}>
@@ -465,15 +417,10 @@ const VideoProgressDashboard: React.FC<VideoProgressDashboardProps> = ({
           ))}
         </Row>
 
-        {/* 视频列表 */}
         <VideoList videos={stats.processed} isDark={isDark} />
       </div>
     </ConfigProvider>
   );
-};
-
-const styles = {
-  container: { padding: 24, maxWidth: 1000, margin: "0 auto" },
 };
 
 export default VideoProgressDashboard;
