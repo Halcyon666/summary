@@ -18,6 +18,13 @@ export const videos1 = [
     name: "Section 3 – Chef Claude Project",
     totalTime: "05:10:55",
     watchedTime: "4:02:56",
+    // whatchedTime是累计时长
+    watchRecords: [
+      { date: "2025-10-08", watchedTime: "00:12:56" },
+      { date: "2025-10-10", watchedTime: "1:51:56" },
+      { date: "2025-10-12", watchedTime: "3:04:36" },
+      { date: "2025-10-13", watchedTime: "4:02:56" },
+    ],
   },
   {
     key: "4",
