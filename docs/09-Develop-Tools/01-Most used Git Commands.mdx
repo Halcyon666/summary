@@ -1,4 +1,4 @@
-# 常用 Git 命令
+# Git Commands
 
 ## 配置化命令
 
@@ -65,7 +65,7 @@ git blame -L 57,+10 filename
 git reset . 
 git checkout .
 
-r# 撤销掉modify状态
+# 撤销掉modify状态
 git checkout <filename>
 # 撤销掉add的文件(如果是新文件则是untracked状态 否则是modify状态)
 git restore --staged test.txt
@@ -212,8 +212,16 @@ echo "# 123" >> README.md
 git init
 git add README.md
 git commit -m "first commit"
+
 # 修改一下HEAD指向的注释; notes: Don’t amend public commits
 git commit --amend -m "an updated commit message" --no-edit
+
+# 修改最后一次的commit信息
+git add new_file.xxx
+git commit --amend --no-edit
+
+# 修改前面的commit信息,然后reword或者edit
+git rebase -i <commit-id>^
 
 git branch -M main
 git remote add origin git@github.com:whalefall541/123.git
