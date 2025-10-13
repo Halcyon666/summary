@@ -1,4 +1,5 @@
-export const videos1 = [
+import { type Video } from "../components/VideoProgressDashboard";
+export const videos1: Video[] = [
   {
     key: "1",
     name: "Section 1 – React Basics",
@@ -20,7 +21,8 @@ export const videos1 = [
       { date: "2025-10-08", watchedTime: "00:12:56" },
       { date: "2025-10-10", watchedTime: "1:51:56" },
       { date: "2025-10-12", watchedTime: "3:04:36" },
-      { date: "2025-10-13", watchedTime: "4:02:56" },
+      { date: "2025-10-13", watchedTime: "4:15:05" },
+      { date: "2025-10-14", watchedTime: "4:35:55" },
     ],
   },
   {
