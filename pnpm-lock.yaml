@@ -9,8 +9,8 @@ dependencies:
     specifier: ^6.1.0
     version: 6.1.0(react-dom@19.2.0)(react@19.2.0)
   '@docsearch/js':
-    specifier: ^4.1.0
-    version: 4.1.0
+    specifier: ^4.2.0
+    version: 4.2.0
   '@docusaurus/core':
     specifier: ^3.9.1
     version: 3.9.1(@docusaurus/faster@3.9.1)(@mdx-js/react@3.1.1)(@swc/core@1.13.19)(react-dom@19.2.0)(react@19.2.0)(typescript@5.9.3)
@@ -2235,8 +2235,8 @@ packages:
     resolution: {integrity: sha512-nuNKGjHj/FQeWgE9t+i83QD/V67QiaAmGY7xS9TVCRUiCqSljOgIKlsLoQZKKVwEG8f+OWKdznzZkJxGZ7d06A==}
     dev: false
 
-  /@docsearch/js@4.1.0:
-    resolution: {integrity: sha512-49+CzeGfOiwG85k+dDvKfOsXLd9PQACoY/FLrZfFOKmpWv166u7bAHmBLdzvxlk8nJ289UgpGf0k6GQZtC85Fg==}
+  /@docsearch/js@4.2.0:
+    resolution: {integrity: sha512-KBHVPO29QiGUFJYeAqxW0oXtGf/aghNmRrIRPT4/28JAefqoCkNn/ZM/jeQ7fHjl0KNM6C+KlLVYjwyz6lNZnA==}
     dev: false
 
   /@docsearch/react@4.1.0(@algolia/client-search@5.40.0)(@types/react@19.2.2)(react-dom@19.2.0)(react@19.2.0)(search-insights@2.17.3):
