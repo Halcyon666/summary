@@ -22,13 +22,14 @@ export const videos1: Video[] = [
       { date: "2025-10-10", watchedTime: "1:51:56" },
       { date: "2025-10-12", watchedTime: "3:04:36" },
       { date: "2025-10-13", watchedTime: "4:15:05" },
-      { date: "2025-10-14", watchedTime: "4:35:55" },
+      { date: "2025-10-15", watchedTime: "05:10:55" },
     ],
   },
   {
     key: "4",
     name: "Section 4 – Meme Generator Project",
     totalTime: "01:57:18",
+    watchRecords: [{ date: "2025-10-17", watchedTime: "0:07:50" }],
   },
   {
     key: "5",

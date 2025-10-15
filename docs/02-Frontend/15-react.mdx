@@ -246,6 +246,27 @@ export default function Main() {
 }
 ```
 
+## onClick传值函数名or匿名函数
+
+Version 1 `(onClick={getRecipe})`
+
+You’re giving React a function reference.
+React will call getRecipe() only when the button is clicked.
+
+This is the simplest and most efficient form — no new function is created on every render.
+
+Version 2 `(onClick={() => getRecipe()})`
+
+You’re creating a new anonymous function on each render that calls getRecipe() inside it.
+
+It still works — React will call your wrapper function on click, which in turn calls getRecipe() — but it’s one extra layer of indirection and (very slightly) less efficient.
+
+| Code                          | When to use                                   | Notes                               |
+| ----------------------------- | --------------------------------------------- | ----------------------------------- |
+| `onClick={getRecipe}`         | Default, most common                          | Pass function directly              |
+| `onClick={() => getRecipe()}` | When you need to wrap logic or pass arguments | Creates a new function every render |
+
+
 import TailProtocal from "@site/src/components/TailProtocal";
 
 <TailProtocal />
