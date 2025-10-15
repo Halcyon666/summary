@@ -1,10 +1,6 @@
 {
   "extends": "@docusaurus/tsconfig",
-  // 忽略所有来自父配置的弃用选项警告。
-  // 并且 转向新的 “moduleResolution bundler / node16 / nodenext”模式。
-  // https://www.typescriptlang.org/tsconfig/#moduleResolution
   "compilerOptions": {
-    "moduleResolution": "bundler",
     "ignoreDeprecations": "6.0"
   }
 }

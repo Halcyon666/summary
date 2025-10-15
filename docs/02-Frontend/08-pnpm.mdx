@@ -39,11 +39,14 @@ pnpm uninstall <package>
 
 #  Remove extraneous packages not listed in the package.json file.
 pnpm prune
+
+# 强制更新pnpm-lock.yaml
+pnpm install --no-frozen-lockfile
 ```
 
 
 
-Problems
+## Problems
 
  `GET https://registry.npm.taobao.org/pnpm error (CERT_HAS_EXPIRED). Will retry in 10 seconds. 2 retries left.`
 
