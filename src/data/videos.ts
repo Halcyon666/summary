@@ -29,12 +29,16 @@ export const videos1: Video[] = [
     key: "4",
     name: "Section 4 – Meme Generator Project",
     totalTime: "01:57:18",
-    watchRecords: [{ date: "2025-10-17", watchedTime: "0:07:50" }],
+    watchRecords: [
+      { date: "2025-10-17", watchedTime: "1:14:42" },
+      { date: "2025-10-18", watchedTime: "01:57:18" },
+    ],
   },
   {
     key: "5",
     name: "Section 5 – Tenzies Project",
     totalTime: "01:30:00",
+    watchRecords: [{ date: "2025-10-18", watchedTime: "00:10:35" }],
   },
   {
     key: "6",

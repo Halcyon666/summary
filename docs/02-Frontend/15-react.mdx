@@ -267,6 +267,129 @@ It still works — React will call your wrapper function on click, which in turn
 | `onClick={() => getRecipe()}` | When you need to wrap logic or pass arguments | Creates a new function every render |
 
 
+## 如何动态设置变量名为key值
+
+```tsx title="错误示范"
+const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const { name, value } = event.currentTarget;
+  // highlight-next-line
+  setMeme((prev) => ({ ...prev, name: value }));
+};
+```
+
+```tsx title="正确用法示范"
+const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const { name, value } = event.currentTarget;
+  // highlight-next-line
+  setMeme((prev) => ({ ...prev, [name]: value }));
+};
+```
+
+## tsx能渲染的类型
+import MyHighLight from "@site/src/components/MyHighLight"
+
+React 的 JSX 表达式 `{ ... }` 里，只能直接渲染以下类型：
+
+- 字符串 (string)
+- 数字 (number)
+- 布尔值 (boolean)
+- React 元素 (JSX 元素)
+- 数组（包含以上类型）
+- <MyHighLight color="red">不能渲染对象,对象数组</MyHighLight>
+
+## useEffect function 
+
+when calling useEffect, depends on the dependents in `[]`.
+
+That's look this example.
+```tsx title="infinite loop"
+import React from "react";
+
+export default function App() {
+  const [starWarsData, setStarWarsData] = React.useState({});
+  const [count, setCount] = React.useState(0);
+
+  console.log("Rendered!");
+
+  React.useEffect(() => {
+    console.log("useEffect runs");
+    fetch("https://swapi.dev/api/people/1")
+      .then((res) => res.json())
+      .then((data) => setStarWarsData(data)
+      );
+      // highlight-next-line
+  }, [starWarsData]);
+
+  return (
+    <div>
+      <h2>The count is {count}</h2>
+      <button onClick={() => setCount((prevCount) => prevCount + 1)}>
+        Add
+      </button>
+      <pre>{JSON.stringify(starWarsData, null, 2)}</pre>
+    </div>
+  );
+}
+```
+Each time setStarWarsData(data) runs, React receives a new `{ ... }` object.
+Even if the JSON content is identical, it’s a different object reference,
+so React thinks the dependency changed and re-runs the effect — causing an infinite loop.
+
+<details>
+  <summary>corret usage</summary>
+
+```tsx
+React.useEffect(() => {
+  console.log("useEffect runs");
+  fetch("https://swapi.dev/api/people/1")
+    .then((res) => res.json())
+    .then((data) =>
+      setStarWarsData(data)
+    );
+    // highlight-next-line
+}, []);
+```
+</details>
+
+What happens when visit the page first time?
+```log title="Console Output"
+Rendered!
+App.tsx:11 useEffect runs
+App.tsx:8 Rendered!
+```
+
+| Stage | Trigger       | What happens                       | Console output   |
+| ----- | ------------- | ---------------------------------- | ---------------- |
+| 1     | Initial mount | Component function executes        | `Rendered!`      |
+| 2     | After mount   | `useEffect` callback runs          | `useEffect runs` |
+| 3     | State updated | Component re-renders with new data | `Rendered!`      |
+
+
+## how to clean resouce in useEffect
+
+```tsx title="WindowTracker"
+import { useEffect, useState } from "react";
+
+export default function WindowTracker() {
+  const [windowWidth, setWindownWidth] = useState<number>(window.innerWidth);
+  useEffect(() => {
+    const watchWindowWidth = () => {
+      console.log("resized!");
+      setWindownWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", watchWindowWidth);
+    // cleaning up what creating before
+    // highlight-start
+    return () => {
+      window.removeEventListener("resize", watchWindowWidth);
+      console.log("cleaning up");
+    };
+    // highlight-end
+  }, []);
+  return <h1>Window width: {windowWidth}</h1>;
+}
+```
+
 import TailProtocal from "@site/src/components/TailProtocal";
 
 <TailProtocal />
