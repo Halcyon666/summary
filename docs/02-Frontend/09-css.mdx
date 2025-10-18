@@ -97,19 +97,11 @@ p {
 
 ## 盒子设置
 
-> box-sizing: content-box;： 这是默认值。在这种模型下，
->
-> 元素的宽度和高度仅包括内容区域，不包括边框（border）、
->
->  内边距（padding）和外边距（margin）。这是传统的盒模型。
->
-> box-sizing: border-box;： 在这种模型下，
->
-> 元素的宽度和高度包括了内容区域、边框和内边距，
->
-> 但不包括外边距。
+- box-sizing: content-box;： 这是默认值。在这种模型下，元素的宽度和高度仅包括内容区域，
+不包括边框（border）、内边距（padding）和外边距（margin）。这是传统的盒模型。
 
-
+- box-sizing: border-box;： 在这种模型下，元素的宽度和高度包括了内容区域、边框和内边距，
+但不包括外边距。
 
 ```css
 h1 {
@@ -117,10 +109,6 @@ h1 {
     border: 2px dashed red;
 }
 ```
-
-
-
-
 
 ```css
 .container {
@@ -235,12 +223,6 @@ li a:focus {
 li:last-child a {
   border-radius: 0 0 2rem 2rem;
 }
-```
-
-## 文字
-
-```
-
 ```
 
 ## 排版样式
@@ -496,8 +478,6 @@ body {
 </body>
 ```
 
-
-
 ```css
 body {
   font-family: "Nunito", sans-serif;
@@ -633,8 +613,6 @@ body {
     </footer>
   </body>
 ```
-
-
 
 ```css
 @import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
@@ -821,7 +799,7 @@ footer {
 
 ```
 
-function 用法
+## function 用法
 
 ```css
 :root {
