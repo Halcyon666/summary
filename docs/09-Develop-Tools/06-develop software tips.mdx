@@ -36,6 +36,20 @@
 
 ```
 
+## vscode 取消AI助手提示
+- 对所有工程有效：
+在设置中搜索`inlineSuggest.enabled`,然后取消勾选即可。
+
+- 如何设置对单个工程有效？在哪创建文件？
+在项目根目录创建 `.vscode/settings.json` 文件，添加如下内容：
+
+```json
+{
+    "editor.inlineSuggest.enabled": false
+}
+```
+
+
 ## idea中powershell中文是原生编码`<AA>`解决办法
 
 ```

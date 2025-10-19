@@ -38,7 +38,10 @@ export const videos1: Video[] = [
     key: "5",
     name: "Section 5 – Tenzies Project",
     totalTime: "01:30:00",
-    watchRecords: [{ date: "2025-10-18", watchedTime: "00:10:35" }],
+    watchRecords: [
+      { date: "2025-10-18", watchedTime: "00:10:35" },
+      { date: "2025-10-19", watchedTime: "00:51:55" },
+    ],
   },
   {
     key: "6",

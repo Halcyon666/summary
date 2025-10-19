@@ -832,6 +832,57 @@ h1 {
 }
 ```
 
+## css rule wins 
+
+inline style > id selector > class selector > element selector.In CSS, the more specific rule wins.
+
+```css title="按钮初始样式"
+.dice-container button {
+    background-color: white; 
+}
+```
+```tsx css="style used in Die.tsx"
+import type { DiceProp } from "./App";
+
+const Die: React.FC<DiceProp> = ({ value, isHeld }) => {
+  return <button className={isHeld ? "held" : "notHeld"}>{value}</button>;
+};
+
+export default Die;
+```
+
+如果想动态修改按钮颜色，可以使用如下代码：
+<details>
+<summary>点击查看代码</summary>
+```css title="css rule wins "
+
+/* highlight-next-line */
+.dice-container button.held {
+    background-color: #59E391;
+}
+
+ /* highlight-next-line */
+.dice-container button.notHeld {
+    background-color: white;
+}
+```
+
+```css title="css rule fails"
+/* highlight-next-line */
+.held {
+    background-color: #59E391;
+}
+
+ /* highlight-next-line */
+.notHeld {
+    background-color: white;
+}
+```
+</details>
+
+## `margin: 0;`or `margin-top: 0;`
+
+这两个常用于tile或者h1标签。`margin: 0;`用来移除多余的边距。`margin-top: 0;`用来移除标题上方的边距，确保标题紧贴上方内容。
 
 import TailProtocal from "@site/src/components/TailProtocal";
 
