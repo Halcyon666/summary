@@ -40,7 +40,7 @@ export const videos1: Video[] = [
     totalTime: "01:30:00",
     watchRecords: [
       { date: "2025-10-18", watchedTime: "00:10:35" },
-      { date: "2025-10-19", watchedTime: "00:51:55" },
+      { date: "2025-10-19", watchedTime: "1:21:15" },
     ],
   },
   {

@@ -552,6 +552,63 @@ Array.from({ length: 3 }, (_, i) => i * 2);
 Array.from({ length: 10 }, () => Math.ceil(Math.random() * 6))
 ```
 
+## `Array.every`
+
+`array.every(callback(element, index, array), thisArg?)`
+
+1. with callback only
+
+```tsx title="check all elements meet condition"
+const threshold = { limit: 10 };
+const numbers = [3, 5, 9];
+
+// Arrow functions do NOT bind `this`, so `thisArg` is ignored.
+const allBelowLimit = numbers.every((num) => num < threshold.limit);
+
+console.log(allBelowLimit); // true
+```
+
+2. with callback and thisArg
+
+```tsx title="check all elements meet condition with thisArg"
+const threshold = 5;
+const numbers = [6, 7, 8, 9, 10];
+const allAboveThreshold = numbers.every(function (num) {
+  return num > this.threshold;
+}, { threshold });
+console.log(allAboveThreshold); // true
+```
+
+## lazy Initialization for useState
+
+1️⃣ Lazy initialization: `useState(() => generateDice())`
+
+- Here, you pass a function to useState.
+- React will call that function once — only on the initial render.
+- The return value of the function becomes the initial state.
+- After that, React never calls the function again, because it already has the state stored internally.
+- Benefit: Useful when computing the initial state is expensive.
+
+**Explain:**
+
+1. Component mounts → React calls () => generateDice().
+2. The return value (DiceProp[]) is stored as the state.
+3. Component re-renders → React reuses the stored state, function is never called again.
+
+
+2️⃣ Non-lazy way:
+`const [dice, setDice] = useState(generateDice());`
+
+- Here, you call generateDice() immediately and pass its return value to useState.
+- This happens every render of the component, but only the first value matters for initialization.
+
+**Explain:**
+
+1. Component renders → generateDice() runs → returns array → React stores as state.
+2. Component re-renders later → generateDice() still runs, but React ignores it, because the state is already managed internally.
+3. Problem: If generateDice() is expensive, you waste CPU calling it unnecessarily on every render.
+
+
 
 import TailProtocal from "@site/src/components/TailProtocal";
 
