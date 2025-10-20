@@ -516,6 +516,30 @@ App.tsx:8 Rendered!
 | 3     | State updated | Component re-renders with new data | `Rendered!`      |
 
 
+## useRef
+
+```tsx title="FocusInput"
+import { useRef } from "react";
+export default function FocusInput() {
+  // highlight-next-line
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleFocus = () => {
+    // current 可能为 null，因此需要进行非空检查
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
+  return (
+    <div>
+      <input ref={inputRef} type="text" placeholder="Click the button to focus me" />
+      <button onClick={handleFocus}>Focus Input</button>
+    </div>
+  );
+}
+```
+
 ## how to clean resouce in useEffect
 
 ```tsx title="WindowTracker"

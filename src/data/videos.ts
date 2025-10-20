@@ -41,12 +41,14 @@ export const videos1: Video[] = [
     watchRecords: [
       { date: "2025-10-18", watchedTime: "00:10:35" },
       { date: "2025-10-19", watchedTime: "1:21:15" },
+      { date: "2025-10-20", watchedTime: "01:30:00" },
     ],
   },
   {
     key: "6",
     name: "Section 6 – Assembly Endgame Project",
     totalTime: "02:06:59",
+    watchRecords: [{ date: "2025-10-20", watchedTime: "00:04:31" }],
   },
   {
     key: "7",

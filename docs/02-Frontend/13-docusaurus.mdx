@@ -2,13 +2,15 @@
 
 ## github workflow configuration
 
+### deploy script
+
 [refers article](https://juejin.cn/post/7115631818736402440)
 
 > besides: you need install yarn and run yarn install in your docs project
 
 [Docusaurus Deployment](https://docusaurus.io/docs/deployment#deploying-to-github-pages)
 
-```yml
+```yml title="deploy.yml"
 name: Deploy to GitHub Pages
 
 on:
@@ -26,7 +28,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 22.19.0
           cache: yarn
 
       - name: Install dependencies
@@ -48,6 +50,32 @@ jobs:
           # The GH actions bot is used by default if you didn't specify the two fields.
           # You can swap them out with your own user credentials.
 
+```
+
+### configuration secrets
+
+![20251020205913](https://s2.loli.net/2025/10/20/J2Z7CxXQPNjc8UW.png)
+
+新版页面最小化权限配置TOKEN
+
+| 分类              | 权限项            | 访问级别                                                   |
+| --------------- | -------------- | ------------------------------------------------------ |
+| 🧱 **Contents** | Read and write | ✅ 必需：允许 Action 推送 `gh-pages` 分支                        |
+| ⚙️ **Actions**  | Read and write | ✅ 可选：如果你的 Workflow 需要触发其他 Actions（例如 re-run workflows） |
+
+
+### deploy error css net::ERR_ABORTED 404 (Not Found)
+
+```tx
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react-swc";
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  // highlight-next-line
+  base: "/tenzies/", // 👈 your repo name here
+});
 ```
 
 ## DocSearch v2 not working in my site
