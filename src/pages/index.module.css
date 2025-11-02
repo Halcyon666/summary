@@ -1,18 +1,42 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
-
 .heroBanner {
-  padding: 4rem 0;
   text-align: center;
-  position: relative;
-  overflow: hidden;
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
+.buttons {
+  margin-top: 1.5rem;
 }
 
+.featureSection {
+  padding: 2rem 0;
+}
+
+.featureGrid {
+  margin-top: 1rem;
+}
+
+.featureCard {
+  text-decoration: none;
+  color: #1b1b1d;
+  background: #00d3c8;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.featureCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.featureCard h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem;
+}
+
+.featureCard p {
+  margin: 0;
+  font-size: 1rem;
+  color: #1b1b1d;
+}

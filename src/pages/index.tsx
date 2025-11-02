@@ -10,14 +10,7 @@ import styles from "./index.module.css";
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <header
-      className={clsx("hero hero--primary", styles.heroBanner)}
-      style={{
-        background: "linear-gradient(135deg, #4caf50, #81c784)",
-        color: "#fff",
-        padding: "4rem 0",
-      }}
-    >
+    <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
         <Heading as="h1" className="hero__title">
           {siteConfig.title}
@@ -76,17 +69,26 @@ export default function Home(): JSX.Element {
               padding: "0 2rem",
             }}
           >
-            <Link to="/blog/react-tutorial" className={styles.featureCard}>
+            <Link
+              to="/frontend/react/basic-react"
+              className={styles.featureCard}
+            >
               <h3>React Tutorial</h3>
               <p>Learn the basics of React and build amazing apps.</p>
             </Link>
-            <Link to="/blog/docker-guide" className={styles.featureCard}>
+            <Link
+              to="/devops/docker/Docker-Command-and-Dockerfile"
+              className={styles.featureCard}
+            >
               <h3>Docker Guide</h3>
               <p>Master containerization with Docker.</p>
             </Link>
-            <Link to="/blog/leetcode-solutions" className={styles.featureCard}>
-              <h3>LeetCode Solutions</h3>
-              <p>Explore solutions to common coding problems.</p>
+            <Link
+              to="/background/Java/DesignPattern/functional-register-engine"
+              className={styles.featureCard}
+            >
+              <h3>Functional Register Engine in Java</h3>
+              <p>Explore the design of a functional register engine.</p>
             </Link>
           </div>
         </section>

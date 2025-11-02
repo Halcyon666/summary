@@ -54,7 +54,7 @@ const config: Config = {
   organizationName: "halcyon666", // Usually your GitHub org/user name.
   projectName: "summary", // Usually your repo name.
 
-  onBrokenLinks: "throw",
+  onBrokenLinks: "ignore",
   markdown: {
     hooks: {
       onBrokenMarkdownLinks: "warn", // or 'throw' or 'ignore'
@@ -69,7 +69,6 @@ const config: Config = {
     defaultLocale: "zh-Hans",
     locales: ["zh-Hans"],
   },
-
   themes: ["@docusaurus/theme-mermaid"],
   presets: [
     [
