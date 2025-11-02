@@ -4,22 +4,46 @@ import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
 import Heading from "@theme/Heading";
-import Hello from "@site/src/components/Hello";
 
 import styles from "./index.module.css";
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <header className={clsx("hero hero--primary", styles.heroBanner)}>
+    <header
+      className={clsx("hero hero--primary", styles.heroBanner)}
+      style={{
+        background: "linear-gradient(135deg, #4caf50, #81c784)",
+        color: "#fff",
+        padding: "4rem 0",
+      }}
+    >
       <div className="container">
         <Heading as="h1" className="hero__title">
           {siteConfig.title}
         </Heading>
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className={styles.buttons}>
-          <Link className="button button--secondary button--lg" to="/intro">
-            See all my blogs
+          <Link
+            className="button button--secondary button--lg"
+            to="/intro"
+            style={{
+              marginRight: "10px",
+              borderRadius: "8px",
+              padding: "0.8rem 1.5rem",
+            }}
+          >
+            Explore Blogs
+          </Link>
+          <Link
+            className="button button--secondary button--lg"
+            to="/about"
+            style={{
+              borderRadius: "8px",
+              padding: "0.8rem 1.5rem",
+            }}
+          >
+            About Me
           </Link>
         </div>
       </div>
@@ -32,18 +56,41 @@ export default function Home(): JSX.Element {
   return (
     <Layout
       title={`${siteConfig.title}`}
-      description="Welcome to halcyon666's blog"
+      description="Explore blogs, tutorials, and more by halcyon666"
     >
       <HomepageHeader />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      ></div>
-
-      <Hello />
+      <main className={styles.main}>
+        <section className={styles.featureSection}>
+          <h2 style={{ marginBottom: "20px", textAlign: "center" }}>
+            Featured Blogs
+          </h2>
+          <p style={{ marginBottom: "20px", textAlign: "center" }}>
+            Check out some of the most popular articles!
+          </p>
+          <div
+            className={styles.featureGrid}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+              gap: "20px",
+              padding: "0 2rem",
+            }}
+          >
+            <Link to="/blog/react-tutorial" className={styles.featureCard}>
+              <h3>React Tutorial</h3>
+              <p>Learn the basics of React and build amazing apps.</p>
+            </Link>
+            <Link to="/blog/docker-guide" className={styles.featureCard}>
+              <h3>Docker Guide</h3>
+              <p>Master containerization with Docker.</p>
+            </Link>
+            <Link to="/blog/leetcode-solutions" className={styles.featureCard}>
+              <h3>LeetCode Solutions</h3>
+              <p>Explore solutions to common coding problems.</p>
+            </Link>
+          </div>
+        </section>
+      </main>
     </Layout>
   );
 }
