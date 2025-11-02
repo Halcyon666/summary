@@ -53,7 +53,7 @@ export const videos1: Video[] = [
       { date: "2025-10-28", watchedTime: "00:26:15" },
       { date: "2025-10-31", watchedTime: "01:00:59" },
       { date: "2025-11-1", watchedTime: "01:21:32" },
-      { date: "2025-11-2", watchedTime: "01:32:52" },
+      { date: "2025-11-2", watchedTime: "01:46:08" },
     ],
   },
   {
