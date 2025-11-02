@@ -17,7 +17,7 @@
 .featureCard {
   text-decoration: none;
   color: #1b1b1d;
-  background: #00d3c8;
+  background: #25c2a0;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 1rem 2rem;
@@ -27,6 +27,7 @@
 
 .featureCard:hover {
   transform: translateY(-5px);
+  background-color: #25c2a0;
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
@@ -39,4 +40,44 @@
   margin: 0;
   font-size: 1rem;
   color: #1b1b1d;
+}
+
+
+/* ✅ 浅色模式：与 hero 一致的绿底白字 */
+html[data-theme='light'] .featureCard {
+  background: #2e8555;
+  color: #fff;
+}
+
+html[data-theme='light'] .featureCard:hover {
+  background: #3fa66a;
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* 深色模式：亮绿底深背景，保持对比度 */
+html[data-theme='dark'] .featureCard {
+  background: #00bfa1;
+  color: #fff;
+}
+
+html[data-theme='dark'] .featureCard:hover {
+  background: #00d2b5;
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .heroBanner {
+    padding: 3.5rem 1rem;
+  }
+
+  .featureCard {
+    padding: 1.2rem 1.5rem;
+  }
+
+  .featureSection {
+    padding: 2rem 1rem 3rem;
+  }
 }
