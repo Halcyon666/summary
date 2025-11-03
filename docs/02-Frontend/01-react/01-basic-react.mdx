@@ -269,7 +269,7 @@ It still works — React will call your wrapper function on click, which in turn
 
 ### pass parameter function
 
-```tsx title="app.tsx" 
+```tsx title="App.tsx" 
 import React, { useState } from "react";
 import "./index.css";
 import Die from "./Die";
@@ -399,7 +399,7 @@ const App: React.FC = () => {
 export default App;
 ```
 
-```tsx
+```tsx title="Die.tsx"
 import type { DiceProp } from "./App";
 
 const Die: React.FC<{ die: DiceProp; changeToHeld: () => void }> = ({
@@ -587,7 +587,7 @@ const threshold = { limit: 10 };
 const numbers = [3, 5, 9];
 
 // Arrow functions do NOT bind `this`, so `thisArg` is ignored.
-const allBelowLimit = numbers.every((num) => num < threshold.limit);
+const allBelowLimit = numbers.every((num) => num <br threshold.limit);
 
 console.log(allBelowLimit); // true
 ```
@@ -632,6 +632,10 @@ console.log(allAboveThreshold); // true
 2. Component re-renders later → generateDice() still runs, but React ignores it, because the state is already managed internally.
 3. Problem: If generateDice() is expensive, you waste CPU calling it unnecessarily on every render.
 
+
+## 插件`ES7 React/Redux/GraphQL/React-Native snippet`
+
+输入时支持快捷键，好像idea中的`main`
 
 
 import TailProtocal from "@site/src/components/TailProtocal";

@@ -11,7 +11,7 @@
 [Docusaurus Deployment](https://docusaurus.io/docs/deployment#deploying-to-github-pages)
 
 ```yml title="deploy.yml"
-name: Deploy to GitHub Pages
+name: Deploy taco shop
 
 on:
   push:
@@ -22,39 +22,43 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to GitHub Pages
+    name: Deploy Chef Claude
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - uses: actions/setup-node@v3
         with:
           node-version: 22.19.0
-          cache: yarn
-
+          cache: "pnpm"
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
-      - name: Build website
-        run: yarn build
+        run: |
+          echo ${{ github.workspace }}  # 输出工作区上下文路径，就是工程路径
+          pnpm install --frozen-lockfile
+      - name: Build Chef Claude
+        run: |
+          pnpm build
 
       # Popular action to deploy to GitHub Pages:
       # Docs: https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-docusaurus
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.ACCESS_TOKEN }}
+          github_token: ${{ secrets.SECRET_TOKEN }}
           # Build output to publish to the `gh-pages` branch:
-          publish_dir: ./build
-          # The following lines assign commit authorship to the official
-          # GH-Actions bot for deploys to `gh-pages` branch:
-          # https://github.com/actions/checkout/issues/13#issuecomment-724415212
-          # The GH actions bot is used by default if you didn't specify the two fields.
-          # You can swap them out with your own user credentials.
+          publish_dir: ./dist # 文档打包产物的目录名就是build
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_message: ${{ github.event.head_commit.message }}
 
 ```
 
 ### configuration secrets
 
 ![20251020205913](https://s2.loli.net/2025/10/20/J2Z7CxXQPNjc8UW.png)
+![20251103223927](https://s2.loli.net/2025/11/03/m8RPDfWd1TYsGwN.png)
 
 新版页面最小化权限配置TOKEN
 
@@ -66,7 +70,9 @@ jobs:
 
 ### deploy error css net::ERR_ABORTED 404 (Not Found)
 
-```tx
+Use Vercel deploy firstly, if need not visited by China Mainland.
+
+```ts
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 
@@ -74,7 +80,9 @@ import react from "@vitejs/plugin-react-swc";
 export default defineConfig({
   plugins: [react()],
   // highlight-next-line
-  base: "/tenzies/", // 👈 your repo name here
+  {/* base: "/tenzies/", // 不要这么写 */}
+  // highlight-next-line
+  base: "./"
 });
 ```
 
