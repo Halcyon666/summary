@@ -1,4 +1,4 @@
-import { type Video } from "../components/VideoProgressDashboard";
+import { type Video } from "../components/video-progress-dashdoard/VideoProgressDashboard";
 
 export const reactLearn2025: Video[] = [
   {
@@ -65,3 +65,15 @@ export const reactLearn2025: Video[] = [
     watchRecords: [{ date: "2025-11-3", watchedTime: "22:43" }],
   },
 ];
+
+// just add one, but not used yet
+// seprate part from VideoProgressDashboard
+export const videoReactRouter: Video = {
+  key: "react-router",
+  name: "Learn React Router v6 In 45 Minutes",
+  totalTime: "46:19",
+  watchRecords: [
+    { date: "2025-11-4", watchedTime: "25:23" },
+    { date: "2025-11-4", watchedTime: "34:39" },
+  ],
+};

@@ -1,7 +1,7 @@
 
-# learn
+# Becomes React Developer
 
-## React 学习计划
+## Full Beginner’s Tutorial
 
 资源列表
 
@@ -9,10 +9,130 @@
 - [Author's case GitHub](https://github.com/scrimba/learn-react)
 - [My learn GitHub](https://github.com/Halcyon666/react-daily-learn)
 
-进度情况
 
 import { reactLearn2025 } from '@site/src/data/videos';
-import VideoProgressDashboard from '@site/src/components/VideoProgressDashboard'
+import VideoProgressDashboard from '@site/src/components/video-progress-dashdoard/VideoProgressDashboard.tsx'
 
+<details>
+<summary>视频进度</summary>
 <VideoProgressDashboard videos={reactLearn2025}/>
+</details>
 
+:::info
+After this course
+<h3>🧭 What You Already Know</h3>
+✅ React fundamentals (components, props, hooks like useState, useEffect, useRef) <br/>
+✅ Functional components + event handling <br/>
+✅ Local state + derived state <br/>
+✅ Rendering optimization basics <br/>
+✅ Some CSS (plain or Tailwind intro) <br/>
+:::
+
+## Next plain
+
+### 🧩 1️⃣ React Router (Navigation Between Pages)
+
+**Why:** Every real app has multiple screens (home, login, detail, etc.).
+
+**Learn**
+
+- 📺 [React Router v6 Crash Course — Web Dev Simplified (1h)](https://www.youtube.com/watch?v=Ul3y1LXxzdU)
+- Topics:
+  - `<BrowserRouter>` / `<Routes>` / `<Route>`
+  - URL params (`useParams`)
+  - Navigation (`useNavigate`)
+  - Nested routes, layout routes
+
+**Practice**
+
+[Practice](https://github.com/Halcyon666/react-daily-learn/commit/7188f52c8b3ade3775f8617d1bf1c41b37772de5)
+
+------
+
+### ⚙️ 2️⃣ State Management Beyond `useState`
+
+**Why:** When your app grows, multiple components share data.
+
+You can learn either:
+
+- 🔸 **Redux Toolkit (most popular)**
+   or
+- 🔸 **Zustand** (simpler but powerful — modern favorite)
+
+**Learn**
+
+- 📺 [Redux Toolkit Crash Course — Traversy Media](https://www.youtube.com/watch?v=9zySeP5vH9c)
+- Optional: [Zustand in 15 Minutes — Web Dev Simplified](https://www.youtube.com/watch?v=2hR-uWjBAgw)
+
+**Practice**
+
+- Move your “game state” or “user info” to Redux/Zustand store.
+- Add a “Reset All Games” button that clears state globally.
+
+------
+
+### 🧠 3️⃣ Other Hooks You Should Know
+
+| Hook              | Use                            | Example                    |
+| ----------------- | ------------------------------ | -------------------------- |
+| `useMemo`         | Cache expensive computations   | Score calculation          |
+| `useCallback`     | Prevent function re-creation   | Pass stable event handlers |
+| `useLayoutEffect` | Runs before paint (rare)       | Measure DOM                |
+| `useReducer`      | Complex state logic            | Form or game state machine |
+| `useId`           | Unique IDs for accessibility   | Label input pairs          |
+| `useContext`      | Share global data (like theme) | Theme toggling             |
+
+**Learn**
+
+- 📺 [All React Hooks Explained Simply — Web Dev Simplified (1h)](https://www.youtube.com/watch?v=f687hBjwFcM)
+
+**Practice**
+
+- Refactor your Tenzies `rollDice` logic to use `useCallback`.
+- Add a “statistics” computation with `useMemo`.
+
+------
+
+### 🎨 4️⃣ CSS Modules + Tailwind (Combine)
+
+**Why:** Learn component-scoped CSS + utility-first design.
+
+**Learn**
+
+- 📺 [CSS Modules in React — Web Dev Simplified (15m)](https://www.youtube.com/watch?v=6v2L2UGZJAM)
+- 📺 [Tailwind CSS Crash Course — Traversy Media (1h)](https://www.youtube.com/watch?v=dFgzHOx84xQ)
+
+**Practice**
+
+- Create a small “profile card” component using CSS Module for layout + Tailwind for colors.
+
+------
+
+### 🌐 5️⃣ Fetching and Managing API Data (Preparation for Backend)
+
+**Why:** Needed to connect with your Spring Boot APIs soon.
+
+**Learn**
+
+- `fetch` and `axios` basics
+- CORS concept
+- React Query (for caching and retries)
+
+📺 [React Query Crash Course — Dev Ed](https://www.youtube.com/watch?v=x1rQ61otgtU)
+
+**Practice**
+
+- Mock an API using `jsonplaceholder.typicode.com`.
+- Display posts and simulate loading/error states.
+
+
+## 🧱 Suggested Next-Step Sequence
+
+| Week   | Focus                                                   | Output                             |
+| ------ | ------------------------------------------------------- | ---------------------------------- |
+| Week 1 | React Router + small navigation project                 | “Game Hub” with multiple pages     |
+| Week 2 | Redux Toolkit or Zustand                                | Global state manager               |
+| Week 3 | Advanced hooks (`useMemo`, `useCallback`, `useReducer`) | Optimized game                     |
+| Week 4 | CSS Modules + Tailwind deep dive                        | Styled portfolio component         |
+| Week 5 | API calls + data fetching                               | Connected front-end with mock APIs |
+| Week 6 | Start Spring Boot REST backend                          | Begin full-stack integration       |
