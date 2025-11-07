@@ -84,7 +84,7 @@ export default function Home(): JSX.Element {
               <p>Master containerization with Docker.</p>
             </Link>
             <Link
-              to="/background/Java/DesignPattern/functional-register-engine"
+              to="/background/Java/design-pattern/functional-register-engine"
               className={styles.featureCard}
             >
               <h3>Functional Register Engine in Java</h3>

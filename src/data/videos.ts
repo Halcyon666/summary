@@ -66,14 +66,12 @@ export const reactLearn2025: Video[] = [
   },
 ];
 
-// just add one, but not used yet
-// seprate part from VideoProgressDashboard
 export const videoReactRouter: Video = {
   key: "react-router",
   name: "Learn React Router v6 In 45 Minutes",
   totalTime: "46:19",
   watchRecords: [
     { date: "2025-11-4", watchedTime: "25:23" },
-    { date: "2025-11-4", watchedTime: "34:39" },
+    { date: "2025-11-6", watchedTime: "34:39" },
   ],
 };
