@@ -89,9 +89,9 @@ boolean 改为Boolean值，某些场景（netty 不响应请求)会有问题。
 
 处理：给Boolean类赋值false
 
-### jackson序列化问题
+## jackson序列化问题
 
-错误信息:
+### LocalDateTime not supported by default
 ```java
 Java 8 date/time type java.time.LocalDateTime not supported by default:
 add Module "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" to enable
@@ -119,6 +119,32 @@ public class JacksonConfig implements WebMvcConfigurer {
 
 2. 如果无法扩展，考虑跳过`Bean`序列化步骤，比如用其实转化Bean为Map的方法
 3. 实在没有办法，改用`Fastjson`或者`Gjson`
+
+### 第二个字段大写问题
+
+1. 使用 `@JsonProperty`
+
+`@JsonProperty` 用来明确告诉 Jackson：
+
+“这个字段（或方法、构造参数）要作为 JSON 属性使用，并且属性名是 XXX。”
+
+2. 使用 `@JsonAutoDetect`
+
+```java
+@JsonAutoDetect(
+fieldVisibility = JsonAutoDetect.Visibility.ANY,
+getterVisibility = JsonAutoDetect.Visibility.NONE,
+setterVisibility = JsonAutoDetect.Visibility.NONE)
+```
+
+序列化和反序列化使用到的成员
+| **用法位置** | **影响方向**      | **常见用途**               |
+| ------------ | ----------------- | -------------------------- |
+| 字段         | 序列化 + 反序列化 | 强制包含私有字段           |
+| getter       | 序列化            | 改输出字段名               |
+| setter       | 反序列化          | 改输入字段名               |
+| 构造函数参数 | 反序列化          | 映射 JSON 参数名到构造参数 |
+| record 参数  | 序列化 + 反序列化 | 控制 JSON 属性名           |
 
 ## 数据库连接池配置问题
 

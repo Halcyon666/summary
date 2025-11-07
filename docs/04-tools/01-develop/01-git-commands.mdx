@@ -56,6 +56,13 @@ git cherry -v
 # 查看某行文件修改人
 git blame -L 58,100 filename
 git blame -L 57,+10 filename
+
+## 只看合并提交的变化
+git log --follow -p --merges -- <file>
+
+## 查看 merge 冲突中修改的部分
+git log --cc -p -- <file>
+
 ```
 
 ## 撤销类命令

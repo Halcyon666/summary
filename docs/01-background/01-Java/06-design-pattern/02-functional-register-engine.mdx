@@ -14,7 +14,7 @@
 - ✅ Spring Boot 集成
 - ✅ 灵活的模板化处理流程
 
----
+------
 
 ## 2. 核心组件设计
 
@@ -59,7 +59,6 @@ public class RegisterEnginV3<T, S extends Business<T>> {
         registry.get(businessType).accept(params);
     }
 }
-
 ```
 
 **泛型参数说明**：
@@ -67,19 +66,17 @@ public class RegisterEnginV3<T, S extends Business<T>> {
 - `T`: 业务处理的参数类型（通常是 `BusinessContext<I, O>`）
 - `S`: 具体的 Business 实现类型
 
----
+------
 
 ### 2.2 Template - 处理模板接口
 
-**设计理念**：
-采用函数式接口设计，定义统一的业务处理流程。
+**设计理念**： 采用函数式接口设计，定义统一的业务处理流程。
 
 ```java
 @FunctionalInterface
 public interface Template<T, S extends Business<T>> {
     void handler(String txcode, T param, S businessService);
 }
-
 ```
 
 **实现示例**：
@@ -103,10 +100,9 @@ public class TemplateImpl3<I, O> implements
         // ...
     }
 }
-
 ```
 
----
+------
 
 ### 2.3 Business - 业务接口层次
 
@@ -118,7 +114,6 @@ Business<T> (标记接口)
 BusinessType3<I, O> extends Business<BusinessContext<I, O>>
     ↓
 Business3 implements BusinessType3<InputDto3, OutputDto3>
-
 ```
 
 **Business 基础接口**：
@@ -127,7 +122,6 @@ Business3 implements BusinessType3<InputDto3, OutputDto3>
 public interface Business<T> {
     // 标记接口，用于类型约束
 }
-
 ```
 
 **业务类型接口**：
@@ -138,7 +132,6 @@ public interface BusinessType3<I, O>
 
     void doBusiness2(BusinessContext<I, O> businessContext);
 }
-
 ```
 
 **具体业务实现**：
@@ -157,10 +150,9 @@ public class Business3 implements
         ctx.setOutput(output);
     }
 }
-
 ```
 
----
+------
 
 ### 2.4 @UseTemplate 注解
 
@@ -172,13 +164,11 @@ public class Business3 implements
 public @interface UseTemplate {
     Class<?> value();  // 指定使用的 Template 实现类
 }
-
 ```
 
-**使用场景**：
-在 Business 实现类上标注，指定该业务使用的处理模板。
+**使用场景**： 在 Business 实现类上标注，指定该业务使用的处理模板。
 
----
+------
 
 ## 3. 数据流转设计
 
@@ -191,7 +181,6 @@ public class BusinessContext<I, O> {
     private O output;       // 输出结果
     private OtherDto3 otherDto;  // 其他上下文信息
 }
-
 ```
 
 ### 3.2 执行流程
@@ -208,10 +197,9 @@ Template.handler(txcode, param, businessService)
 BusinessService.doBusiness(param)
     ↓
 返回结果（通过 BusinessContext）
-
 ```
 
----
+------
 
 ## 4. 类型安全机制
 
@@ -230,7 +218,6 @@ private static <T, S extends Business<T>> void
         throw new IllegalStateException("❌ Template type mismatch");
     }
 }
-
 ```
 
 ### 4.2 类型不匹配示例
@@ -242,17 +229,15 @@ public class Business3 implements
     BusinessType3<InputDto3, OutputDto3> {  // 实际 BusinessContext<InputDto3, OutputDto3>
     // 启动时会抛出 IllegalStateException
 }
-
 ```
 
----
+------
 
 ## 5. Bean 命名策略
 
 ### 5.1 UniquePackageBeanNameGenerator
 
-**问题背景**：
-当多个包下存在同名 Business 类时，Spring 默认命名策略会导致 Bean 名称冲突。
+**问题背景**： 当多个包下存在同名 Business 类时，Spring 默认命名策略会导致 Bean 名称冲突。
 
 **解决方案**：
 
@@ -279,7 +264,6 @@ public class UniquePackageBeanNameGenerator
         return originalBeanName;
     }
 }
-
 ```
 
 ### 5.2 配置方式
@@ -292,10 +276,9 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 }
-
 ```
 
----
+------
 
 ## 6. 使用示例
 
@@ -312,7 +295,6 @@ public class OutputDto3 {
     private String field2;
     private String field3;
 }
-
 ```
 
 ### 6.2 实现业务逻辑
@@ -334,7 +316,6 @@ public class Business3 implements
         ctx.setOutput(output);
     }
 }
-
 ```
 
 ### 6.3 调用业务
@@ -360,26 +341,32 @@ public class BusinessController {
         return context;
     }
 }
-
 ```
 
----
+------
 
 ## 7. 优势与扩展性
 
 ### 7.1 设计优势
 
-| 特性 | 说明 |
-| --- | --- |
-| **低耦合** | 业务逻辑与处理流程完全分离 |
-| **高内聚** | 相同类型业务共享同一模板 |
-| **类型安全** | 编译期 + 运行期双重类型检查 |
-| **易扩展** | 新增业务只需实现接口并添加注解 |
-| **可维护** | 统一的注册和执行机制 |
+| 特性         | 说明                           |
+| ------------ | ------------------------------ |
+| **低耦合**   | 业务逻辑与处理流程完全分离     |
+| **高内聚**   | 相同类型业务共享同一模板       |
+| **类型安全** | 编译期 + 运行期双重类型检查    |
+| **易扩展**   | 新增业务只需实现接口并添加注解 |
+| **可维护**   | 统一的注册和执行机制           |
+
+## 8. 异常处理
+
+1. 定义系统内部异常和自定义通信异常
+2. `Controller` 或者 `Service` 统一处理自定义异常和未知异常
+3. 如果有不需要响应的场景，自定义一个不响应的异常
+4. 如果有多个远程调用，按多种远程调用的自定义异常来处理
 
 ---
 
-## 8. 总结
+## 9. 总结
 
 本设计通过注解驱动的方式实现了业务逻辑的灵活注册和执行，主要特点：
 
@@ -397,7 +384,7 @@ public class BusinessController {
 - 需要动态扩展业务的系统
 - 业务流程标准化的场景
 
----
+------
 
 import TailProtocal from "@site/src/components/TailProtocal";
 
