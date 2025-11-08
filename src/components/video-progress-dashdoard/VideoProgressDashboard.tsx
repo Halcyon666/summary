@@ -18,6 +18,7 @@ import {
   ClockCircleOutlined,
   CalendarOutlined,
 } from "@ant-design/icons";
+import { nanoid } from "nanoid";
 
 /** 观看记录类型 */
 export type WatchRecord = {
@@ -39,6 +40,7 @@ export type ProcessedVideo = Video & {
   watched: number;
   percent: number;
   isCompleted: boolean;
+  key: string;
 };
 
 /** 工具函数：时间字符串转秒 */
@@ -70,7 +72,8 @@ const useVideoStats = (videos: Video[]) =>
       const watched = parseTimeToSeconds(lastRecord?.watchedTime);
       const percent = total > 0 ? Math.round((watched / total) * 100) : 0;
       const isCompleted = watched >= total && total > 0;
-      return { ...v, total, watched, percent, isCompleted };
+      const key = nanoid();
+      return { ...v, total, watched, percent, isCompleted, key };
     });
 
     const totalVideos = processed.length;
@@ -326,7 +329,7 @@ const VideoList: React.FC<{
               }}
             >
               <span style={{ fontWeight: 500 }}>{video.name}</span>
-              <StatusTag {...video} />
+              <StatusTag {...video} key={video.key} />
             </div>
 
             <ProgressWithDates

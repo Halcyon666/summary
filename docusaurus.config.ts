@@ -273,14 +273,14 @@ const config: Config = {
       playgroundPosition: "bottom",
     },
   } satisfies Preset.ThemeConfig,
-  scripts: [
+  /*   scripts: [
     // Object format.
     {
       src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4872091594975928",
       async: true,
       crossorigin: "anonymous",
     },
-  ],
+  ], */
   plugins: ["@docusaurus/theme-live-codeblock", "docusaurus-plugin-image-zoom"],
 };
 
