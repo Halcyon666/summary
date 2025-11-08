@@ -18,7 +18,6 @@ import {
   ClockCircleOutlined,
   CalendarOutlined,
 } from "@ant-design/icons";
-import { nanoid } from "nanoid";
 
 /** 观看记录类型 */
 export type WatchRecord = {
@@ -72,8 +71,7 @@ const useVideoStats = (videos: Video[]) =>
       const watched = parseTimeToSeconds(lastRecord?.watchedTime);
       const percent = total > 0 ? Math.round((watched / total) * 100) : 0;
       const isCompleted = watched >= total && total > 0;
-      const key = nanoid();
-      return { ...v, total, watched, percent, isCompleted, key };
+      return { ...v, total, watched, percent, isCompleted };
     });
 
     const totalVideos = processed.length;

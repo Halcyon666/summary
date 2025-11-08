@@ -67,7 +67,7 @@ export const beginnerVideos: Video[] = [
 ];
 
 export const routerVideo: Video = {
-  key: "react-router",
+  key: "1",
   name: "Learn React Router v6 In 45 Minutes",
   totalTime: "46:19",
   watchRecords: [

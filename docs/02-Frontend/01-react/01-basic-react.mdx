@@ -632,11 +632,72 @@ console.log(allAboveThreshold); // true
 2. Component re-renders later → generateDice() still runs, but React ignores it, because the state is already managed internally.
 3. Problem: If generateDice() is expensive, you waste CPU calling it unnecessarily on every render.
 
+## reusable routes
 
-## 插件`ES7 React/Redux/GraphQL/React-Native snippet`
+[All Xml codes](https://github.com/Halcyon666/react-daily-learn/tree/main/src/routes/v3)
+<details>
+<summary>Xml</summary>
+```tsx title="GameRoutes.tsx"
+import { Route, Routes } from "react-router-dom";
+import GamesId from "./GamesId";
+import GameLayout from "./GameLayout";
 
-输入时支持快捷键，好像idea中的`main`
+// this contains links and routes
+// 1. move all sub Route
+// 2. wrapper all routes in to a "<Route element={<GameLayout />}></Route>"
+// this part of code equivalent to "src/routes/v4/gameRoutes.tsx"
+export default function GameRoutes() {
+  return (
+    <>
+      {/* <GameLayout /> */}
+      <Routes>
+        <Route element={<GameLayout />}>
+          <Route index element={<h1>Games</h1>}></Route>
+          <Route path=":id" element={<GamesId />}></Route>
+          <Route path="search" element={<h1>games search</h1>}></Route>
+        </Route>
+      </Routes>
+    </>
+  );
+}
+```
+</details>
 
+[All Json codes](https://github.com/Halcyon666/react-daily-learn/tree/main/src/routes/v4)
+<details>
+<summary>Json</summary>
+```tsx title="gameRoute.tsx"
+import type { RouteObject } from "react-router-dom";
+import GameLayout from "./GameLayout";
+import GameItem from "./GameItem";
+/**
+ * reusable links and routes in gameRoutes,
+ * - index
+ * - index > {id}
+ * - index > description
+ */
+const gameRoutes: RouteObject = {
+  element: <GameLayout />,
+  children: [
+    { index: true, element: <h1>games</h1> },
+    { path: ":id", element: <GameItem /> },
+    {
+      path: "description",
+      element: (
+        <p>
+          PUBG is a last-player-standing shooter where up to 100 players
+          parachute onto an island, scavenge for weapons and equipment, and
+          fight to be the sole survivor. The playable area continuously shrinks
+          throughout the match, forcing players into closer combat.
+        </p>
+      ),
+    },
+  ],
+};
+
+export default gameRoutes;
+```
+</details>
 
 
 import TailProtocal from "@site/src/components/TailProtocal";
