@@ -1,6 +1,6 @@
 import { type Video } from "../components/video-progress-dashdoard/VideoProgressDashboard";
 
-export const reactLearn2025: Video[] = [
+export const beginnerVideos: Video[] = [
   {
     key: "1",
     name: "Section 1 – React Basics",
@@ -66,12 +66,13 @@ export const reactLearn2025: Video[] = [
   },
 ];
 
-export const videoReactRouter: Video = {
+export const routerVideo: Video = {
   key: "react-router",
   name: "Learn React Router v6 In 45 Minutes",
   totalTime: "46:19",
   watchRecords: [
     { date: "2025-11-4", watchedTime: "25:23" },
     { date: "2025-11-6", watchedTime: "34:39" },
+    { date: "2025-11-8", watchedTime: "46:19" },
   ],
 };
