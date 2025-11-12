@@ -1,0 +1,103 @@
+# React Problem
+
+## TypeScript type assertion
+Property 'reaction' does not exist on type 'PostData'.
+
+[fix commit](https://github.com/Halcyon666/react-daily-learn/commit/26819a23ea2730f03fd3ada4ce936de97fa81c28)
+
+```tsx title="ReactionButtons.tsx"
+import { useAppDispatch } from "../../hooks";
+import { reactionAdded, type PostData, type Reactions } from "./postsSlice";
+
+const reactionEmoji: Record<keyof Reactions, string> = {
+  thumbsUp: "👍",
+  wow: "😮",
+  heart: "❤️",
+  rocket: "🚀",
+  coffee: "☕",
+};
+
+const ReactionButtons = ({ id, reactions }: PostData) => {
+  const dispatch = useAppDispatch();
+  const reactionButtons = Object.entries(reactionEmoji).map(([name, emoji]) => {
+    // highlight-next-line
+    const reaction = name as keyof Reactions;
+    return (
+      <button
+        key={name}
+        className="reactionButton"
+        onClick={() => dispatch(reactionAdded({ postId: id, reaction }))}
+      >
+        {emoji} {reactions[reaction]}
+      </button>
+    );
+  });
+  return <div>{reactionButtons}</div>;
+};
+
+export default ReactionButtons;
+
+```
+
+[fix commit](https://github.com/Halcyon666/react-daily-learn/commit/ac8e9cbc1b28c3da48ba97dc4146a15194552375)
+
+```tsx title="postsSlice.ts"
+
+const postsSlice = createSlice({
+  name: "postSlice",
+  initialState,
+  reducers: {
+    postAdded: {
+      reducer: (state, action: PayloadAction<PostData>) => {
+        state.push(action.payload);
+      },
+      prepare: (title: string, content: string, userId: string) => {
+        return {
+          payload: {
+            id: nanoid(),
+            title,
+            content,
+            userId,
+            date: new Date().toISOString(),
+            reactions: {
+              thumsUp: 0,
+              wow: 0,
+              heart: 0,
+              rocket: 0,
+              coffee: 0,
+            },
+          },
+        };
+      },
+    },
+
+    // The issue is that reactionAdded is expecting a different payload type. 
+    // It needs id and reaction, not the full PostData. Here's the corrected code:
+    reactionAdded: (
+      state,
+      // highlight-next-line
+      action: PayloadAction<{ postId: string; reaction: keyof Reactions }>
+    ) => {
+      const { postId, reaction } = action.payload;
+      const existingPost = state.find((post) => post.id === postId);
+      if (existingPost) {
+        existingPost.reactions[reaction]++;
+      }
+    },
+  },
+});
+```
+
+## useAppDispatch Called Incorrectly: Expected 0 Arguments, Got 1
+
+```txs
+// highlight-next-line
+const dispatch = useAppDispatch();
+const savePost = () => {
+    if (title && content) {
+        dispatch(postAdded({ id: nanoid(), title, content }));
+        setContent("");
+        setTitle("");
+    }
+};
+```
