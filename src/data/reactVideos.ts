@@ -81,5 +81,10 @@ export const reduxVideo: Video = {
   key: "1",
   name: "React Redux Full Course for Beginners | Redux Toolkit Complete Tutorial",
   totalTime: "3:59:38",
-  watchRecords: [{ date: "2025-11-9", watchedTime: "27:46" }],
+  watchRecords: [
+    { date: "2025-11-9", watchedTime: "27:46" },
+    { date: "2025-11-12", watchedTime: "1:04:25" },
+    { date: "2025-11-13", watchedTime: "1:22:32" },
+    { date: "2025-11-13", watchedTime: "1:34:32" },
+  ],
 };
