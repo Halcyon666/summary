@@ -9,8 +9,8 @@ dependencies:
     specifier: ^6.1.0
     version: 6.1.0(react-dom@19.2.0)(react@19.2.0)
   '@docsearch/js':
-    specifier: ^4.2.0
-    version: 4.2.0
+    specifier: ^4.3.2
+    version: 4.3.2
   '@docusaurus/core':
     specifier: ^3.9.2
     version: 3.9.2(@docusaurus/faster@3.9.2)(@mdx-js/react@3.1.1)(@swc/core@1.13.19)(react-dom@19.2.0)(react@19.2.0)(typescript@5.9.3)
@@ -54,8 +54,8 @@ dependencies:
     specifier: ^3.0.1
     version: 3.0.1(@docusaurus/theme-classic@3.9.2)
   pnpm:
-    specifier: ^10.20.0
-    version: 10.20.0
+    specifier: ^10.21.0
+    version: 10.21.0
   prism-react-renderer:
     specifier: ^2.4.1
     version: 2.4.1(react@19.2.0)
@@ -2235,8 +2235,10 @@ packages:
     resolution: {integrity: sha512-nuNKGjHj/FQeWgE9t+i83QD/V67QiaAmGY7xS9TVCRUiCqSljOgIKlsLoQZKKVwEG8f+OWKdznzZkJxGZ7d06A==}
     dev: false
 
-  /@docsearch/js@4.2.0:
-    resolution: {integrity: sha512-KBHVPO29QiGUFJYeAqxW0oXtGf/aghNmRrIRPT4/28JAefqoCkNn/ZM/jeQ7fHjl0KNM6C+KlLVYjwyz6lNZnA==}
+  /@docsearch/js@4.3.2:
+    resolution: {integrity: sha512-xdfpPXMgKRY9EW7U1vtY7gLKbLZFa9ed+t0Dacquq8zXBqAlH9HlUf0h4Mhxm0xatsVeMaIR2wr/u6g0GsZyQw==}
+    dependencies:
+      htm: 3.1.1
     dev: false
 
   /@docsearch/react@4.1.0(@algolia/client-search@5.42.0)(@types/react@19.2.2)(react-dom@19.2.0)(react@19.2.0)(search-insights@2.17.3):
@@ -7563,6 +7565,10 @@ packages:
       wbuf: 1.7.3
     dev: false
 
+  /htm@3.1.1:
+    resolution: {integrity: sha512-983Vyg8NwUE7JkZ6NmOqpCZ+sh1bKv2iYTlUkzlWmA5JD2acKoxd4KVxbMmxX/85mtfdnDmTFoNKcg5DGAvxNQ==}
+    dev: false
+
   /html-escaper@2.0.2:
     resolution: {integrity: sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==}
     dev: false
@@ -9677,8 +9683,8 @@ packages:
       pathe: 2.0.3
     dev: false
 
-  /pnpm@10.20.0:
-    resolution: {integrity: sha512-z5mYIiFi3YWGTQqBAueJLnukzq3rv1ox+cL85I384xepxTufZGTR75BCy6LgKuAqn3wUOitDjNk8kYQPAZK53Q==}
+  /pnpm@10.21.0:
+    resolution: {integrity: sha512-2jM3Jn5AD909R5psaAeaxtsB2MpPZ1cgg+cid1p5Z4inqZVmE3SeAA+sINQktZT3p5Gl9OLhNYHF75R/JpaKQA==}
     engines: {node: '>=18.12'}
     hasBin: true
     dev: false
