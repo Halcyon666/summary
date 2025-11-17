@@ -54,8 +54,8 @@ dependencies:
     specifier: ^3.0.1
     version: 3.0.1(@docusaurus/theme-classic@3.9.2)
   pnpm:
-    specifier: ^10.21.0
-    version: 10.21.0
+    specifier: ^10.22.0
+    version: 10.22.0
   prism-react-renderer:
     specifier: ^2.4.1
     version: 2.4.1(react@19.2.0)
@@ -9683,8 +9683,8 @@ packages:
       pathe: 2.0.3
     dev: false
 
-  /pnpm@10.21.0:
-    resolution: {integrity: sha512-2jM3Jn5AD909R5psaAeaxtsB2MpPZ1cgg+cid1p5Z4inqZVmE3SeAA+sINQktZT3p5Gl9OLhNYHF75R/JpaKQA==}
+  /pnpm@10.22.0:
+    resolution: {integrity: sha512-vwSe/plbKPUn/StBrgR0zikYb37cs79UUIe9Yfu+uyv3U2LRMH/aCcLSiOHkmXh6wS1Py2F6l0cYpgUfLu50HA==}
     engines: {node: '>=18.12'}
     hasBin: true
     dev: false
