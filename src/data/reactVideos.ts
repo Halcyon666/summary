@@ -85,6 +85,8 @@ export const reduxVideo: Video = {
     { date: "2025-11-9", watchedTime: "27:46" },
     { date: "2025-11-12", watchedTime: "1:04:25" },
     { date: "2025-11-13", watchedTime: "1:22:32" },
-    { date: "2025-11-13", watchedTime: "1:34:32" },
+    { date: "2025-11-17", watchedTime: "1:34:32" },
+    { date: "2025-11-18", watchedTime: "1:54:57" },
+    { date: "2025-11-19", watchedTime: "2:33:11" },
   ],
 };
