@@ -35,17 +35,37 @@ If you wanna initiate a new project, you can read [this article](https://halcyon
 Also you can skip all steps above, just execute the following command,
 
 ```shell
-pnpm install -D tailwindcss postcss autoprefixer
-pnpm install -D postcss-nesting
-pnpm install -D postcss-preset-env
-pnpm install -D autoprefixer
-# this will use postcss-preset-env to compile css
-pnpm install -D cssnano postcss 
-# this will initiate will create typescript config file
-pnpx tailwindcss init -p --ts
-# also you can execute without --ts will create js config file
-pnpx tailwindcss init -p 
+pnpm add -D tailwindcss postcss @tailwindcss/postcss
 ```
+
+| 包名                       | 作用                             |
+| ------------------------ | ------------------------------ |
+| **tailwindcss**          | Tailwind core      |
+| **postcss**              | CSS compiler, used to run Tailwind         |
+| **@tailwindcss/postcss** | Tailwind v4 PostCSS integration plugin (required) |
+
+
+```js  title="postcss.config.js"
+export default {
+  plugins: {
+    '@tailwindcss/postcss': {},
+  },
+}
+```
+
+```index.css title="src/index.css"
+@import "tailwindcss";
+
+/* @layer base {
+    select,
+    textarea,
+    input {
+        all: revert;
+    }
+} */
+```
+
+[example commit](https://github.com/Halcyon666/react-daily-learn/commit/419fe06cb1b05244e1dbd7e1927ba08e397b4a5f)
 
 ### Tailwind Usage
 
