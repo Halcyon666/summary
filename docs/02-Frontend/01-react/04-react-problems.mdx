@@ -101,3 +101,19 @@ const savePost = () => {
     }
 };
 ```
+
+## Cannot find module '@rollup/rollup-win32-x64-msvc'
+
+```log
+\node_modules\.pnpm\rollup@4.53.3\node_modules\rollup\dist\native.js:92:76)
+[cause]: Error: Cannot find module '@rollup/rollup-win32-x64-msvc'
+  Require stack:
+```
+
+I definately use a win nodejs package in windows system, `node-v24.12.0-win-x64.zip`.
+
+Maybe try to install another vite version `vite 7.2.7`, meanwhile auto download the missing module.
+
+Or you can mannually move the directory to `%LOCALAPPDATA%\pnpm\global\5\.pnpm` from a online machine.
+
+![20251213140735](https://s2.loli.net/2025/12/13/aYQoR9qhtApGPJ3.png)
