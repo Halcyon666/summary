@@ -81,13 +81,6 @@ export LC_ALL="zh_CN.UTF-8"
 
 如果所用的操作有事务，则需要在Dao层之前，对数据源进行设置，在Dao或者Mybatis-plus中的带dao的service都会切换数据源失效。
 
-### boolean改为Boolean可能遇到的问题
-
-代码优化时，原始类型改成包装类型时，如果是Spring 注入的方式，注意默认值会有变化，boolean默认值为false，包装类为null，可能会造成空指针异常。
-
-boolean 改为Boolean值，某些场景（netty 不响应请求)会有问题。
-
-处理：给Boolean类赋值false
 
 ## jackson序列化问题
 

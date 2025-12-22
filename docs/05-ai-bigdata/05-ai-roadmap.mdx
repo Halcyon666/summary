@@ -1,0 +1,175 @@
+# AI roadmap
+That is a **very solid starting point**, and it already puts you **past the beginner stage**.
+
+Since you have **LangChain + Ollama (local LLM) experience**, the correct next step is **not more LangChain basics**, but **system-level AI engineering**: architecture, reliability, performance, and Java-first integration.
+
+Below is a **clear progression path from where you are now**.
+
+------
+
+## 1. What You Already Have (Baseline Assessment)
+
+With **LangChain + Ollama**, you already understand:
+
+- Local model execution (privacy, cost control)
+- Prompt → model → response flow
+- Tool / chain abstractions
+- Basic orchestration
+
+This means:
+
+> You do **not** need beginner AI courses anymore.
+
+------
+
+## 2. Critical Next Skill: LLM Application Architecture
+
+You should now focus on **how LLMs live inside real systems**.
+
+### Concepts to Master (Language-Agnostic)
+
+- Prompt versioning
+- Context window management
+- Chunking strategies (size, overlap)
+- Embedding quality vs latency trade-offs
+- Determinism vs creativity (`temperature`, `top_p`)
+- Retry & fallback strategies
+- Timeouts and circuit breakers
+- Cost / performance monitoring (even for local models)
+
+These are **production concerns**, not ML theory.
+
+------
+
+## 3. Move from LangChain → LangGraph (Stateful Workflows)
+
+Since you already use LangChain:
+
+### Why LangGraph matters
+
+- Explicit state machines for LLM flows
+- Multi-step reasoning (plan → act → reflect)
+- Better control than linear chains
+- Easier to debug than nested chains
+
+This maps well to **backend workflow engines** (similar to what you know from Java).
+
+Focus on:
+
+- Node-based execution
+- Memory persistence
+- Error branches
+- Human-in-the-loop checkpoints
+
+------
+
+## 4. Java Track: Mirror LangChain Concepts in Spring AI
+
+You should **not abandon Java** for Python.
+
+### Concept Mapping
+
+| LangChain      | Spring AI             |
+| -------------- | --------------------- |
+| PromptTemplate | PromptTemplate        |
+| LLM            | ChatClient            |
+| Chain          | Service orchestration |
+| Memory         | ChatMemory            |
+| Tools          | Function calling      |
+| Retriever      | VectorStore           |
+| RAG            | Advisor / Retriever   |
+
+This allows you to:
+
+- Prototype in Python
+- Productionize in Java
+
+This is **exactly how many teams work**.
+
+------
+
+## 5. Local RAG with Ollama (Next-Level Use)
+
+You should extend your current setup to:
+
+- Local embeddings (`nomic-embed-text`, `bge`)
+- Persistent vector store (Chroma, Qdrant, Weaviate)
+- Document loaders (PDF, Markdown, HTML)
+- Hybrid search (keyword + vector)
+
+Key questions to answer in practice:
+
+- When does RAG outperform pure prompting?
+- What chunk size works best for your domain?
+- How does retrieval error manifest?
+
+------
+
+## 6. React Integration: Streaming + UX
+
+This is where your React skills shine.
+
+You should implement:
+
+- Token streaming (SSE)
+- Partial rendering
+- Cancel / regenerate
+- Context reset
+- Model switch (7B vs 13B vs 70B)
+
+This turns demos into **usable tools**.
+
+------
+
+## 7. Advanced: Agent & Tooling Patterns (Optional but Valuable)
+
+Only after RAG is solid:
+
+- Tool calling (DB queries, REST APIs)
+- Agent planning loops
+- Guardrails (input/output validation)
+- JSON schema enforcement
+- Model routing (fast vs smart)
+
+Avoid:
+
+- Autonomous agents without constraints
+- Recursive self-calling loops
+
+------
+
+## 8. What You Should Learn Next (Concrete Order)
+
+**Immediate (1–2 weeks)**
+
+- LangGraph
+- Chunking & retrieval evaluation
+- Streaming responses
+
+**Short-term**
+
+- Spring AI + Ollama
+- Vector DB persistence
+- Prompt version control
+
+**Mid-term**
+
+- Observability (logs, traces, evals)
+- Model benchmarking (local vs cloud)
+
+------
+
+## 9. Recommended Focused Resources
+
+### High Value (No Fluff)
+
+- LangGraph official docs
+- Spring AI reference docs
+- RAG evaluation articles (precision@k, recall)
+- Ollama model comparisons (Mistral vs LLaMA vs Qwen)
+
+You do **not** need:
+
+- Coursera beginner tracks
+- Deep learning math
+- Training your own models
