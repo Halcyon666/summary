@@ -31,7 +31,7 @@
     "antd": "^6.1.0",
     "clsx": "^2.1.1",
     "docusaurus-plugin-image-zoom": "^3.0.1",
-    "pnpm": "^10.25.0",
+    "pnpm": "^10.26.1",
     "prism-react-renderer": "^2.4.1",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
