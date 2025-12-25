@@ -1,175 +1,177 @@
-# AI roadmap
-That is a **very solid starting point**, and it already puts you **past the beginner stage**.
+# AI RoadMap v2.0：PyTorch & SLM 实战增强版
 
-Since you have **LangChain + Ollama (local LLM) experience**, the correct next step is **not more LangChain basics**, but **system-level AI engineering**: architecture, reliability, performance, and Java-first integration.
+**基于目标岗位要求的实战导向学习计划**
 
-Below is a **clear progression path from where you are now**.
+## 🎯 你的技术优势诊断
 
-------
+- ✅ **5年 Java 开发经验 + React/Vue 前端能力**：具备构建复杂企业级应用的工程底座。
+- ✅ **Docker 容器化经验**：为 AI 模型的私有化部署和微服务化提供了基础。
+- ✅ **LangChain + Ollama 经验**：已经跨过了 AI 应用开发的入门门槛。
 
-## 1. What You Already Have (Baseline Assessment)
+v2.0 升级目标：
 
-With **LangChain + Ollama**, you already understand:
+这意味着你已经具备了 AI 应用工程化 的基础。现在的核心痛点是“知其然不知其所以然”（只会调 API）。
 
-- Local model execution (privacy, cost control)
-- Prompt → model → response flow
-- Tool / chain abstractions
-- Basic orchestration
-
-This means:
-
-> You do **not** need beginner AI courses anymore.
+本计划重点补齐 PyTorch 底层视角 + 小模型（SLM）私有化实战 + Agent 架构，助你从“调包侠”进化为能修改模型、优化推理、掌控架构的 高级 AI 工程师。
 
 ------
 
-## 2. Critical Next Skill: LLM Application Architecture
+## 🗓️ 3 个月冲刺时间表概览
 
-You should now focus on **how LLMs live inside real systems**.
-
-### Concepts to Master (Language-Agnostic)
-
-- Prompt versioning
-- Context window management
-- Chunking strategies (size, overlap)
-- Embedding quality vs latency trade-offs
-- Determinism vs creativity (`temperature`, `top_p`)
-- Retry & fallback strategies
-- Timeouts and circuit breakers
-- Cost / performance monitoring (even for local models)
-
-These are **production concerns**, not ML theory.
+| **阶段** | **周期**    | **核心任务**                     | **关键产出**                       |
+| -------- | ----------- | -------------------------------- | ---------------------------------- |
+| **一**   | 第 1-3 周   | **Python 数据栈 + PyTorch 基础** | Tensor 运算脚本、CUDA 环境检测工具 |
+| **二**   | 第 4-6 周   | **小模型原生加载 + RAG**         | 本地全栈 RAG Demo (脱离云端 API)   |
+| **三**   | 第 7-8 周   | **Agent 架构 (LangGraph)**       | 基于本地小模型的多步骤 Agent       |
+| **四**   | 第 9 周     | **知识图谱 (Neo4j)**             | 组织架构图谱查询系统               |
+| **五**   | 第 10-11 周 | **全栈 AI 应用 (React)**         | 支持流式输出的 AI 对话应用         |
+| **六**   | 第 12 周+   | **模型微调 (LoRA)**              | 训练特定领域模型并导出 GGUF        |
 
 ------
 
-## 3. Move from LangChain → LangGraph (Stateful Workflows)
+## 🚀 阶段一：Python 数据科学与 PyTorch 基础（第 1-3 周）
 
-Since you already use LangChain:
+### 核心任务：掌握 AI 的数据底座与计算引擎
 
-### Why LangGraph matters
+1. Python 数据栈（前 1.5 周）
 
-- Explicit state machines for LLM flows
-- Multi-step reasoning (plan → act → reflect)
-- Better control than linear chains
-- Easier to debug than nested chains
+你已经有编程基础，重点是 快速掌握 Python AI 生态的惯用法，不要用写 Java 的思维写 Python。
 
-This maps well to **backend workflow engines** (similar to what you know from Java).
+- **Pandas**：重点掌握 `DataFrame` 的清洗、转换、分组聚合（对标 Java Stream API）。
+- **NumPy**：重点掌握向量化计算、广播机制（Broadcasting），这是理解 AI 矩阵运算的基础。
+- **Jupyter Notebook**：熟练使用这种交互式开发环境进行数据探索。
+- PyTorch 基础（后 1.5 周）—— [新增核心]
 
-Focus on:
+不要去学“如何从零写一个 CNN”，重点学 “如何使用 PyTorch 操作数据和加载模型”。
 
-- Node-based execution
-- Memory persistence
-- Error branches
-- Human-in-the-loop checkpoints
+- **Tensor（张量）操作**：
+  - **Shape (维度)**：必须形成肌肉记忆，例如 `[Batch_Size, Sequence_Length, Embedding_Dim]`。
+  - **设备管理**：熟练使用 `.to('cuda')` 和 `.to('cpu')`，理解数据在 CPU 内存和 GPU 显存之间的传输成本。
+- **Autograd（自动求导）**：虽然推理用不到，但必须理解“梯度（Gradient）”的概念，这是后续学习微调的基础。
+- **Dataset & DataLoader**：学会如何写一个自定义的数据加载器，将原始文本转化为模型能吃的 Tensor。
 
-------
+**🛠️ 实战项目**
 
-## 4. Java Track: Mirror LangChain Concepts in Spring AI
-
-You should **not abandon Java** for Python.
-
-### Concept Mapping
-
-| LangChain      | Spring AI             |
-| -------------- | --------------------- |
-| PromptTemplate | PromptTemplate        |
-| LLM            | ChatClient            |
-| Chain          | Service orchestration |
-| Memory         | ChatMemory            |
-| Tools          | Function calling      |
-| Retriever      | VectorStore           |
-| RAG            | Advisor / Retriever   |
-
-This allows you to:
-
-- Prototype in Python
-- Productionize in Java
-
-This is **exactly how many teams work**.
+1. **数据清洗**：用 Pandas 处理一个用户行为日志 CSV（去重、填充缺失值、时间窗口统计）。
+2. **向量原理**：用 PyTorch 手动实现两个高维向量的 **余弦相似度计算**（这是向量数据库检索的底层数学原理）。
+3. **环境探针**：编写一个 Python 脚本，检测当前机器的 CUDA 版本、显卡型号及剩余显存。
 
 ------
 
-## 5. Local RAG with Ollama (Next-Level Use)
+## 🧠 阶段二：小模型 (SLM) 与 RAG 系统构建（第 4-6 周）
 
-You should extend your current setup to:
+### 核心任务：从“调用 Ollama”进化到“原生控制模型”
 
-- Local embeddings (`nomic-embed-text`, `bge`)
-- Persistent vector store (Chroma, Qdrant, Weaviate)
-- Document loaders (PDF, Markdown, HTML)
-- Hybrid search (keyword + vector)
+1. 小模型（SLM）全景与原生加载 —— [新增核心]
 
-Key questions to answer in practice:
+企业级应用中，Ollama 更多用于开发测试，生产环境通常需要更精细的控制。你需要学会使用 Hugging Face transformers 库。
 
-- When does RAG outperform pure prompting?
-- What chunk size works best for your domain?
-- How does retrieval error manifest?
+- **模型选型策略**：
+  - **Phi-3.5 / Gemma 2**：高性价比，适合笔记本/边缘设备部署。
+  - **Qwen 2.5 (1.5B/7B)**：中文能力与 Coding 能力极强，目前国内首选。
+- **关键技能**：
+  - **显存计算**：掌握公式 `参数量 x 精度 = 显存占用`。例如 7B 模型在 FP16 下约需 14GB 显存。
+  - **量化加载**：使用 `bitsandbytes` 库加载 4-bit 模型（Int4），将 7B 模型显存压缩到 6GB 左右。
 
-------
+**2. 向量数据库选型**
 
-## 6. React Integration: Streaming + UX
+- **Milvus**（岗位核心要求）：学习其架构（Proxy, QueryNode, DataNode），支持混合检索。
+- **Embedding 模型**：使用 `sentence-transformers` 加载本地模型（如 `bge-m3`），不再依赖 API。
 
-This is where your React skills shine.
+**🛠️ 实战项目：构建“本地全栈”文档问答系统**
 
-You should implement:
-
-- Token streaming (SSE)
-- Partial rendering
-- Cancel / regenerate
-- Context reset
-- Model switch (7B vs 13B vs 70B)
-
-This turns demos into **usable tools**.
+1. **模型加载**：用 Python 代码原生加载 `Qwen2.5-7B-Instruct` (4-bit 量化)。
+2. **文本分块**：使用 LangChain 的 `RecursiveCharacterTextSplitter` 对文档切片。
+3. **向量化**：使用本地 Embedding 模型生成向量。
+4. **存入 Milvus**：创建 Collection，定义 Schema，插入向量。
+5. **RAG 链路**：检索 Top-K 片段 -> 组装 Prompt 模板 -> 输入本地模型 -> 生成答案。
 
 ------
 
-## 7. Advanced: Agent & Tooling Patterns (Optional but Valuable)
+## 🤖 阶段三：Agent 架构深度实践（第 7-8 周）
 
-Only after RAG is solid:
+### 岗位要求的核心框架全覆盖
 
-- Tool calling (DB queries, REST APIs)
-- Agent planning loops
-- Guardrails (input/output validation)
-- JSON schema enforcement
-- Model routing (fast vs smart)
+**1. LangGraph（重点掌握）**
 
-Avoid:
+- **核心概念**：
+  - **StateGraph**：理解如何用图结构定义工作流。
+  - **Checkpointer**：学习如何持久化保存 Agent 的中间状态（Memory）。
+  - **Human-in-the-loop**：实现“关键步骤人工确认”机制。
+- **小模型适配**：测试小模型在 Agent 复杂指令下的表现，通过 Prompt Engineering 修复小模型容易“跟丢指令”的问题。
 
-- Autonomous agents without constraints
-- Recursive self-calling loops
+**2. 多 Agent 协作**
 
-------
+- 了解 **AutoGen** 或 **CrewAI**，实现一个简单的多角色协作流程（如：研究员搜集信息 -> 写作者撰写 -> 审核者评分）。
 
-## 8. What You Should Learn Next (Concrete Order)
+**3. MCP (Model Context Protocol)**
 
-**Immediate (1–2 weeks)**
-
-- LangGraph
-- Chunking & retrieval evaluation
-- Streaming responses
-
-**Short-term**
-
-- Spring AI + Ollama
-- Vector DB persistence
-- Prompt version control
-
-**Mid-term**
-
-- Observability (logs, traces, evals)
-- Model benchmarking (local vs cloud)
+- 实现一个简单的 MCP Server，让 LLM 能够以标准协议连接你的数据库或 API。
 
 ------
 
-## 9. Recommended Focused Resources
+## 🕸️ 阶段四：知识图谱入门（第 9 周）
 
-### High Value (No Fluff)
+### 岗位要求的差异化技能
 
-- LangGraph official docs
-- Spring AI reference docs
-- RAG evaluation articles (precision@k, recall)
-- Ollama model comparisons (Mistral vs LLaMA vs Qwen)
+**核心任务**
 
-You do **not** need:
+- **图数据库 Neo4j**：安装并学习 Cypher 查询语言（类 SQL）。
+- **GraphRAG**：理解“什么时候用向量检索（查语义），什么时候用图谱检索（查关系）”。
 
-- Coursera beginner tracks
-- Deep learning math
-- Training your own models
+**🛠️ 实战项目**
+
+- **构建组织架构图谱**：设计 `Person`, `Department`, `Project` 实体及 `MANAGES`, `WORKS_IN` 关系。
+- **混合检索**：实现一个 Router，让 Agent 自动决定是查 Milvus 还是查 Neo4j。
+
+------
+
+## 💻 阶段五：前端 AI 应用开发（第 10-11 周）
+
+### 发挥你的 React 优势，打造完整产品
+
+**核心功能**
+
+- **WebSocket 流式响应**：前端实现打字机效果，后端使用 FastAPI + WebSocket。
+- **对话界面**：Markdown 渲染、代码高亮、多会话管理、消息持久化。
+- **文件上传**：拖拽上传 PDF/Word，后端自动解析并触发 RAG 流程。
+
+**技术栈**
+
+- **前端**：React + TypeScript + TailwindCSS + Zustand
+- **后端**：FastAPI (Python) + LangChain + PyTorch (本地模型推理)
+
+------
+
+## 🔧 阶段六：PyTorch 模型微调实战（第 12 周+）
+
+### 进阶技能：让通用模型变成行业专家
+
+**LoRA / QLoRA 微调 —— [新增核心]**
+
+- **工具链**：Hugging Face `peft`, `bitsandbytes`, `transformers`, `trl`。
+- **流程**：
+  1. **数据准备**：将非结构化文档清洗为 JSONL 格式的指令数据集（Instruction Dataset）。
+  2. **训练配置**：配置 LoRA 参数（Rank, Alpha），使用 `SFTTrainer` 进行微调。
+  3. **监控**：观察 Loss 曲线，防止过拟合。
+  4. **合并导出**：将训练好的 LoRA 权重合并回基座模型，并导出为 GGUF 格式供 Ollama 使用。
+
+------
+
+## 📝 面试准备清单 (v2.0)
+
+### 必须能回答的技术问题
+
+- **[PyTorch]** `Dataset` 和 `DataLoader` 的区别是什么？
+- **[PyTorch]** 什么是混合精度训练 (FP16/BF16)？它有什么好处？
+- **[模型]** 7B 参数的模型，4-bit 量化后大概需要多少显存？（约 5-6GB）
+- **[RAG]** 向量数据库的 HNSW 索引原理是什么？如何优化召回率？
+- **[Agent]** LangGraph 如何管理状态？与传统 Chain 有什么区别？
+- **[微调]** LoRA 和全量微调的区别是什么？为什么要用 LoRA？
+
+### 必须具备的项目经验
+
+1. 一个 **PyTorch 原生加载** 小模型并结合 Milvus 的 **RAG 系统**（非 API 调用）。
+2. 一个基于 **LangGraph** 的具备状态管理的 **Agent 应用**。
+3. 一个 **知识图谱** 结合的应用 Demo（Neo4j）。
+4. *(进阶加分项)* 一份 **LoRA 微调实验报告**（包含 Loss 曲线分析）。
