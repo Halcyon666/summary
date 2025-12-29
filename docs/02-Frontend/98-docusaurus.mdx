@@ -1,4 +1,4 @@
-# Deploy stuff
+# docusaurus
 
 ## github workflow configuration
 
@@ -172,8 +172,35 @@ searchParameters: {
 修复commit[记录](https://github.com/Halcyon666/summary/commit/00b6ea74b68b586919e0a2c41a67ef0037defe7b)
 
 
-## 使用FireStore database
+## rspack crack on cache
 
+```shell
+> summary@0.2.0 start D:\summary
+> docusaurus start --host 0.0.0.0 --no-open
+
+[INFO] Starting the development server...
+[SUCCESS] Docusaurus website is running at: http://localhost:3000/summary/
+● Client ██████████████████████████████████████████████████ (9%) setup compilation
+Panic occurred at runtime. Please file an issue on GitHub with the backtrace below: https://github.com/web-infra-dev/rspack/issues: panicked at crates\rspack_core\src\cache\persistent\occasion\make\module_graph.rs:188:8:
+should mgm exist
+ ELIFECYCLE  Command failed with exit code 3221226505.
+```
+
+在 项目根目录 D:\summary 执行：
+
+```shell
+
+rmdir /s /q .docusaurus
+rmdir /s /q node_modules\.cache
+rmdir /s /q node_modules\.pnpm
+del /f /q pnpm-lock.yaml
+
+
+然后重新安装：
+
+pnpm install
+pnpm start
+```
 
 
 import TailProtocal from "@site/src/components/TailProtocal";

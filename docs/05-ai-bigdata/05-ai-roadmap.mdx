@@ -40,15 +40,16 @@ v2.0 升级目标：
 - ✅ **Pandas**：重点掌握 `DataFrame` 的清洗、转换、分组聚合（对标 Java Stream API）。
 - ✅ **NumPy**：重点掌握向量化计算、广播机制（Broadcasting），这是理解 AI 矩阵运算的基础。
 - ✅ **Jupyter Notebook**：熟练使用这种交互式开发环境进行数据探索。
-- PyTorch 基础（后 1.5 周）—— [新增核心]
+- ✅ PyTorch
+- ✅ transformers(AutoTokenizer)
 
 不要去学“如何从零写一个 CNN”，重点学 “如何使用 PyTorch 操作数据和加载模型”。
 
-- **Tensor（张量）操作**：
-  - **Shape (维度)**：必须形成肌肉记忆，例如 `[Batch_Size, Sequence_Length, Embedding_Dim]`。
-  - **设备管理**：熟练使用 `.to('cuda')` 和 `.to('cpu')`，理解数据在 CPU 内存和 GPU 显存之间的传输成本。
-- **Autograd（自动求导）**：虽然推理用不到，但必须理解“梯度（Gradient）”的概念，这是后续学习微调的基础。
-- **Dataset & DataLoader**：学会如何写一个自定义的数据加载器，将原始文本转化为模型能吃的 Tensor。
+- ✅ **Tensor（张量）操作**：
+  - ✅ **Shape (维度)**：必须形成肌肉记忆，例如 `[Batch_Size, Sequence_Length, Embedding_Dim]`。
+  - ✅ **设备管理**：熟练使用 `.to('cuda')` 和 `.to('cpu')`，理解数据在 CPU 内存和 GPU 显存之间的传输成本。
+- ✅ **Autograd（自动求导）**：虽然推理用不到，但必须理解“梯度（Gradient）”的概念，这是后续学习微调的基础。
+- ✅ **Dataset & DataLoader**：学会如何写一个自定义的数据加载器，将原始文本转化为模型能吃的 Tensor。
 
 **🛠️ 实战项目**
 
@@ -57,6 +58,16 @@ v2.0 升级目标：
 3. **环境探针**：编写一个 Python 脚本，检测当前机器的 CUDA 版本、显卡型号及剩余显存。
 
 ------
+
+:::tip
+你可以把这些工具的关系理解为：
+
+NumPy：在 CPU 上处理数字矩阵。
+
+PyTorch：在 GPU 上处理数字矩阵，并且多了 “自动求导”（这是神经网络能学习的核心）。
+
+模型 (LLM/BERT)：本质上就是用 PyTorch 写的一个超级复杂的数学公式。
+:::
 
 ## 🧠 阶段二：小模型 (SLM) 与 RAG 系统构建（第 4-6 周）
 
