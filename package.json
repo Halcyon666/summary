@@ -43,7 +43,7 @@
     "@docusaurus/tsconfig": "^3.9.2",
     "@types/node": "^25.0.2",
     "@types/react": "^19.2.7",
-    "baseline-browser-mapping": "^2.9.7",
+    "baseline-browser-mapping": "^2.9.11",
     "typescript": "~5.9.3"
   },
   "browserslist": {
