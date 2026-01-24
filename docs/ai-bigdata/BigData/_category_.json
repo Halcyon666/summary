@@ -1,0 +1,8 @@
+{
+    "label": "🐘 Big Data",
+    "position": 2,
+    "link": {
+        "type": "generated-index",
+        "description": "Hadoop Ecosystem, HBase, Flink, and big data infrastructure"
+    }
+}
