@@ -1,0 +1,8 @@
+{
+    "label": "🎯 Design Patterns",
+    "position": 5,
+    "link": {
+        "type": "generated-index",
+        "description": "Java design patterns and architectural approaches."
+    }
+}

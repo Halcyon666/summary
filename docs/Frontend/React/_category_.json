@@ -1,0 +1,10 @@
+{
+    "label": "React",
+    "position": 1,
+    "collapsible": true,
+    "collapsed": false,
+    "link": {
+        "type": "generated-index",
+        "description": "Comprehensive React guides covering hooks, state management, routing, and best practices."
+    }
+}

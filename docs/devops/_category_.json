@@ -1,0 +1,8 @@
+{
+    "label": "🚀 DevOps & Infrastructure",
+    "position": 3,
+    "link": {
+        "type": "generated-index",
+        "description": "Linux, Docker, Kubernetes, and deployment infrastructure."
+    }
+}

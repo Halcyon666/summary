@@ -1,0 +1,417 @@
+---
+title: "Git Commands"
+sidebar_label: "📦 Git Commands"
+sidebar_position: 1
+description: "Comprehensive Git command reference: config, log, diff, rebase, merge, stash"
+---
+
+# Git Commands
+
+## 配置化命令
+
+```shell
+ssh-keygen
+git config --global user.name "whalefall541"
+git config --global user.email "jackchen541@sina.com"
+git config --global alias.ll "log --graph --pretty=format:'%C(yellow)%h%Creset -%C(cyan)%d%Creset %s %Cgreen(%an, %cr)' --abbrev-commit"
+git config --global alias.a '!git add -A && git commit -m'
+```
+
+## 配置全局.gitignore
+
+```shell
+# 这里最好写绝对路径 有时候可能不生效
+git config --global core.excludesfile D:/project/.gitignore 
+
+# .gitignore只能忽略那些原来没有被track的文件，如果某些文件已经被纳入了版本管理中，则修改.gitignore是无效的。
+# 解决方法就是先把本地缓存删除（改变成未track状态），然后再提交:
+
+git rm -r --cached .
+git add .
+```
+
+## 查看类命令
+
+```shell
+# 查看 
+git log --graph --pretty=format:'%C(yellow)%h%Creset -%C(cyan)%d%Creset %s %Cgreen(%an, %cr)' --abbrev-commit
+# 查看 xxx提交的内容
+git show <commit-id>
+# 查看引用记录
+git reflog
+# 查看文件差异
+git diff filename
+
+# 查看已经add 但是未commit 的差异
+git diff --staged
+git diff --cached
+# 仅查看汇总统计
+git diff --stat branch1 branch2
+
+# 查看两个提交之间某个文件的差异 第一个为开始的hash，要比当前查看的还早一个
+git diff <commit> <commit> xxx.java
+# 查看两个分支的具体差异
+git diff dev st 
+
+
+# 一次diff出全部modify的文件内容 也可以自行重定向到某个文件中
+git status | awk -F "modified:" '{if($2 != "") print $2}' | xargs git diff
+
+# 查看已经commit 但是未push的记录
+git cherry -v
+
+# 查看某行文件修改人
+git blame -L 58,100 filename
+git blame -L 57,+10 filename
+
+## 只看合并提交的变化
+git log --follow -p --merges -- <file>
+
+## 查看 merge 冲突中修改的部分
+git log --cc -p -- <file>
+
+```
+
+## 撤销类命令
+
+```shell
+# 一次撤销所有的文件
+git reset . 
+git checkout .
+
+# 撤销掉modify状态
+git checkout <filename>
+# 撤销掉add的文件(如果是新文件则是untracked状态 否则是modify状态)
+git restore --staged test.txt
+git rm --cached test.txt
+
+# 撤销 add commit modify(把commit 记录全删掉 慎用）
+git reset --hard <commit-id>
+# 撤销add、commit  (把commit 记录变成modify之后）
+git reset --mixed <commit-id>
+# 仅撤销commit (把commit 记录变成add之后）
+git reset --soft <commit-id>
+
+# 撤销一次提交内容
+git revert <commit-id>git
+
+# 删除本地所有 untracked 记录
+git clean -df
+```
+
+## 创建或删除相关命令
+
+```shell
+# 本地仓库关联到远程仓库
+git remote add origin git@github.com:whalefall541/rebase-learn.git
+# 删除关联
+git remote rm origin
+
+# 删除远程 分支
+git push origin -d <branch-name>
+
+# 创建本地 分支
+git branch <branch-name>
+# 创建并切换
+git chekcout -b <branch-name>
+# 删除本地 分支
+git branch -D  <branch-name>
+```
+
+## 合并类命令
+
+```shell
+# 关闭自动合并
+git merge --no-ff -m "merge with no-ff" dev
+
+# 自动变基 在当前分支重放另一个分支 
+git rebase [<branch-name> | <commit-id> | <head~n>]
+
+# 交互式变基
+git rebase -i <commit-id> <commit-id> 
+
+`一般使用 p s组成 将多条commit 合并为一条` 
+# 注意 rebase时commit id 为前开区间，后闭区间；
+# 千万注意rebase时后面的id要是最后一个，除非你不想要在后面id之后的提交记录否则千万不要这么干，
+# 如果不小心做了，重新从远程拉取把
+
+# Commands:
+# p, pick <commit> = use commit
+# r, reword <commit> = use commit, but edit the commit message
+# e, edit <commit> = use commit, but stop for amending
+# s, squash <commit> = use commit, but meld into previous commit
+# f, fixup [-C | -c] <commit> = like "squash" but keep only the previous
+#                    commit's log message, unless -C is used, in which case
+#                    keep only this commit's message; -c is same as -C but
+#                    opens the editor
+
+
+# 将base分支的内容变基到当前分支 rebase 就是移动HEAD指针
+git rebase <base-branch>
+
+示例
+A---B---C  main
+         \
+          D---E  feature
+
+git checkout feature
+git rebase main
+
+A---B---C  main
+             \
+              D'--E'  feature
+
+「想要谁“跟上”谁，就在谁上面执行 rebase，目标是“基底”」
+“开发用 rebase，合并用 merge，主干不可 rebase，干净不出事。”
+
+feature 想跟上 main → 在 feature 上执行 git rebase main
+
+main 想跟上 feature（不推荐）→ 在 main 上执行 git rebase feature
+
+# rebase --onto 可以将一个位于子分支的分支变基到主分支上
+# 变基前：current-upsteam-branch 是base-branch的一个子分支 
+# 而 current-branch 又是 current-upsteam-branch的一个子分支
+# 变基后 current-upsteam-branch current-branch 各自为base-branch 的子分支
+# I.E. git rebase --onto
+git rebase --onto <base-branch> <current-upsteam-branch> <current-branch>
+
+示例
+A---B---C  main
+         \
+          D---E---F  feature
+     \
+      X---Y  experiment
+
+git checkout experiment
+git rebase --onto feature A
+
+A---B---C  main
+         \
+          D---E---F  feature
+                    \
+                     X'--Y'  experiment
+速记：
+剪：从 B 后
+
+贴：到 A 后
+
+操作：--onto A B
+
+# 从其他分支复制某个提交到另一个分支
+git cherry-pick <commit-id>
+```
+
+## 暂存内容命令
+
+```shell
+git stash
+git stash list
+git pop
+
+# 暂存部分文件
+git stash push filename
+
+# 交互式暂存文件
+git stash -p
+```
+
+如何暂存部分文件呢 [stash part][stash part]
+
+[stash part]: https://www.jianshu.com/p/fe4d54cb6244
+
+## 提交相关命令
+
+```shell
+echo "# 123" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+
+# 修改一下HEAD指向的注释; notes: Don’t amend public commits
+git commit --amend -m "an updated commit message" --no-edit
+
+# 修改最后一次的commit信息
+git add new_file.xxx
+git commit --amend --no-edit
+
+# 修改前面的commit信息,然后reword或者edit
+git rebase -i <commit-id>^
+
+git branch -M main
+git remote add origin git@github.com:whalefall541/123.git
+git push -u origin main
+
+# 直接在dev分支 推到所有其他分支 从branch1分支推送到branch2
+git push origin refs/heads/branch1:branch2
+```
+
+## 标签类命令
+
+```shell
+# 在当前分支当前提交上打标签：
+git tag v1.0
+
+#如果想要打标签在某个指定历史commit上：
+git tag v0.9 f52c633
+git tag -a <tagname> -m "<message>"
+
+# 可以通过如下命令查看一个tag信息：
+git show v0.1
+
+# 如果标签打错了，也可以删除：
+git tag -d v0.1
+
+# 如果要推送某个标签到远程，使用命令git push origin <tagname>
+git push origin v1.0
+# 或者，一次性推送全部尚未推送到远程的本地标签：
+git push origin --tags    
+# 如果标签已经推送到远程，要删除远程标签就麻烦一点，先从本地删除：
+git tag -d v0.9    
+# 然后，从远程删除。删除命令也是push，但是格式如下：
+git push origin :refs/tags/v0.9
+```
+
+## 更新命令
+
+[可以参考这个网站](https://cloud.tencent.com/developer/section/1138793)
+
+```shell
+# 拉取所有分支
+git fetch --all
+# update某个分支 如果是聚合工程需要加上--recurse-submodules=no 
+git fetch origin main:main --progress --prune
+ 
+# 拉取代码时变基 fetch and rebase 
+git pull -r origin main
+
+git fetch origin 
+git rebase origin/main
+
+git pull -r
+
+```
+
+## 如何同步github fork仓库
+
+1. 配置forked仓库
+   [configuring-a-remote-for-a-fork](https://docs.github.com/en/github/collaborating-with-pull-requests/working-with-forks/configuring-a-remote-for-a-fork)
+2. Merging an upstream repository into your fork
+   [syncing-a-fork](https://docs.github.com/en/github/collaborating-with-pull-requests/working-with-forks/syncing-a-fork)
+
+
+## 原则问题
+
+1. git rebase 原则：同步并保持历史整洁：
+
+✅ 用于将当前分支的更改，转移到目标分支的最新状态之后
+
+✅ 保持线性提交历史，避免合并冲突树
+
+✅ 更适合 feature 分支同步主干：git rebase main
+
+⚠️ 使用前请确保工作区干净（git status 应无改动）
+
+❌ 不建议对共享历史的分支强推（除非团队允许）
+
+2. git pull --rebase 原则：简化 fetch + rebase
+✅ 是 git fetch + git rebase 的快捷方式
+
+✅ 推荐设为默认策略，避免产生 merge commit
+
+3. 分支同步推荐模式（双向同步场景）
+假设你在 dev 和 feature-x 两个分支间交替开发：
+
+🔁 同步主干进 feature 分支：
+
+git checkout feature-x
+
+git fetch origin
+
+git rebase origin/dev  # 或 git rebase dev
+
+⬆️ 将 feature-x 回同步回 dev：
+
+git checkout dev
+
+git rebase feature-x  # 或者 git merge --ff-only feature-x
+
+⚠️ 如果团队共享 dev，建议使用 merge 以免强制推送
+
+## 碰到问题记录
+
+### 在IDEA中PS Terminal中使用`git rebase -i`时无法退出
+
+import MyHighlight from "@site/src/components/MyHighLight";
+
+`git rebase -i` 强制要求必须使用<MyHighlight color="white" background="red">git rebase</MyHighlight> 来执行。
+
+按i进入编辑模式之后，如果esc无法退出，请使用ctr+c, :q!
+
+:::tip
+IDEA Ultimate 2021.3.1有出现过问题
+:::
+
+***The first way***
+
+I understand this is frustrating. Let's try a more comprehensive approach to recover your repository:
+
+1. Let's first check the overall Git status:
+    
+    ```
+    git status
+    
+    ```
+    
+2. If the above command still shows errors, let's try a full reset using ORIG_HEAD:
+    
+    ```
+    git reset --hard ORIG_HEAD
+    
+    ```
+    
+3. If that doesn't work, we can try checking what branches exist:
+    
+    ```
+    git branch -a
+    
+    ```
+    
+4. Then try to get back to your main/master branch:
+    
+    ```
+    git checkout main
+    
+    ```
+    
+    (or `git checkout master` if that's your primary branch name)
+    
+5. If all else fails, we might need a more drastic approach. First, back up any uncommitted changes you care about manually. Then:
+    
+    ```
+    # Create or update a reference to your current HEAD
+    git update-ref HEAD $(git rev-parse HEAD) 2>/dev/null
+    
+    # Clean up all Git temporary files
+    rm -f .git/MERGE_HEAD .git/MERGE_MODE .git/MERGE_MSG
+    rm -rf .git/rebase-merge .git/rebase-apply
+    
+    # Reset the index and working tree
+    git reset --hard
+    
+    ```
+    
+
+If none of these approaches work, please let me know what specific error messages you're seeing now, and we can try a different recovery method.
+
+***the second way***
+
+firstly push the local commit to the remote, even though your broken repository in rebase status.
+
+secondly clone a new copy repository to a different directory, then open with the idea
+
+if idea occurs Cannot resolve symbol ‘xxx’, just Invalidate caches and restart the project, project will run normally.
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

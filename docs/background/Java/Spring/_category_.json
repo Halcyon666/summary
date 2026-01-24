@@ -1,0 +1,10 @@
+{
+    "label": "Spring Framework",
+    "position": 2,
+    "collapsible": true,
+    "collapsed": false,
+    "link": {
+        "type": "generated-index",
+        "description": "Comprehensive guides on Spring Framework including Core concepts, IoC/DI, and AOP."
+    }
+}
