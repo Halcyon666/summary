@@ -1,0 +1,1183 @@
+{
+  "timestamp": "2026-01-25T21:08:29.875439",
+  "total_files": 125,
+  "modified_files": 125,
+  "skipped_files": 0,
+  "errors": [],
+  "changes": [
+    {
+      "file": "docs\\intro.mdx",
+      "changes": [
+        "Added id: intro",
+        "Inferred tags: ",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\Frontend\\docusaurus.mdx",
+      "changes": [
+        "Added id: docusaurus",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Inferred tags: frontend, javascript, react",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\Frontend\\firebase-database.mdx",
+      "changes": [
+        "Added id: firebase-database",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Inferred tags: frontend, javascript, react",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\Frontend\\uni-app.mdx",
+      "changes": [
+        "Added id: uni-app",
+        "Generated description",
+        "Inferred tags: frontend, javascript, react",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\tools\\Development\\develop-software-tips.mdx",
+      "changes": [
+        "Added id: develop-software-tips",
+        "Inferred title from heading: 常用开发软件",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: development, tools",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\tools\\Development\\git-commands.mdx",
+      "changes": [
+        "Added id: git-commands",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Inferred tags: development, tools",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\tools\\Development\\gradle-maven-configuration.mdx",
+      "changes": [
+        "Added id: gradle-maven-configuration",
+        "Generated description",
+        "Inferred tags: development, tools",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\tools\\NonDevelopment\\adoc.mdx",
+      "changes": [
+        "Added id: adoc",
+        "Inferred title from heading: adoc",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: development, tools",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\tools\\NonDevelopment\\Everything.mdx",
+      "changes": [
+        "Added id: everything",
+        "Generated description",
+        "Inferred tags: development, tools",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\tools\\NonDevelopment\\not-develop-software-tips.mdx",
+      "changes": [
+        "Added id: not-develop-software-tips",
+        "Inferred title from heading: 常用软件",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: development, tools",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\tools\\NonDevelopment\\regex.mdx",
+      "changes": [
+        "Added id: regex",
+        "Inferred title from heading: 正则大全",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: development, tools",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\misc\\Links\\useful_links.mdx",
+      "changes": [
+        "Added id: useful-links",
+        "Generated description",
+        "Inferred tags: books, learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\misc\\Others\\cnblogs-simple-memory-theme -beautification.mdx",
+      "changes": [
+        "Added id: cnblogs-simple-memory-theme--beautification",
+        "Generated title from filename: Cnblogs Simple Memory Theme  Beautification",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: books, learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\misc\\Others\\cnblogs-theme-silence configure plain style theme.mdx",
+      "changes": [
+        "Added id: cnblogs-theme-silence-configure-plain-style-theme",
+        "Generated title from filename: Cnblogs Theme Silence Configure Plain Style Theme",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: books, learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\misc\\Others\\command-usage.mdx",
+      "changes": [
+        "Added id: command-usage",
+        "Inferred title from heading: Bash or PS Command Usage",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: books, learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\misc\\Others\\pixpin-settings.mdx",
+      "changes": [
+        "Added id: pixpin-settings",
+        "Inferred title from heading: pixpin",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: books, learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\misc\\Others\\win11-release-update.mdx",
+      "changes": [
+        "Added id: win11-release-update",
+        "Generated description",
+        "Inferred tags: books, learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\misc\\Books\\01-computor-theory\\computer-composition-theory.mdx",
+      "changes": [
+        "Added id: computer-composition-theory",
+        "Generated description",
+        "Inferred tags: books, learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\misc\\Books\\01-computor-theory\\computer-network-apps.mdx",
+      "changes": [
+        "Added id: computer-network-apps",
+        "Inferred title from heading: 计算机网络 - 网络应用",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: books, learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\misc\\Books\\01-computor-theory\\computer-network-concept.mdx",
+      "changes": [
+        "Added id: computer-network-concept",
+        "Inferred title from heading: 计算机网络 - 网络概述",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: books, learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\misc\\Books\\01-computor-theory\\computer-network-transmit-layer.mdx",
+      "changes": [
+        "Added id: computer-network-transmit-layer",
+        "Inferred title from heading: 计算机网络 - 传输层",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: books, learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\misc\\Books\\01-computor-theory\\os-lean-notes.mdx",
+      "changes": [
+        "Added id: os-lean-notes",
+        "Generated description",
+        "Inferred tags: books, learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\misc\\Books\\02-literature\\connitive-awaking-unloc-the-drrving-force-for-self-change.mdx",
+      "changes": [
+        "Added id: connitive-awaking-unloc-the-drrving-force-for-self-change",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: books, learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\Frontend\\Cases\\drag-drop-container-movement.mdx",
+      "changes": [
+        "Added id: drag-drop-container-movement",
+        "Inferred tags: frontend, javascript, react",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\Frontend\\jQuery\\JQuery-revese-selector.mdx",
+      "changes": [
+        "Added id: jquery-revese-selector",
+        "Generated description",
+        "Inferred tags: frontend, javascript, react",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\Frontend\\React\\react-learn-2025.mdx",
+      "changes": [
+        "Added id: react-learn-2025",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Inferred tags: frontend, javascript, react",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\Frontend\\React\\react-naming-conventions.mdx",
+      "changes": [
+        "Added id: react-naming-conventions",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Inferred tags: frontend, javascript, react",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\Frontend\\React\\react-problems.mdx",
+      "changes": [
+        "Added id: react-problems",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Inferred tags: frontend, javascript, react",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\Frontend\\React\\react-reference.mdx",
+      "changes": [
+        "Added id: react-reference",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Inferred tags: frontend, javascript, react",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\Frontend\\Styling\\css.mdx",
+      "changes": [
+        "Added id: css",
+        "Generated description",
+        "Inferred tags: frontend, javascript, react",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\Frontend\\Styling\\tailwind.mdx",
+      "changes": [
+        "Added id: tailwind",
+        "Inferred tags: frontend, javascript, react",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\Frontend\\Tools\\Integrate-husky-prettier-etc.mdx",
+      "changes": [
+        "Added id: integrate-husky-prettier-etc",
+        "Generated description",
+        "Inferred tags: frontend, javascript, react",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\Frontend\\Tools\\pnpm.mdx",
+      "changes": [
+        "Added id: pnpm",
+        "Generated description",
+        "Inferred tags: frontend, javascript, react",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\Frontend\\Vue\\vue-grammer-one.mdx",
+      "changes": [
+        "Added id: vue-grammer-one",
+        "Generated description",
+        "Inferred tags: frontend, javascript, react",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\Frontend\\Vue\\vue-grammer-two.mdx",
+      "changes": [
+        "Added id: vue-grammer-two",
+        "Generated description",
+        "Inferred tags: frontend, javascript, react",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\Frontend\\Vue\\vue-project-notes.mdx",
+      "changes": [
+        "Added id: vue-project-notes",
+        "Generated description",
+        "Inferred tags: frontend, javascript, react",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\Frontend\\Vue\\vue-route.mdx",
+      "changes": [
+        "Added id: vue-route",
+        "Generated description",
+        "Inferred tags: frontend, javascript, react",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\Frontend\\Vue\\vue3-starter.mdx",
+      "changes": [
+        "Added id: vue3-starter",
+        "Generated description",
+        "Inferred tags: frontend, javascript, react",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\devops\\Docker\\docker-chinese-register-mirror-address.mdx",
+      "changes": [
+        "Added id: docker-chinese-register-mirror-address",
+        "Generated description",
+        "Inferred tags: containerization, devops, docker",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\devops\\Docker\\Docker-Command-and-Dockerfile.mdx",
+      "changes": [
+        "Added id: docker-command-and-dockerfile",
+        "Generated description",
+        "Inferred tags: containerization, devops, docker",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\devops\\Docker\\docker-compose-configure-redis-cluster-jenkins.mdx",
+      "changes": [
+        "Added id: docker-compose-configure-redis-cluster-jenkins",
+        "Generated description",
+        "Inferred tags: containerization, devops, docker",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\devops\\Docker\\idea-docker-deployment.mdx",
+      "changes": [
+        "Added id: idea-docker-deployment",
+        "Generated description",
+        "Inferred tags: containerization, devops, docker",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\devops\\Kubernetes\\centos8-instal-k8s.mdx",
+      "changes": [
+        "Added id: centos8-instal-k8s",
+        "Generated description",
+        "Inferred tags: containerization, devops, docker",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\devops\\Kubernetes\\k8s-common-used-command.mdx",
+      "changes": [
+        "Added id: k8s-common-used-command",
+        "Generated description",
+        "Inferred tags: containerization, devops, docker",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\devops\\Linux\\awk-sed-quick-start.mdx",
+      "changes": [
+        "Added id: awk-sed-quick-start",
+        "Generated description",
+        "Inferred tags: containerization, devops, docker",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\devops\\Linux\\Common-Shell-Command.mdx",
+      "changes": [
+        "Added id: common-shell-command",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Inferred tags: containerization, devops, docker",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Algorithm\\Base-Sort.mdx",
+      "changes": [
+        "Added id: base-sort",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Algorithm\\Binary-Insert.mdx",
+      "changes": [
+        "Added id: binary-insert",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Algorithm\\bubble-sort.mdx",
+      "changes": [
+        "Added id: bubble-sort",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Algorithm\\head-sort.mdx",
+      "changes": [
+        "Added id: head-sort",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Algorithm\\insert-sort.mdx",
+      "changes": [
+        "Added id: insert-sort",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Algorithm\\KMP.mdx",
+      "changes": [
+        "Added id: kmp",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Algorithm\\leet-code-4-power.mdx",
+      "changes": [
+        "Added id: leet-code-4-power",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Algorithm\\leet-code-return-twomedian-of-two-positive-intergers.mdx",
+      "changes": [
+        "Added id: leet-code-return-twomedian-of-two-positive-intergers",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Algorithm\\leet-code-two-link-table-add.mdx",
+      "changes": [
+        "Added id: leet-code-two-link-table-add",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Algorithm\\merge-sort.mdx",
+      "changes": [
+        "Added id: merge-sort",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Algorithm\\quick-sort.mdx",
+      "changes": [
+        "Added id: quick-sort",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Algorithm\\select-sort.mdx",
+      "changes": [
+        "Added id: select-sort",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Algorithm\\shell-sort.mdx",
+      "changes": [
+        "Added id: shell-sort",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Database\\Java-Case-Distribution.mdx",
+      "changes": [
+        "Added id: java-case-distribution",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Database\\mybatis-plus-code-generate.mdx",
+      "changes": [
+        "Added id: mybatis-plus-code-generate",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Database\\mybatis-Plus-quick-start.mdx",
+      "changes": [
+        "Added id: mybatis-plus-quick-start",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Database\\mysql-procedure.mdx",
+      "changes": [
+        "Added id: mysql-procedure",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Database\\oracle-procedure.mdx",
+      "changes": [
+        "Added id: oracle-procedure",
+        "Inferred title from heading: Oracle 相关",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Database\\transaction-process.mdx",
+      "changes": [
+        "Added id: transaction-process",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Middleware\\Camunda.mdx",
+      "changes": [
+        "Added id: camunda",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Middleware\\Kafka.mdx",
+      "changes": [
+        "Added id: kafka",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Middleware\\RabbitMQ.mdx",
+      "changes": [
+        "Added id: rabbitmq",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Middleware\\Redis.mdx",
+      "changes": [
+        "Added id: redis",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Python\\python-problems.mdx",
+      "changes": [
+        "Added id: python-problems",
+        "Inferred title from heading: Python 使用问题",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Python\\python-replacement-script.mdx",
+      "changes": [
+        "Added id: python-replacement-script",
+        "Inferred title from heading: 在多个文件中替换多个相应的内容",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Concurrent-JVM\\CPU memory domain.mdx",
+      "changes": [
+        "Added id: cpu-memory-domain",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Concurrent-JVM\\final memory domain.mdx",
+      "changes": [
+        "Added id: final-memory-domain",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Concurrent-JVM\\Java Concurrent Cases.mdx",
+      "changes": [
+        "Added id: java-concurrent-cases",
+        "Inferred title from heading: Java 并发编程",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: case-study, frontend",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Concurrent-JVM\\JAVA Virtual Machine.mdx",
+      "changes": [
+        "Added id: java-virtual-machine",
+        "Inferred title from heading: JAVA虚拟机",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Concurrent-JVM\\JMM.mdx",
+      "changes": [
+        "Added id: jmm",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Concurrent-JVM\\lock.mdx",
+      "changes": [
+        "Added id: lock",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Concurrent-JVM\\volatile memory domain.mdx",
+      "changes": [
+        "Added id: volatile-memory-domain",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\DesignPatterns\\Design Pattern.mdx",
+      "changes": [
+        "Added id: design-pattern",
+        "Inferred title from heading: 设计模式",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\DesignPatterns\\functional-register-engine.mdx",
+      "changes": [
+        "Added id: functional-register-engine",
+        "Inferred title from heading: 功能注册引擎设计文档",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Interview\\Java-Case-Interview-one.mdx",
+      "changes": [
+        "Added id: java-case-interview-one",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Interview\\Java-Case-Interview-two.mdx",
+      "changes": [
+        "Added id: java-case-interview-two",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\JavaBase\\annotation processor.mdx",
+      "changes": [
+        "Added id: annotation-processor",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\JavaBase\\class description.mdx",
+      "changes": [
+        "Added id: class-description",
+        "Inferred title from heading: Java类描述",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\JavaBase\\file upload.mdx",
+      "changes": [
+        "Added id: file-upload",
+        "Inferred title from heading: Java 文件相关",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\JavaBase\\lambda.mdx",
+      "changes": [
+        "Added id: lambda",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\JavaBase\\netty.mdx",
+      "changes": [
+        "Added id: netty",
+        "Inferred title from heading: netty ",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\JavaBase\\trace.mdx",
+      "changes": [
+        "Added id: trace",
+        "Inferred title from heading: Jaeger Trace MDC",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Problems\\github problems.mdx",
+      "changes": [
+        "Added id: github-problems",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Problems\\Java problems.mdx",
+      "changes": [
+        "Added id: java-problems",
+        "Inferred title from heading: Java问题汇总",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Problems\\Junit-Stuff.mdx",
+      "changes": [
+        "Added id: junit-stuff",
+        "Inferred title from heading: jUnit Stuff",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Problems\\Oracle.mdx",
+      "changes": [
+        "Added id: oracle",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Problems\\Production.mdx",
+      "changes": [
+        "Added id: production",
+        "Inferred title from heading: 生产问题",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Problems\\Spring Boot.mdx",
+      "changes": [
+        "Added id: spring-boot",
+        "Inferred title from heading: Spring Boot",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Spring\\AOP\\advice.mdx",
+      "changes": [
+        "Added id: advice",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Spring\\AOP\\aspect.mdx",
+      "changes": [
+        "Added id: aspect",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Spring\\AOP\\joinpoint.mdx",
+      "changes": [
+        "Added id: joinpoint",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Spring\\AOP\\pointcut.mdx",
+      "changes": [
+        "Added id: pointcut",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Spring\\AOP\\schema-configuration.mdx",
+      "changes": [
+        "Added id: schema-configuration",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Spring\\Core\\application-context.mdx",
+      "changes": [
+        "Added id: application-context",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Spring\\Core\\bean-creating-process.mdx",
+      "changes": [
+        "Added id: bean-creating-process",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Spring\\Core\\bean-factory-post-processor.mdx",
+      "changes": [
+        "Added id: bean-factory-post-processor",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Spring\\Core\\spring-core.mdx",
+      "changes": [
+        "Added id: spring-core",
+        "Inferred title from heading: Spring Core",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Spring\\IOC\\ioc-advanced.mdx",
+      "changes": [
+        "Added id: ioc-advanced",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Spring\\IOC\\ioc-basics.mdx",
+      "changes": [
+        "Added id: ioc-basics",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Spring\\AOP\\AspectJ\\aspectj-overview.mdx",
+      "changes": [
+        "Added id: aspectj-overview",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Spring\\AOP\\AspectJ\\aspectj-weaving.mdx",
+      "changes": [
+        "Added id: aspectj-weaving",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Spring\\AOP\\AspectJ\\full-aspectj-temp.mdx",
+      "changes": [
+        "Added id: full-aspectj-temp",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Spring\\AOP\\Weaving\\weaving-autoproxy.mdx",
+      "changes": [
+        "Added id: weaving-autoproxy",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\background\\Java\\Spring\\AOP\\Weaving\\weaving-programmatic.mdx",
+      "changes": [
+        "Added id: weaving-programmatic",
+        "Generated description",
+        "Inferred tags: algorithm, computer-science, data-structures",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\ai-bigdata\\AI\\AI-formula.mdx",
+      "changes": [
+        "Added id: ai-formula",
+        "Inferred tags: ai, machine-learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\ai-bigdata\\AI\\ai-problems.mdx",
+      "changes": [
+        "Added id: ai-problems",
+        "Inferred tags: ai, machine-learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\ai-bigdata\\AI\\ai-roadmap.mdx",
+      "changes": [
+        "Added id: ai-roadmap",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Inferred tags: ai, machine-learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\ai-bigdata\\AI\\career.mdx",
+      "changes": [
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\ai-bigdata\\AI\\future-vibecoding.mdx",
+      "changes": [
+        "Updated sidebar_label to match title (removed emoji)",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\ai-bigdata\\AI\\lays-in-ai.mdx",
+      "changes": [
+        "Added id: lays-in-ai",
+        "Inferred tags: ai, machine-learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\ai-bigdata\\AI\\maxi-model-capacity.mdx",
+      "changes": [
+        "Added id: maxi-model-capacity",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Inferred tags: ai, machine-learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\ai-bigdata\\AI\\mcp.mdx",
+      "changes": [
+        "Added id: mcp",
+        "Inferred tags: ai, machine-learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\ai-bigdata\\AI\\prompt.mdx",
+      "changes": [
+        "Added id: prompt",
+        "Inferred tags: ai, machine-learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\ai-bigdata\\AI\\vibe-coding.mdx",
+      "changes": [
+        "Added id: vibe-coding",
+        "Inferred tags: ai, machine-learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\ai-bigdata\\BigData\\flink docker-compose.mdx",
+      "changes": [
+        "Added id: flink-docker-compose",
+        "Generated title from filename: Flink Docker Compose",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: ai, machine-learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\ai-bigdata\\BigData\\hadoop.mdx",
+      "changes": [
+        "Added id: hadoop",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Inferred tags: ai, machine-learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\ai-bigdata\\BigData\\HBASE.mdx",
+      "changes": [
+        "Added id: hbase",
+        "Inferred title from heading: HBASE",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: ai, machine-learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\ai-bigdata\\BigData\\Hadoop\\full-hadoop-reference.mdx",
+      "changes": [
+        "Added id: full-hadoop-reference",
+        "Inferred title from heading: hadoop",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: ai, machine-learning",
+        "Updated last_update date and author"
+      ]
+    },
+    {
+      "file": "docs\\ai-bigdata\\BigData\\Hadoop\\hadoop-overview.mdx",
+      "changes": [
+        "Added id: hadoop-overview",
+        "Updated sidebar_label to match title (removed emoji)",
+        "Generated description",
+        "Inferred tags: ai, machine-learning",
+        "Updated last_update date and author"
+      ]
+    }
+  ]
+}

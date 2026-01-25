@@ -1,0 +1,126 @@
+# 计算机网络 - 传输层
+
+## 多路复用/分用(传输层)
+
+![20250920191454](https://s2.loli.net/2025/09/20/nlXfId69z8ekqYO.png)
+
+`UDP`多路复用/分用:使用二元组(D-IP, D-Port)
+
+![20250920191512](https://s2.loli.net/2025/09/20/GZKfc1owT9U6bBC.png)
+
+`TCP`多路复用/分用:使用四元组(S-IP, S-Port, D-IP, D-Port)
+
+![20250920191531](https://s2.loli.net/2025/09/20/biTfZXmRq1CMh3z.png)
+
+## Rdt2.0 FSM（有限状态机）规约
+
+> 可能产生位的错误 0 弄成1、1弄成 0
+> 
+
+![20250920191554](https://s2.loli.net/2025/09/20/XESGxKRD9Le7sO1.png)
+
+**发送方应对，ACK、NAK破坏的包**
+
+rdt2.1加入序列号保证消息不被重复处理
+
+![20250920191611](https://s2.loli.net/2025/09/20/wVujiqHrAoKlZyS.png)
+
+收到`ACK` 的时候，处理下一个消息，序号+1.
+
+**接收方应对，ACK、NAK破坏的包**
+
+![20250920191649](https://s2.loli.net/2025/09/20/v2synfHgBto9jUk.png)
+
+rdt2.2 移除NAK
+
+接收方当消息处理失败时，重发上次的ACK及序号
+
+![20250920191709](https://s2.loli.net/2025/09/20/a68wN7HCDAvQpLT.png)
+
+rdt3.0 分组会丢失
+
+![20250920191726](https://s2.loli.net/2025/09/20/WwJnzN3ut8TvXEm.png)
+
+![20250920191747](https://s2.loli.net/2025/09/20/PNIFQGvnqsxlJ2o.png)
+
+![20250920191802](https://s2.loli.net/2025/09/20/XgrnjAFJk9EoVSU.png)
+
+![20250920191947](https://s2.loli.net/2025/09/20/59P1BjMzNaqVZhs.png)
+
+## Go-Back-N
+
+![20250920192003](https://s2.loli.net/2025/09/20/KzHhDan7fcki3WP.png)
+
+## Selective Repeat
+
+![20250920192018](https://s2.loli.net/2025/09/20/Oprog1tvG7zXceS.png)
+
+![20250920192043](https://s2.loli.net/2025/09/20/4JexPzGNVmcOpBD.png)
+
+### 正确的数学约束关系
+
+> 2^k ≥ 2N
+> 
+> 
+> 即：
+> 
+> ```
+> 
+> Ns + Nr ≤ 2^k / 2 = N_max
+> 
+> 2N ≤ 2^k
+> N ≤ 2^(k-1)
+> ```
+> 
+> 其中：
+> 
+> - `k`：序列号的比特数
+> - `2^k`：序列号空间大小
+> - `N`：发送窗口大小（发送方和接收方窗口一般相等）
+> - `Ns`：发送窗口大小
+> - `Nr`：接收窗口大小（SR中常设置 `Ns = Nr = N`）
+
+| k（序号比特） | 序列号空间大小（2^k） | 最大窗口大小（N ≤） |
+| --- | --- | --- |
+| 3 | 8 | 4 |
+| 4 | 16 | 8 |
+| 5 | 32 | 16 |
+
+## TCP结构
+
+![20250920192058](https://s2.loli.net/2025/09/20/8GDRBbfoi6qgE17.png)
+
+![20250920192127](https://s2.loli.net/2025/09/20/FXeci54zt91joKZ.png)
+
+- 表示：Host A 发出了数据 `'C'`，这是它第 42 号字节。
+- 同时 ACK = 79：它告诉 B：“我已经收到你发来的数据到第 78 字节了，下一个我要的是第 79 字节。”
+- B 发出的数据字节号是 79（这是 B 发送方向的字节号）
+- ACK = 43：B 告诉 A：“我收到了你发来的第 42 字节（就是‘C’），现在我等的是第 43 个字节。”
+- Host A 的下一个字节是 43（它已完成前面42）
+- 它 ACK = 80，表示它已收到 B 发来的字节到第 79，下一字节是 80。
+
+## TCP创建和关闭连接
+
+创建
+
+![20250920192158](https://s2.loli.net/2025/09/20/b7jnoeawMxcTlYQ.png)
+
+关闭
+
+![20250920192549](https://s2.loli.net/2025/09/20/7LMl9NgQmuAoqSp.png)
+
+![20250920192558](https://s2.loli.net/2025/09/20/o2IYexb3vnMQKqd.png)
+
+![20250920192610](https://s2.loli.net/2025/09/20/8PebymMl1HNqwR7.png)
+
+
+**所有内容来自，保留所有课程著作权限。文档仅限学习使用。**
+
+**如有侵权联系  `whalefallcl@icloud.com`**
+
+**https://www.icourse163.org/learn/HIT-154005?tid=1474180488#/learn/announce**
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

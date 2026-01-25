@@ -1,0 +1,29 @@
+---
+title: "Prompt"
+sidebar_label: "Prompt"
+sidebar_position: 8
+description: "Prompt"
+---
+
+# Prompt
+
+## 使用特殊标记
+
+1. 使用引号包裹需要分析的 Prompt
+
+"Font Formatter"
+
+2. 使用`---`包裹需要分析的 Prompt
+
+```textplain
+
+下面就是待分析的 Prompt:
+---
+## 你的 Prompt 在这里
+---
+
+```
+
+3. 当有歧义的时候，添加更多描述
+
+不说"层(layer)"，而是 "神经网络: layer"

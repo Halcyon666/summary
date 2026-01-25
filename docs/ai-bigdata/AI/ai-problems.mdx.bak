@@ -1,0 +1,14 @@
+---
+title: "AI Problems"
+sidebar_label: "AI Problems"
+sidebar_position: 6
+description: "AI Problems"
+---
+
+# AI Problems
+
+## ollama本地调用问题
+
+502 Bad Gateway: 
+
+如果以前可以正常调用，后面又无法正常调用，多半是代理的问题，检查下代理设置。

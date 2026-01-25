@@ -1,0 +1,389 @@
+# jUnit Stuff
+
+## Mockito 单元测试 vs Spring Boot 测试
+
+本文整理了两种常用的测试方式：
+
+1. **纯单元测试（Mockito + JUnit）**
+2. **Spring Boot 测试（@SpringBootTest 排除自动装配）**
+
+
+
+### Mockito JUnit
+
+特点：
+
+- 不依赖 Spring 容器
+- 使用 `@ExtendWith(MockitoExtension.class)`
+- 适合 Service 层逻辑测试
+
+<details>
+<summary>示例代码</summary>
+
+```java title="CodeEntityServiceImplTest"
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
+class CodeEntityServiceImplTest {
+
+    @InjectMocks
+    private CodeEntityServiceImpl codeEntityService;
+
+    @Mock
+    private CodeEntityMapper codeEntityMapper;
+
+    @Test
+    void testGetByIdMine_success() {
+        CodeEntityPO po = new CodeEntityPO();
+        po.setUsername("Candy");
+        po.setCode("abc");
+
+        Mockito.when(codeEntityMapper.selectById("abc")).thenReturn(po);
+
+        CodeEntityPO result = codeEntityService.getByIdMine("abc");
+
+        assertEquals("Candy", result.getUsername());
+        assertEquals("abc", result.getCode());
+    }
+
+    @Test
+    void testGetByIdMine_nullShouldThrow() {
+        Mockito.when(codeEntityMapper.selectById("abc")).thenReturn(null);
+
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
+            codeEntityService.getByIdMine1("abc");
+        });
+
+        assertEquals("Object must not be null", ex.getMessage());
+    }
+}
+```
+</details>
+
+✅ 优点：
+
+- 快速执行
+- 不依赖数据库或 Spring 容器
+- 逻辑测试清晰
+
+
+### Spring Boot test
+
+特点：
+
+- 依赖 Spring Boot 上下文，但排除了数据库等自动装配
+- 使用 `@MockBean` 替换 Mapper 或 Service
+- 适合 Service/Controller 逻辑测试
+
+
+<details>
+<summary>示例代码</summary>
+
+```java title="CodeEntityServiceImplBootTest"
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.beans.factory.annotation.Autowired;
+
+@SpringBootTest(
+    classes = YourMainApplication.class,
+    properties = {
+        "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+    }
+)
+class CodeEntityServiceImplBootTest {
+
+    @Autowired
+    private CodeEntityServiceImpl codeEntityService;
+
+    @MockBean
+    private CodeEntityMapper codeEntityMapper;
+
+    @Test
+    void testGetByIdMine_success() {
+        CodeEntityPO po = new CodeEntityPO();
+        po.setUsername("Candy");
+        po.setCode("abc");
+
+        Mockito.when(codeEntityMapper.selectById("abc")).thenReturn(po);
+
+        CodeEntityPO result = codeEntityService.getByIdMine("abc");
+
+        assertEquals("Candy", result.getUsername());
+        assertEquals("abc", result.getCode());
+    }
+}
+```
+</details>
+
+
+也可以使用`yml`文件来排除自动装配：
+
+```yml title="application-test.yml"
+spring:
+ autoconfigure:
+   exclude:
+     - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+```
+```java title="CodeEntityServiceImplBootTest"
+@SpringBootTest(classes = App.class)
+@ActiveProfiles("test")
+```
+
+✅ 优点：
+
+- Spring 上下文可用，依赖注入正常
+- 可以测试带有事务或 AOP 的 Service
+- 避免数据库连接报错
+
+[完整代码记录](https://github.com/Halcyon666/mybatis-plus/commit/d092b62282b1666aaaad46c46077114752a37115)
+
+### static method mock
+
+<details>
+<summary>静态方法Mock</summary>
+```java title="StaticMockTest"
+import com.whalefall541.staticmock.ExternalLib;
+import com.whalefall541.staticmock.MyService;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+
+import java.util.function.Supplier;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mockStatic;
+
+class StaticMockTest {
+    @Test
+    void testStaticMockWithSupplier() {
+        // 1. Create the static mock within a try-with-resources block
+        try (MockedStatic<ExternalLib> mockedLib = mockStatic(ExternalLib.class)) {
+            // 2. Define behavior: When compute() is called with ANY Supplier, return "Mocked"
+            mockedLib.when(() -> ExternalLib.compute(any(Supplier.class)))
+                    .thenReturn("Mocked Result");
+            // 3. Execute the service method
+            MyService service = new MyService();
+            String result = service.getProcessedData();
+            // 4. Verify the result is what we mocked
+            assertEquals("Mocked Result", result);
+            // Optional: Verify the static method was called exactly once
+            mockedLib.verify(() -> ExternalLib.compute(any(Supplier.class)));
+        }
+    }
+
+    @Test
+    void testGetProcessedData1_FailureInsideSupplier() {
+        try (MockedStatic<ExternalLib> mockedLib = mockStatic(ExternalLib.class)) {
+            mockedLib.when(() -> ExternalLib.compute(any()))
+                    .thenCallRealMethod();
+            MyService service = new MyService();
+            Exception exception = assertThrows(IllegalArgumentException.class, service::getProcessedData1);
+            assertEquals("This will fail", exception.getMessage());
+        }
+    }
+}
+```
+</details>
+
+## Assert log content
+
+1. [System out 重定向](https://github.com/Halcyon666/learn-cases/blob/2e543cf044a8e67a0ae1cbde5fe3ab8aa5b1637e/learncases/src/test/java/com/whalefall/override/TestClassTest.java#L48)
+
+2. LogCaptor (并发执行场景有问题)
+
+```java title="MyServiceTest "
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+// highlight-next-line
+@ExtendWith(OutputCaptureExtension.class)
+// If CapturedOutput is used by several methods, just opening next line comment
+// @SpringBootTest
+class MyServiceTest {
+    
+    @Test
+    void shouldLogMessage(CapturedOutput output) {
+		// highlight-next-line
+        MyService service = new MyService();
+        service.doSomething();
+        assertThat(output.getOut()).contains("Expected log message");
+    }
+}
+```
+
+## Mock annotation
+
+1. using spring boot test
+
+getting the real annotation from classes
+
+2. using a tempt inner class
+
+```java
+@UseTemplate(DemoTemplate.class)
+static class DemoBusiness implements Business<String> {
+    @Override
+    public void process(String input) {
+        // no-op
+    }
+}
+
+static class DemoTemplate implements Template<String, DemoBusiness> {
+    @Override
+    public void handler(String txcode, String param, DemoBusiness businessService) {
+        // mock behavior
+    }
+}
+@Test
+void testInit_withUseTemplateAnnotation() {
+    ApplicationContext ctx = mock(ApplicationContext.class);
+    DemoTemplate demoTemplate = new DemoTemplate();
+    when(ctx.getBean(DemoTemplate.class)).thenReturn(demoTemplate);
+
+    Map<String, DemoBusiness> map = Map.of("job1", new DemoBusiness());
+
+    RegisterEnginV3<String, DemoBusiness> engin =
+        new RegisterEnginV3<>(map, Map.of(), new HashMap<>(), ctx);
+
+    engin.init(); // ✅ Will read @UseTemplate(DemoTemplate.class)
+}
+```
+
+3. new a annotion instance to use.
+
+## 同一个类中单元测试方法之间相关影响
+
+very调用次数本来是一次，前面的一个测试方法会影响后面的方法，需要在单元测试类上面加这个。
+
+```java
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+```
+
+## Depends on `@PostConstruct`
+
+You can create it, pass parameter by new construction, then call the init method .
+
+```java
+@Service
+@AllArgsConstructor
+public class RegisterEnginV3<T, S extends Business<T>> {
+
+    @PostConstruct
+    public void init() {
+        businessesMap.forEach((txcode, businessService) -> {
+            // 1. 解析 @UseTemplate 注解
+            UseTemplate ann = businessService.getClass()
+                .getAnnotation(UseTemplate.class);
+
+            // 2. 获取对应的 Template Bean
+            Template<T, S> templateToUse =
+                (Template<T, S>) applicationContext
+                    .getBean(ann.value());
+
+            // 3. 泛型类型检查
+            checkConsistentGenericType(businessService, templateToUse);
+
+            // 4. 注册到执行注册表
+            registry.put(txcode,
+                param -> templateToUse.handler(txcode, param, businessService));
+        });
+    }
+
+    public void run(String businessType, T params) {
+        registry.get(businessType).accept(params);
+    }
+}
+```
+
+## @MockBean 失效问题
+
+debug发现一个@Resource对象里面的属性已经在单元测试中写了@MockBean 但是依然注入了真实的对象
+
+**✅ 方案 1：改用**
+
+**@Autowired**
+
+最直接、官方推荐的方式。
+
+@MockBean 专门为 @Autowired 机制设计。
+
+## Mock的方法改变参数的属性
+
+非常好的问题 👏
+
+你这个场景非常典型：
+
+✅ 问题场景
+
+一个被 @MockBean 的对象（比如 service 或 client），
+
+它有一个 void 方法，在方法里会修改你传入的对象（例如设置字段）。
+
+在单元测试中，你想模拟这个行为，让该对象的属性被设置。
+
+```java
+@Service
+public class OrderService {
+    @Autowired
+    private PaymentClient paymentClient;
+
+    public void process(OrderContext ctx) {
+        paymentClient.fillPaymentInfo(ctx);  // void 方法，内部会设置 ctx 的字段
+    }
+}
+
+public class PaymentClient {
+    public void fillPaymentInfo(OrderContext ctx) {
+        ctx.setPayStatus("SUCCESS");
+        ctx.setPayAmount(100);
+    }
+}
+```
+
+doAnswer() 可以让你定义在调用 void 方法时的自定义行为。
+
+```java
+@SpringBootTest
+class OrderServiceTest {
+
+    @Autowired
+    private OrderService orderService;
+
+    @MockBean
+    private PaymentClient paymentClient;
+
+    @Test
+    void testProcess() {
+        // 1️⃣ 模拟 PaymentClient 对 fillPaymentInfo 的行为
+        doAnswer(invocation -> {
+            OrderContext ctx = invocation.getArgument(0);
+            ctx.setPayStatus("MOCK_SUCCESS");
+            ctx.setPayAmount(999);
+            return null; // 因为目标方法是 void
+        }).when(paymentClient).fillPaymentInfo(any(OrderContext.class));
+
+        // 2️⃣ 调用实际业务
+        OrderContext context = new OrderContext();
+        orderService.process(context);
+
+        // 3️⃣ 断言模拟效果
+        assertEquals("MOCK_SUCCESS", context.getPayStatus());
+        assertEquals(999, context.getPayAmount());
+    }
+}
+```
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

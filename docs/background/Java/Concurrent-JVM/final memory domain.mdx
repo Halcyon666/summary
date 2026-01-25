@@ -1,9 +1,17 @@
 ---
+id: final-memory-domain
 title: final域内存知识
 sidebar_label: final域内存知识
+sidebar_position: 10
+description: 在构造函数内对一个final域的写入，与随后把这个被构造对象的引用赋值给一个引用变量，这两个操作之间不能重排序。 初次读一个包含final域的对象的引用，与随后初次读这个final域，这两个操作之间不能重排序
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
 ---
-
-
 ## final域重排序规则
 
 在构造函数内对一个final域的写入，与随后把这个被构造对象的引用赋值给一个引用变量，这两个操作之间不能重排序。

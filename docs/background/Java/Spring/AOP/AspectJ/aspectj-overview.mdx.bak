@@ -1,0 +1,56 @@
+---
+title: AspectJ形式AOP概述
+sidebar_label: AspectJ概述
+---
+
+本文相关代码(来自[官方源码](https://github.com/spring-projects/spring-framework.git "官方源码")spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) org.springframework.mylearntest包下。
+
+
+无需像1.0那样实现相应的接口，唯一要做的就是在这个Aspect类上加一个@Aspect注解。这样就可以判断ClassPath中哪些类是我们要找的Aspect定义。通过@Pointcut定义Pointcut，通过Around等注解来指定哪些方法定义了相应的Advice逻辑。
+
+<details>
+	<summary>PerformanceTraceAspect</summary>
+
+```java
+package org.springframework.mylearntest.aop2.aspectj;
+
+import org.apache.commons.lang3.time.StopWatch;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+
+/**
+ * @Author: whalefall
+ * @Date: 2020/7/28 22:46
+ * Spring 2.0 之后无需实现接口定义pointcut
+ */
+@Aspect
+public class PerformanceTraceAspect {
+	private final Log logger = LogFactory.getLog(PerformanceTraceAspect.class);
+
+	@Pointcut("execution(public  void *.method1()) || execution(public  void *.method2())")
+	public void pointcutName() {}
+
+	@Around("pointcutName()")
+	public Object performanceTrace(ProceedingJoinPoint joinPoint) throws Throwable {
+		StopWatch sw = new StopWatch();
+		try {
+			sw.start();
+			return joinPoint.proceed();
+		} finally {
+				System.out.println("pt in method["
+						+ joinPoint.getSignature().getName()
+				+ "]>>>>>>" + sw.toString());
+		}
+	}
+}
+```
+</details>
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

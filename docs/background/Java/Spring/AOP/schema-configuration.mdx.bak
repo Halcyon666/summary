@@ -1,0 +1,356 @@
+---
+title: 基于Schema的AOPA配置
+sidebar_label: 基于Schema的AOPA配置
+---
+
+本文相关代码(来自[官方源码](https://github.com/spring-projects/spring-framework.git)spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) org.springframework.mylearntest包下。
+
+## 基于Schema的AOP配置
+
+基于Schema的AOP是Spring2.0发布之后新增加的一种AOP使用方式。可以从如下两个角度来看待基于Schema的AOP。
+
+* 配置方式的改变 ： Spring框架从1.x版本升级到2.x版本之后，提倡容器配置方式从基于DTD的xml转向了基于Schema的xml，进一步提高了配置方式的灵活性和可扩展型。同时，新的Schema的配置方式为Spring的AOP功能专门提供了独有的命名空间。原来1.x中基于DTD的AOP配置方式，可以稍微转换一下配置方式就移植到基于Schema的AOP，所以从这一点来说，基于Schema的AOP只是配置方式的改变。
+
+* @AspectJ形式AOP的折中： 要使用@AspectJ形式的AOP，必须要求使用Java 5或者更高版本的JDK或者JRE，因为注解是Java 5发布之后才引入的特性。如果我们不得不使用Java 5之前的版本，而又想使用基于POJO的Aspect声明方式，我们可以使用基于Schema的Spring AOP。使用基于Schema的AOP，我们依然可以使用POJO声明Aspect以及相关的Advice。不过不需要注解标记了，直接通过Schema的配置文件进行配置就可以，@AspectJ形式的Pointcut表达式也全都可以配置到基于Schema的配置文件中。
+
+### 基于Schema的AOP配置概览
+
+新的基于Schema的AOP配置方式，针对Pointcut、Advisor以及Aspect等概念提供了独立的配置元素，所有这些配置元素都包含在统一的配置元素中，即`<aop:config/>`它只有一个属性，proxy-target-class，对应ProxyConfig中的proxyTargetClass属性，通过该属性，我们可以控制是使用基于接口的代理还是基于类的代理。它内部可以有三个子元素，分别是`<aop:pointcut>、<aop:advisor>、<aop:aspect>`，必须按顺序进行配置。
+
+![](https://s2.loli.net/2023/07/15/eRbMPO3Cwx1XEyL.png)
+
+对于`<aop:config>`来说，底层基本上是使用1.x中的自动代理机制实现的。相应的自动代理实现类，会根据元素内部对应的Pointcut、Advisor以及Aspect的子元素取得必要的织入信息，然后为容器内注册的bean进行自动代理。所以，如果愿意不用`<aop:config>`，而依然使用AutoProxyCreator实现类的方式也是可以的。
+
+### 向基于Schema的AOP迁移
+
+1. 单纯的迁移
+
+1.x版本的Spring AOP通Advisor的概念对横切关注点进行封装当把相应的Pointcut定义和Advice定义注册到容器之后(通常是在基于DTD的XML配置文件中)，通过声明相应的Advisor实现，将这些Pointcut
+以及Advisor定义装配到一起，最后通过某个AutoProxyCreator进行最后的织入。
+
+在转向2.x版本基于Schema的配置方式之后，这些概念实际上是相同的，唯一需要改变的是具体配置方式的改变。现在使用`<aop:advisor>`替代各种具体的Advisor实现类的bean定义声明，
+使用`<aop:config>`取代各种AutoProxyCreator。
+
+![](https://s2.loli.net/2023/07/15/HgJbXV8t4Ple9qZ.png)
+
+在`<aop:config>`中使用`<aop:advisor>`配置相应的Advisor，也就是特定于Spring AOP的Aspect。
+
+* id：指定当前Advisor定义的标志id
+* pointcut-ref：通过这个属性指定当前Advisor所对应的Pointcut定义是什么，需要指定容器中注册的具体的Pointcut对象引用
+* advice-ref：指定当前Advisor对应的Advice对象引用
+* order：指定当前Advisor的顺序号，因为基本上所有的Advisor实现都实现了Ordered接口
+
+2. 深入挖掘`<aop:advisor>`
+
+![](https://s2.loli.net/2023/07/15/ICXHBAMW3c7z61Y.png)
+
+### @AspectJ到“基于Schema的AOP迁移”
+
+除Introduction之外基于Schema的Advice声明以及Pointcut声明
+
+<details>
+	<summary>SchemaBasedAspect</summary>
+
+```java
+package org.springframework.mylearntest.aop2.schemaapsect;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.springframework.util.StopWatch;
+
+/**
+ * @Author: WhaleFall541
+ * @Date: 2020/8/12 21:33
+ */
+public class SchemaBasedAspect {
+	public void method1() {}
+	public void method2() {}
+
+	private  final Log logger = LogFactory.getLog(SchemaBasedAspect.class);
+
+	public void doBefore(JoinPoint jp) {
+		if (logger.isInfoEnabled()) {
+			logger.info("before method {" + jp.getSignature().getName()+"} execution");
+		}
+	}
+
+	public void doAfterReturning(JoinPoint jp, Object retValue) {
+		if (logger.isInfoEnabled()) {
+			logger.info("before method {" + jp.getSignature().getName()+"} execution");
+			logger.info("with return value: " + retValue);
+		}
+	}
+
+	public void doAfterThrowing(RuntimeException e) {
+		logger.error(ExceptionUtils.getStackTrace(e));
+	}
+
+	public void doAfter() {
+		logger.warn("release system resources ,etc.");
+	}
+
+	// NOTE：第一个参数必须为ProceedingJoinPoint
+	public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
+		StopWatch watch = new StopWatch();
+		try {
+			watch.start();
+			return pjp.proceed();
+		} finally {
+			watch.stop();
+			if (logger.isInfoEnabled()) {
+				logger.info(watch);
+			}
+		}
+	}
+}
+```
+</details>
+
+<details>
+	<summary>schemaaspect.xml</summary>
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation=
+			   "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+
+              	  http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<aop:config>
+		<aop:aspect id="myAspect" ref="schemaBasedAspect" order="2">
+			<aop:pointcut id="privatePointcut" expression="execution(public void *.doSth())"/>
+			<aop:before pointcut-ref="privatePointcut" method="doBefore"/>
+			<aop:after-returning pointcut-ref="privatePointcut" method="doAfterReturning" returning="retValue"/>
+			<aop:after-throwing pointcut-ref="privatePointcut" method="doAfterThrowing" throwing="e"/>
+			<aop:after pointcut-ref="privatePointcut" method="doAfter"/>
+			<aop:around pointcut-ref="privatePointcut" method="doAround"/>
+
+			<!--			introduction
+			types-matching 表示哪些目标对象进行Introduction逻辑织入
+			implement-interface 指定新增加的Introduction行为的接口定义类型
+			default-impl 指定新增加的Introduction行为的接口定义的默认实现类-->
+			<aop:declare-parents types-matching="org.springframework.mylearntest.aop1.weaver.baseoninterface.MockTask"
+								 implement-interface="org.springframework.mylearntest.aop1.weaver.proxyfactorybean.ICounter"
+								 default-impl="org.springframework.mylearntest.aop1.weaver.proxyfactorybean.CounterImpl"/>
+		</aop:aspect>
+	</aop:config>
+
+
+    <bean id="schemaBasedAspect" class="org.springframework.mylearntest.aop2.schemaapsect.SchemaBasedAspect"/>
+
+
+</beans>
+```
+</details>
+
+## AOP使用场景
+
+1. 异常处理
+
+* unchecked exception: java.lang.Error、java.lang.RuntimeException以及其子类。编译器不会在编译期对这些类型进行检查。
+* checked exception: java.lang.Exception及其子类，但是除去RuntimeException分支。必须对这些异常处理，并且编译器会在编译期对这些异常类型进行检查
+
+![](https://s2.loli.net/2023/07/15/bXHyAk8ZaFerdfB.png)
+
+当系统中多个地方都可能抛出unchecked exception的时候，我们可以在调用的最顶层，分别添加异常处理逻辑对其进行处理(记录日志，通知相应人员)。我们可以实现一个对应Fault处理的Aspect，让其对系统中所有可能的Fault情况进行统一的处理。这个专职的Aspect，我们称之为Fault Barrier。
+
+2. 安全检查
+
+Acegi 框架最初独立于Spring开发，现在已经并入Spring Portfolio，更名为Spring Security。
+
+3. 缓存
+
+为了避免需要添加的缓存实现逻辑影响业务逻辑的实现，我们可以让缓存的实现独立于业务对象的实现之外，将系统中的缓存需求通过AOP的Aspect进行封装，只在系统中某个点确切需要缓存支持的情况下，才为其织入。
+
+![](https://s2.loli.net/2023/07/15/dVmx8W5NDYSGL4g.png)
+
+现成的Caching产品实现有EhCache、JBossCache等；Spring Modules项目提供了对现有Caching产品的集成，这样就可以通过外部声明的方式为系统中的Joinpoint添加Caching支持。
+
+[相关案例](https://www.infoworld.com/article/2072722/extending-declarative-caching-services-for-spring.html)
+
+## Spring AOP 扩展
+
+### 问题的现象
+
+存在一个自身嵌套方法调用的类
+
+<details>
+	<summary>NestableInvocationBO</summary>
+
+```java
+public class NestableInvocationBO {
+    public void method1() {
+        method2();
+        System.out.println("method1 executed");
+    }
+
+    public void method2() {
+        System.out.println("method2 executed");
+    }
+}
+```
+</details>
+
+定义一个用于性能检查的AspectJ
+
+<details>
+	<summary>PerformanceTraceAspect1</summary>
+
+```java
+@Aspect
+public class PerformanceTraceAspect1 {
+    private final Log logger = LogFactory.getLog(PerformanceTraceAspect1.class);
+
+    @Pointcut("execution(public void *.method1())")
+    public void method1() {}
+
+    @Pointcut("execution(public void *.method2())")
+    public void method2() {}
+
+    @Pointcut("method1() || method2()")
+    public void compositePointcut() {}
+
+    @Around("compositePointcut()")
+    public Object performanceTrace(ProceedingJoinPoint pjp) throws Throwable {
+        StopWatch watch = new StopWatch();
+        try {
+            watch.start();
+            return pjp.proceed();
+        } finally {
+            watch.stop();
+            System.out.println("PT in method" + pjp.getSignature().getName() + "]>>>>>" + watch.toString());
+            if (logger.isInfoEnabled()) {
+                logger.info("PT in method" + pjp.getSignature().getName() + "]>>>>>" + watch.toString());
+            }
+        }
+    }
+}
+```
+</details>
+
+我们的Around Advice定义会拦截compositePointcut()所指定的Joinpoint，即匹配method1或者method2的执行。
+
+<details>
+	<summary>Test4NestableInvocationBO</summary>
+
+```java
+public class Test4NestableInvocationBO {
+    public static void main(String[] args) {
+        AspectJProxyFactory weaver = new AspectJProxyFactory(new NestableInvocationBO());
+        weaver.setProxyTargetClass(true);
+        weaver.addAspect(PerformanceTraceAspect1.class);
+        Object proxy = weaver.getProxy();
+        ((NestableInvocationBO)proxy).method2();
+        ((NestableInvocationBO)proxy).method1();
+    }
+}
+```
+</details>
+
+### 原因分析
+
+```log
+method2 executed
+PT in methodmethod2]>>>>>StopWatch '': running time = 9203600 ns; [] took 9203600 ns = 100%
+method2 executed
+method1 executed
+PT in methodmethod1]>>>>>StopWatch '': running time = 65800 ns; [] took 65800 ns = 100%
+```
+
+输出结果表明：
+
+* 第一次调用method2，被拦截后执行成功
+* 第二次调用method1，却只有method1方法的执行拦截成功，而method1方法内部的method2方法却没有被拦截
+
+方法调用时序图
+![](https://s2.loli.net/2023/07/15/pqer2USxgj7CTnL.png)
+
+同一对象内部方法嵌套调用示意图
+![](https://s2.loli.net/2023/07/15/dXsEeAV9ofqGQH8.png)
+当method1调用method2时，它调用的是TargetObject上的method2，而不是ProxyObject上的method2。要针对met活动的横切逻辑，只织入到了ProxyObject上的method2方法中，所以在method1所调用的method2没有能够被成功拦截。
+
+3. 解决方案
+
+当目标对象依赖于自身时，我们也可以尝试将目标对象的代理对象公开给它，只要让目标对象调用自身代理对象上的相应方法，就可以解决内部调用的方法没有被拦截的问题。
+
+Spring AOP 提供了AopContext来公开当前目标对象的代理对象，我们只要在目标对象中使用`AopContext.currentProxy()`就可以获取当前目标对象所对应的代理对象。并在测试类中设置`weaver.setExposeProxy(true);`即可。
+
+<details>
+	<summary>NestableInvocationBO优化后</summary>
+
+```java
+package org.springframework.mylearntest.aop2.aopextends;
+
+import org.springframework.aop.framework.AopContext;
+
+/**
+ * @Author: WhaleFall541
+ * @Date: 2020/8/14 0:03
+ * 统一对象内方法嵌套调用的目标对象示例
+ */
+public class NestableInvocationBO {
+    public void method1() {
+        // method2(); // 优化前
+        ((NestableInvocationBO)AopContext.currentProxy()).method2();//优化后
+        System.out.println("method1 executed");
+    }
+
+    public void method2() {
+        System.out.println("method2 executed");
+    }
+}
+```
+</details>
+
+<details>
+	<summary>Test4NestableInvocationBO优化后</summary>
+
+```java
+package org.springframework.mylearntest.aop2.aopextends;
+
+import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
+
+/**
+ * @Author: WhaleFall541
+ * @Date: 2020/8/14 0:24
+ */
+public class Test4NestableInvocationBO {
+    public static void main(String[] args) {
+        AspectJProxyFactory weaver = new AspectJProxyFactory(new NestableInvocationBO());
+        weaver.setProxyTargetClass(true);
+        // 要使AopContext.currentProxy()生效 需要设置exposeProxy属性为true
+        weaver.setExposeProxy(true);
+        weaver.addAspect(PerformanceTraceAspect1.class);
+        Object proxy = weaver.getProxy();
+        ((NestableInvocationBO)proxy).method2();
+        ((NestableInvocationBO)proxy).method1();
+    }
+
+}
+```
+</details>
+
+```log
+method2 executed
+PT in methodmethod2]>>>>>StopWatch '': running time = 9457200 ns; [] took 9457200 ns = 100%
+method2 executed
+PT in methodmethod2]>>>>>StopWatch '': running time = 19500 ns; [] took 19500 ns = 100%
+method1 executed
+PT in methodmethod1]>>>>>StopWatch '': running time = 121900 ns; [] took 121900 ns = 100%
+```
+
+
+> 参考资料：
+>
+> 1. 书籍 王福强-Spring揭秘
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

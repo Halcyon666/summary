@@ -1,8 +1,17 @@
 ---
+id: java-case-distribution
 title: 分布式问题
 sidebar_label: 分布式问题
+sidebar_position: 10
+description: 1. 基于XA协议的：二阶段提交和三阶段提交 2. 基于时间补偿机制：TCC 基于业务层面实现 3. 本地消息表：基于数据库+mq，通过mq调用服务，完成响应后回调，将状态盖好才能完成。需要配合定时任务扫描，重发消息调用服务，需要保证幂等性；(不推荐使用)
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
 ---
-
 ## 分布式事务解决方案？
 
 1. 基于`XA`协议的：二阶段提交和三阶段提交

@@ -1,8 +1,17 @@
 ---
+id: bean-creating-process
 title: Bean的构造过程
 sidebar_label: Bean的构造过程
+sidebar_position: 10
+description: 本文相关代码(来自官方源码spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/sprin
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
 ---
-
 本文相关代码(来自[官方源码](https://github.com/spring-projects/spring-framework.git "官方源码")spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) org.springframework.mylearntest包下。
 
 容器启动之后，并不会马上就实例化相应的bean定义。我们知道，容器现在仅仅拥有所有对象的BeanDefinition来保存实例化阶段将要用的必要信息。只有当请求方通过BeanFactory的getBean()方法来请求某个对象实例的时候，才有可能触发Bean实例化阶段的活动。 BeanFactory的getBean()法可以被客户端对象显式调用，也可以在容器内部隐式地被调用。隐式调用有如下两种情况。

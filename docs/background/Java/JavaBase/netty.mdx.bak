@@ -1,0 +1,49 @@
+# netty 
+
+## 源码分析：为什么要先设置 newCtx 的 prev 和 next，再把它加到链表里？
+
+![20250922233019](https://s2.loli.net/2025/09/22/NmiBwZOqyFnj3KQ.png)
+
+![20250922233035](https://s2.loli.net/2025/09/22/bi6RxrGKVFOldJT.png)
+
+`io.netty.channel.DefaultChannelPipeline#addLast0`
+
+You're **modifying the linked list pointers** to include `newCtx` **before** fully initializing its `prev` and `next`. <br/>
+If anything (like another thread or debugging breakpoint) tries to traverse the list at this point — `newCtx` is in the chain, 
+but not fully initialized yet. That could lead to nulls or broken state during traversal.
+
+While **your order may work in some cases**, it is **unsafe and not recommended**.
+
+:::warning
+❗ The safe pattern is always:
+- ***Initialize the new node's pointers***
+- ***Then hook it into the list***
+:::
+
+## netty响应报文，发送位置问题
+
+即使 a 只是流水号（Sequence ID / Trace ID），它在异步通信（如 Netty）中起着**“桥梁”的关键作用。如果它缺失或为空，最直接的后果就是“请求和响应无法配对”**，从而导致你看到的“方向改变”。
+结合你的描述（本来该给 Client 的报文，发到了其他地方），根本原因极大概率是：响应报文被误判为了新请求。
+以下是详细的逻辑推演：
+核心原因：响应丢失了“回家的路”
+在 Netty 这种异步非阻塞模型中，服务端收到请求后，往往不会原地等待业务处理完成，而是把请求转发给后端服务（或其他线程）。为了在后端处理完后能把结果还给同一个 Client，系统通常维护一个映射表（Map）。
+1. 正常流程 (a|b|)
+1. Request: Client 发送 1001|Data。
+2. Mapping: Netty 解析出流水号 1001，记录映射关系：Map.put("1001", Client_Channel_A)。
+3. Forward: Netty 把请求转发给后端。
+4. Response: 后端处理完，带回流水号 1001|Result。
+5. Routing: Netty 收到响应，查表 Map.get("1001")，找到了 Client_Channel_A。
+6. Reply: 通过 Client_Channel_A 把结果写回给 Client。
+
+
+
+## Java属性类型对netty影响
+
+问题:代码优化时，原始类型改成包装类型时，如果是Spring 注入的方式，注意默认值会有变化，boolean默认值为false，<br/>
+包装类为null，可能会造成空指针异常。<br/>
+boolean 改为Boolean值，某些场景(netty 不响应请求)会有问题。<br/>
+处理：给Boolean类赋值false
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

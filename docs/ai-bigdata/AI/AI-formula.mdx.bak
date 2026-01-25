@@ -1,0 +1,108 @@
+---
+title: "AI Formula"
+sidebar_label: "AI Formula"
+sidebar_position: 7
+description: "AI Formula"
+---
+
+# AI Formula
+
+## 基本概念
+
+1. 损失函数
+2. 梯度下降算法
+3. 深度学习中的激活函数
+4. `MLP`（多层感知机，Multi-Layer `Perceptron`）神经网络
+5. `CNN`卷积神经网络
+6. 图片（`RGB`和灰度图）
+
+数据处理
+
+数据无量纲化
+
+https://github.com/fengdu78/Coursera-ML-AndrewNg-Notes
+
+- [ ]  Prompt optimization
+
+
+## 损失函数
+
+1. **回归任务的损失函数**（用于预测连续值）
+
+$$
+
+MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
+
+$$
+
+1. **分类任务的损失函数**（用于预测离散类别）
+2. **目标检测/分割任务的损失函数**
+
+## 梯度下降算法
+
+![20250923224408](https://s2.loli.net/2025/09/23/XrHBGJgT4PtVpRn.png)
+
+## **激活函数**
+
+![20250923224444](https://s2.loli.net/2025/09/23/v359tc2lEYnyF8k.png)
+
+$$
+Swish: f(x)=x⋅δ(x)=x⋅\frac{1}{1 + e^{-x}}
+$$
+
+## `MLP` 原理
+
+**线性变化** 
+
+$z=Wx+b$
+
+其中:
+
+- $W$是权重矩阵，
+- $x$ 是输入向量，
+- $b$ 是偏置项（bias）。
+
+**激活函数**
+
+$ReLU:f(z)=max(0,z)$
+
+$Sigmoid:f(z)=\frac{1}{1 + e^{-z}}$
+
+$Tanh:f(z)=\frac{e^z - e^{-z}}{e^z + e^{-z}}f(z)$
+
+SoftMax 省略，转化数据为概率分布
+
+**反向传播**
+$$
+W=W-α⋅\frac{∂L}{∂W}
+$$
+
+其中α 是学习率
+
+## `CNN` 原理
+
+**包括四层**
+
+- 卷积层
+- 池化层
+- 全连接层
+- 输出层
+
+## 其它神经网络
+
+- 循环神经网络（RNN, Recurrent Neural Network）
+- 长短时记忆网络（LSTM, Long Short-Term Memory）
+- 门控循环单元（GRU, Gated Recurrent Unit）
+- 自编码器（Autoencoder）
+- 生成对抗网络（GAN, Generative Adversarial Network）
+- Transformer 网络
+- 图神经网络（GNN, Graph Neural Network）
+- 强化学习网络（Reinforcement Learning, RL）
+- 注意力机制（Attention Mechanism）
+
+https://chatgpt.com/share/67a7ee4e-d198-8009-996d-cd7cb5e11c65
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

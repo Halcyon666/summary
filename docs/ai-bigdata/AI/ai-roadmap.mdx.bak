@@ -1,0 +1,213 @@
+---
+title: "Full Stack AI Engineer Roadmap"
+sidebar_label: "AI Engineer Roadmap"
+sidebar_position: 2
+description: "Complete learning path for becoming a full-stack AI engineer"
+---
+
+# 🚀 全栈 AI 工程师实战路线图 (v4.1 - 进阶优化版)
+
+**核心目标**：既能用 **Dify** 快速交付企业级应用，又能用 **LangGraph/PyTorch** 解决底层复杂逻辑，成为"懂原理、能落地"的全栈 AI 专家。
+
+## 🎯 你的技术优势诊断与路线规划
+
+- **现状**：已掌握 Java/React，了解 AI 基础。
+- **痛点**：会调 API，但不知其所以然；想做复杂应用但缺乏架构能力。
+- **策略**：两条腿走路。
+  - **左腿（生产力）**：Dify, Ollama, MCP —— 快速解决 80% 通用需求。
+  - **右腿（硬实力）**：PyTorch, LangGraph, VectorDB —— 攻克 20% 核心难题。
+
+------
+
+## 💡 跨越式能力要求 (贯穿全程)
+
+### 1. AI 工具驱动能力 (AI-Native Workflow)
+
+这**不是**指"会用 ChatGPT 提问"，而是指**重构你的整个开发生命周期**。你需要刻意练习以下技能，把它们贯穿在每一天的学习中：
+
+- **IDE 掌控力 (Cursor/Windsurf Mastery):**
+  - **练习目标：** 强迫自己**不写** Boilerplate Code（样板代码）。
+  - **实战：** 在做上面的 Python 练习时，尝试只用自然语言（如 Cursor 的 `Cmd+K` 或 `Composer`）生成 Pydantic 模型和 FastAPI 接口。如果生成的代码不对，**不要手动改，而是修你的 Prompt**，直到它生成对为止。这能训练你对 AI 逻辑的把控感。
+- **元提示工程 (Meta-Prompting for Coding):**
+  - **练习目标：** 建立一套自己的 Prompt Library（提示词库）。
+  - **实战：** 针对 Java SpringBoot 和 React，分别总结一套"最佳实践 Prompt"。
+  - *比如：* "作为一个资深 Java 架构师，请基于 DDD 领域驱动设计，帮我生成这个 User 模块的聚合根和 Repository 接口……"
+- **AI 调试闭环 (AI Debugging Loop):**
+  - **练习目标：** 遇到报错，禁止第一时间看 Stack Trace，而是训练 AI 去分析日志。
+  - **实战：** 在学习 RAG 时，你会遇到很多环境依赖问题。尝试把错误日志 + 上下文代码 喂给 AI，让它分析 Root Cause。
+
+### 2. 复杂系统架构能力 (System Architecture)
+
+这是 Java 开发者的老本行，但在 AI 时代有全新的挑战。你需要在学习路线中特别关注以下**架构难点**：
+
+- **异构系统解耦 (Decoupling):**
+  - **核心痛点：** AI 推理很慢（Python），业务逻辑很快（Java）。
+  - **架构设计：** 学习如何用 **消息队列 (RabbitMQ/Kafka)** 将 AI 任务异步化。
+  - **实战场景：** 用户上传 PDF 后，Java 后端直接返回"处理中"，然后通过 MQ 通知 Python 服务去切片、向量化，处理完再回调 Java 更新状态。
+- **结构化输出与协议 (Protocol & Structured Output):**
+  - **核心痛点：** Java 需要确定的 JSON 对象，而 LLM 喜欢输出不稳定的文本。
+  - **架构设计：** Python 端通过 **Pydantic** + **Instructor** 库强制约束 LLM 输出，Java 端通过 Swagger/OpenAPI 生成对应的 DTO。
+- **可观测性 (LLM Observability):**
+  - **核心痛点：** 传统的 APM（如 SkyWalking）监控不了 AI 的回答质量。
+  - **架构设计：** 集成 **LangSmith** 或 **Arize Phoenix**。
+  - **实战场景：** 记录每一次用户提问和 AI 回答的延迟、Token 消耗、以及**回答的准确性评分**。
+
+------
+
+## 🗓️ 阶段一：环境与基础 (Level 1) —— "先把车跑起来" ✅
+
+**周期：第 1-2 周** **目标**：搭建本地 AI 基础设施，理解大模型如何与外部世界连接。
+
+### 1. 基础设施搭建
+
+- [x] **本地模型**：Ollama 部署 Llama 3.1 / Qwen 2.5 (8B)。
+  - *关键点*：理解量化 (Q4_0 vs FP16)，学会计算显存占用。
+- [x] **连接协议**：**MCP (Model Context Protocol)** 实战。
+  - *任务*：编写一个 Python MCP Client，让 Ollama 调用本地的 `add_numbers`工具。
+- [x] **Docker 环境**：熟练使用 Docker Compose 部署本地服务（Milvus, Dify, Neo4j）。
+
+### 2. Python 数据栈 (AI 的语言)
+
+- [x] **Pandas/NumPy**：重点掌握向量化计算（为 Embedding 打基础）。
+- [x] **PyTorch 基础**：
+  - Tensor 维度操作 `[Batch, Seq, Dim]`。
+  - `.to('cuda')` 设备管理。
+  - *避坑*：不需要学怎么从零写 CNN，只要学会**加载预训练模型**。
+
+### 3. AI 工具流 CheckList
+
+- [x] 学习 Python 基础。
+- [x] 彻底配置好 Cursor/Windsurf，强迫自己 80% 的代码由 AI 生成。
+- [x] 建立个人的 ".cursorrules" 文件，把你的代码规范（Java/React）写进去让 AI 遵守。
+
+:::tip
+你可以把这些工具的关系理解为：
+
+NumPy：在 CPU 上处理数字矩阵。
+
+PyTorch：在 GPU 上处理数字矩阵，并且多了 "自动求导"（这是神经网络能学习的核心）。
+
+模型 (LLM/BERT)：本质上就是用 PyTorch 写的一个超级复杂的数学公式。
+:::
+
+------
+
+## 🧠 阶段二：RAG 应用开发 (Level 2) —— "从玩具到产品" 🔄
+
+**周期：第 3-5 周** **目标**：掌握检索增强生成（RAG），**评估左移**，分别通过"平台"和"代码"两种方式实现。
+
+### 1. 平台流：Dify 企业级实战 (80% 场景) ← **当前进度**
+
+- [ ] **任务**：使用 Docker 部署 Dify。
+- [ ] **实战**：
+  - 接入本地 Ollama。
+  - 搭建**企业知识库**：上传 PDF，配置 Embedding 模型，测试混合检索效果。
+  - 发布一个 Web 端对话机器人。
+
+### 2. 代码流：手写 RAG 链路 (20% 深度定制)
+
+- [ ] **核心组件**：
+  - **Milvus**：部署并理解 HNSW 索引原理。
+  - **Embedding**：使用 `sentence-transformers` 加载 `bge-base-zh`。
+- [ ] **高级切片策略 (Advanced Chunking)**：
+  - **Parent-Child Indexing**：索引小切片（精准检索），但返回给 LLM 父切片（保留上下文）。
+  - **HyDE (假设性文档嵌入)**：让 LLM 先生成一个"假想答案"，用假答案去搜文档，解决问题与文档语义不匹配的问题。
+- [ ] **实战代码**：
+  - 不依赖 Dify，用 Python 手写：`读取 PDF -> 高级切片 -> 向量化 -> 存入 Milvus -> 检索 -> 组装 Prompt -> LLM 回答`。
+- [ ] **早期评估 (Early Eval) [关键!]**：
+  - 建立一个包含 10-20 个"问题 + 标准答案"的 Golden Dataset。
+  - 写一个脚本，每次 RAG 逻辑修改后，自动计算检索内容的**召回率 (Recall)**，不要等到最后才发现搜不准。
+
+### 3. 架构进阶 CheckList
+
+- [ ] 学习 Prompt Engineering 和 RAG 原理。
+- [ ] 设计"异步 RAG 架构"：用户上传文件 -> 消息队列 -> Python 处理 -> 存入 Milvus。
+- [ ] 学习设计"双库架构"：MySQL 存业务数据 (User/Course) + Vector DB 存语义数据 (Embeddings)，并解决**数据同步一致性**问题（这是面试杀手锏）。
+
+------
+
+## 🤖 阶段三：Agent 架构与高级逻辑 (Level 3) —— "赋予模型大脑"
+
+**周期：第 6-8 周** **目标**：解决"复杂决策"问题，并建立 Java 与 Python 的**企业级通信标准**。
+
+### 1. LangGraph 深度实践
+
+- [ ] **核心概念**：`StateGraph` (状态图), `Conditional Edge` (条件边), `Checkpointer` (记忆持久化)。
+- [ ] **实战一：Router (路由层)**
+  - 实现一个 Agent，根据用户问题自动决定：是查 Milvus (文档)，还是查 Neo4j (关系)，还是去 Google 搜索。
+- [ ] **实战二：自主 Agent**
+  - 实现一个"研报生成器"：自动规划大纲 -> 分段搜索素材 -> 整合写作 -> 自我反思修改。
+
+### 2. 异构系统通信 (Java ↔ Python)
+
+- [ ] **Serving 协议设计**：
+  - 使用 **FastAPI** 封装 LangGraph Agent。
+  - 使用 **Instructor** 库配合 Pydantic，强迫 LLM 输出严格符合 Java POJO 定义的 JSON 数据。
+  - 定义 Swagger/OpenAPI 接口文档，供 Java 端 Feign Client 调用。
+
+### 3. 知识图谱 (Knowledge Graph)
+
+- [ ] **Neo4j**：安装并学习 Cypher 查询语言。
+- [ ] **GraphRAG**：理解图谱如何解决"全局性问题"（如：总结A公司和B公司的所有关联）。
+- [ ] *任务*：将组织架构数据存入 Neo4j，让 Agent 能回答"谁是张三的老板的老板"。
+
+------
+
+## 💻 阶段四：全栈落地与微调 (Level 4) —— "专家级优化"
+
+**周期：第 9-12 周** **目标**：针对特定领域进行优化，并掌握生产级部署方案。
+
+### 1. 前端应用交付 (React)
+
+- [ ] 利用你的 React 优势，结合 **Vercel AI SDK** 或 **FastAPI**。
+- [ ] **实战**：实现一个支持 **流式输出 (Streaming)** 和 **Markdown 渲染** 的 Chat 界面，后端对接你的 LangGraph Agent。
+
+### 2. 模型微调 (Fine-tuning)
+
+- [ ] **场景**：当 Prompt Engineering 无法满足需求时（如需要让模型学会特定的JSON输出格式）。
+- [ ] **技术栈**：LoRA / QLoRA。
+- [ ] **工具**：LLaMA-Factory (推荐) 或 HuggingFace PEFT。
+- [ ] **任务**：微调一个 Qwen 2.5，让它专门擅长写"Java 代码注释"。
+
+### 3. 评估与运维 (LLMOps)
+
+- [ ] **Ragas / TruLens**：完善 Level 2 的评估体系，增加"回答忠实度"和"上下文相关性"指标。
+- [ ] **生产级部署 (Inference Serving)**：
+  - 了解 **vLLM** 或 **TGI** (Text Generation Inference)。
+  - *知识点*：知道为什么企业生产环境不用 Ollama (并发能力弱)，而是用 vLLM (高吞吐、PagedAttention)。
+- [ ] **LangSmith**：接入监控，查看 Token 消耗和 Trace 链路。
+
+------
+
+## 📝 2026 面试突击清单 (已更新)
+
+### 必问技术点
+
+1. **Dify vs LangChain**：企业里什么时候用 Dify，什么时候必须手写代码？
+2. **RAG 进阶**：如何解决"检索不到"的问题？（除了切片，你是否用过 **Parent-Child** 或 **HyDE**？）。
+3. **结构化输出**：Java 业务系统如何稳定解析 AI 的回复？（提到 **Instructor** 和 **JSON Schema** 约束）。
+4. **Agent 原理**：ReAct 模式是什么？LangGraph 如何解决死循环问题？
+5. **部署架构**：开发环境用 Ollama，生产环境用什么？（回答 **vLLM** 及其优势）。
+
+### 杀手级项目经验
+
+1. **"混合架构 RAG 系统"**：基于 Dify 做管理后台，但利用 Python + Milvus 实现了 Dify 无法做到的**父子索引策略**，检索准确率提升了 30%。
+2. **"企业级 Router Agent"**：基于 LangGraph 实现智能分发，通过 **FastAPI + RabbitMQ** 与 Java 主系统解耦，实现了高并发下的异步推理。
+
+------
+
+## 🎯 你的技能组合拳
+
+**左手 Python (AI 逻辑)**：写 LangGraph、高级 RAG 策略 (Parent-Child)、FastAPI 接口、微调脚本。
+
+**右手 Java (工程底座)**：写高性能网关、业务系统集成、企业级鉴权、消费 Python 生产的 JSON 数据。
+
+**大脑 (架构思维)**：设计 Dify 工作流、Router 分发策略、系统容错与评估体系。
+
+------
+
+### 给你的一句话总结
+
+你的 **Java/React 经验** 决定了你能把系统搭建得多**稳**（复杂架构能力），而你对 **AI 工具的驱动能力** 决定了你能跑得多**快**（开发效率）。
+
+**这两个加上去，才是真正的 Full Stack AI Engineer。** 你的"课程追踪项目"如果能体现出"异步消息解耦"和"AI 代码生成流"，哪怕功能简单，在技术面试中也是降维打击。

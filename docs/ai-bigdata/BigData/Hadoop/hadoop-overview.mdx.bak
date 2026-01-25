@@ -1,0 +1,38 @@
+---
+title: Hadoop Overview
+sidebar_label: Overview
+---
+
+# Hadoop
+
+## Hadoop版本
+
+1. Hadoop1.0：包括Common、HDFS、MapReduce
+
+2. Hadoop2.0：包括Common、HDFS、MapReduce、YARN。Hadoop1.0和Hadoop2.0不兼容。从Hadoop2.7版本开始，包含了Ozone，从Hadoop2.10版本开始，包含了Submarine
+3. Hadoop3.0：包括了Common、HDFS、MapReduce、YARN以及Ozone模块，最新的Hadoop3.0版本中包含了Submarine
+
+## Hadoop模块
+
+### 1. Hadoop Common：用于支持其他模块
+2. Hadoop Distributed File System (HDFS™)：分布式存储 
+3. Hadoop YARN：任务调度和资源管理
+4. Hadoop MapReduce：基于YARN的分布式计算框架
+5. Hadoop Ozone：对象存储
+6. Hadoop Submarine：机器学习引擎
+
+## Hadoop安装
+
+### 单机安装及配置
+
+- Hadoop伪分布式安装.txt
+- Hadoop完全分布式搭建.txt
+
+### Hadoop2.0和Hadoop3.0的区别
+
+- [https://www.jianshu.com/p/fb2fa03a2f03](https://www.jianshu.com/p/fb2fa03a2f03)
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

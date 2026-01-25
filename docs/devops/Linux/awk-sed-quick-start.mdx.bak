@@ -1,0 +1,77 @@
+---
+title: AWK SED 简单使用
+sidebar_label: AWK SED 简单使用
+---
+
+# awk
+
+```shell
+# awk 
+tee awk.txt <<-'EOF'
+john wang male 30 02103213
+ludc dasf fama 12 12311321
+EOF
+
+awk '{print $1,$4}' awk.txt
+awk '{print NF}' awk.txt
+# 打印最后一行 awk 默认以空位为分隔符 NF内部变量表示以分隔符划分后元素的个数
+awk '{print $NF}' awk.txt
+cat awk.txt  | awk '{print substr($1,1)}'
+cat awk.txt  | awk   '{print length}'
+
+cat awk.txt | awk 'BEGIN{total=0}{total+=$4}END{print total}'
+cat awk.txt | awk 'BEGIN{total=0}{total+=$4}END{print total/NR}'
+```
+
+# sed
+
+```shell
+tee sed.txt <<-'EOF'  
+this is line 1, this is First line
+this is line 2, the Second line, Empty line followed
+
+this is line 4, this is Third line
+this is line 5, this is Fifth line
+EOF
+# 替换
+sed 's/this/That/g ; s/line/LINE/g' sed.txt
+# 删除第一行 
+sed '1d' sed.txt
+# 保存删除后文件
+sed '1d' sed.txt > save_file
+# 如果想直接修改源文件
+sed -i '1d' save_file
+
+# 删除指定范围 （第1-3行）
+sed '1,3d' sed.txt
+
+# 删除最后一行
+sed '$d' sed.txt
+
+# 清空文件
+sed '1,$d' sed.txt
+
+# 只保留第5行
+sed '5!d' sed.txt
+
+# 删除所有包含Empty的行
+sed '/Empty/d' sed.txt 
+
+# 删除空行
+sed '/^$/d' sed.txt
+
+# 替换每一行的第一个值
+sed 's/line/LINE' sed.txt
+
+sed 's/line/LINE/2' sed.txt
+sed 's/line/LINE/g' sed.txt
+
+# 替换开头的this 为 that
+sed 's/^this/that/'
+```
+
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

@@ -1,9 +1,18 @@
 ---
+id: volatile-memory-domain
 title: volatile域内存知识
 sidebar_label: volatile域内存知识
+sidebar_position: 10
+description: 避免使用锁：无锁并发编程，多线程竞争锁时，会引起上下问文切换，所以多线程处理时，可以用一些办法来避免使用锁，如将数据的ID按照Hash算法取模分段，不同的线程处理不同段的数据
+  CAS算法：java的atomic包使用CAS算法来更新数据，而不需要加锁
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
 ---
-
-
 ## 如何减少cpu上下文切换
 
 避免使用锁：无锁并发编程，多线程竞争锁时，会引起上下问文切换，所以多线程处理时，可以用一些办法来避免使用锁，如将数据的ID按照Hash算法取模分段，不同的线程处理不同段的数据

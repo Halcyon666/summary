@@ -1,0 +1,48 @@
+---
+title: K8S常用命令
+sidebar_label: K8S常用命令
+---
+
+### [状态检查](https://blog.csdn.net/weixin_38007578/article/details/117586266)
+
+```shell
+# 检查 docker 状态
+systemctl status docker.service
+# 检查 kubelet 状态
+systemctl status kubelet.service
+# 检查 kubelet 端口
+netstat -antp| grep 6443
+netstat -pnlt | grep 6443
+# 查看系统日志
+tail -200f /var/log/messages
+#  
+kubectl get cs
+
+```
+
+### 重启命令
+
+```shell
+systemctl restart docker.service
+systemctl restart kubelet.service
+systemctl restart kubelet
+```
+
+```csharp
+[root@master01 ~]# wget https://docs.projectcalico.org/v3.14/manifests/calico.yaml --no-check-certificate
+输出….
+ [root@master01 ~]# ls
+anaconda-ks.cfg  calico.yaml
+```
+
+[清理命令](https://www.51cto.com/article/696675.html)
+
+```shell
+
+```
+
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />
