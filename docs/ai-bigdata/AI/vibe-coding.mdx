@@ -1,0 +1,49 @@
+---
+title: "Vibe Coding Tools"
+sidebar_label: "Vibe Coding Tools"
+sidebar_position: 9
+description: "Vibe Coding Tools"
+---
+
+# 🚀 Vibe Coding 实战配置指南 (Java + React 全栈版)
+
+## 核心策略
+* **前端 (VS Code)**：追求**全自动**，让 Agent 自己写组件。
+* **后端 (IDEA)**：追求**稳健**，用插件做大脑外挂 + 极速补全。
+* **模型核心**：全线接入 **DeepSeek V3 API** (便宜、聪明、国产直连)。
+
+---
+
+## 1️⃣ 前端战场：VS Code
+**目标**：React 组件生成、样式调整、自动修 Bug。
+
+* **主力插件**：**Cline** (必装)
+    * **配置**：API Provider 选 `DeepSeek`，模型选 `deepseek-chat`。
+    * **用法**：侧边栏对话 -> "帮我写一个用户列表卡片，用 Tailwind 样式" -> **它自动创建文件并写入**。
+* **备用方案**：**Antigravity**
+    * **场景**：不想配 Key，只想白嫖免费额度做快速 Demo 时使用。
+
+---
+
+## 2️⃣ 后端战场：IntelliJ IDEA
+**目标**：复杂业务逻辑、架构重构、秒级补全。
+
+* **大脑插件**：**Continue** (必装)
+    * **配置**：接入 `DeepSeek API`。
+    * **用法**：遇到复杂逻辑/重构 -> 唤起对话框 -> "@Codebase 帮我检查 UserServiceImpl 的事务一致性问题"。
+* **手速插件**：**通义灵码 (Lingma)** (必装)
+    * **配置**：登录阿里云账号即可。
+    * **用法**：日常写代码 -> **Tab 键狂按**，享受毫秒级自动补全。
+
+---
+
+## ⚡ 工作流速查 (Workflow)
+
+| 场景 | 工具 | 动作 |
+| :--- | :--- | :--- |
+| **写 React 页面** | VS Code + Cline | "读取 @api.ts，帮我生成对应的前端 CRUD 页面，要深色模式。" |
+| **写 Java 接口** | IDEA + Continue | "@Codebase 基于现有实体，设计一个高性能的批量插入接口。" |
+| **写具体代码** | IDEA + Lingma | 敲前几个字母，按 `Tab` 补全剩余代码。 |
+| **修 Bug** | VS Code + Cline | 把报错贴给它 -> "运行终端，定位并修复这个问题。" |
+
+

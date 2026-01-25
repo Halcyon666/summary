@@ -66,6 +66,42 @@ powershell.exe -NoExit -Command "[Console]::OutputEncoding=[System.Text.Encoding
 
 删除以上目录中的 `idea211.evaluation.key`
 
+## 在vscode中配置java环境
+
+这是最推荐的方式，因为它能同时搞定“执行程序”和“配置文件”。
+
+1. 按 `Ctrl + Shift + P`。
+2. 输入 **"Open User Settings (JSON)"** 并回车。
+3. 在配置文件中加入以下内容（注意替换你的实际路径）：
+
+```json
+{
+    "git.autofetch": true,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "diffEditor.hideUnchangedRegions.enabled": true,
+    "git.confirmSync": false,
+    "files.autoSave": "onFocusChange",
+    "workbench.colorTheme": "Solarized Light",
+    "editor.minimap.sectionHeaderFontSize": 10,
+    "security.workspace.trust.untrustedFiles": "open",
+    "redhat.telemetry.enabled": true,
+    // 配置 Java Home (指向你的 JDK 根目录)
+    // 注意：Windows 路径里的斜杠要用双斜杠 \\ 或反斜杠 /
+    "java.jdt.ls.java.home": "D:\\software\\Java\\jdk-17.0.7",
+    // 配置 Gradle Home (指向你的 Gradle 安装目录)
+    // 如果你用 wrapper (gradlew)，这一行其实可以不配，但配了更稳
+    "java.import.gradle.home": "D:\\software\\gradle-8.7",
+    // 可选：指定 Gradle 运行时用的 Java 版本（通常和项目一致）
+    "java.import.gradle.java.home": "D:\\software\\Java\\jdk-17.0.7",
+    // 1. 指定 Maven 的可执行文件路径 (注意指向 bin 目录下的 mvn 或 mvn.cmd)
+    "maven.executable.path": "D:\\software\\apache-maven-3.8.7\\bin\\mvn.cmd",
+    // 2. 关键！指定你的 settings.xml 路径 (为了读取阿里云镜像配置)
+    "java.configuration.maven.userSettings": "D:\\software\\apache-maven-3.8.7\\conf\\settings.xml",
+    // 3. (可选) 如果你的 Maven 需要特定的 JDK 运行
+    "maven.terminal.useJavaHome": true
+}
+```
+
 import TailProtocal from "@site/src/components/TailProtocal";
 
 <TailProtocal />
