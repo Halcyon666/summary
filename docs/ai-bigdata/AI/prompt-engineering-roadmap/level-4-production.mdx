@@ -1,0 +1,300 @@
+---
+id: level-4-production
+title: Level 4 - 全栈落地与生产优化
+sidebar_label: Level 4 - 全栈落地
+sidebar_position: 5
+description: 完成前后端全栈交付,掌握模型微调,建立生产级 LLMOps 体系
+tags:
+- ai
+- production
+- fine-tuning
+- level-4
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+---
+
+# 阶段四: 全栈落地与生产优化 (Level 4)
+
+**周期**: 第 9-12 周  
+**核心目标**: 完成前后端全栈交付,掌握模型微调,建立生产级 LLMOps 体系
+
+## 前置能力要求
+
+- ✅ 已掌握 Agent 架构 (Level 3)
+- ✅ 已建立可观测性和审计能力
+- ✅ 已实现完整的 Java-Python 通信
+
+## 为什么需要这个阶段
+
+前三个阶段解决了"AI 能力"问题,但企业级应用还需要"工程能力": 前端交付、模型优化、生产部署、监控运维。这个阶段让你从"能做 Demo"升级为"能上生产"。
+
+## 核心能力 1: 前端应用交付
+
+### 工具选择策略
+
+- **Streamlit**: 用于内部 AI 调试工具 (快速原型,不需要复杂 UI)
+- **React**: 用于实际终端用户产品 (专业 UI,良好用户体验)
+
+### React + FastAPI 全栈实战
+
+**前端: 流式输出 + Markdown 渲染**
+
+```typescript
+// React 组件: Chat 界面
+import { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+
+function ChatInterface() {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState('');
+  const [streaming, setStreaming] = useState(false);
+
+  const sendMessage = async () => {
+    setStreaming(true);
+    
+    // 调用 FastAPI 流式接口
+    const response = await fetch('/api/agent/stream', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question: input })
+    });
+
+    const reader = response.body.getReader();
+    let currentMessage = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      const chunk = new TextDecoder().decode(value);
+      currentMessage += chunk;
+      
+      // 实时更新 UI
+      setMessages(prev => [...prev.slice(0, -1), { role: 'assistant', content: currentMessage }]);
+    }
+
+    setStreaming(false);
+  };
+
+  return (
+    <div className="chat-container">
+      {messages.map((msg, idx) => (
+        <div key={idx} className={`message ${msg.role}`}>
+          <ReactMarkdown>{msg.content}</ReactMarkdown>
+        </div>
+      ))}
+      <input value={input} onChange={e => setInput(e.target.value)} />
+      <button onClick={sendMessage} disabled={streaming}>发送</button>
+    </div>
+  );
+}
+```
+
+**后端: FastAPI 流式输出**
+
+```python
+from fastapi import FastAPI
+from fastapi.responses import StreamingResponse
+
+app = FastAPI()
+
+@app.post("/api/agent/stream")
+async def stream_agent_response(request: AgentRequest):
+    async def generate():
+        # 运行 Agent,逐步生成回答
+        for chunk in agent_app.stream({"question": request.question}):
+            yield chunk["content"]
+    
+    return StreamingResponse(generate(), media_type="text/plain")
+```
+
+## 核心能力 2: 模型微调 (Fine-tuning)
+
+### 何时需要微调
+
+Prompt Engineering 无法满足需求时:
+- 需要特定的输出格式 (如严格的 JSON Schema)
+- 需要领域专业知识 (如医疗、法律术语)
+- 需要特定的写作风格 (如代码注释风格)
+
+### 技术栈
+
+- **LoRA / QLoRA**: 参数高效微调,只训练少量参数
+- **LLaMA-Factory**: 推荐,提供 Web UI,简化微调流程
+- **HuggingFace PEFT**: 代码级控制,适合高级用户
+
+### 实战任务: 微调 Qwen 2.5 写 Java 代码注释
+
+**1. 准备训练数据** (至少 100 个样本):
+
+```json
+[
+  {
+    "instruction": "为以下 Java 方法添加 Javadoc 注释",
+    "input": "public User findById(Long id) { return userRepository.findById(id).orElse(null); }",
+    "output": "/**\n * 根据用户 ID 查询用户信息\n * @param id 用户 ID\n * @return 用户对象,如果不存在则返回 null\n */\npublic User findById(Long id) { return userRepository.findById(id).orElse(null); }"
+  }
+]
+```
+
+**2. 使用 LLaMA-Factory 微调**:
+
+```bash
+# 启动 LLaMA-Factory Web UI
+llamafactory-cli webui
+
+# 或使用命令行
+llamafactory-cli train \
+  --model_name_or_path Qwen/Qwen2.5-7B \
+  --dataset java_comments \
+  --finetuning_type lora \
+  --output_dir ./output/qwen-java-comments \
+  --num_train_epochs 3 \
+  --per_device_train_batch_size 4
+```
+
+**3. 评估微调效果**:
+
+```python
+# 对比微调前后的输出质量
+base_model = load_model("Qwen/Qwen2.5-7B")
+finetuned_model = load_model("./output/qwen-java-comments")
+
+test_code = "public void saveUser(User user) { userRepository.save(user); }"
+
+print("Base model:", base_model.generate(test_code))
+print("Finetuned model:", finetuned_model.generate(test_code))
+```
+
+## 核心能力 3: 生产级部署
+
+### 部署方案选择
+
+**开发环境**: Ollama
+- 优点: 简单易用,适合本地开发
+- 缺点: 并发能力弱 (5-10 QPS)
+
+**生产环境**: vLLM
+- 优点: 高吞吐 (100+ QPS),PagedAttention 优化显存
+- 缺点: 配置复杂,需要 GPU 服务器
+
+**量化对比** (必须掌握的性能指标):
+
+| 指标 | Ollama | vLLM | 差异说明 |
+|------|--------|------|----------|
+| **QPS** (Queries Per Second) | 5-10 | 100+ | vLLM 并发能力是 Ollama 的 10-20 倍 |
+| **首 Token 延迟** | ~500ms | ~200ms | vLLM 响应速度快 60% |
+| **并发支持** | 弱 (单请求队列) | 强 (PagedAttention) | vLLM 支持高并发场景 |
+| **显存优化** | 无 | PagedAttention | vLLM 显存利用率提升 30-40% |
+| **适用场景** | 开发/测试 | 生产环境 | 根据并发需求选择 |
+
+**决策标准**: 
+- **使用 Ollama**: 单用户场景,QPS < 10,如个人助手、内部工具
+- **使用 vLLM**: 多用户场景,QPS > 50,如企业级应用、对外服务
+
+### vLLM 部署示例
+
+```bash
+# 安装 vLLM
+pip install vllm
+
+# 启动 vLLM 服务
+python -m vllm.entrypoints.openai.api_server \
+  --model Qwen/Qwen2.5-7B \
+  --tensor-parallel-size 2 \
+  --max-num-seqs 256
+
+# 调用 vLLM API (兼容 OpenAI 格式)
+curl http://localhost:8000/v1/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "Qwen/Qwen2.5-7B",
+    "prompt": "你好",
+    "max_tokens": 100
+  }'
+```
+
+## 核心能力 4: LLMOps 评估与运维
+
+### 完善评估体系 (Ragas / TruLens)
+
+在 Level 2 的基础上,增加更多指标:
+
+```python
+from ragas.metrics import (
+    faithfulness,           # 回答忠实度 (是否基于检索内容)
+    answer_relevancy,       # 回答相关性 (是否回答了问题)
+    context_precision,      # 上下文精确度 (检索内容是否相关)
+    context_recall          # 上下文召回率 (是否检索到所有相关内容)
+)
+
+results = evaluate(
+    golden_qa,
+    metrics=[faithfulness, answer_relevancy, context_precision, context_recall]
+)
+
+# 设置质量门槛
+assert results['faithfulness'] > 0.8, "回答忠实度不足"
+assert results['answer_relevancy'] > 0.7, "回答相关性不足"
+```
+
+### LangSmith 监控
+
+```python
+from langsmith import Client
+
+client = Client()
+
+# 查看 Token 消耗和成本
+runs = client.list_runs(project_name="my-rag-app")
+total_tokens = sum(run.total_tokens for run in runs)
+total_cost = sum(run.total_cost for run in runs)
+
+print(f"Total tokens: {total_tokens}")
+print(f"Total cost: ${total_cost:.2f}")
+
+# 查看 Trace 链路
+for run in runs:
+    print(f"Run ID: {run.id}")
+    print(f"Latency: {run.latency_ms}ms")
+    print(f"Steps: {run.child_runs}")
+```
+
+## 阶段产出标准
+
+**必须完成的交付物** (作为全栈 AI 工程师的最终验证):
+
+**全栈应用层**:
+- [ ] 完成至少 1 个全栈 AI 应用 (React + FastAPI + LangGraph),包含完整的用户界面和后端服务
+- [ ] 实现流式输出和 Markdown 渲染,用户体验流畅
+
+**模型优化层**:
+- [ ] 完成至少 1 次模型微调实验,准备 100+ 训练样本,微调后效果可量化提升 (如准确率提升 10% 或输出格式符合率达到 95%)
+
+**评估体系层**:
+- [ ] 建立完整的评估体系 (Ragas/TruLens),包含至少 4 个指标 (Faithfulness, Answer Relevancy, Context Precision, Context Recall)
+- [ ] **质量门槛**: Faithfulness > 0.8, Answer Relevancy > 0.7, Context Precision > 0.7
+
+**生产部署层**:
+- [ ] 了解生产级部署方案 (vLLM/TGI),能够说明 Ollama vs vLLM 的性能差异 (QPS, 延迟, 并发支持)
+- [ ] 集成 LangSmith 监控,能够追踪 Token 消耗和 Trace 链路
+- [ ] 建立监控和告警机制 (延迟 > 2s 告警,成本超预算告警,错误率 > 5% 告警)
+
+**能力验证**:
+- [ ] 能够独立设计并实现一个完整的全栈 AI 应用,从前端到后端到模型部署
+- [ ] 能够根据业务需求选择合适的部署方案 (Ollama vs vLLM) 并给出数据支持
+
+**时间检查点**: 如果超过 3 周仍未完成,建议先完成前端交付,再逐步添加微调和生产部署功能
+
+## 路线图优化建议
+
+**实战项目**: 
+- 使用 **Streamlit** 构建内部 AI 调试工具 (可视化 RAG 检索结果、Agent 决策过程)
+- 使用 **React** 构建面向终端用户的产品 (专业 UI,流式输出,Markdown 渲染)
+
+---
+
+**上一阶段**: [Level 3 - Agent 架构与可观测性](./level-3-agent)
+
+**下一阶段**: [Prompt 质量评估与总结](./summary)

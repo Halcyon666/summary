@@ -34,24 +34,3 @@
 4. 所有日期使用 `YYYY-MM-DD` 格式
 5. author 固定为 `halcyon666`，除非文档中明确指定其他作者
 
-## Front Matter 重构规则
-
-### 1️⃣ 字段映射与调整
-
-| 原字段 | 处理规则 |
-|------|---------|
-| title | 保留，但允许简化为「主题级标题」 |
-| sidebar_label | 统一为与 title 一致（不使用 emoji） |
-| sidebar_position | 统一调整为 10（或根据目录顺序合理设置） |
-| description | 重写为「面向长期视角、体系化描述」 |
-| ❌ 删除 | 不再使用原有的 emoji、页面营销式描述 |
-
-### 2️⃣ 新增字段（如不存在）
-
-```yaml
-id: <根据文件名或主题生成的 kebab-case 唯一 id>
-tags:
-  - <主题相关标签，2–5 个>
-last_update:
-  date: 2026-01-25
-  author: halcyon666

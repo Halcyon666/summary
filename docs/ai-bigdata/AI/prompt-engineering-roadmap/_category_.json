@@ -1,0 +1,10 @@
+{
+    "label": "AI Prompt Engineering Roadmap",
+    "position": 4,
+    "collapsible": true,
+    "collapsed": false,
+    "link": {
+        "type": "doc",
+        "id": "ai-bigdata/AI/prompt-engineering-roadmap/overview"
+    }
+}
