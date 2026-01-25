@@ -1,9 +1,0 @@
-# adoc
-
-## 引用其它文件
-```adoc
-[source,java]
-----
-include::TxData.java[lines=6..7;22..36]
-----
-```
