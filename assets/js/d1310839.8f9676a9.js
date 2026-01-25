@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunksummary=self.webpackChunksummary||[]).push([["7399"],{11306:function(e){e.exports=JSON.parse('{"tags":[{"label":"vibecoding","permalink":"/summary/tags/vibecoding","count":1},{"label":"future","permalink":"/summary/tags/future","count":1}]}')}}]);
