@@ -28,3 +28,39 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/* Custom Category Page Styling - Applied to all cards */
+.card {
+  transition: all 0.3s ease;
+  border-radius: 16px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  background: linear-gradient(145deg, var(--ifm-card-background-color, var(--ifm-background-surface-color)), var(--ifm-color-emphasis-100));
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-color: var(--ifm-color-primary);
+}
+
+.card__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(90deg, var(--ifm-color-primary), var(--ifm-color-primary-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+.card__description {
+  color: var(--ifm-color-content-secondary);
+}
+
+[data-theme='dark'] .card {
+  background: linear-gradient(145deg, var(--ifm-card-background-color, #1b1b1d), #222);
+  border-color: var(--ifm-color-emphasis-100);
+}

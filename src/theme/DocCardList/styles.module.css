@@ -1,0 +1,44 @@
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+.docCardListItem {
+    margin-bottom: 2rem;
+}
+
+.docCardListItem>* {
+    height: 100%;
+}
+
+/* Custom Search Input */
+.searchContainer {
+    margin-bottom: 2rem;
+    width: 100%;
+    position: relative;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    border: 1px solid var(--ifm-color-emphasis-300);
+    background: var(--ifm-background-surface-color);
+    color: var(--ifm-font-color-base);
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.searchInput:focus {
+    border-color: var(--ifm-color-primary);
+    outline: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+.searchInput::placeholder {
+    color: var(--ifm-color-emphasis-500);
+}
