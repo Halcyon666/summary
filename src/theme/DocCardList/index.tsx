@@ -5,16 +5,22 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { type ComponentProps, type ReactNode, useState, useMemo } from 'react';
+import React, { type ReactNode, useState, useMemo } from 'react';
 import clsx from 'clsx';
 import DocCard from '@theme/DocCard';
-import type { Props } from '@theme/DocCardList';
 import styles from './styles.module.css';
 import Translate, { translate } from '@docusaurus/Translate';
+import type { PropSidebarItem } from '@docusaurus/plugin-content-docs';
 
 // Use require() to avoid module resolution issues with /client subpath
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { useCurrentSidebarSiblings, filterDocCardListItems } = require('@docusaurus/plugin-content-docs/client');
+
+// --- 修复点：直接在这里定义 Props，而不是从 @theme 导入 ---
+export interface Props {
+    items?: PropSidebarItem[];
+    className?: string;
+}
 
 function DocCardListForCurrentSidebarCategory({ className }: Props) {
     const items = useCurrentSidebarSiblings();
@@ -24,7 +30,7 @@ function DocCardListForCurrentSidebarCategory({ className }: Props) {
 function DocCardListItem({
     item,
 }: {
-    item: ComponentProps<typeof DocCard>['item'];
+    item: PropSidebarItem;
 }) {
     return (
         <article className={clsx(styles.docCardListItem, 'col col--6')}>
@@ -45,8 +51,10 @@ export default function DocCardList(props: Props): ReactNode {
     const visibleItems = useMemo(() => {
         if (!searchQuery) return filteredItems;
         const lowerQuery = searchQuery.toLowerCase();
-        return filteredItems.filter((item) => {
-            // @ts-ignore - access internal label which is usually present
+
+        // 显式指定 item 类型，解决 implicitly has an 'any' type
+        return filteredItems.filter((item: PropSidebarItem) => {
+            // @ts-ignore
             const label = item.label || item.text || item.value || '';
             return label.toLowerCase().includes(lowerQuery);
         });
@@ -69,7 +77,7 @@ export default function DocCardList(props: Props): ReactNode {
                 />
             </div>
             <section className={clsx('row', className)}>
-                {visibleItems.map((item, index) => (
+                {visibleItems.map((item: PropSidebarItem, index: number) => (
                     <DocCardListItem key={index} item={item} />
                 ))}
                 {visibleItems.length === 0 && (
