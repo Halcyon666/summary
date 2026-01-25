@@ -38,7 +38,7 @@ last_update:
 
 ### React + FastAPI 全栈实战
 
-**前端: 流式输出 + Markdown 渲染**
+**⭐ 前端: 流式输出 + Markdown 渲染**
 
 ```typescript
 // React 组件: Chat 界面
@@ -121,7 +121,7 @@ Prompt Engineering 无法满足需求时:
 ### 技术栈
 
 - **LoRA / QLoRA**: 参数高效微调,只训练少量参数
-- **LLaMA-Factory**: 推荐,提供 Web UI,简化微调流程
+- ⭐ **LLaMA-Factory**: 推荐,提供 Web UI,简化微调流程
 - **HuggingFace PEFT**: 代码级控制,适合高级用户
 
 ### 实战任务: 微调 Qwen 2.5 写 Java 代码注释
@@ -167,29 +167,29 @@ print("Base model:", base_model.generate(test_code))
 print("Finetuned model:", finetuned_model.generate(test_code))
 ```
 
-## 核心能力 3: 生产级部署
+## ⭐ 核心能力 3: 生产级部署
 
-### 部署方案选择
+### ⭐ 部署方案选择
 
 **开发环境**: Ollama
 - 优点: 简单易用,适合本地开发
 - 缺点: 并发能力弱 (5-10 QPS)
 
-**生产环境**: vLLM
+**⭐ 生产环境**: vLLM
 - 优点: 高吞吐 (100+ QPS),PagedAttention 优化显存
 - 缺点: 配置复杂,需要 GPU 服务器
 
-**量化对比** (必须掌握的性能指标):
+**⭐ 量化对比** (必须掌握的性能指标):
 
 | 指标 | Ollama | vLLM | 差异说明 |
 |------|--------|------|----------|
-| **QPS** (Queries Per Second) | 5-10 | 100+ | vLLM 并发能力是 Ollama 的 10-20 倍 |
+| ⭐ **QPS** (Queries Per Second) | 5-10 | 100+ | vLLM 并发能力是 Ollama 的 10-20 倍 |
 | **首 Token 延迟** | ~500ms | ~200ms | vLLM 响应速度快 60% |
-| **并发支持** | 弱 (单请求队列) | 强 (PagedAttention) | vLLM 支持高并发场景 |
+| ⭐ **并发支持** | 弱 (单请求队列) | 强 (PagedAttention) | vLLM 支持高并发场景 |
 | **显存优化** | 无 | PagedAttention | vLLM 显存利用率提升 30-40% |
 | **适用场景** | 开发/测试 | 生产环境 | 根据并发需求选择 |
 
-**决策标准**: 
+**⭐ 决策标准**: 
 - **使用 Ollama**: 单用户场景,QPS < 10,如个人助手、内部工具
 - **使用 vLLM**: 多用户场景,QPS > 50,如企业级应用、对外服务
 
@@ -267,7 +267,7 @@ for run in runs:
 
 **全栈应用层**:
 - [ ] 完成至少 1 个全栈 AI 应用 (React + FastAPI + LangGraph),包含完整的用户界面和后端服务
-- [ ] 实现流式输出和 Markdown 渲染,用户体验流畅
+- [ ] ⭐ 实现流式输出和 Markdown 渲染,用户体验流畅
 
 **模型优化层**:
 - [ ] 完成至少 1 次模型微调实验,准备 100+ 训练样本,微调后效果可量化提升 (如准确率提升 10% 或输出格式符合率达到 95%)
@@ -277,13 +277,13 @@ for run in runs:
 - [ ] **质量门槛**: Faithfulness > 0.8, Answer Relevancy > 0.7, Context Precision > 0.7
 
 **生产部署层**:
-- [ ] 了解生产级部署方案 (vLLM/TGI),能够说明 Ollama vs vLLM 的性能差异 (QPS, 延迟, 并发支持)
+- [ ] ⭐ 了解生产级部署方案 (vLLM/TGI),能够说明 Ollama vs vLLM 的性能差异 (QPS, 延迟, 并发支持)
 - [ ] 集成 LangSmith 监控,能够追踪 Token 消耗和 Trace 链路
-- [ ] 建立监控和告警机制 (延迟 > 2s 告警,成本超预算告警,错误率 > 5% 告警)
+- [ ] ⭐ 建立监控和告警机制 (延迟 > 2s 告警,成本超预算告警,错误率 > 5% 告警)
 
 **能力验证**:
 - [ ] 能够独立设计并实现一个完整的全栈 AI 应用,从前端到后端到模型部署
-- [ ] 能够根据业务需求选择合适的部署方案 (Ollama vs vLLM) 并给出数据支持
+- [ ] ⭐ 能够根据业务需求选择合适的部署方案 (Ollama vs vLLM) 并给出数据支持
 
 **时间检查点**: 如果超过 3 周仍未完成,建议先完成前端交付,再逐步添加微调和生产部署功能
 

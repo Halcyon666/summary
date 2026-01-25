@@ -29,15 +29,15 @@ last_update:
 
 RAG 解决了"知识获取"问题,但复杂应用需要 AI 能够**自主决策**: 何时检索、检索什么、如何组合多个数据源。Agent 架构让 AI 从"被动回答"升级为"主动规划"。
 
-## 核心能力 1: LangGraph 状态图编程
+## ⭐ 核心能力 1: LangGraph 状态图编程
 
-### 核心概念
+### ⭐ 核心概念
 
-- **StateGraph**: 定义 Agent 的状态和转换
-- **Conditional Edge**: 根据条件决定下一步
+- ⭐ **StateGraph**: 定义 Agent 的状态和转换
+- ⭐ **Conditional Edge**: 根据条件决定下一步
 - **Checkpointer**: 持久化 Agent 的记忆
 
-### 实战一: Router Agent (路由层)
+### ⭐ 实战一: Router Agent (路由层)
 
 **目标**: Agent 根据用户问题自动决定查询哪个数据源
 
@@ -135,9 +135,9 @@ RETURN boss.name
 
 **GraphRAG**: 解决"全局性问题"
 - 传统 RAG: 只能回答"局部"问题 (单个文档内)
-- GraphRAG: 可以回答"全局"问题 (跨多个实体的关系)
+- ⭐ GraphRAG: 可以回答"全局"问题 (跨多个实体的关系)
 
-## 核心能力 3: LLM 可观测性
+## ⭐ 核心能力 3: LLM 可观测性
 
 ### 核心痛点
 
@@ -145,7 +145,7 @@ RETURN boss.name
 
 ### 架构设计
 
-集成 **LangSmith** 或 **Arize Phoenix**
+集成 ⭐ **LangSmith** 或 **Arize Phoenix**
 
 **实战场景**: 记录每次用户提问和 AI 回答
 
@@ -173,28 +173,28 @@ def rag_query(question: str) -> str:
 
 **监控指标**:
 - 延迟 (P50, P95, P99)
-- Token 消耗 (输入 tokens, 输出 tokens, 总成本)
+- ⭐ Token 消耗 (输入 tokens, 输出 tokens, 总成本)
 - 回答的准确性评分 (通过 Ragas 自动评估)
 
-## 核心能力 4: Agent 审计日志
+## ⭐ 核心能力 4: Agent 审计日志
 
 ### 核心原则
 
 AI 是非确定性的,必须记录每个决策用于合规性审计
 
-### 日志记录标准
+### ⭐ 日志记录标准
 
 **必须包含的字段**:
 - 时间戳 (ISO 8601 格式)
-- 用户 ID 和会话 ID
-- Agent 决策类型 (路由选择、工具调用、最终回答)
+- ⭐ 用户 ID 和会话 ID
+- ⭐ Agent 决策类型 (路由选择、工具调用、最终回答)
 - 输入上下文 (用户问题、检索到的文档)
-- 输出结果 (Agent 的决策和理由)
+- ⭐ 输出结果 (Agent 的决策和理由)
 - Token 消耗和延迟
 
 **存储方案**:
 - 结构化日志: 使用 JSON 格式存储到 Elasticsearch
-- 关系型存储: 关键决策存入 MySQL 的 `agent_audit_log` 表
+- ⭐ 关系型存储: 关键决策存入 MySQL 的 `agent_audit_log` 表
 
 **代码示例**:
 
@@ -341,7 +341,7 @@ async def agent_query(request: AgentRequest):
 **必须完成的交付物** (作为进入 Level 4 的前置条件):
 
 **Agent 应用层**:
-- [ ] 实现至少 1 个 Router Agent,能够在 3 个数据源中智能选择 (Milvus/Neo4j/Google),准确率 > 80%
+- [ ] ⭐ 实现至少 1 个 Router Agent,能够在 3 个数据源中智能选择 (Milvus/Neo4j/Google),准确率 > 80%
 - [ ] 实现至少 1 个自主决策 Agent (如研报生成器或多步推理 Agent),能够完成完整任务流程
 
 **服务封装层**:
@@ -352,11 +352,11 @@ async def agent_query(request: AgentRequest):
 - [ ] 完成 Neo4j 知识图谱实战,至少包含 50 个节点和关系,能够回答多跳查询问题
 
 **可观测性层**:
-- [ ] 集成 LLM 可观测性工具 (LangSmith 或 Arize Phoenix),能够查看 Trace 链路和 Token 消耗
-- [ ] 实现完整的 Agent 审计日志系统,包含所有必需字段,可通过 session_id 追溯完整对话
+- [ ] ⭐ 集成 LLM 可观测性工具 (LangSmith 或 Arize Phoenix),能够查看 Trace 链路和 Token 消耗
+- [ ] ⭐ 实现完整的 Agent 审计日志系统,包含所有必需字段,可通过 session_id 追溯完整对话
 
 **能力验证**:
-- [ ] 能够解释 LangGraph 的 StateGraph 、Conditional Edge 、Checkpointer 三个核心概念
+- [ ] ⭐ 能够解释 LangGraph 的 StateGraph 、Conditional Edge 、Checkpointer 三个核心概念
 - [ ] 能够设计并实现一个完整的 Agent 审计日志系统,符合金融、医疗等强监管行业要求
 
 **时间检查点**: 如果超过 3 周仍未完成,建议先实现简单的 Router Agent,再逐步添加复杂功能

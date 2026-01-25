@@ -28,9 +28,9 @@ last_update:
 
 RAG 是 AI 应用的核心能力,Agent 的智能决策依赖于 RAG 提供的知识检索能力。必须先掌握"如何让 AI 获取外部知识",才能进入"如何让 AI 自主决策"。
 
-## 核心能力 1: 双轨 RAG 实现
+## ⭐ 核心能力 1: 双轨 RAG 实现
 
-### 平台流: Dify 企业级实战 (80% 场景)
+### ⭐ 平台流: Dify 企业级实战 (80% 场景)
 
 **策略: "扩展,不深读"**
 
@@ -40,21 +40,21 @@ RAG 是 AI 应用的核心能力,Agent 的智能决策依赖于 RAG 提供的知
 - **Workflow Orchestration**: 掌握 Dify 的 Workflow 节点,理解如何在节点间传递变量
 - **为什么跳过源码?** Dify 基于 Flask/Next.js/PostgreSQL 复杂栈,除非修复 bug,时间更应花在 **LangGraph** (复杂逻辑) 或 **Milvus** (数据侧)
 
-**实战任务**:
+**⭐ 实战任务**:
 1. 使用 Docker 部署 Dify
 2. 接入本地 Ollama
-3. 搭建企业知识库: 上传 PDF,配置 Embedding 模型,测试混合检索
+3. ⭐ 搭建企业知识库: 上传 PDF,配置 Embedding 模型,测试混合检索
 4. 发布 Web 端对话机器人
 
 ### 代码流: 手写 RAG 链路 (20% 深度定制)
 
 **核心组件**:
-- **Milvus**: 部署并理解 HNSW 索引原理
-- **Embedding**: 使用 `sentence-transformers` 加载 `bge-base-zh`
+- ⭐ **Milvus**: 部署并理解 HNSW 索引原理
+- ⭐ **Embedding**: 使用 `sentence-transformers` 加载 `bge-base-zh`
 
-**高级切片策略**:
+**⭐ 高级切片策略**:
 
-1. **Parent-Child Indexing**
+1. ⭐ **Parent-Child Indexing**
    - 索引小切片 (128 tokens,精准检索)
    - 返回父切片 (512 tokens,保留上下文)
    - 解决"检索精准但上下文不足"的问题
@@ -64,16 +64,16 @@ RAG 是 AI 应用的核心能力,Agent 的智能决策依赖于 RAG 提供的知
    - 用假答案的 Embedding 去搜文档
    - 解决"问题与文档语义不匹配"的问题
 
-**实战代码链路**:
+**⭐ 实战代码链路**:
 ```
 读取 PDF → 高级切片 → 向量化 → 存入 Milvus → 检索 → 组装 Prompt → LLM 回答
 ```
 
-### 早期评估 (Early Eval) - 关键!
+### ⭐ 早期评估 (Early Eval) - 关键!
 
-**核心理念**: 将 RAG 评估视为**单元测试**
+**⭐ 核心理念**: 将 RAG 评估视为**单元测试**
 
-**Golden Dataset 构建方法**:
+**⭐ Golden Dataset 构建方法**:
 
 1. **选择代表性问题** (10-20 个):
    - 覆盖不同难度: 简单事实查询、复杂推理、多跳问题
@@ -84,7 +84,7 @@ RAG 是 AI 应用的核心能力,Agent 的智能决策依赖于 RAG 提供的知
    - 标注答案来源 (哪个文档的哪个段落)
    - 标注关键信息点 (用于评估召回率)
 
-3. **自动化评估脚本**:
+3. **⭐ 自动化评估脚本**:
 ```python
 # 示例: RAG 评估脚本
 from ragas import evaluate
@@ -111,7 +111,7 @@ assert results['faithfulness'] > 0.7, "RAG 忠实度不足"
 
 **实施步骤**:
 1. **创建评估脚本**: 将上述 RAG 评估代码保存为 `tests/test_rag_quality.py`
-2. **设置质量门槛**: 定义最低可接受分数 (Faithfulness > 0.7, Answer Relevancy > 0.7)
+2. ⭐ **设置质量门槛**: 定义最低可接受分数 (Faithfulness > 0.7, Answer Relevancy > 0.7)
 3. **集成 CI 流程**: 在 GitHub Actions / GitLab CI 中添加评估步骤
 
 **CI 配置示例** (GitHub Actions):
@@ -131,22 +131,22 @@ jobs:
 ```
 
 **使用 Ragas 或 TruLens**:
-- **Ragas**: 更适合 RAG 系统,提供 Faithfulness, Answer Relevancy 等指标
+- ⭐ **Ragas**: 更适合 RAG 系统,提供 Faithfulness, Answer Relevancy 等指标
 - **TruLens**: 更适合复杂 Agent,提供完整的 Trace 分析
 
 **效果验证**: 修改 Prompt 后,CI 自动运行评估,如果 Faithfulness 下降超过 5%,自动阻止合并
 
-## 核心能力 2: 异构系统通信协议 (Java ↔ Python)
+## ⭐ 核心能力 2: 异构系统通信协议 (Java ↔ Python)
 
 ### 核心挑战
 
 1. **AI 推理很慢 (Python),业务逻辑很快 (Java)** → 需要异步解耦
-2. **Java 需要确定的 JSON 对象,LLM 输出不稳定** → 需要结构化输出验证
+2. ⭐ **Java 需要确定的 JSON 对象,LLM 输出不稳定** → 需要结构化输出验证
 3. **跨语言数据一致性** → 需要统一的数据契约
 
 ### 架构设计: 三层解决方案
 
-**1. 结构化输出验证**
+**⭐ 1. 结构化输出验证**
 
 Python 端:
 ```python
@@ -179,7 +179,7 @@ public class UserInfo {
 }
 ```
 
-**2. 异步通信模式 (Sidecar Pattern)**
+**⭐ 2. 异步通信模式 (Sidecar Pattern)**
 
 架构图:
 ```
@@ -288,21 +288,21 @@ def sync_user_to_vector_db(event: UserCreatedEvent):
 
 **RAG 应用层**:
 - [ ] 完成 Dify 部署并发布至少 1 个知识库应用,能够回答领域问题
-- [ ] 手写完整 RAG 链路代码,包含: PDF 解析 → 切片 → 向量化 → Milvus 存储 → 检索 → LLM 生成
-- [ ] 实现至少 1 种高级切片策略 (Parent-Child 或 HyDE),并通过对比实验验证效果
+- [ ] ⭐ 手写完整 RAG 链路代码,包含: PDF 解析 → 切片 → 向量化 → Milvus 存储 → 检索 → LLM 生成
+- [ ] ⭐ 实现至少 1 种高级切片策略 (Parent-Child 或 HyDE),并通过对比实验验证效果
 
 **评估体系层**:
-- [ ] 建立 Golden Dataset (10-20 个问答对),包含不同难度和主题的问题
-- [ ] 实现自动化评估脚本,集成 Ragas 或 TruLens
+- [ ] ⭐ 建立 Golden Dataset (10-20 个问答对),包含不同难度和主题的问题
+- [ ] ⭐ 实现自动化评估脚本,集成 Ragas 或 TruLens
 - [ ] **量化指标**: 使用 Golden Dataset 测试,召回率从基线提升至少 20% (例如从 0.60 提升到 0.72),Faithfulness > 0.7
 
 **异构系统架构层**:
-- [ ] 设计并实现 Java-Python 异步通信架构 (使用 RabbitMQ 或 Kafka)
+- [ ] ⭐ 设计并实现 Java-Python 异步通信架构 (使用 RabbitMQ 或 Kafka)
 - [ ] 实现混合搜索策略 (向量 + 全文),并通过 A/B 测试验证效果提升
 - [ ] 定义统一的 OpenAPI 数据契约,Java 端能够通过 Feign Client 调用 Python 服务
 
 **能力验证**:
-- [ ] 能够解释 "Parent-Child Indexing 为什么比普通切片更好" 并给出数据支持
+- [ ] ⭐ 能够解释 "Parent-Child Indexing 为什么比普通切片更好" 并给出数据支持
 - [ ] 能够设计一个完整的双库架构 (MySQL + Milvus),并解决数据同步一致性问题
 
 **时间检查点**: 如果超过 3 周仍未完成,建议先使用 Dify 完成基础 RAG,再逐步添加高级功能
