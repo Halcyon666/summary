@@ -1,0 +1,854 @@
+---
+id: oh-my-opencode
+title: Oh My OpenCode
+sidebar_label: Oh My OpenCode
+sidebar_position: 2
+description: Oh My OpenCode 安装配置指南
+tags:
+- ai
+- open-code
+- development-tool
+- tutorial
+last_update:
+  date: '2026-01-26'
+  author: halcyon666
+---
+
+# Oh My OpenCode 安装配置指南
+
+> 将你的 OpenCode 打造成最强 AI 编码助手
+
+## 📖 简介
+
+**Oh My OpenCode** 是一个强大的 OpenCode 插件，它为 OpenCode 提供了：
+
+- 🤖 **多代理编排系统** - Sisyphus、Oracle、Librarian 等专业代理
+- ⚡ **并行后台任务** - 同时执行多个任务，提升效率
+- 🔧 **完整的 LSP 支持** - 代码重构、符号重命名、诊断信息
+- 📚 **内置 MCP 服务** - 网络搜索、文档搜索、GitHub 代码搜索
+- 🎯 **智能任务管理** - TODO 强制执行、注释检查、持续循环
+- 🌟 **Claude Code 兼容** - 完整的钩子系统、命令、技能支持
+
+:::tip 核心理念
+如果 OpenCode 是 Debian/Arch，那么 Oh My OpenCode 就是 Ubuntu/Manjaro - 开箱即用，功能强大。
+:::
+
+---
+
+## 🎯 适用场景
+
+### 你应该使用 Oh My OpenCode，如果你：
+
+- ✅ 想要最强大的 AI 编码助手
+- ✅ 需要多个 AI 模型协同工作
+- ✅ 希望 AI 能自动完成复杂任务
+- ✅ 想要并行执行多个任务
+- ✅ 需要深度代码库探索和重构
+- ✅ 追求高度可定制化的开发体验
+
+### 不适合的场景：
+
+- ❌ 只需要简单的代码补全
+- ❌ 不想配置任何东西
+- ❌ 没有任何 AI 模型订阅或 API 访问
+
+---
+
+## 📋 前置要求
+
+### 必需：
+
+1. **Node.js** - v18 或更高版本
+2. **npm** - v8 或更高版本
+3. **现代终端模拟器**：
+   - [WezTerm](https://wezterm.org)（跨平台，推荐）
+   - [Alacritty](https://alacritty.org)（跨平台）
+   - [Ghostty](https://ghostty.org)（Linux/macOS）
+   - [Kitty](https://sw.kovidgoyal.net/kitty/)（Linux/macOS）
+   - Windows Terminal（Windows）
+
+### 推荐：
+
+4. **AI 模型访问**（至少一种）：
+   - Claude Pro/Max 订阅
+   - OpenAI/ChatGPT Plus 订阅
+   - Google Gemini 订阅
+   - GitHub Copilot 订阅
+   - 自定义 API 提供商（如 DuoJie、OpenRouter 等）
+
+:::warning 重要提示
+**Sisyphus 主代理强烈推荐使用 Claude Opus 4.5 模型**。使用其他模型可能导致体验显著下降。
+:::
+
+---
+
+## 🚀 快速安装
+
+### 步骤 1：安装 OpenCode
+
+```bash
+# 使用 npm（推荐）
+npm install -g opencode-ai
+
+# 或使用 Homebrew（macOS/Linux）
+brew install anomalyco/tap/opencode
+
+# 或使用安装脚本
+curl -fsSL https://opencode.ai/install | bash
+```
+
+验证安装：
+
+```bash
+opencode --version
+# 应该显示版本号，如：1.1.36
+```
+
+### 步骤 2：安装 Oh My OpenCode
+
+```bash
+npm install -g oh-my-opencode
+```
+
+### 步骤 3：运行安装程序
+
+#### 方式 A：交互式安装（推荐）
+
+```bash
+npx oh-my-opencode install
+```
+
+安装程序会询问你的订阅情况：
+- Claude Pro/Max 订阅？
+- OpenAI/ChatGPT Plus 订阅？
+- Gemini 订阅？
+- GitHub Copilot 订阅？
+- 等等...
+
+#### 方式 B：非交互式安装
+
+如果你已经知道要使用的配置：
+
+```bash
+# 示例：有 Claude Max (20x) + OpenAI + Gemini
+npx oh-my-opencode install --no-tui --claude=max20 --openai=yes --gemini=yes --copilot=no
+
+# 示例：只有 Claude Pro
+npx oh-my-opencode install --no-tui --claude=yes --openai=no --gemini=no --copilot=no
+
+# 示例：只有 GitHub Copilot
+npx oh-my-opencode install --no-tui --claude=no --openai=no --gemini=no --copilot=yes
+```
+
+### 步骤 4：配置认证
+
+根据你的订阅情况，配置相应的提供商：
+
+#### Anthropic (Claude)
+
+```bash
+opencode auth login
+# 选择 Provider: Anthropic
+# 选择 Login method: Claude Pro/Max
+# 在浏览器中完成 OAuth 流程
+```
+
+#### OpenAI (ChatGPT)
+
+```bash
+opencode auth login
+# 选择 Provider: OpenAI
+# 输入你的 API 密钥
+```
+
+#### Google Gemini
+
+需要先安装 `opencode-antigravity-auth` 插件：
+
+```bash
+# 编辑 ~/.config/opencode/opencode.json
+# 添加插件：
+{
+  "plugin": [
+    "oh-my-opencode",
+    "opencode-antigravity-auth@latest"
+  ]
+}
+```
+
+然后认证：
+
+```bash
+opencode auth login
+# 选择 Provider: Google
+# 选择 Login method: OAuth with Google (Antigravity)
+# 在浏览器中完成登录
+```
+
+#### GitHub Copilot
+
+```bash
+opencode auth login
+# 选择 Provider: GitHub
+# 完成 OAuth 认证
+```
+
+---
+
+## 🔧 自定义配置
+
+### 使用自定义 API 提供商
+
+如果你使用自定义 API 提供商（如 DuoJie、OpenRouter 等），需要手动配置。
+
+#### 步骤 1：配置提供商
+
+编辑 `~/.config/opencode/opencode.json`：
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["oh-my-opencode"],
+  "provider": {
+    "your-provider-name": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "Your Provider Name",
+      "options": {
+        "baseURL": "https://api.your-provider.com/v1"
+      },
+      "models": {
+        "claude-opus-4-5-max": {
+          "limit": { "context": 200000, "output": 8192 },
+          "modalities": { "input": ["text", "image"], "output": ["text"] }
+        },
+        "gpt-5.2": {
+          "limit": { "context": 400000, "output": 8192 },
+          "modalities": { "input": ["text", "image"], "output": ["text"] }
+        },
+        "claude-sonnet-4-5": {
+          "limit": { "context": 200000, "output": 8192 },
+          "modalities": { "input": ["text", "image"], "output": ["text"] }
+        },
+        "claude-haiku-4-5": {
+          "limit": { "context": 200000, "output": 8192 },
+          "modalities": { "input": ["text", "image"], "output": ["text"] }
+        },
+        "gemini-3-pro-preview": {
+          "limit": { "context": 1000000, "output": 8192 },
+          "modalities": { "input": ["text", "image"], "output": ["text"] }
+        },
+        "gemini-3-pro-image-preview": {
+          "limit": { "context": 1000000, "output": 8192 },
+          "modalities": { "input": ["text", "image"], "output": ["text", "image"] }
+        }
+      }
+    }
+  }
+}
+```
+
+#### 步骤 2：配置代理模型
+
+创建或编辑 `~/.config/opencode/oh-my-opencode.json`：
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/schema.json",
+  "agents": {
+    "sisyphus": {
+      "model": "your-provider-name/claude-opus-4-5-max",
+      "temperature": 0.7,
+      "comment": "主编排代理 - 使用 Claude Opus 4.5 Max（最强模型）"
+    },
+    "prometheus": {
+      "model": "your-provider-name/claude-opus-4-5-max",
+      "temperature": 0.6,
+      "comment": "规划器代理 - 使用 Opus Max 进行深度规划"
+    },
+    "oracle": {
+      "model": "your-provider-name/gpt-5.2",
+      "temperature": 0.5,
+      "comment": "架构/调试专家 - 使用 GPT-5.2 高智商模型"
+    },
+    "librarian": {
+      "model": "your-provider-name/claude-sonnet-4-5",
+      "temperature": 0.3,
+      "comment": "文档/代码搜索 - 使用 Claude Sonnet 4.5（平衡性能）"
+    },
+    "explore": {
+      "model": "your-provider-name/claude-haiku-4-5",
+      "temperature": 0.2,
+      "comment": "快速代码库探索 - 使用 Claude Haiku（最快响应）"
+    },
+    "frontend-engineer": {
+      "model": "your-provider-name/gemini-3-pro-preview",
+      "temperature": 0.6,
+      "comment": "前端开发 - 使用 Gemini 3 Pro（前端专长）"
+    },
+    "multimodal-looker": {
+      "model": "your-provider-name/gemini-3-pro-image-preview",
+      "temperature": 0.5,
+      "comment": "多模态分析 - 使用 Gemini 3 Pro Image（图像处理）"
+    }
+  },
+  "disabled_hooks": [],
+  "background_tasks": {
+    "max_concurrent_per_provider": 3,
+    "max_concurrent_per_model": 2,
+    "comment": "允许并行执行多个后台任务"
+  },
+  "comment": "使用自定义提供商的配置"
+}
+```
+
+---
+
+## 🎯 代理系统详解
+
+Oh My OpenCode 提供了一个强大的多代理系统，每个代理都有特定的职责：
+
+### 核心代理
+
+| 代理 | 推荐模型 | 温度 | 职责 | 使用场景 |
+|------|----------|------|------|----------|
+| **Sisyphus** | Claude Opus 4.5 Max | 0.7 | 主编排代理 | 复杂任务协调、整体架构决策 |
+| **Prometheus** | Claude Opus 4.5 Max | 0.6 | 规划器 | 任务规划、访谈式需求分析 |
+| **Oracle** | GPT-5.2 | 0.5 | 架构/调试专家 | 架构设计、复杂 bug 调试 |
+| **Librarian** | Claude Sonnet 4.5 | 0.3 | 文档/代码搜索 | 搜索文档、查找代码示例 |
+| **Explore** | Claude Haiku 4.5 | 0.2 | 快速探索 | 代码库扫描、文件查找 |
+| **Frontend Engineer** | Gemini 3 Pro | 0.6 | 前端开发 | UI/UX 实现、前端优化 |
+| **Multimodal Looker** | Gemini 3 Pro Image | 0.5 | 图像分析 | 设计稿分析、截图理解 |
+
+### 温度设置说明
+
+- **0.2-0.3**：确定性任务（搜索、探索、数据处理）
+- **0.5-0.6**：平衡任务（调试、前端开发、代码审查）
+- **0.7**：创造性任务（架构设计、主编排、问题解决）
+
+### 代理调用方式
+
+#### 1. 自动调用（推荐）
+
+使用 `ultrawork` 或 `ulw` 关键词，Sisyphus 会自动决定调用哪些代理：
+
+```
+ulw 重构这个项目的认证模块，使用最佳实践
+```
+
+#### 2. 手动调用
+
+直接 @ 提及特定代理：
+
+```
+@oracle 分析这个架构设计的问题
+@librarian 搜索 React Server Components 的最佳实践
+@explore 找出所有使用 useEffect 的文件
+@frontend-engineer 优化这个组件的性能
+```
+
+#### 3. 规划模式
+
+按 **Tab** 键进入 Prometheus 规划模式：
+
+1. Prometheus 会通过访谈了解你的需求
+2. 生成详细的工作计划
+3. 按 Tab 键切换回执行模式
+4. 输入"开始执行"启动任务
+
+---
+
+## 💡 使用指南
+
+### 基本使用流程
+
+#### 1. 启动 OpenCode
+
+```bash
+cd /path/to/your/project
+opencode
+```
+
+#### 2. 初始化项目（首次使用）
+
+```
+/init
+```
+
+这会创建 `AGENTS.md` 文件，帮助 OpenCode 理解你的项目结构。
+
+:::tip 提示
+应该将 `AGENTS.md` 提交到 Git 仓库，这样团队成员都能受益。
+:::
+
+#### 3. 开始工作
+
+选择以下任一方式：
+
+**方式 A：懒人模式（ultrawork）**
+
+```
+ulw 帮我添加用户注册功能，包括表单验证和错误处理
+```
+
+**方式 B：规划模式（Prometheus）**
+
+```
+1. 按 Tab 键进入 Plan 模式
+2. 描述需求："我想添加用户注册功能"
+3. 回答 Prometheus 的问题
+4. 审查生成的计划
+5. 按 Tab 键切换回 Build 模式
+6. 输入："开始执行"
+```
+
+**方式 C：直接对话**
+
+```
+帮我重构 @src/auth/login.ts 中的登录逻辑
+```
+
+### 高级功能
+
+#### 1. 文件引用
+
+使用 `@` 符号引用文件（支持模糊搜索）：
+
+```
+@components/Header 这个组件有什么问题？
+@auth/login.ts 重构这个文件的错误处理
+```
+
+#### 2. 图像输入
+
+直接拖拽图片到终端：
+
+```
+参考这个设计图实现界面 [拖拽图片到终端]
+```
+
+#### 3. 撤销/重做
+
+```
+/undo  # 撤销最后的更改
+/redo  # 重做撤销的更改
+```
+
+可以多次运行 `/undo` 撤销多个更改。
+
+#### 4. 分享会话
+
+```
+/share  # 生成分享链接，复制到剪贴板
+```
+
+#### 5. 后台任务
+
+Sisyphus 会自动并行执行多个任务：
+
+```
+ulw 同时完成以下任务：
+1. 重构用户认证模块
+2. 优化数据库查询性能
+3. 更新 API 文档
+4. 修复所有 ESLint 警告
+```
+
+**并发设置：**
+- 每个提供商最多 3 个并发任务
+- 每个模型最多 2 个并发任务
+
+---
+
+## 🌟 核心功能
+
+### 1. 多代理编排
+
+- **Sisyphus**：主编排代理，协调所有任务
+- **Prometheus**：规划器，通过访谈创建详细计划
+- **Oracle**：架构和调试专家
+- **Librarian**：文档和代码搜索专家
+- **Explore**：快速代码库探索
+- **Frontend Engineer**：前端开发专家
+- **Multimodal Looker**：图像和多模态分析
+
+### 2. 后台任务系统
+
+- 并行执行多个任务
+- 自动负载均衡
+- 智能任务分配
+- 可配置的并发限制
+
+### 3. LSP 工具集成
+
+- 代码重构
+- 符号重命名
+- 诊断信息
+- AST 感知搜索
+- 自动导入修复
+
+### 4. 内置 MCP 服务
+
+- **websearch (Exa)**：网络搜索
+- **context7**：官方文档搜索
+- **grep_app**：GitHub 代码搜索
+
+### 5. 生产力工具
+
+- **Ralph Loop**：持续执行循环，直到任务完成
+- **Todo Enforcer**：强制完成 TODO 列表
+- **Comment Checker**：防止过度注释
+- **Think Mode**：深度思考模式
+
+### 6. 钩子系统
+
+- **PreToolUse**：工具使用前的钩子
+- **PostToolUse**：工具使用后的钩子
+- **UserPromptSubmit**：提示词提交时的钩子
+- **Stop**：停止时触发的钩子
+- 25+ 内置钩子，完全可配置
+
+### 7. Claude Code 兼容
+
+- 完整的命令系统
+- 代理系统
+- 技能系统
+- MCP 服务器
+- 钩子系统
+
+---
+
+## ⚙️ 配置选项
+
+### 配置文件位置
+
+- **用户级配置**：`~/.config/opencode/oh-my-opencode.json`（全局生效）
+- **项目级配置**：`.opencode/oh-my-opencode.json`（仅当前项目）
+
+项目级配置会覆盖用户级配置。
+
+### 配置示例
+
+#### 基本配置
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/schema.json",
+  "agents": {
+    "sisyphus": {
+      "model": "anthropic/claude-opus-4-5",
+      "temperature": 0.7
+    }
+  }
+}
+```
+
+#### 完整配置
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/schema.json",
+  "agents": {
+    "sisyphus": {
+      "model": "anthropic/claude-opus-4-5",
+      "temperature": 0.7,
+      "systemPrompt": "你是一个专业的软件工程师...",
+      "permissions": {
+        "read": true,
+        "write": true,
+        "execute": true
+      }
+    },
+    "oracle": {
+      "model": "openai/gpt-5.2",
+      "temperature": 0.5
+    }
+  },
+  "disabled_hooks": [],
+  "background_tasks": {
+    "max_concurrent_per_provider": 3,
+    "max_concurrent_per_model": 2
+  },
+  "experimental": {
+    "aggressive_truncation": false,
+    "auto_resume": true
+  }
+}
+```
+
+### 常用配置选项
+
+#### 禁用特定钩子
+
+```json
+{
+  "disabled_hooks": [
+    "comment-checker",
+    "todo-enforcer"
+  ]
+}
+```
+
+#### 调整并发限制
+
+```json
+{
+  "background_tasks": {
+    "max_concurrent_per_provider": 5,
+    "max_concurrent_per_model": 3
+  }
+}
+```
+
+#### 自定义代理提示词
+
+```json
+{
+  "agents": {
+    "sisyphus": {
+      "model": "anthropic/claude-opus-4-5",
+      "systemPrompt": "你是一个专业的全栈工程师，擅长 React、Node.js 和 TypeScript..."
+    }
+  }
+}
+```
+
+---
+
+## 🔍 故障排除
+
+### 问题 1：OpenCode 命令找不到
+
+**症状**：运行 `opencode` 时提示 `command not found`
+
+**解决方案**：
+
+```bash
+# 检查是否已安装
+npm list -g opencode-ai
+
+# 重新安装
+npm install -g opencode-ai --force
+
+# 检查 PATH 环境变量
+echo $PATH
+```
+
+### 问题 2：插件未加载
+
+**症状**：Oh My OpenCode 功能不可用
+
+**解决方案**：
+
+```bash
+# 检查插件配置
+cat ~/.config/opencode/opencode.json
+
+# 确保包含：
+# "plugin": ["oh-my-opencode"]
+
+# 如果缺失，手动添加
+```
+
+### 问题 3：代理调用失败
+
+**症状**：代理无响应或报错
+
+**可能原因**：
+- API 密钥未配置或过期
+- 模型名称错误
+- 网络连接问题
+- 提供商配额用尽
+
+**解决方案**：
+
+```bash
+# 检查配置
+cat ~/.config/opencode/opencode.json
+cat ~/.config/opencode/oh-my-opencode.json
+
+# 重新认证
+opencode auth login
+
+# 测试网络连接
+curl -I https://api.anthropic.com
+```
+
+### 问题 4：配置文件格式错误
+
+**症状**：OpenCode 启动失败或报错
+
+**解决方案**：
+
+1. 使用 JSON 验证器检查语法
+2. 确保所有引号、逗号、括号匹配
+3. 删除多余的逗号（JSON 不允许尾随逗号）
+4. 使用 JSONC 格式（支持注释）
+
+### 问题 5：Windows 上安装程序崩溃
+
+**症状**：运行 `npx oh-my-opencode install` 时崩溃
+
+**解决方案**：
+
+这是 Bun 运行时的已知问题。使用手动配置方式：
+
+1. 全局安装插件：`npm install -g oh-my-opencode`
+2. 手动编辑配置文件（参考上面的配置示例）
+3. 跳过安装程序，直接使用
+
+---
+
+## 📚 进一步学习
+
+### 官方文档
+
+- **Oh My OpenCode GitHub**：https://github.com/code-yeongyu/oh-my-opencode
+- **OpenCode 官网**：https://opencode.ai/docs
+- **Features 文档**：https://github.com/code-yeongyu/oh-my-opencode/blob/master/docs/features.md
+- **Configuration 文档**：https://github.com/code-yeongyu/oh-my-opencode/blob/master/docs/configurations.md
+- **Overview 指南**：https://github.com/code-yeongyu/oh-my-opencode/blob/master/docs/guide/overview.md
+
+### 社区资源
+
+- **Discord 社区**：https://discord.gg/PUwSMR9XNk
+- **GitHub Issues**：https://github.com/code-yeongyu/oh-my-opencode/issues
+- **Twitter/X**：[@justsisyphus](https://x.com/justsisyphus)
+
+### 相关项目
+
+- **OpenCode**：https://github.com/sst/opencode
+- **AmpCode**：https://ampcode.com
+- **Claude Code**：https://code.claude.com
+
+---
+
+## 🎯 最佳实践
+
+### 1. 项目初始化
+
+每个新项目都应该运行 `/init` 创建 `AGENTS.md`：
+
+```bash
+cd your-project
+opencode
+# 在 OpenCode 中：
+/init
+```
+
+### 2. 使用 ultrawork 模式
+
+对于复杂任务，始终使用 `ulw` 关键词：
+
+```
+ulw 重构整个认证系统，使用 JWT 和 refresh token
+```
+
+### 3. 利用规划模式
+
+对于不确定的任务，使用 Prometheus 规划模式：
+
+```
+1. 按 Tab 进入 Plan 模式
+2. 描述需求
+3. 回答问题
+4. 审查计划
+5. 执行
+```
+
+### 4. 合理使用代理
+
+- **简单查询**：直接对话
+- **架构问题**：`@oracle`
+- **文档搜索**：`@librarian`
+- **代码探索**：`@explore`
+- **前端任务**：`@frontend-engineer`
+
+### 5. 配置管理
+
+- 用户级配置：通用设置
+- 项目级配置：项目特定设置
+- 提交 `AGENTS.md` 到 Git
+- 不要提交 API 密钥
+
+### 6. 性能优化
+
+- 使用更快的模型进行探索任务
+- 调整并发限制以平衡速度和成本
+- 禁用不需要的钩子
+- 使用项目级配置覆盖特定设置
+
+---
+
+## 🎊 快速参考
+
+### 常用命令
+
+| 命令 | 功能 |
+|------|------|
+| `/init` | 初始化项目 |
+| `/undo` | 撤销更改 |
+| `/redo` | 重做更改 |
+| `/share` | 分享会话 |
+| `/help` | 查看帮助 |
+| `/connect` | 连接提供商 |
+| `/exit` | 退出 OpenCode |
+
+### 关键词
+
+| 关键词 | 功能 |
+|--------|------|
+| `ulw` / `ultrawork` | 启用完整编排模式 |
+| `@agent-name` | 调用特定代理 |
+| `@file-path` | 引用文件 |
+| `Tab` | 切换 Plan/Build 模式 |
+
+### 配置文件
+
+| 文件 | 用途 |
+|------|------|
+| `~/.config/opencode/opencode.json` | OpenCode 主配置 |
+| `~/.config/opencode/oh-my-opencode.json` | Oh My OpenCode 配置 |
+| `.opencode/oh-my-opencode.json` | 项目级配置 |
+| `AGENTS.md` | 项目上下文文件 |
+
+---
+
+## 🙏 致谢
+
+- **OpenCode 团队**：提供了强大的基础框架
+- **AmpCode**：提供了许多灵感和功能参考
+- **Claude Code**：钩子系统和命令系统的灵感来源
+- **社区贡献者**：持续改进和反馈
+
+---
+
+## 📄 许可证
+
+Oh My OpenCode 使用 [SUL-1.0](https://github.com/code-yeongyu/oh-my-opencode/blob/master/LICENSE.md) 许可证。
+
+---
+
+## 🌟 支持项目
+
+如果你觉得 Oh My OpenCode 有帮助，请：
+
+1. ⭐ 给项目点星：https://github.com/code-yeongyu/oh-my-opencode
+2. 🐛 报告 Bug：https://github.com/code-yeongyu/oh-my-opencode/issues
+3. 💡 提出建议：https://github.com/code-yeongyu/oh-my-opencode/discussions
+4. 🤝 贡献代码：https://github.com/code-yeongyu/oh-my-opencode/pulls
+5. 📢 分享给朋友
+
+---
+
+## 📞 获取帮助
+
+遇到问题？
+
+1. 查看 [故障排除](#故障排除) 部分
+2. 搜索 [GitHub Issues](https://github.com/code-yeongyu/oh-my-opencode/issues)
+3. 加入 [Discord 社区](https://discord.gg/PUwSMR9XNk)
+4. 提交新的 Issue
+
+---
+
+**祝你使用愉快！Happy Coding! 🚀**
