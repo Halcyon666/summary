@@ -1,0 +1,176 @@
+---
+id: environment recovery
+title: environment recovery
+sidebar_label: environment recovery
+sidebar_position: 4
+description: '一些环境的快速恢复方法'
+tags:
+- books
+- learning
+last_update:
+  date: '2026-01-31'
+  author: halcyon666
+---
+# 一些环境的快速恢复方法
+
+## PixPin
+
+### 快捷/动作
+
+![20251204234100](https://s2.loli.net/2025/12/04/CHQP9wOi35TbJx7.png)
+
+### 内置快捷键
+
+![20251204234217](https://s2.loli.net/2025/12/04/qGxL3Vlw5mIc279.png)
+
+## 重装系统后恢复开发环境
+
+### 恢复脚本 
+
+```powershell title="sys-path-auto-configuration.ps1"
+# 必须管理员运行
+$ErrorActionPreference = "Stop"
+
+function Set-EnvIfNotExists {
+    param (
+        [string]$Name,
+        [string]$Value
+    )
+
+    $current = [Environment]::GetEnvironmentVariable($Name, "Machine")
+    if ($current -ne $Value) {
+        Write-Host "Setting $Name = $Value"
+        [Environment]::SetEnvironmentVariable($Name, $Value, "Machine")
+    } else {
+        Write-Host "$Name already set"
+    }
+}
+
+function Add-ToPath {
+    param (
+        [string]$Dir
+    )
+
+    if (-not (Test-Path $Dir)) {
+        Write-Warning "$Dir not exists, skipped"
+        return
+    }
+
+    $path = [Environment]::GetEnvironmentVariable("Path", "Machine")
+    if ($path -notlike "*$Dir*") {
+        Write-Host "Add $Dir to PATH"
+        [Environment]::SetEnvironmentVariable(
+            "Path",
+            "$path;$Dir",
+            "Machine"
+        )
+    } else {
+        Write-Host "$Dir already in PATH"
+    }
+}
+
+# ===== JAVA =====
+Set-EnvIfNotExists "JAVA_HOME" "D:\software\Java\jdk-21"
+Add-ToPath "$env:JAVA_HOME\bin"
+
+# ===== MAVEN =====
+Set-EnvIfNotExists "MAVEN_HOME" "D:\software\apache-maven-3.8.7"
+Add-ToPath "$env:MAVEN_HOME\bin"
+
+# ===== GRADLE =====
+Set-EnvIfNotExists "GRADLE_HOME" "D:\software\gradle-8.7"
+Add-ToPath "$env:GRADLE_HOME\bin"
+
+# ===== SCALA =====
+Set-EnvIfNotExists "SCALA_HOME" "D:\software\scala"
+Add-ToPath "$env:SCALA_HOME\bin"
+
+# ===== PYTHON =====
+Add-ToPath "D:\software\py3137"
+
+Write-Host "All configuration done."
+
+```
+
+### 恢复检查脚本
+
+```powershell title="sys-path-auto-check.ps1"
+# ================================
+# Environment Validation Script
+# ================================
+
+$ErrorCount = 0
+
+function Write-ErrorMsg {
+    param($Message)
+    Write-Host "[ERROR] $Message" -ForegroundColor Red
+    $script:ErrorCount++
+}
+
+function Write-WarnMsg {
+    param($Message)
+    Write-Host "[WARN ] $Message" -ForegroundColor Yellow
+}
+
+function Write-OkMsg {
+    param($Message)
+    Write-Host "[ OK  ] $Message" -ForegroundColor Green
+}
+
+Write-Host "========================================"
+Write-Host " Development Environment Validation"
+Write-Host "========================================"
+
+# -------- JAVA --------
+if (-not $env:JAVA_HOME) {
+    Write-ErrorMsg "JAVA_HOME is not set"
+} elseif (-not (Test-Path "$env:JAVA_HOME\bin\java.exe")) {
+    Write-ErrorMsg "JAVA_HOME invalid: $env:JAVA_HOME"
+}
+
+# -------- MAVEN --------
+if (-not (Test-Path "$env:MAVEN_HOME\bin\mvn.cmd")) {
+    Write-ErrorMsg "MAVEN_HOME invalid"
+}
+
+# -------- GRADLE --------
+if (-not (Test-Path "$env:GRADLE_HOME\bin\gradle.bat")) {
+    Write-ErrorMsg "GRADLE_HOME invalid"
+}
+
+# -------- SCALA --------
+if (-not (Test-Path "$env:SCALA_HOME\bin\scala.bat")) {
+    Write-WarnMsg "SCALA_HOME not configured correctly"
+}
+
+# -------- GIT --------
+if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+    Write-ErrorMsg "Git not found in PATH"
+}
+
+# -------- NODE / NVM --------
+if (Get-Command nvm -ErrorAction SilentlyContinue) {
+    if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
+        Write-WarnMsg "nvm installed but Node.js not activated"
+    }
+} else {
+    Write-WarnMsg "nvm not found"
+}
+
+# -------- PYTHON --------
+if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
+    Write-WarnMsg "Python not found in PATH"
+}
+
+# -------- RESULT --------
+Write-Host "----------------------------------------"
+
+if ($ErrorCount -eq 0) {
+    Write-OkMsg "Environment check passed"
+} else {
+    Write-ErrorMsg "Environment check failed ($ErrorCount error(s))"
+}
+
+Write-Host "========================================"
+
+```
