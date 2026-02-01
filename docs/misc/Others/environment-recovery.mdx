@@ -174,3 +174,29 @@ if ($ErrorCount -eq 0) {
 Write-Host "========================================"
 
 ```
+
+## anaconda 环境恢复
+
+1. 管理员执行
+```powershell
+setx ANACONDA_HOME "D:\software\anaconda3" /M
+setx PATH "$env:PATH;D:\software\anaconda3;D:\software\anaconda3\Scripts;D:\software\anaconda3\Library\bin" /M
+```
+
+```powershell title='check'
+conda --version
+where conda
+```
+
+
+
+2. 手动注册`jupyter kernel`
+
+```command
+# (ai-env) D:\project\backend\ai-learn>
+python -m ipykernel install --user --name ai-env --display-name "Python (ai-env)"
+```
+
+3. vscode中配置`conda path`
+
+`D:\software\anaconda3\Scripts\conda.exe`
