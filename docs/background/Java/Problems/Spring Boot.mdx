@@ -118,6 +118,49 @@ logback配置
 
 ---
 
+## 获取 AOP 代理对象的真实类注解
+
+在 Spring Boot 中，使用 `@Aspect` 等 AOP 技术后，注入的 Bean 是**代理对象**。
+直接通过 `getClass().getAnnotation()` 往往无法获取到原始类上的注解（尤其是 JDK 动态代理）。
+
+核心解决方案:使用 Spring 提供的 `AopProxyUtils` 穿透代理，获取最终的**原始业务类**。
+
+<details>
+<summary>点击查看</summary>
+```java
+import org.springframework.aop.framework.AopProxyUtils;
+// ...
+@Component
+public class MyAnnotationScanner implements ApplicationRunner {
+
+    private final ApplicationContext context;
+    private final Map<String, MyAnnotation> cacheMap = new ConcurrentHashMap<>();
+
+    public MyAnnotationScanner(ApplicationContext context) {
+        this.context = context;
+    }
+
+    @Override
+    public void run(ApplicationArguments args) {
+        // 1. 获取所有带有特定注解的 Bean
+        Map<String, Object> beans = context.getBeansWithAnnotation(MyAnnotation.class);
+
+        beans.forEach((name, bean) -> {
+            // 2. 穿透代理，获取真实的类（TargetClass）
+            Class<?> targetClass = AopProxyUtils.ultimateTargetClass(bean);
+            
+            // 3. 提取注解信息
+            MyAnnotation anno = AnnotationUtils.findAnnotation(targetClass, MyAnnotation.class);
+            
+            if (anno != null) {
+                cacheMap.put(targetClass.getName(), anno);
+            }
+        });
+    }
+}
+```
+</details>
+
 
 import TailProtocal from "@site/src/components/TailProtocal";
 
