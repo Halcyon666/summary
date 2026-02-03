@@ -1,0 +1,208 @@
+---
+id: wsl-opencode
+title: WSL + OpenCode
+sidebar_label: WSL + OpenCode
+sidebar_position: 2
+description: WSL + OpenCode 安装配置指南
+tags:
+- ai
+- open-code
+- development-tool
+- tutorial
+last_update:
+  date: '2026-02-04'
+  author: halcyon666
+---
+
+# WSL + OpenCode 环境说明书
+
+## 1. 基础系统
+
+- OS: Windows 10 Pro
+- WSL: WSL2
+- Linux 发行版: Ubuntu 22.04 LTS
+- 用户: ollama
+
+## 2. WSL 安装与进入
+
+### 安装 Ubuntu
+
+```shell
+wsl --install -d Ubuntu-22.04
+```
+
+> 下载大小约 500-700MB，安装后占用约 1.2-1.6GB
+
+### 进入 WSL
+
+```shell
+wsl -d Ubuntu-22.04 -u ollama
+```
+
+### 查看已安装发行版
+
+```shell
+wsl -l -v
+```
+
+## 3. Node / 包管理
+
+- Node.js: v20.x（Linux 原生安装）
+- Corepack: 已启用
+- pnpm: Corepack 管理（pnpm@latest）
+- PNPM_HOME: `~/.local/share/pnpm`
+- PATH 已包含 PNPM_HOME
+
+### Node 安装命令
+
+```shell
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+### pnpm 启用
+
+```shell
+sudo corepack enable
+sudo corepack prepare pnpm@latest --activate
+pnpm setup
+source ~/.bashrc
+```
+
+## 4. OpenCode 安装
+
+### 推荐方式（官方二进制）
+
+```shell
+curl -fsSL https://opencode.ai/install | bash
+source ~/.bashrc
+```
+
+### 验证
+
+```shell
+which opencode   # 应为 /usr/local/bin/opencode
+opencode --version
+```
+
+## 5. OpenCode Server
+
+- 文档: [windows-wsl](https://opencode.ai/docs/windows-wsl/)
+- 启动命令: `opencode serve --hostname 0.0.0.0 --port 4096`
+- 用途: 提供 Desktop / Web Client 远程接入
+
+## 6. OpenCode 使用模式对比
+
+| 模式 | 上下文管理 | Token消耗 | 适合场景 |
+|------|-----------|----------|---------|
+| Desktop | 会话历史累积 | 较高 | 决策/澄清需求 |
+| Desktop + WSL | 工程驱动 | 中等 | 重度改动/调试 |
+| CLI | 独立调用 | 最低 | 批量/原子patch |
+| TUI | 可视化CLI | 低 | 高频执行 |
+
+### 工作流建议
+
+- **Desktop**: 用于"想清楚要改什么"
+- **CLI/TUI**: 用于"把代码改对"
+- 每次调用只干一件事，用 Snapshot 替代历史
+
+## 7. Token 优化策略
+
+### 核心原则
+
+1. 减少上下文：用 Task Snapshot 替代历史
+2. 减少回合：子代理一次性调用
+3. 结构化输出：禁止解释，只给 diff
+
+### 低 Token Prompt 模板
+
+```text
+Task Snapshot:
+- Project: Spring Boot 2.7
+- Goal: [明确目标]
+- Constraints: [约束条件]
+
+Output:
+- Only unified diff
+- No explanation
+```
+
+## 8. Python 环境
+
+```shell
+sudo apt install -y python3 python3-pip python3-venv
+pip3 install --user virtualenv ipython black isort pylint mypy
+```
+
+```shell
+# 使用 tee 添加环境变量（无需进入编辑器）
+echo 'export PATH="$HOME/.local/bin:$PATH"' | tee -a ~/.bashrc
+source ~/.bashrc
+```
+
+## 9. Java 环境
+
+```shell
+sudo apt install -y openjdk-17-jdk maven
+```
+
+- JAVA_HOME: 已配置
+- 用途: OpenCode 代码理解与执行
+
+## 10. 辅助工具
+
+```shell
+sudo apt install -y git build-essential tree ripgrep fd-find curl wget unzip
+```
+
+## 11. tmux 终端复用
+
+### 安装
+
+```shell
+sudo apt install -y tmux
+```
+
+### 常用命令
+
+```shell
+# 创建新会话
+tmux new -s dev
+
+# 列出会话
+tmux ls
+
+# 附加到会话
+tmux attach -t dev
+
+# 分离会话（在 tmux 内）
+Ctrl+b d
+
+# 关闭窗口（在 tmux 内）
+Ctrl+d
+
+# 杀死会话
+tmux kill-session -t dev
+```
+
+### 窗口操作（在 tmux 内）
+
+| 快捷键 | 功能 |
+|--------|------|
+| `Ctrl+b c` | 新建窗口 |
+| `Ctrl+b n` | 下一个窗口 |
+| `Ctrl+b p` | 上一个窗口 |
+| `Ctrl+b %` | 垂直分屏 |
+| `Ctrl+b "` | 水平分屏 |
+| `Ctrl+b 方向键` | 切换面板 |
+
+### 配合 OpenCode 使用
+
+```shell
+# 创建 dev 会话并在其中启动 opencode server
+tmux new -s dev -d 'opencode serve --hostname 0.0.0.0 --port 4096'
+
+# 附加查看
+tmux attach -t dev
+```
+
