@@ -10,7 +10,7 @@ tags:
 - development-tool
 - tutorial
 last_update:
-  date: '2026-02-04'
+  date: '2026-02-05'
   author: halcyon666
 ---
 
@@ -195,6 +195,25 @@ tmux kill-session -t dev
 | `Ctrl+b %` | 垂直分屏 |
 | `Ctrl+b "` | 水平分屏 |
 | `Ctrl+b 方向键` | 切换面板 |
+
+### 设置容器滚动
+
+写入 tmux 配置文件
+
+编辑：
+
+```
+~/.tmux.conf
+```
+
+加入一行：
+
+```shell
+echo 'set -g mouse on' | tee -a ~/.tmux.conf
+echo 'bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "clip.exe"' | tee -a ~/.tmux.conf
+```
+
+
 
 ### 配合 OpenCode 使用
 
