@@ -40,7 +40,7 @@ const GraphViewContent = () => {
         });
 
         const connectedNodes = graphData.nodes.filter((node: any) =>
-          (nodeDegree.get(node.id) || 0) > 0 || node.id === 'overview'
+          ((nodeDegree.get(node.id) || 0) > 0 || node.id === 'overview') && node.id !== 'intro'
         );
 
         setData({ nodes: connectedNodes, links });
@@ -233,7 +233,6 @@ const GraphViewContent = () => {
           padding: '24px',
           borderRadius: '20px',
           backgroundColor: isDark ? 'rgba(30,30,30,0.85)' : 'rgba(255,255,255,0.85)',
-          // Glassmorphism effect
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
           border: '1px solid var(--ifm-color-emphasis-200)',
@@ -258,15 +257,49 @@ const GraphViewContent = () => {
 
           {/* Stats Section */}
           <div style={{
-            display: 'flex',
-            gap: '15px',
             marginBottom: '15px',
             paddingBottom: '15px',
             borderBottom: '1px solid var(--ifm-color-emphasis-200)'
           }}>
+            <div style={{ display: 'flex', gap: '15px', marginBottom: '10px' }}>
+              <div>
+                <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--ifm-color-content-secondary)' }}>Connections</div>
+                <div style={{ fontSize: '16px', fontWeight: 'bold' }}>{(hoverNode as any).val ? Math.max(0, (hoverNode as any).val - 1) : 0}</div>
+              </div>
+            </div>
+
+            {/* Neighbor Nodes List */}
             <div>
-              <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--ifm-color-content-secondary)' }}>Connections</div>
-              <div style={{ fontSize: '16px', fontWeight: 'bold' }}>{(hoverNode as any).val ? Math.max(0, (hoverNode as any).val - 1) : 0}</div>
+              <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.5px', color: 'var(--ifm-color-content-secondary)', marginBottom: '5px' }}>Connected To</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+                {(() => {
+                  const neighbors = data.links.reduce((acc: string[], link: any) => {
+                    const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+                    const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+                    if (sourceId === (hoverNode as any).id) acc.push(targetId);
+                    else if (targetId === (hoverNode as any).id) acc.push(sourceId);
+                    return acc;
+                  }, []);
+
+                  const neighborNodes = data.nodes.filter((n: any) => neighbors.includes(n.id));
+
+                  if (neighborNodes.length === 0) return <span style={{ fontSize: '12px', color: 'var(--ifm-color-content-secondary)' }}>None</span>;
+
+                  return neighborNodes.map((n: any) => (
+                    <span key={n.id} style={{
+                      fontSize: '11px',
+                      padding: '2px 8px',
+                      borderRadius: '4px',
+                      backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : '#f0f2f5',
+                      color: isDark ? '#e6e6e6' : '#1f1f1f',
+                      border: isDark ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid #d9d9d9',
+                      display: 'inline-block'
+                    }}>
+                      {n.name}
+                    </span>
+                  ));
+                })()}
+              </div>
             </div>
           </div>
 
@@ -276,9 +309,11 @@ const GraphViewContent = () => {
                 fontSize: '10px',
                 padding: '4px 10px',
                 borderRadius: '20px',
-                backgroundColor: 'var(--ifm-color-primary-lightest)',
-                color: 'var(--ifm-color-primary-dark)',
-                fontWeight: 600
+                backgroundColor: isDark ? 'rgba(56, 189, 248, 0.2)' : '#e6f7ff',
+                color: isDark ? '#38bdf8' : '#0050b3',
+                border: isDark ? '1px solid rgba(56, 189, 248, 0.4)' : '1px solid #91d5ff',
+                fontWeight: 600,
+                display: 'inline-block'
               }}>
                 #{tag}
               </span>
