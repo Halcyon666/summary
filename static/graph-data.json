@@ -1723,7 +1723,7 @@
         "tutorial"
       ],
       "group": "ai",
-      "val": 8,
+      "val": 7,
       "sources": [
         "level-1-ai-native"
       ],
@@ -1742,13 +1742,12 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 8,
+      "val": 6,
       "sources": [
         "level-1-ai-native"
       ],
       "references": [
-        "future-vibecoding",
-        "wsl-opencode"
+        "future-vibecoding"
       ]
     },
     {
@@ -1782,13 +1781,12 @@
         "tutorial"
       ],
       "group": "ai",
-      "val": 8,
+      "val": 7,
       "sources": [
         "level-1-ai-native",
         "wsl-opencode"
       ],
       "references": [
-        "vibe-coding",
         "mcp"
       ]
     },
@@ -2084,10 +2082,6 @@
       "target": "future-vibecoding"
     },
     {
-      "source": "vibe-coding",
-      "target": "wsl-opencode"
-    },
-    {
       "source": "level-1-ai-native",
       "target": "prompt"
     },
@@ -2106,10 +2100,6 @@
     {
       "source": "wsl-opencode",
       "target": "oh-my-opencode"
-    },
-    {
-      "source": "oh-my-opencode",
-      "target": "vibe-coding"
     },
     {
       "source": "oh-my-opencode",
