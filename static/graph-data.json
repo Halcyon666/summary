@@ -1,0 +1,1575 @@
+{
+  "nodes": [
+    {
+      "id": "intro",
+      "path": "/summary/intro",
+      "name": "Introduction",
+      "group": "documentation",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "regex",
+      "path": "/summary/tools/NonDevelopment/regex",
+      "name": "正则大全",
+      "group": "development",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "not-develop-software-tips",
+      "path": "/summary/tools/NonDevelopment/not-develop-software-tips",
+      "name": "常用软件",
+      "group": "development",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "everything",
+      "path": "/summary/tools/NonDevelopment/Everything",
+      "name": "Everything 使用",
+      "group": "development",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "adoc",
+      "path": "/summary/tools/NonDevelopment/adoc",
+      "name": "adoc",
+      "group": "development",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "gradle-maven-configuration",
+      "path": "/summary/tools/Development/gradle-maven-configuration",
+      "name": "gradle 和 maven 配置",
+      "group": "development",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "git-commands",
+      "path": "/summary/tools/Development/git-commands",
+      "name": "Git Commands",
+      "group": "development",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "develop-software-tips",
+      "path": "/summary/tools/Development/develop-software-tips",
+      "name": "常用开发软件",
+      "group": "development",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "win11-release-update",
+      "path": "/summary/misc/Others/win11-release-update",
+      "name": "W11更新 跳过TPM",
+      "group": "books",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "environment recovery",
+      "path": "/summary/misc/Others/environment-recovery",
+      "name": "environment recovery",
+      "group": "books",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "command-usage",
+      "path": "/summary/misc/Others/command-usage",
+      "name": "Bash or PS Command Usage",
+      "group": "books",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "cnblogs-theme-silence-configure-plain-style-theme",
+      "path": "/summary/misc/Others/cnblogs-theme-silence-configure-plain-style-theme",
+      "name": "Cnblogs Theme Silence Configure Plain Style Theme",
+      "group": "books",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "cnblogs-simple-memory-theme--beautification",
+      "path": "/summary/misc/Others/cnblogs-simple-memory-theme-beautification",
+      "name": "Cnblogs Simple Memory Theme  Beautification",
+      "group": "books",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "useful-links",
+      "path": "/summary/misc/Links/useful_links",
+      "name": "有用网站收集",
+      "group": "books",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "connitive-awaking-unloc-the-drrving-force-for-self-change",
+      "path": "/summary/misc/Books/02-literature/connitive-awaking-unloc-the-drrving-force-for-self-change",
+      "name": "周岭-认知觉醒-开启自我改变的原动力",
+      "group": "books",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "os-lean-notes",
+      "path": "/summary/misc/Books/01-computor-theory/os-lean-notes",
+      "name": "操作系统",
+      "group": "books",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "computer-network-transmit-layer",
+      "path": "/summary/misc/Books/01-computor-theory/computer-network-transmit-layer",
+      "name": "计算机网络 - 传输层",
+      "group": "books",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "computer-network-concept",
+      "path": "/summary/misc/Books/01-computor-theory/computer-network-concept",
+      "name": "计算机网络 - 网络概述",
+      "group": "books",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "computer-network-apps",
+      "path": "/summary/misc/Books/01-computor-theory/computer-network-apps",
+      "name": "计算机网络 - 网络应用",
+      "group": "books",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "computer-composition-theory",
+      "path": "/summary/misc/Books/01-computor-theory/computer-composition-theory",
+      "name": "计算机组成原理",
+      "group": "books",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "uni-app",
+      "path": "/summary/Frontend/uni-app",
+      "name": "uni-app开发",
+      "group": "frontend",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "firebase-database",
+      "path": "/summary/Frontend/firebase-database",
+      "name": "Firebase Database Setup",
+      "group": "frontend",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "docusaurus",
+      "path": "/summary/Frontend/docusaurus",
+      "name": "Docusaurus Configuration",
+      "group": "frontend",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "vue3-starter",
+      "path": "/summary/Frontend/Vue/vue3-starter",
+      "name": "vue3 入门",
+      "group": "frontend",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "vue-route",
+      "path": "/summary/Frontend/Vue/vue-route",
+      "name": "use vue route",
+      "group": "frontend",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "vue-project-notes",
+      "path": "/summary/Frontend/Vue/vue-project-notes",
+      "name": "Vue 项目笔记",
+      "group": "frontend",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "vue-grammer-two",
+      "path": "/summary/Frontend/Vue/vue-grammer-two",
+      "name": "Vue 基础2",
+      "group": "frontend",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "vue-grammer-one",
+      "path": "/summary/Frontend/Vue/vue-grammar-one",
+      "name": "Vue 基础1",
+      "group": "frontend",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "pnpm",
+      "path": "/summary/Frontend/Tools/pnpm",
+      "name": "pnpm常用命令",
+      "group": "frontend",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "integrate-husky-prettier-etc",
+      "path": "/summary/Frontend/Tools/Integrate-husky-prettier-etc",
+      "name": "integrate husky prettier etc",
+      "group": "frontend",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "tailwind",
+      "path": "/summary/Frontend/Styling/tailwind",
+      "name": "tailwind usage",
+      "group": "frontend",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "css",
+      "path": "/summary/Frontend/Styling/css",
+      "name": "CSS相关知识",
+      "group": "frontend",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "react-reference",
+      "path": "/summary/Frontend/React/react-reference",
+      "name": "Basic React",
+      "group": "frontend",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "react-problems",
+      "path": "/summary/Frontend/React/react-problems",
+      "name": "React Problems & Solutions",
+      "group": "frontend",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "react-naming-conventions",
+      "path": "/summary/Frontend/React/react-naming-conventions",
+      "name": "React TypeScript Naming Conventions",
+      "group": "frontend",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "react-learn-2025",
+      "path": "/summary/Frontend/React/react-learn-2025",
+      "name": "React Learning Roadmap 2025",
+      "group": "frontend",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "jquery-revese-selector",
+      "path": "/summary/Frontend/jQuery/JQuery-revese-selector",
+      "name": "jQuery选择器",
+      "group": "frontend",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "drag-drop-container-movement",
+      "path": "/summary/Frontend/Cases/drag-drop-container-movement",
+      "name": "A Robust Draggable Element",
+      "group": "frontend",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "common-shell-command",
+      "path": "/summary/devops/Linux/Common-Shell-Command",
+      "name": "Shell Common Commands",
+      "group": "containerization",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "awk-sed-quick-start",
+      "path": "/summary/devops/Linux/awk-sed-quick-start",
+      "name": "AWK SED 简单使用",
+      "group": "containerization",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "k8s-common-used-command",
+      "path": "/summary/devops/Kubernetes/k8s-common-used-command",
+      "name": "K8S常用命令",
+      "group": "containerization",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "centos8-instal-k8s",
+      "path": "/summary/devops/Kubernetes/centos8-instal-k8s",
+      "name": "Centos8 安装K8S",
+      "group": "containerization",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "idea-docker-deployment",
+      "path": "/summary/devops/Docker/idea-docker-deployment",
+      "name": "idea使用docker部署",
+      "group": "containerization",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "docker-destop-configuration",
+      "path": "/summary/devops/Docker/docker-destop-configuration",
+      "name": "docker-destop-configuration",
+      "group": "containerization",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "docker-compose-configure-redis-cluster-jenkins",
+      "path": "/summary/devops/Docker/docker-compose-configure-redis-cluster-jenkins",
+      "name": "docker-compose使用",
+      "group": "containerization",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "docker-command-and-dockerfile",
+      "path": "/summary/devops/Docker/Docker-Command-and-Dockerfile",
+      "name": "基础Docker命令",
+      "group": "containerization",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "python-replacement-script",
+      "path": "/summary/background/Python/python-replacement-script",
+      "name": "在多个文件中替换多个相应的内容",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "python-problems",
+      "path": "/summary/background/Python/python-problems",
+      "name": "Python 使用问题",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "redis",
+      "path": "/summary/background/Middleware/Redis",
+      "name": "Redis",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "rabbitmq",
+      "path": "/summary/background/Middleware/RabbitMQ",
+      "name": "RabbitMQ",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "kafka",
+      "path": "/summary/background/Middleware/Kafka",
+      "name": "Kafka",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "camunda",
+      "path": "/summary/background/Middleware/Camunda",
+      "name": "Camunda Workflow Engine",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "ioc-basics",
+      "path": "/summary/background/Java/Spring/IOC/ioc-basics",
+      "name": "IoC注入方式1",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "ioc-advanced",
+      "path": "/summary/background/Java/Spring/IOC/ioc-advanced",
+      "name": "IoC注入方式2",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "spring-core",
+      "path": "/summary/background/Java/Spring/Core/spring-core",
+      "name": "Spring Core",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "bean-factory-post-processor",
+      "path": "/summary/background/Java/Spring/Core/bean-factory-post-processor",
+      "name": "BeanFactoryPostProcessor",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "bean-creating-process",
+      "path": "/summary/background/Java/Spring/Core/bean-creating-process",
+      "name": "Bean的构造过程",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "application-context",
+      "path": "/summary/background/Java/Spring/Core/application-context",
+      "name": "ApplicationContext",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "schema-configuration",
+      "path": "/summary/background/Java/Spring/AOP/schema-configuration",
+      "name": "基于Schema的AOPA配置",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "pointcut",
+      "path": "/summary/background/Java/Spring/AOP/pointcut",
+      "name": "Spring AOP中的Pointcut",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "joinpoint",
+      "path": "/summary/background/Java/Spring/AOP/joinpoint",
+      "name": "Joinpoint",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "aspect",
+      "path": "/summary/background/Java/Spring/AOP/aspect",
+      "name": "Spring AOP中的Aspect",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "advice",
+      "path": "/summary/background/Java/Spring/AOP/advice",
+      "name": "Spring AOP中的Advice",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "weaving-programmatic",
+      "path": "/summary/background/Java/Spring/AOP/Weaving/weaving-programmatic",
+      "name": "Spring AOP的织入1",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "weaving-autoproxy",
+      "path": "/summary/background/Java/Spring/AOP/Weaving/weaving-autoproxy",
+      "name": "Spring AOP的织入2",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "full-aspectj-temp",
+      "path": "/summary/background/Java/Spring/AOP/AspectJ/full-aspectj-temp",
+      "name": "AspectJ形式AOP使用",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "aspectj-weaving",
+      "path": "/summary/background/Java/Spring/AOP/AspectJ/aspectj-weaving",
+      "name": "AspectJ织入方法",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "aspectj-overview",
+      "path": "/summary/background/Java/Spring/AOP/AspectJ/aspectj-overview",
+      "name": "AspectJ形式AOP概述",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "spring-boot",
+      "path": "/summary/background/Java/Problems/Spring Boot",
+      "name": "Spring Boot",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "production",
+      "path": "/summary/background/Java/Problems/Production",
+      "name": "生产问题",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "oracle",
+      "path": "/summary/background/Java/Problems/Oracle",
+      "name": "Oracle相关问题处理",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "junit-stuff",
+      "path": "/summary/background/Java/Problems/Junit-Stuff",
+      "name": "jUnit Stuff",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "java-problems",
+      "path": "/summary/background/Java/Problems/Java problems",
+      "name": "Java问题汇总",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "github-problems",
+      "path": "/summary/background/Java/Problems/github problems",
+      "name": "github相关问题处理",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "trace",
+      "path": "/summary/background/Java/JavaBase/trace",
+      "name": "Jaeger Trace MDC",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "netty",
+      "path": "/summary/background/Java/JavaBase/netty",
+      "name": "netty ",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "lambda",
+      "path": "/summary/background/Java/JavaBase/lambda",
+      "name": "lambda 使用",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "file-upload",
+      "path": "/summary/background/Java/JavaBase/file upload",
+      "name": "Java 文件相关",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "class-description",
+      "path": "/summary/background/Java/JavaBase/class description",
+      "name": "Java类描述",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "annotation-processor",
+      "path": "/summary/background/Java/JavaBase/annotation processor",
+      "name": "APT 使用",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "java-case-interview-two",
+      "path": "/summary/background/Java/Interview/Java-Case-Interview-two",
+      "name": "java 面试题2",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "java-case-interview-one",
+      "path": "/summary/background/Java/Interview/Java-Case-Interview-one",
+      "name": "java 面试题1",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "functional-register-engine",
+      "path": "/summary/background/Java/DesignPatterns/functional-register-engine",
+      "name": "功能注册引擎设计文档",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "design-pattern",
+      "path": "/summary/background/Java/DesignPatterns/Design Pattern",
+      "name": "设计模式",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "volatile-memory-domain",
+      "path": "/summary/background/Java/Concurrent-JVM/volatile-memory-domain",
+      "name": "volatile域内存知识",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "lock",
+      "path": "/summary/background/Java/Concurrent-JVM/lock",
+      "name": "锁",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "jmm",
+      "path": "/summary/background/Java/Concurrent-JVM/JMM",
+      "name": "JMM相关内容",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "java-virtual-machine",
+      "path": "/summary/background/Java/Concurrent-JVM/JAVA Virtual Machine",
+      "name": "JAVA虚拟机",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "java-concurrent-cases",
+      "path": "/summary/background/Java/Concurrent-JVM/Java Concurrent Cases",
+      "name": "Java 并发编程",
+      "group": "case-study",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "final-memory-domain",
+      "path": "/summary/background/Java/Concurrent-JVM/final memory domain",
+      "name": "final域内存知识",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "cpu-memory-domain",
+      "path": "/summary/background/Java/Concurrent-JVM/CPU memory domain",
+      "name": "处理器内存模型",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "transaction-process",
+      "path": "/summary/background/Database/transaction-process",
+      "name": "事务处理",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "oracle-procedure",
+      "path": "/summary/background/Database/oracle-procedure",
+      "name": "Oracle 相关",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "mysql-procedure",
+      "path": "/summary/background/Database/mysql-procedure",
+      "name": "mysql存储过程",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "mybatis-plus-quick-start",
+      "path": "/summary/background/Database/mybatis-Plus-quick-start",
+      "name": "Mybatis Plus快速开始",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "mybatis-plus-code-generate",
+      "path": "/summary/background/Database/mybatis-plus-code-generate",
+      "name": "Mybatis Plus代码生成",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "java-case-distribution",
+      "path": "/summary/background/Database/Java-Case-Distribution",
+      "name": "分布式问题",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "shell-sort",
+      "path": "/summary/background/Algorithm/shell-sort",
+      "name": "希尔排序",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "select-sort",
+      "path": "/summary/background/Algorithm/select-sort",
+      "name": "选择排序",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "quick-sort",
+      "path": "/summary/background/Algorithm/quick-sort",
+      "name": "快速排序",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "merge-sort",
+      "path": "/summary/background/Algorithm/merge-sort",
+      "name": "归并排序",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "leet-code-two-link-table-add",
+      "path": "/summary/background/Algorithm/leet-code-two-link-table-add",
+      "name": "两个单链表相加",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "leet-code-return-twomedian-of-two-positive-intergers",
+      "path": "/summary/background/Algorithm/leet-code-return-twomedian-of-two-positive-intergers",
+      "name": "返回两个正序数组中位数",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "leet-code-4-power",
+      "path": "/summary/background/Algorithm/leet-code-4-power",
+      "name": "求4的幂",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "kmp",
+      "path": "/summary/background/Algorithm/KMP",
+      "name": "KMP算法",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "insert-sort",
+      "path": "/summary/background/Algorithm/insert-sort",
+      "name": "插入排序",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "head-sort",
+      "path": "/summary/background/Algorithm/head-sort",
+      "name": "堆排序",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "bubble-sort",
+      "path": "/summary/background/Algorithm/bubble-sort",
+      "name": "冒泡排序",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "binary-insert",
+      "path": "/summary/background/Algorithm/Binary-Insert",
+      "name": "二分插入",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "base-sort",
+      "path": "/summary/background/Algorithm/Base-Sort",
+      "name": "基数排序",
+      "group": "algorithm",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "hbase",
+      "path": "/summary/ai-bigdata/BigData/HBASE",
+      "name": "HBASE",
+      "group": "ai",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "hadoop",
+      "path": "/summary/ai-bigdata/BigData/hadoop",
+      "name": "Hadoop Full Reference",
+      "group": "ai",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "flink-docker-compose",
+      "path": "/summary/ai-bigdata/BigData/flink docker-compose",
+      "name": "Flink Docker Compose",
+      "group": "ai",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "hadoop-overview",
+      "path": "/summary/ai-bigdata/BigData/Hadoop/hadoop-overview",
+      "name": "Hadoop Overview",
+      "group": "ai",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "full-hadoop-reference",
+      "path": "/summary/ai-bigdata/BigData/Hadoop/full-hadoop-reference",
+      "name": "hadoop",
+      "group": "ai",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
+      "id": "wsl-opencode",
+      "path": "/summary/ai-bigdata/AI/wsl-opencode",
+      "name": "WSL + OpenCode",
+      "group": "ai",
+      "val": 8,
+      "sources": [
+        "level-1-ai-native"
+      ],
+      "references": [
+        "oh-my-opencode",
+        "vibe-coding"
+      ]
+    },
+    {
+      "id": "vibe-coding",
+      "path": "/summary/ai-bigdata/AI/vibe-coding",
+      "name": "Vibe Coding Tools",
+      "group": "ai",
+      "val": 9,
+      "sources": [
+        "level-1-ai-native"
+      ],
+      "references": [
+        "future-vibecoding",
+        "oh-my-opencode",
+        "wsl-opencode"
+      ]
+    },
+    {
+      "id": "prompt",
+      "path": "/summary/ai-bigdata/AI/prompt",
+      "name": "Prompt",
+      "group": "ai",
+      "val": 7,
+      "sources": [
+        "level-1-ai-native",
+        "summary"
+      ],
+      "references": [
+        "maxi-model-capacity"
+      ]
+    },
+    {
+      "id": "oh-my-opencode",
+      "path": "/summary/ai-bigdata/AI/oh-my-opencode-installation-guide",
+      "name": "Oh My OpenCode",
+      "group": "ai",
+      "val": 10,
+      "sources": [
+        "level-1-ai-native",
+        "wsl-opencode"
+      ],
+      "references": [
+        "vibe-coding",
+        "mcp"
+      ]
+    },
+    {
+      "id": "mcp",
+      "path": "/summary/ai-bigdata/AI/mcp",
+      "name": "MCP",
+      "group": "ai",
+      "val": 8,
+      "sources": [
+        "level-1-ai-native"
+      ],
+      "references": [
+        "maxi-model-capacity",
+        "wsl-opencode",
+        "oh-my-opencode"
+      ]
+    },
+    {
+      "id": "maxi-model-capacity",
+      "path": "/summary/ai-bigdata/AI/maxi-model-capacity",
+      "name": "Agent 智能体设计完整指南",
+      "group": "ai",
+      "val": 9,
+      "sources": [
+        "lays-in-ai",
+        "level-3-agent"
+      ],
+      "references": [
+        "prompt",
+        "mcp"
+      ]
+    },
+    {
+      "id": "lays-in-ai",
+      "path": "/summary/ai-bigdata/AI/lays-in-ai",
+      "name": "AI开发核心技术栈",
+      "group": "ai",
+      "val": 13,
+      "sources": [
+        "overview"
+      ],
+      "references": [
+        "level-2-rag",
+        "level-3-agent",
+        "level-4-production",
+        "maxi-model-capacity"
+      ]
+    },
+    {
+      "id": "future-vibecoding",
+      "path": "/summary/ai-bigdata/AI/future-vibecoding",
+      "name": "Future Vibe Coding",
+      "group": "vibecoding",
+      "val": 6,
+      "sources": [
+        "vibe-coding",
+        "career"
+      ],
+      "references": [
+        "oh-my-opencode"
+      ]
+    },
+    {
+      "id": "career",
+      "path": "/summary/ai-bigdata/AI/career",
+      "name": "Career Paths",
+      "group": "career",
+      "val": 8,
+      "sources": [
+        "level-4-production",
+        "summary"
+      ],
+      "references": [
+        "future-vibecoding",
+        "lays-in-ai"
+      ]
+    },
+    {
+      "id": "ai-problems",
+      "path": "/summary/ai-bigdata/AI/ai-problems",
+      "name": "AI Problems",
+      "group": "ai",
+      "val": 2,
+      "sources": [
+        "level-1-ai-native"
+      ],
+      "references": []
+    },
+    {
+      "id": "ai-formula",
+      "path": "/summary/ai-bigdata/AI/AI-formula",
+      "name": "AI Formula",
+      "group": "ai",
+      "val": 2,
+      "sources": [
+        "lays-in-ai"
+      ],
+      "references": []
+    },
+    {
+      "id": "summary",
+      "path": "/summary/ai-bigdata/AI/prompt-engineering-roadmap/summary",
+      "name": "Prompt 质量评估与总结",
+      "group": "ai",
+      "val": 12,
+      "sources": [
+        "overview",
+        "level-1-ai-native",
+        "level-2-rag",
+        "level-3-agent",
+        "level-4-production"
+      ],
+      "references": [
+        "prompt",
+        "career"
+      ]
+    },
+    {
+      "id": "overview",
+      "path": "/summary/ai-bigdata/AI/prompt-engineering-roadmap/overview",
+      "name": "AI Prompt Engineering Roadmap - 概述",
+      "group": "ai",
+      "val": 13,
+      "sources": [],
+      "references": [
+        "level-1-ai-native",
+        "level-2-rag",
+        "level-3-agent",
+        "level-4-production",
+        "summary",
+        "lays-in-ai"
+      ]
+    },
+    {
+      "id": "level-4-production",
+      "path": "/summary/ai-bigdata/AI/prompt-engineering-roadmap/level-4-production",
+      "name": "Level 4 - 全栈落地与生产优化",
+      "group": "ai",
+      "val": 11,
+      "sources": [
+        "overview",
+        "level-3-agent"
+      ],
+      "references": [
+        "summary",
+        "lays-in-ai",
+        "career"
+      ]
+    },
+    {
+      "id": "level-3-agent",
+      "path": "/summary/ai-bigdata/AI/prompt-engineering-roadmap/level-3-agent",
+      "name": "Level 3 - Agent 架构与可观测性",
+      "group": "ai",
+      "val": 12,
+      "sources": [
+        "overview",
+        "level-2-rag"
+      ],
+      "references": [
+        "level-4-production",
+        "maxi-model-capacity",
+        "lays-in-ai"
+      ]
+    },
+    {
+      "id": "level-2-rag",
+      "path": "/summary/ai-bigdata/AI/prompt-engineering-roadmap/level-2-rag",
+      "name": "Level 2 - RAG 应用开发与异构系统架构",
+      "group": "ai",
+      "val": 10,
+      "sources": [
+        "overview",
+        "level-1-ai-native"
+      ],
+      "references": [
+        "level-3-agent",
+        "lays-in-ai"
+      ]
+    },
+    {
+      "id": "level-1-ai-native",
+      "path": "/summary/ai-bigdata/AI/prompt-engineering-roadmap/level-1-ai-native",
+      "name": "Level 1 - AI-Native 工作流与基础设施",
+      "group": "ai",
+      "val": 17,
+      "sources": [
+        "overview"
+      ],
+      "references": [
+        "level-2-rag",
+        "mcp",
+        "prompt",
+        "wsl-opencode",
+        "oh-my-opencode",
+        "vibe-coding"
+      ]
+    }
+  ],
+  "links": [
+    {
+      "source": "level-1-ai-native",
+      "target": "wsl-opencode"
+    },
+    {
+      "source": "wsl-opencode",
+      "target": "oh-my-opencode"
+    },
+    {
+      "source": "wsl-opencode",
+      "target": "vibe-coding"
+    },
+    {
+      "source": "level-1-ai-native",
+      "target": "vibe-coding"
+    },
+    {
+      "source": "vibe-coding",
+      "target": "future-vibecoding"
+    },
+    {
+      "source": "vibe-coding",
+      "target": "oh-my-opencode"
+    },
+    {
+      "source": "vibe-coding",
+      "target": "wsl-opencode"
+    },
+    {
+      "source": "level-1-ai-native",
+      "target": "prompt"
+    },
+    {
+      "source": "summary",
+      "target": "prompt"
+    },
+    {
+      "source": "prompt",
+      "target": "maxi-model-capacity"
+    },
+    {
+      "source": "level-1-ai-native",
+      "target": "oh-my-opencode"
+    },
+    {
+      "source": "wsl-opencode",
+      "target": "oh-my-opencode"
+    },
+    {
+      "source": "oh-my-opencode",
+      "target": "vibe-coding"
+    },
+    {
+      "source": "oh-my-opencode",
+      "target": "mcp"
+    },
+    {
+      "source": "level-1-ai-native",
+      "target": "mcp"
+    },
+    {
+      "source": "mcp",
+      "target": "maxi-model-capacity"
+    },
+    {
+      "source": "mcp",
+      "target": "wsl-opencode"
+    },
+    {
+      "source": "mcp",
+      "target": "oh-my-opencode"
+    },
+    {
+      "source": "lays-in-ai",
+      "target": "maxi-model-capacity"
+    },
+    {
+      "source": "level-3-agent",
+      "target": "maxi-model-capacity"
+    },
+    {
+      "source": "maxi-model-capacity",
+      "target": "prompt"
+    },
+    {
+      "source": "maxi-model-capacity",
+      "target": "mcp"
+    },
+    {
+      "source": "overview",
+      "target": "lays-in-ai"
+    },
+    {
+      "source": "lays-in-ai",
+      "target": "level-2-rag"
+    },
+    {
+      "source": "lays-in-ai",
+      "target": "level-3-agent"
+    },
+    {
+      "source": "lays-in-ai",
+      "target": "level-4-production"
+    },
+    {
+      "source": "lays-in-ai",
+      "target": "maxi-model-capacity"
+    },
+    {
+      "source": "vibe-coding",
+      "target": "future-vibecoding"
+    },
+    {
+      "source": "career",
+      "target": "future-vibecoding"
+    },
+    {
+      "source": "future-vibecoding",
+      "target": "oh-my-opencode"
+    },
+    {
+      "source": "level-4-production",
+      "target": "career"
+    },
+    {
+      "source": "summary",
+      "target": "career"
+    },
+    {
+      "source": "career",
+      "target": "future-vibecoding"
+    },
+    {
+      "source": "career",
+      "target": "lays-in-ai"
+    },
+    {
+      "source": "level-1-ai-native",
+      "target": "ai-problems"
+    },
+    {
+      "source": "lays-in-ai",
+      "target": "ai-formula"
+    },
+    {
+      "source": "overview",
+      "target": "summary"
+    },
+    {
+      "source": "level-1-ai-native",
+      "target": "summary"
+    },
+    {
+      "source": "level-2-rag",
+      "target": "summary"
+    },
+    {
+      "source": "level-3-agent",
+      "target": "summary"
+    },
+    {
+      "source": "level-4-production",
+      "target": "summary"
+    },
+    {
+      "source": "summary",
+      "target": "prompt"
+    },
+    {
+      "source": "summary",
+      "target": "career"
+    },
+    {
+      "source": "overview",
+      "target": "level-1-ai-native"
+    },
+    {
+      "source": "overview",
+      "target": "level-2-rag"
+    },
+    {
+      "source": "overview",
+      "target": "level-3-agent"
+    },
+    {
+      "source": "overview",
+      "target": "level-4-production"
+    },
+    {
+      "source": "overview",
+      "target": "summary"
+    },
+    {
+      "source": "overview",
+      "target": "lays-in-ai"
+    },
+    {
+      "source": "overview",
+      "target": "level-4-production"
+    },
+    {
+      "source": "level-3-agent",
+      "target": "level-4-production"
+    },
+    {
+      "source": "level-4-production",
+      "target": "summary"
+    },
+    {
+      "source": "level-4-production",
+      "target": "lays-in-ai"
+    },
+    {
+      "source": "level-4-production",
+      "target": "career"
+    },
+    {
+      "source": "overview",
+      "target": "level-3-agent"
+    },
+    {
+      "source": "level-2-rag",
+      "target": "level-3-agent"
+    },
+    {
+      "source": "level-3-agent",
+      "target": "level-4-production"
+    },
+    {
+      "source": "level-3-agent",
+      "target": "maxi-model-capacity"
+    },
+    {
+      "source": "level-3-agent",
+      "target": "lays-in-ai"
+    },
+    {
+      "source": "overview",
+      "target": "level-2-rag"
+    },
+    {
+      "source": "level-1-ai-native",
+      "target": "level-2-rag"
+    },
+    {
+      "source": "level-2-rag",
+      "target": "level-3-agent"
+    },
+    {
+      "source": "level-2-rag",
+      "target": "lays-in-ai"
+    },
+    {
+      "source": "overview",
+      "target": "level-1-ai-native"
+    },
+    {
+      "source": "level-1-ai-native",
+      "target": "level-2-rag"
+    },
+    {
+      "source": "level-1-ai-native",
+      "target": "mcp"
+    },
+    {
+      "source": "level-1-ai-native",
+      "target": "prompt"
+    },
+    {
+      "source": "level-1-ai-native",
+      "target": "wsl-opencode"
+    },
+    {
+      "source": "level-1-ai-native",
+      "target": "oh-my-opencode"
+    },
+    {
+      "source": "level-1-ai-native",
+      "target": "vibe-coding"
+    }
+  ]
+}
