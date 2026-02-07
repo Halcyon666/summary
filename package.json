@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "docusaurus start --host 0.0.0.0 --no-open",
-    "build": "docusaurus build",
+    "start": "node scripts/generate-graph.js && docusaurus start --host 0.0.0.0 --no-open",
+    "build": "node scripts/generate-graph.js && docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
@@ -36,6 +36,7 @@
     "prism-react-renderer": "^2.4.1",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
+    "react-force-graph-2d": "^1.29.1",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0"
   },
@@ -45,6 +46,9 @@
     "@types/node": "^25.0.2",
     "@types/react": "^19.2.7",
     "baseline-browser-mapping": "^2.9.7",
+    "glob": "^13.0.1",
+    "gray-matter": "^4.0.3",
+    "ts-node": "^10.9.2",
     "typescript": "~5.9.3"
   },
   "browserslist": {

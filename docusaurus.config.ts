@@ -163,6 +163,7 @@ const config: Config = {
           position: "left",
           label: "docs",
         },
+        {to: '/graph', label: 'Graph', position: 'left'},
         // {to: '/blog', label: 'Blog', position: 'left'},
         {
           href: "https://github.com/Halcyon666/",
@@ -281,7 +282,10 @@ const config: Config = {
       crossorigin: "anonymous",
     },
   ], */
-  plugins: ["@docusaurus/theme-live-codeblock", "docusaurus-plugin-image-zoom"],
+  plugins: [
+    "@docusaurus/theme-live-codeblock",
+    "docusaurus-plugin-image-zoom",
+  ],
 };
 
 export default config;
