@@ -22,9 +22,25 @@
         "introduction"
       ],
       "group": "documentation",
-      "val": 1,
+      "val": 16,
       "sources": [],
-      "references": []
+      "references": [
+        "overview",
+        "hadoop",
+        "spring-core",
+        "python-problems",
+        "redis",
+        "mybatis-plus-quick-start",
+        "bubble-sort",
+        "common-shell-command",
+        "docker-command-and-dockerfile",
+        "k8s-common-used-command",
+        "vue3-starter",
+        "react-learn-2025",
+        "pnpm",
+        "develop-software-tips",
+        "command-usage"
+      ]
     },
     {
       "id": "regex",
@@ -92,8 +108,10 @@
         "tools"
       ],
       "group": "development",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "develop-software-tips"
+      ],
       "references": []
     },
     {
@@ -106,8 +124,10 @@
         "tools"
       ],
       "group": "development",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "develop-software-tips"
+      ],
       "references": []
     },
     {
@@ -120,9 +140,14 @@
         "tools"
       ],
       "group": "development",
-      "val": 1,
-      "sources": [],
-      "references": []
+      "val": 4,
+      "sources": [
+        "intro"
+      ],
+      "references": [
+        "git-commands",
+        "gradle-maven-configuration"
+      ]
     },
     {
       "id": "win11-release-update",
@@ -134,8 +159,10 @@
         "learning"
       ],
       "group": "books",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "command-usage"
+      ],
       "references": []
     },
     {
@@ -148,8 +175,10 @@
         "learning"
       ],
       "group": "books",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "command-usage"
+      ],
       "references": []
     },
     {
@@ -162,9 +191,16 @@
         "learning"
       ],
       "group": "books",
-      "val": 1,
-      "sources": [],
-      "references": []
+      "val": 13,
+      "sources": [
+        "intro"
+      ],
+      "references": [
+        "cnblogs-simple-memory-theme--beautification",
+        "cnblogs-theme-silence-configure-plain-style-theme",
+        "environment",
+        "win11-release-update"
+      ]
     },
     {
       "id": "cnblogs-theme-silence-configure-plain-style-theme",
@@ -176,8 +212,10 @@
         "learning"
       ],
       "group": "books",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "command-usage"
+      ],
       "references": []
     },
     {
@@ -190,8 +228,10 @@
         "learning"
       ],
       "group": "books",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "command-usage"
+      ],
       "references": []
     },
     {
@@ -204,8 +244,10 @@
         "learning"
       ],
       "group": "books",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "command-usage"
+      ],
       "references": []
     },
     {
@@ -218,8 +260,10 @@
         "learning"
       ],
       "group": "books",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "command-usage"
+      ],
       "references": []
     },
     {
@@ -232,8 +276,10 @@
         "learning"
       ],
       "group": "books",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "command-usage"
+      ],
       "references": []
     },
     {
@@ -246,8 +292,10 @@
         "learning"
       ],
       "group": "books",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "command-usage"
+      ],
       "references": []
     },
     {
@@ -260,8 +308,10 @@
         "learning"
       ],
       "group": "books",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "command-usage"
+      ],
       "references": []
     },
     {
@@ -274,8 +324,10 @@
         "learning"
       ],
       "group": "books",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "command-usage"
+      ],
       "references": []
     },
     {
@@ -288,8 +340,10 @@
         "learning"
       ],
       "group": "books",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "command-usage"
+      ],
       "references": []
     },
     {
@@ -348,9 +402,16 @@
         "react"
       ],
       "group": "frontend",
-      "val": 1,
-      "sources": [],
-      "references": []
+      "val": 6,
+      "sources": [
+        "intro"
+      ],
+      "references": [
+        "vue-grammer-one",
+        "vue-grammer-two",
+        "vue-project-notes",
+        "vue-route"
+      ]
     },
     {
       "id": "vue-route",
@@ -363,8 +424,10 @@
         "react"
       ],
       "group": "frontend",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "vue3-starter"
+      ],
       "references": []
     },
     {
@@ -378,8 +441,10 @@
         "react"
       ],
       "group": "frontend",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "vue3-starter"
+      ],
       "references": []
     },
     {
@@ -393,8 +458,10 @@
         "react"
       ],
       "group": "frontend",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "vue3-starter"
+      ],
       "references": []
     },
     {
@@ -408,8 +475,10 @@
         "react"
       ],
       "group": "frontend",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "vue3-starter"
+      ],
       "references": []
     },
     {
@@ -423,9 +492,13 @@
         "react"
       ],
       "group": "frontend",
-      "val": 1,
-      "sources": [],
-      "references": []
+      "val": 3,
+      "sources": [
+        "intro"
+      ],
+      "references": [
+        "integrate-husky-prettier-etc"
+      ]
     },
     {
       "id": "integrate-husky-prettier-etc",
@@ -438,8 +511,10 @@
         "react"
       ],
       "group": "frontend",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "pnpm"
+      ],
       "references": []
     },
     {
@@ -483,8 +558,10 @@
         "react"
       ],
       "group": "frontend",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "react-learn-2025"
+      ],
       "references": []
     },
     {
@@ -498,8 +575,10 @@
         "react"
       ],
       "group": "frontend",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "react-learn-2025"
+      ],
       "references": []
     },
     {
@@ -513,8 +592,10 @@
         "react"
       ],
       "group": "frontend",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "react-learn-2025"
+      ],
       "references": []
     },
     {
@@ -528,9 +609,15 @@
         "react"
       ],
       "group": "frontend",
-      "val": 1,
-      "sources": [],
-      "references": []
+      "val": 5,
+      "sources": [
+        "intro"
+      ],
+      "references": [
+        "react-naming-conventions",
+        "react-problems",
+        "react-reference"
+      ]
     },
     {
       "id": "jquery-revese-selector",
@@ -573,9 +660,13 @@
         "docker"
       ],
       "group": "containerization",
-      "val": 1,
-      "sources": [],
-      "references": []
+      "val": 3,
+      "sources": [
+        "intro"
+      ],
+      "references": [
+        "awk-sed-quick-start"
+      ]
     },
     {
       "id": "awk-sed-quick-start",
@@ -588,8 +679,10 @@
         "docker"
       ],
       "group": "containerization",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "common-shell-command"
+      ],
       "references": []
     },
     {
@@ -603,9 +696,13 @@
         "docker"
       ],
       "group": "containerization",
-      "val": 1,
-      "sources": [],
-      "references": []
+      "val": 3,
+      "sources": [
+        "intro"
+      ],
+      "references": [
+        "centos8-instal-k8s"
+      ]
     },
     {
       "id": "centos8-instal-k8s",
@@ -618,8 +715,10 @@
         "docker"
       ],
       "group": "containerization",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "k8s-common-used-command"
+      ],
       "references": []
     },
     {
@@ -633,8 +732,10 @@
         "docker"
       ],
       "group": "containerization",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "docker-command-and-dockerfile"
+      ],
       "references": []
     },
     {
@@ -648,8 +749,10 @@
         "docker"
       ],
       "group": "containerization",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "docker-command-and-dockerfile"
+      ],
       "references": []
     },
     {
@@ -663,8 +766,10 @@
         "docker"
       ],
       "group": "containerization",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "docker-command-and-dockerfile"
+      ],
       "references": []
     },
     {
@@ -678,9 +783,15 @@
         "docker"
       ],
       "group": "containerization",
-      "val": 1,
-      "sources": [],
-      "references": []
+      "val": 5,
+      "sources": [
+        "intro"
+      ],
+      "references": [
+        "docker-compose-configure-redis-cluster-jenkins",
+        "docker-destop-configuration",
+        "idea-docker-deployment"
+      ]
     },
     {
       "id": "python-replacement-script",
@@ -693,8 +804,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "python-problems"
+      ],
       "references": []
     },
     {
@@ -708,9 +821,13 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
-      "references": []
+      "val": 3,
+      "sources": [
+        "intro"
+      ],
+      "references": [
+        "python-replacement-script"
+      ]
     },
     {
       "id": "redis",
@@ -723,9 +840,15 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
-      "references": []
+      "val": 5,
+      "sources": [
+        "intro"
+      ],
+      "references": [
+        "camunda",
+        "kafka",
+        "rabbitmq"
+      ]
     },
     {
       "id": "rabbitmq",
@@ -738,8 +861,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "redis"
+      ],
       "references": []
     },
     {
@@ -753,8 +878,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "redis"
+      ],
       "references": []
     },
     {
@@ -768,8 +895,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "redis"
+      ],
       "references": []
     },
     {
@@ -783,8 +912,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -798,8 +929,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -813,9 +946,15 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
-      "references": []
+      "val": 40,
+      "sources": [
+        "intro"
+      ],
+      "references": [
+        "application-context",
+        "bean-creating-process",
+        "bean-factory-post-processor"
+      ]
     },
     {
       "id": "bean-factory-post-processor",
@@ -828,8 +967,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -843,8 +984,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -858,8 +1001,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -873,8 +1018,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -888,8 +1035,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -903,8 +1052,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -918,8 +1069,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -933,8 +1086,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -948,8 +1103,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -963,8 +1120,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -978,8 +1137,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -993,8 +1154,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1008,8 +1171,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1023,8 +1188,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1038,8 +1205,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1053,8 +1222,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1068,8 +1239,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1083,8 +1256,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1098,8 +1273,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1113,8 +1290,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1128,8 +1307,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1143,8 +1324,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1158,8 +1341,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1173,8 +1358,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1188,8 +1375,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1203,8 +1392,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1218,8 +1409,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1233,8 +1426,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1248,8 +1443,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1263,8 +1460,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1278,8 +1477,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1293,8 +1494,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1308,8 +1511,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1322,8 +1527,10 @@
         "frontend"
       ],
       "group": "case-study",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1337,8 +1544,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1352,8 +1561,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
       "references": []
     },
     {
@@ -1367,8 +1578,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "mybatis-plus-quick-start"
+      ],
       "references": []
     },
     {
@@ -1382,8 +1595,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "mybatis-plus-quick-start"
+      ],
       "references": []
     },
     {
@@ -1397,8 +1612,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "mybatis-plus-quick-start"
+      ],
       "references": []
     },
     {
@@ -1412,9 +1629,17 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
-      "references": []
+      "val": 7,
+      "sources": [
+        "intro"
+      ],
+      "references": [
+        "java-case-distribution",
+        "mybatis-plus-code-generate",
+        "mysql-procedure",
+        "oracle-procedure",
+        "transaction-process"
+      ]
     },
     {
       "id": "mybatis-plus-code-generate",
@@ -1427,8 +1652,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "mybatis-plus-quick-start"
+      ],
       "references": []
     },
     {
@@ -1442,8 +1669,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "mybatis-plus-quick-start"
+      ],
       "references": []
     },
     {
@@ -1457,8 +1686,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "bubble-sort"
+      ],
       "references": []
     },
     {
@@ -1472,8 +1703,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "bubble-sort"
+      ],
       "references": []
     },
     {
@@ -1487,8 +1720,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "bubble-sort"
+      ],
       "references": []
     },
     {
@@ -1502,8 +1737,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "bubble-sort"
+      ],
       "references": []
     },
     {
@@ -1517,8 +1754,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "bubble-sort"
+      ],
       "references": []
     },
     {
@@ -1532,8 +1771,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "bubble-sort"
+      ],
       "references": []
     },
     {
@@ -1547,8 +1788,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "bubble-sort"
+      ],
       "references": []
     },
     {
@@ -1562,8 +1805,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "bubble-sort"
+      ],
       "references": []
     },
     {
@@ -1577,8 +1822,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "bubble-sort"
+      ],
       "references": []
     },
     {
@@ -1592,8 +1839,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "bubble-sort"
+      ],
       "references": []
     },
     {
@@ -1607,9 +1856,24 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
-      "references": []
+      "val": 14,
+      "sources": [
+        "intro"
+      ],
+      "references": [
+        "base-sort",
+        "binary-insert",
+        "head-sort",
+        "insert-sort",
+        "kmp",
+        "leet-code-4-power",
+        "leet-code-return-twomedian-of-two-positive-intergers",
+        "leet-code-two-link-table-add",
+        "merge-sort",
+        "quick-sort",
+        "select-sort",
+        "shell-sort"
+      ]
     },
     {
       "id": "binary-insert",
@@ -1622,8 +1886,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "bubble-sort"
+      ],
       "references": []
     },
     {
@@ -1637,8 +1903,10 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "bubble-sort"
+      ],
       "references": []
     },
     {
@@ -1653,6 +1921,7 @@
       "group": "ai",
       "val": 2,
       "sources": [
+        "hadoop",
         "hadoop"
       ],
       "references": []
@@ -1667,11 +1936,16 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 6,
+      "val": 7,
       "sources": [
+        "intro",
         "lays-in-ai"
       ],
       "references": [
+        "flink-docker-compose",
+        "hbase",
+        "full-hadoop-reference",
+        "hadoop-overview",
         "hbase",
         "flink-docker-compose",
         "full-hadoop-reference",
@@ -1690,6 +1964,7 @@
       "group": "ai",
       "val": 2,
       "sources": [
+        "hadoop",
         "hadoop"
       ],
       "references": []
@@ -1706,6 +1981,7 @@
       "group": "ai",
       "val": 2,
       "sources": [
+        "hadoop",
         "hadoop"
       ],
       "references": []
@@ -1722,6 +1998,7 @@
       "group": "ai",
       "val": 2,
       "sources": [
+        "hadoop",
         "hadoop"
       ],
       "references": []
@@ -1974,7 +2251,7 @@
         "architecture"
       ],
       "group": "ai",
-      "val": 7,
+      "val": 8,
       "sources": [],
       "references": [
         "level-1-ai-native",
@@ -2078,6 +2355,406 @@
     }
   ],
   "filteredLinks": [
+    {
+      "source": "intro",
+      "target": "overview"
+    },
+    {
+      "source": "intro",
+      "target": "hadoop"
+    },
+    {
+      "source": "intro",
+      "target": "spring-core"
+    },
+    {
+      "source": "intro",
+      "target": "python-problems"
+    },
+    {
+      "source": "intro",
+      "target": "redis"
+    },
+    {
+      "source": "intro",
+      "target": "mybatis-plus-quick-start"
+    },
+    {
+      "source": "intro",
+      "target": "bubble-sort"
+    },
+    {
+      "source": "intro",
+      "target": "common-shell-command"
+    },
+    {
+      "source": "intro",
+      "target": "docker-command-and-dockerfile"
+    },
+    {
+      "source": "intro",
+      "target": "k8s-common-used-command"
+    },
+    {
+      "source": "intro",
+      "target": "vue3-starter"
+    },
+    {
+      "source": "intro",
+      "target": "react-learn-2025"
+    },
+    {
+      "source": "intro",
+      "target": "pnpm"
+    },
+    {
+      "source": "intro",
+      "target": "develop-software-tips"
+    },
+    {
+      "source": "intro",
+      "target": "command-usage"
+    },
+    {
+      "source": "develop-software-tips",
+      "target": "gradle-maven-configuration"
+    },
+    {
+      "source": "develop-software-tips",
+      "target": "git-commands"
+    },
+    {
+      "source": "command-usage",
+      "target": "win11-release-update"
+    },
+    {
+      "source": "command-usage",
+      "target": "environment recovery"
+    },
+    {
+      "source": "command-usage",
+      "target": "cnblogs-simple-memory-theme--beautification"
+    },
+    {
+      "source": "command-usage",
+      "target": "cnblogs-theme-silence-configure-plain-style-theme"
+    },
+    {
+      "source": "command-usage",
+      "target": "useful-links"
+    },
+    {
+      "source": "command-usage",
+      "target": "connitive-awaking-unloc-the-drrving-force-for-self-change"
+    },
+    {
+      "source": "command-usage",
+      "target": "os-lean-notes"
+    },
+    {
+      "source": "command-usage",
+      "target": "computer-network-transmit-layer"
+    },
+    {
+      "source": "command-usage",
+      "target": "computer-network-concept"
+    },
+    {
+      "source": "command-usage",
+      "target": "computer-network-apps"
+    },
+    {
+      "source": "command-usage",
+      "target": "computer-composition-theory"
+    },
+    {
+      "source": "vue3-starter",
+      "target": "vue-grammer-one"
+    },
+    {
+      "source": "vue3-starter",
+      "target": "vue-grammer-two"
+    },
+    {
+      "source": "vue3-starter",
+      "target": "vue-project-notes"
+    },
+    {
+      "source": "vue3-starter",
+      "target": "vue-route"
+    },
+    {
+      "source": "pnpm",
+      "target": "integrate-husky-prettier-etc"
+    },
+    {
+      "source": "react-learn-2025",
+      "target": "react-reference"
+    },
+    {
+      "source": "react-learn-2025",
+      "target": "react-problems"
+    },
+    {
+      "source": "react-learn-2025",
+      "target": "react-naming-conventions"
+    },
+    {
+      "source": "common-shell-command",
+      "target": "awk-sed-quick-start"
+    },
+    {
+      "source": "k8s-common-used-command",
+      "target": "centos8-instal-k8s"
+    },
+    {
+      "source": "docker-command-and-dockerfile",
+      "target": "idea-docker-deployment"
+    },
+    {
+      "source": "docker-command-and-dockerfile",
+      "target": "docker-destop-configuration"
+    },
+    {
+      "source": "docker-command-and-dockerfile",
+      "target": "docker-compose-configure-redis-cluster-jenkins"
+    },
+    {
+      "source": "python-problems",
+      "target": "python-replacement-script"
+    },
+    {
+      "source": "redis",
+      "target": "camunda"
+    },
+    {
+      "source": "redis",
+      "target": "kafka"
+    },
+    {
+      "source": "redis",
+      "target": "rabbitmq"
+    },
+    {
+      "source": "spring-core",
+      "target": "ioc-basics"
+    },
+    {
+      "source": "spring-core",
+      "target": "ioc-advanced"
+    },
+    {
+      "source": "spring-core",
+      "target": "application-context"
+    },
+    {
+      "source": "spring-core",
+      "target": "bean-creating-process"
+    },
+    {
+      "source": "spring-core",
+      "target": "bean-factory-post-processor"
+    },
+    {
+      "source": "spring-core",
+      "target": "schema-configuration"
+    },
+    {
+      "source": "spring-core",
+      "target": "pointcut"
+    },
+    {
+      "source": "spring-core",
+      "target": "joinpoint"
+    },
+    {
+      "source": "spring-core",
+      "target": "aspect"
+    },
+    {
+      "source": "spring-core",
+      "target": "advice"
+    },
+    {
+      "source": "spring-core",
+      "target": "weaving-programmatic"
+    },
+    {
+      "source": "spring-core",
+      "target": "weaving-autoproxy"
+    },
+    {
+      "source": "spring-core",
+      "target": "full-aspectj-temp"
+    },
+    {
+      "source": "spring-core",
+      "target": "aspectj-weaving"
+    },
+    {
+      "source": "spring-core",
+      "target": "aspectj-overview"
+    },
+    {
+      "source": "spring-core",
+      "target": "spring-boot"
+    },
+    {
+      "source": "spring-core",
+      "target": "production"
+    },
+    {
+      "source": "spring-core",
+      "target": "oracle"
+    },
+    {
+      "source": "spring-core",
+      "target": "junit-stuff"
+    },
+    {
+      "source": "spring-core",
+      "target": "java-problems"
+    },
+    {
+      "source": "spring-core",
+      "target": "github-problems"
+    },
+    {
+      "source": "spring-core",
+      "target": "trace"
+    },
+    {
+      "source": "spring-core",
+      "target": "netty"
+    },
+    {
+      "source": "spring-core",
+      "target": "lambda"
+    },
+    {
+      "source": "spring-core",
+      "target": "file-upload"
+    },
+    {
+      "source": "spring-core",
+      "target": "class-description"
+    },
+    {
+      "source": "spring-core",
+      "target": "annotation-processor"
+    },
+    {
+      "source": "spring-core",
+      "target": "java-case-interview-two"
+    },
+    {
+      "source": "spring-core",
+      "target": "java-case-interview-one"
+    },
+    {
+      "source": "spring-core",
+      "target": "functional-register-engine"
+    },
+    {
+      "source": "spring-core",
+      "target": "design-pattern"
+    },
+    {
+      "source": "spring-core",
+      "target": "volatile-memory-domain"
+    },
+    {
+      "source": "spring-core",
+      "target": "lock"
+    },
+    {
+      "source": "spring-core",
+      "target": "jmm"
+    },
+    {
+      "source": "spring-core",
+      "target": "java-virtual-machine"
+    },
+    {
+      "source": "spring-core",
+      "target": "java-concurrent-cases"
+    },
+    {
+      "source": "spring-core",
+      "target": "final-memory-domain"
+    },
+    {
+      "source": "spring-core",
+      "target": "cpu-memory-domain"
+    },
+    {
+      "source": "mybatis-plus-quick-start",
+      "target": "transaction-process"
+    },
+    {
+      "source": "mybatis-plus-quick-start",
+      "target": "oracle-procedure"
+    },
+    {
+      "source": "mybatis-plus-quick-start",
+      "target": "mysql-procedure"
+    },
+    {
+      "source": "mybatis-plus-quick-start",
+      "target": "java-case-distribution"
+    },
+    {
+      "source": "mybatis-plus-quick-start",
+      "target": "mybatis-plus-code-generate"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "shell-sort"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "select-sort"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "quick-sort"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "merge-sort"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "leet-code-two-link-table-add"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "leet-code-return-twomedian-of-two-positive-intergers"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "leet-code-4-power"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "kmp"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "insert-sort"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "head-sort"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "base-sort"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "binary-insert"
+    },
     {
       "source": "hadoop",
       "target": "hbase"
