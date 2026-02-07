@@ -1651,8 +1651,10 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "hadoop"
+      ],
       "references": []
     },
     {
@@ -1665,9 +1667,16 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 1,
-      "sources": [],
-      "references": []
+      "val": 6,
+      "sources": [
+        "lays-in-ai"
+      ],
+      "references": [
+        "hbase",
+        "flink-docker-compose",
+        "full-hadoop-reference",
+        "hadoop-overview"
+      ]
     },
     {
       "id": "flink-docker-compose",
@@ -1679,8 +1688,10 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "hadoop"
+      ],
       "references": []
     },
     {
@@ -1693,8 +1704,10 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "hadoop"
+      ],
       "references": []
     },
     {
@@ -1707,8 +1720,10 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 1,
-      "sources": [],
+      "val": 2,
+      "sources": [
+        "hadoop"
+      ],
       "references": []
     },
     {
@@ -1723,7 +1738,7 @@
         "tutorial"
       ],
       "group": "ai",
-      "val": 7,
+      "val": 6,
       "sources": [
         "level-1-ai-native"
       ],
@@ -1742,7 +1757,7 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 6,
+      "val": 4,
       "sources": [
         "level-1-ai-native"
       ],
@@ -1760,7 +1775,7 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 7,
+      "val": 4,
       "sources": [
         "level-1-ai-native",
         "summary"
@@ -1781,7 +1796,7 @@
         "tutorial"
       ],
       "group": "ai",
-      "val": 7,
+      "val": 4,
       "sources": [
         "level-1-ai-native",
         "wsl-opencode"
@@ -1800,7 +1815,7 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 8,
+      "val": 5,
       "sources": [
         "level-1-ai-native"
       ],
@@ -1820,7 +1835,7 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 9,
+      "val": 5,
       "sources": [
         "lays-in-ai",
         "level-3-agent"
@@ -1840,7 +1855,7 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 13,
+      "val": 8,
       "sources": [
         "overview"
       ],
@@ -1848,7 +1863,8 @@
         "level-2-rag",
         "level-3-agent",
         "level-4-production",
-        "maxi-model-capacity"
+        "maxi-model-capacity",
+        "hadoop"
       ]
     },
     {
@@ -1862,7 +1878,7 @@
         "programming-mindset"
       ],
       "group": "vibecoding",
-      "val": 5,
+      "val": 3,
       "sources": [
         "vibe-coding",
         "career"
@@ -1879,7 +1895,7 @@
         "ai"
       ],
       "group": "career",
-      "val": 8,
+      "val": 4,
       "sources": [
         "level-4-production",
         "summary"
@@ -1899,9 +1915,10 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 2,
+      "val": 3,
       "sources": [
-        "level-1-ai-native"
+        "level-1-ai-native",
+        "wsl-opencode"
       ],
       "references": []
     },
@@ -1932,7 +1949,7 @@
         "interview"
       ],
       "group": "ai",
-      "val": 12,
+      "val": 8,
       "sources": [
         "overview",
         "level-1-ai-native",
@@ -1957,7 +1974,7 @@
         "architecture"
       ],
       "group": "ai",
-      "val": 13,
+      "val": 7,
       "sources": [],
       "references": [
         "level-1-ai-native",
@@ -1980,7 +1997,7 @@
         "level-4"
       ],
       "group": "ai",
-      "val": 11,
+      "val": 6,
       "sources": [
         "overview",
         "level-3-agent"
@@ -2003,7 +2020,7 @@
         "level-3"
       ],
       "group": "ai",
-      "val": 12,
+      "val": 7,
       "sources": [
         "overview",
         "level-2-rag"
@@ -2025,7 +2042,7 @@
         "level-2"
       ],
       "group": "ai",
-      "val": 10,
+      "val": 6,
       "sources": [
         "overview",
         "level-1-ai-native"
@@ -2046,7 +2063,7 @@
         "level-1"
       ],
       "group": "ai",
-      "val": 17,
+      "val": 10,
       "sources": [
         "overview"
       ],
@@ -2060,7 +2077,27 @@
       ]
     }
   ],
-  "links": [
+  "filteredLinks": [
+    {
+      "source": "hadoop",
+      "target": "hbase"
+    },
+    {
+      "source": "lays-in-ai",
+      "target": "hadoop"
+    },
+    {
+      "source": "hadoop",
+      "target": "flink-docker-compose"
+    },
+    {
+      "source": "hadoop",
+      "target": "full-hadoop-reference"
+    },
+    {
+      "source": "hadoop",
+      "target": "hadoop-overview"
+    },
     {
       "source": "level-1-ai-native",
       "target": "wsl-opencode"
@@ -2090,28 +2127,12 @@
       "target": "prompt"
     },
     {
-      "source": "prompt",
-      "target": "maxi-model-capacity"
-    },
-    {
       "source": "level-1-ai-native",
       "target": "oh-my-opencode"
     },
     {
-      "source": "wsl-opencode",
-      "target": "oh-my-opencode"
-    },
-    {
-      "source": "oh-my-opencode",
-      "target": "mcp"
-    },
-    {
       "source": "level-1-ai-native",
       "target": "mcp"
-    },
-    {
-      "source": "mcp",
-      "target": "maxi-model-capacity"
     },
     {
       "source": "mcp",
@@ -2154,14 +2175,6 @@
       "target": "level-4-production"
     },
     {
-      "source": "lays-in-ai",
-      "target": "maxi-model-capacity"
-    },
-    {
-      "source": "vibe-coding",
-      "target": "future-vibecoding"
-    },
-    {
       "source": "career",
       "target": "future-vibecoding"
     },
@@ -2174,15 +2187,11 @@
       "target": "career"
     },
     {
-      "source": "career",
-      "target": "future-vibecoding"
-    },
-    {
-      "source": "career",
-      "target": "lays-in-ai"
-    },
-    {
       "source": "level-1-ai-native",
+      "target": "ai-problems"
+    },
+    {
+      "source": "wsl-opencode",
       "target": "ai-problems"
     },
     {
@@ -2210,14 +2219,6 @@
       "target": "summary"
     },
     {
-      "source": "summary",
-      "target": "prompt"
-    },
-    {
-      "source": "summary",
-      "target": "career"
-    },
-    {
       "source": "overview",
       "target": "level-1-ai-native"
     },
@@ -2234,96 +2235,16 @@
       "target": "level-4-production"
     },
     {
-      "source": "overview",
-      "target": "summary"
-    },
-    {
-      "source": "overview",
-      "target": "lays-in-ai"
-    },
-    {
-      "source": "overview",
-      "target": "level-4-production"
-    },
-    {
       "source": "level-3-agent",
       "target": "level-4-production"
-    },
-    {
-      "source": "level-4-production",
-      "target": "summary"
-    },
-    {
-      "source": "level-4-production",
-      "target": "lays-in-ai"
-    },
-    {
-      "source": "level-4-production",
-      "target": "career"
-    },
-    {
-      "source": "overview",
-      "target": "level-3-agent"
     },
     {
       "source": "level-2-rag",
       "target": "level-3-agent"
     },
     {
-      "source": "level-3-agent",
-      "target": "level-4-production"
-    },
-    {
-      "source": "level-3-agent",
-      "target": "maxi-model-capacity"
-    },
-    {
-      "source": "level-3-agent",
-      "target": "lays-in-ai"
-    },
-    {
-      "source": "overview",
-      "target": "level-2-rag"
-    },
-    {
       "source": "level-1-ai-native",
       "target": "level-2-rag"
-    },
-    {
-      "source": "level-2-rag",
-      "target": "level-3-agent"
-    },
-    {
-      "source": "level-2-rag",
-      "target": "lays-in-ai"
-    },
-    {
-      "source": "overview",
-      "target": "level-1-ai-native"
-    },
-    {
-      "source": "level-1-ai-native",
-      "target": "level-2-rag"
-    },
-    {
-      "source": "level-1-ai-native",
-      "target": "mcp"
-    },
-    {
-      "source": "level-1-ai-native",
-      "target": "prompt"
-    },
-    {
-      "source": "level-1-ai-native",
-      "target": "wsl-opencode"
-    },
-    {
-      "source": "level-1-ai-native",
-      "target": "oh-my-opencode"
-    },
-    {
-      "source": "level-1-ai-native",
-      "target": "vibe-coding"
     }
   ]
 }

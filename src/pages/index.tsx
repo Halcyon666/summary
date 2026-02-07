@@ -38,20 +38,7 @@ function HomepageHeader() {
           >
             About Me
           </Link>
-          <Link
-            className="button button--secondary button--lg"
-            to="/graph"
-            style={{
-              marginLeft: "10px",
-              borderRadius: "8px",
-              padding: "0.8rem 1.5rem",
-              backgroundColor: "#ff0072",
-              color: "white",
-              border: "none",
-            }}
-          >
-            Knowledge Graph
-          </Link>
+
         </div>
       </div>
     </header>

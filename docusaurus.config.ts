@@ -177,8 +177,8 @@ const config: Config = {
           position: "left",
           label: "docs",
         },
-        {to: '/graph', label: 'Graph', position: 'left'},
-        {to: '/blog', label: 'Blog', position: 'left'},
+        { to: '/blog', label: 'blog', position: 'left' },
+        { to: '/graph', label: 'graph', position: 'left' },
         {
           href: "https://github.com/Halcyon666/",
           label: "GitHub",
