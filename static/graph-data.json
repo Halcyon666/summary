@@ -1,17 +1,6 @@
 {
   "nodes": [
     {
-      "id": "roadmap-context",
-      "path": "/summary/roadmap-context",
-      "name": "roadmap-context",
-      "description": "",
-      "allTags": [],
-      "group": "other",
-      "val": 1,
-      "sources": [],
-      "references": []
-    },
-    {
       "id": "intro",
       "path": "/summary/intro",
       "name": "Introduction",
@@ -22,25 +11,9 @@
         "introduction"
       ],
       "group": "documentation",
-      "val": 16,
+      "val": 1,
       "sources": [],
-      "references": [
-        "overview",
-        "hadoop",
-        "spring-core",
-        "python-problems",
-        "redis",
-        "mybatis-plus-quick-start",
-        "bubble-sort",
-        "common-shell-command",
-        "docker-command-and-dockerfile",
-        "k8s-common-used-command",
-        "vue3-starter",
-        "react-learn-2025",
-        "pnpm",
-        "develop-software-tips",
-        "command-usage"
-      ]
+      "references": []
     },
     {
       "id": "regex",
@@ -108,7 +81,7 @@
         "tools"
       ],
       "group": "development",
-      "val": 2,
+      "val": 3,
       "sources": [
         "develop-software-tips"
       ],
@@ -124,7 +97,7 @@
         "tools"
       ],
       "group": "development",
-      "val": 2,
+      "val": 3,
       "sources": [
         "develop-software-tips"
       ],
@@ -140,10 +113,8 @@
         "tools"
       ],
       "group": "development",
-      "val": 4,
-      "sources": [
-        "intro"
-      ],
+      "val": 5,
+      "sources": [],
       "references": [
         "git-commands",
         "gradle-maven-configuration"
@@ -159,7 +130,7 @@
         "learning"
       ],
       "group": "books",
-      "val": 2,
+      "val": 3,
       "sources": [
         "command-usage"
       ],
@@ -191,10 +162,8 @@
         "learning"
       ],
       "group": "books",
-      "val": 13,
-      "sources": [
-        "intro"
-      ],
+      "val": 15,
+      "sources": [],
       "references": [
         "cnblogs-simple-memory-theme--beautification",
         "cnblogs-theme-silence-configure-plain-style-theme",
@@ -212,7 +181,7 @@
         "learning"
       ],
       "group": "books",
-      "val": 2,
+      "val": 3,
       "sources": [
         "command-usage"
       ],
@@ -228,7 +197,7 @@
         "learning"
       ],
       "group": "books",
-      "val": 2,
+      "val": 3,
       "sources": [
         "command-usage"
       ],
@@ -402,10 +371,8 @@
         "react"
       ],
       "group": "frontend",
-      "val": 6,
-      "sources": [
-        "intro"
-      ],
+      "val": 9,
+      "sources": [],
       "references": [
         "vue-grammer-one",
         "vue-grammer-two",
@@ -424,7 +391,7 @@
         "react"
       ],
       "group": "frontend",
-      "val": 2,
+      "val": 3,
       "sources": [
         "vue3-starter"
       ],
@@ -441,7 +408,7 @@
         "react"
       ],
       "group": "frontend",
-      "val": 2,
+      "val": 3,
       "sources": [
         "vue3-starter"
       ],
@@ -458,7 +425,7 @@
         "react"
       ],
       "group": "frontend",
-      "val": 2,
+      "val": 3,
       "sources": [
         "vue3-starter"
       ],
@@ -475,7 +442,7 @@
         "react"
       ],
       "group": "frontend",
-      "val": 2,
+      "val": 3,
       "sources": [
         "vue3-starter"
       ],
@@ -493,9 +460,7 @@
       ],
       "group": "frontend",
       "val": 3,
-      "sources": [
-        "intro"
-      ],
+      "sources": [],
       "references": [
         "integrate-husky-prettier-etc"
       ]
@@ -511,7 +476,7 @@
         "react"
       ],
       "group": "frontend",
-      "val": 2,
+      "val": 3,
       "sources": [
         "pnpm"
       ],
@@ -558,7 +523,7 @@
         "react"
       ],
       "group": "frontend",
-      "val": 2,
+      "val": 3,
       "sources": [
         "react-learn-2025"
       ],
@@ -575,7 +540,7 @@
         "react"
       ],
       "group": "frontend",
-      "val": 2,
+      "val": 3,
       "sources": [
         "react-learn-2025"
       ],
@@ -592,7 +557,7 @@
         "react"
       ],
       "group": "frontend",
-      "val": 2,
+      "val": 3,
       "sources": [
         "react-learn-2025"
       ],
@@ -609,10 +574,8 @@
         "react"
       ],
       "group": "frontend",
-      "val": 5,
-      "sources": [
-        "intro"
-      ],
+      "val": 7,
+      "sources": [],
       "references": [
         "react-naming-conventions",
         "react-problems",
@@ -661,9 +624,7 @@
       ],
       "group": "containerization",
       "val": 3,
-      "sources": [
-        "intro"
-      ],
+      "sources": [],
       "references": [
         "awk-sed-quick-start"
       ]
@@ -679,7 +640,7 @@
         "docker"
       ],
       "group": "containerization",
-      "val": 2,
+      "val": 3,
       "sources": [
         "common-shell-command"
       ],
@@ -697,9 +658,7 @@
       ],
       "group": "containerization",
       "val": 3,
-      "sources": [
-        "intro"
-      ],
+      "sources": [],
       "references": [
         "centos8-instal-k8s"
       ]
@@ -715,7 +674,7 @@
         "docker"
       ],
       "group": "containerization",
-      "val": 2,
+      "val": 3,
       "sources": [
         "k8s-common-used-command"
       ],
@@ -732,7 +691,7 @@
         "docker"
       ],
       "group": "containerization",
-      "val": 2,
+      "val": 3,
       "sources": [
         "docker-command-and-dockerfile"
       ],
@@ -749,7 +708,7 @@
         "docker"
       ],
       "group": "containerization",
-      "val": 2,
+      "val": 3,
       "sources": [
         "docker-command-and-dockerfile"
       ],
@@ -766,7 +725,7 @@
         "docker"
       ],
       "group": "containerization",
-      "val": 2,
+      "val": 3,
       "sources": [
         "docker-command-and-dockerfile"
       ],
@@ -783,10 +742,8 @@
         "docker"
       ],
       "group": "containerization",
-      "val": 5,
-      "sources": [
-        "intro"
-      ],
+      "val": 7,
+      "sources": [],
       "references": [
         "docker-compose-configure-redis-cluster-jenkins",
         "docker-destop-configuration",
@@ -804,7 +761,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "python-problems"
       ],
@@ -822,9 +779,7 @@
       ],
       "group": "algorithm",
       "val": 3,
-      "sources": [
-        "intro"
-      ],
+      "sources": [],
       "references": [
         "python-replacement-script"
       ]
@@ -840,10 +795,8 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 5,
-      "sources": [
-        "intro"
-      ],
+      "val": 7,
+      "sources": [],
       "references": [
         "camunda",
         "kafka",
@@ -861,7 +814,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "redis"
       ],
@@ -878,7 +831,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "redis"
       ],
@@ -895,7 +848,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "redis"
       ],
@@ -946,10 +899,8 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 40,
-      "sources": [
-        "intro"
-      ],
+      "val": 42,
+      "sources": [],
       "references": [
         "application-context",
         "bean-creating-process",
@@ -967,7 +918,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "spring-core"
       ],
@@ -984,7 +935,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "spring-core"
       ],
@@ -1001,7 +952,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "spring-core"
       ],
@@ -1578,7 +1529,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "mybatis-plus-quick-start"
       ],
@@ -1595,7 +1546,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "mybatis-plus-quick-start"
       ],
@@ -1612,7 +1563,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "mybatis-plus-quick-start"
       ],
@@ -1629,10 +1580,8 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 7,
-      "sources": [
-        "intro"
-      ],
+      "val": 11,
+      "sources": [],
       "references": [
         "java-case-distribution",
         "mybatis-plus-code-generate",
@@ -1652,7 +1601,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "mybatis-plus-quick-start"
       ],
@@ -1669,7 +1618,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "mybatis-plus-quick-start"
       ],
@@ -1686,7 +1635,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "bubble-sort"
       ],
@@ -1703,7 +1652,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "bubble-sort"
       ],
@@ -1720,7 +1669,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "bubble-sort"
       ],
@@ -1737,7 +1686,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "bubble-sort"
       ],
@@ -1754,7 +1703,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "bubble-sort"
       ],
@@ -1771,7 +1720,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "bubble-sort"
       ],
@@ -1788,7 +1737,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "bubble-sort"
       ],
@@ -1805,7 +1754,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "bubble-sort"
       ],
@@ -1822,7 +1771,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "bubble-sort"
       ],
@@ -1839,7 +1788,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "bubble-sort"
       ],
@@ -1856,10 +1805,8 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 14,
-      "sources": [
-        "intro"
-      ],
+      "val": 25,
+      "sources": [],
       "references": [
         "base-sort",
         "binary-insert",
@@ -1886,7 +1833,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "bubble-sort"
       ],
@@ -1903,7 +1850,7 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
+      "val": 3,
       "sources": [
         "bubble-sort"
       ],
@@ -1919,7 +1866,7 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 2,
+      "val": 5,
       "sources": [
         "hadoop",
         "hadoop"
@@ -1936,9 +1883,8 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 7,
+      "val": 19,
       "sources": [
-        "intro",
         "lays-in-ai"
       ],
       "references": [
@@ -1962,7 +1908,7 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 2,
+      "val": 5,
       "sources": [
         "hadoop",
         "hadoop"
@@ -1979,7 +1925,7 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 2,
+      "val": 5,
       "sources": [
         "hadoop",
         "hadoop"
@@ -1996,7 +1942,7 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 2,
+      "val": 5,
       "sources": [
         "hadoop",
         "hadoop"
@@ -2015,7 +1961,7 @@
         "tutorial"
       ],
       "group": "ai",
-      "val": 6,
+      "val": 7,
       "sources": [
         "level-1-ai-native"
       ],
@@ -2034,7 +1980,7 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 4,
+      "val": 6,
       "sources": [
         "level-1-ai-native"
       ],
@@ -2052,14 +1998,12 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 4,
+      "val": 6,
       "sources": [
         "level-1-ai-native",
         "summary"
       ],
-      "references": [
-        "maxi-model-capacity"
-      ]
+      "references": []
     },
     {
       "id": "oh-my-opencode",
@@ -2073,7 +2017,7 @@
         "tutorial"
       ],
       "group": "ai",
-      "val": 4,
+      "val": 6,
       "sources": [
         "level-1-ai-native",
         "wsl-opencode"
@@ -2096,11 +2040,7 @@
       "sources": [
         "level-1-ai-native"
       ],
-      "references": [
-        "maxi-model-capacity",
-        "wsl-opencode",
-        "oh-my-opencode"
-      ]
+      "references": []
     },
     {
       "id": "maxi-model-capacity",
@@ -2112,7 +2052,7 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 5,
+      "val": 7,
       "sources": [
         "lays-in-ai",
         "level-3-agent"
@@ -2132,7 +2072,7 @@
         "machine-learning"
       ],
       "group": "ai",
-      "val": 8,
+      "val": 11,
       "sources": [
         "overview"
       ],
@@ -2155,7 +2095,7 @@
         "programming-mindset"
       ],
       "group": "vibecoding",
-      "val": 3,
+      "val": 5,
       "sources": [
         "vibe-coding",
         "career"
@@ -2172,14 +2112,13 @@
         "ai"
       ],
       "group": "career",
-      "val": 4,
+      "val": 7,
       "sources": [
         "level-4-production",
         "summary"
       ],
       "references": [
-        "future-vibecoding",
-        "lays-in-ai"
+        "future-vibecoding"
       ]
     },
     {
@@ -2226,7 +2165,7 @@
         "interview"
       ],
       "group": "ai",
-      "val": 8,
+      "val": 12,
       "sources": [
         "overview",
         "level-1-ai-native",
@@ -2251,7 +2190,7 @@
         "architecture"
       ],
       "group": "ai",
-      "val": 8,
+      "val": 13,
       "sources": [],
       "references": [
         "level-1-ai-native",
@@ -2274,14 +2213,13 @@
         "level-4"
       ],
       "group": "ai",
-      "val": 6,
+      "val": 10,
       "sources": [
         "overview",
         "level-3-agent"
       ],
       "references": [
         "summary",
-        "lays-in-ai",
         "career"
       ]
     },
@@ -2297,15 +2235,14 @@
         "level-3"
       ],
       "group": "ai",
-      "val": 7,
+      "val": 11,
       "sources": [
         "overview",
         "level-2-rag"
       ],
       "references": [
         "level-4-production",
-        "maxi-model-capacity",
-        "lays-in-ai"
+        "maxi-model-capacity"
       ]
     },
     {
@@ -2319,14 +2256,13 @@
         "level-2"
       ],
       "group": "ai",
-      "val": 6,
+      "val": 9,
       "sources": [
         "overview",
         "level-1-ai-native"
       ],
       "references": [
-        "level-3-agent",
-        "lays-in-ai"
+        "level-3-agent"
       ]
     },
     {
@@ -2340,7 +2276,7 @@
         "level-1"
       ],
       "group": "ai",
-      "val": 10,
+      "val": 17,
       "sources": [
         "overview"
       ],
@@ -2356,72 +2292,20 @@
   ],
   "filteredLinks": [
     {
-      "source": "intro",
-      "target": "overview"
-    },
-    {
-      "source": "intro",
-      "target": "hadoop"
-    },
-    {
-      "source": "intro",
-      "target": "spring-core"
-    },
-    {
-      "source": "intro",
-      "target": "python-problems"
-    },
-    {
-      "source": "intro",
-      "target": "redis"
-    },
-    {
-      "source": "intro",
-      "target": "mybatis-plus-quick-start"
-    },
-    {
-      "source": "intro",
-      "target": "bubble-sort"
-    },
-    {
-      "source": "intro",
-      "target": "common-shell-command"
-    },
-    {
-      "source": "intro",
-      "target": "docker-command-and-dockerfile"
-    },
-    {
-      "source": "intro",
-      "target": "k8s-common-used-command"
-    },
-    {
-      "source": "intro",
-      "target": "vue3-starter"
-    },
-    {
-      "source": "intro",
-      "target": "react-learn-2025"
-    },
-    {
-      "source": "intro",
-      "target": "pnpm"
-    },
-    {
-      "source": "intro",
-      "target": "develop-software-tips"
-    },
-    {
-      "source": "intro",
-      "target": "command-usage"
-    },
-    {
       "source": "develop-software-tips",
       "target": "gradle-maven-configuration"
     },
     {
       "source": "develop-software-tips",
       "target": "git-commands"
+    },
+    {
+      "source": "develop-software-tips",
+      "target": "git-commands"
+    },
+    {
+      "source": "develop-software-tips",
+      "target": "gradle-maven-configuration"
     },
     {
       "source": "command-usage",
@@ -2438,6 +2322,18 @@
     {
       "source": "command-usage",
       "target": "cnblogs-theme-silence-configure-plain-style-theme"
+    },
+    {
+      "source": "command-usage",
+      "target": "win11-release-update"
+    },
+    {
+      "source": "command-usage",
+      "target": "cnblogs-theme-silence-configure-plain-style-theme"
+    },
+    {
+      "source": "command-usage",
+      "target": "cnblogs-simple-memory-theme--beautification"
     },
     {
       "source": "command-usage",
@@ -2484,6 +2380,26 @@
       "target": "vue-route"
     },
     {
+      "source": "vue3-starter",
+      "target": "vue-route"
+    },
+    {
+      "source": "vue3-starter",
+      "target": "vue-project-notes"
+    },
+    {
+      "source": "vue3-starter",
+      "target": "vue-grammer-two"
+    },
+    {
+      "source": "vue3-starter",
+      "target": "vue-grammer-one"
+    },
+    {
+      "source": "pnpm",
+      "target": "integrate-husky-prettier-etc"
+    },
+    {
       "source": "pnpm",
       "target": "integrate-husky-prettier-etc"
     },
@@ -2500,8 +2416,28 @@
       "target": "react-naming-conventions"
     },
     {
+      "source": "react-learn-2025",
+      "target": "react-naming-conventions"
+    },
+    {
+      "source": "react-learn-2025",
+      "target": "react-problems"
+    },
+    {
+      "source": "react-learn-2025",
+      "target": "react-reference"
+    },
+    {
       "source": "common-shell-command",
       "target": "awk-sed-quick-start"
+    },
+    {
+      "source": "common-shell-command",
+      "target": "awk-sed-quick-start"
+    },
+    {
+      "source": "k8s-common-used-command",
+      "target": "centos8-instal-k8s"
     },
     {
       "source": "k8s-common-used-command",
@@ -2520,6 +2456,22 @@
       "target": "docker-compose-configure-redis-cluster-jenkins"
     },
     {
+      "source": "docker-command-and-dockerfile",
+      "target": "docker-compose-configure-redis-cluster-jenkins"
+    },
+    {
+      "source": "docker-command-and-dockerfile",
+      "target": "docker-destop-configuration"
+    },
+    {
+      "source": "docker-command-and-dockerfile",
+      "target": "idea-docker-deployment"
+    },
+    {
+      "source": "python-problems",
+      "target": "python-replacement-script"
+    },
+    {
       "source": "python-problems",
       "target": "python-replacement-script"
     },
@@ -2534,6 +2486,18 @@
     {
       "source": "redis",
       "target": "rabbitmq"
+    },
+    {
+      "source": "redis",
+      "target": "rabbitmq"
+    },
+    {
+      "source": "redis",
+      "target": "kafka"
+    },
+    {
+      "source": "redis",
+      "target": "camunda"
     },
     {
       "source": "spring-core",
@@ -2554,6 +2518,18 @@
     {
       "source": "spring-core",
       "target": "bean-factory-post-processor"
+    },
+    {
+      "source": "spring-core",
+      "target": "bean-factory-post-processor"
+    },
+    {
+      "source": "spring-core",
+      "target": "bean-creating-process"
+    },
+    {
+      "source": "spring-core",
+      "target": "application-context"
     },
     {
       "source": "spring-core",
@@ -2708,6 +2684,26 @@
       "target": "mybatis-plus-code-generate"
     },
     {
+      "source": "mybatis-plus-quick-start",
+      "target": "mysql-procedure"
+    },
+    {
+      "source": "mybatis-plus-quick-start",
+      "target": "oracle-procedure"
+    },
+    {
+      "source": "mybatis-plus-quick-start",
+      "target": "transaction-process"
+    },
+    {
+      "source": "mybatis-plus-quick-start",
+      "target": "mybatis-plus-code-generate"
+    },
+    {
+      "source": "mybatis-plus-quick-start",
+      "target": "java-case-distribution"
+    },
+    {
       "source": "bubble-sort",
       "target": "shell-sort"
     },
@@ -2756,6 +2752,58 @@
       "target": "binary-insert"
     },
     {
+      "source": "bubble-sort",
+      "target": "head-sort"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "insert-sort"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "kmp"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "leet-code-4-power"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "leet-code-return-twomedian-of-two-positive-intergers"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "leet-code-two-link-table-add"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "merge-sort"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "quick-sort"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "select-sort"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "shell-sort"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "binary-insert"
+    },
+    {
+      "source": "bubble-sort",
+      "target": "base-sort"
+    },
+    {
+      "source": "hadoop",
+      "target": "hbase"
+    },
+    {
       "source": "hadoop",
       "target": "hbase"
     },
@@ -2769,11 +2817,55 @@
     },
     {
       "source": "hadoop",
+      "target": "hbase"
+    },
+    {
+      "source": "hadoop",
       "target": "full-hadoop-reference"
     },
     {
       "source": "hadoop",
       "target": "hadoop-overview"
+    },
+    {
+      "source": "hadoop",
+      "target": "hbase"
+    },
+    {
+      "source": "hadoop",
+      "target": "flink-docker-compose"
+    },
+    {
+      "source": "hadoop",
+      "target": "full-hadoop-reference"
+    },
+    {
+      "source": "hadoop",
+      "target": "hadoop-overview"
+    },
+    {
+      "source": "hadoop",
+      "target": "flink-docker-compose"
+    },
+    {
+      "source": "hadoop",
+      "target": "flink-docker-compose"
+    },
+    {
+      "source": "hadoop",
+      "target": "hadoop-overview"
+    },
+    {
+      "source": "hadoop",
+      "target": "hadoop-overview"
+    },
+    {
+      "source": "hadoop",
+      "target": "full-hadoop-reference"
+    },
+    {
+      "source": "hadoop",
+      "target": "full-hadoop-reference"
     },
     {
       "source": "level-1-ai-native",
@@ -2808,16 +2900,16 @@
       "target": "oh-my-opencode"
     },
     {
-      "source": "level-1-ai-native",
+      "source": "wsl-opencode",
+      "target": "oh-my-opencode"
+    },
+    {
+      "source": "oh-my-opencode",
       "target": "mcp"
     },
     {
-      "source": "mcp",
-      "target": "wsl-opencode"
-    },
-    {
-      "source": "mcp",
-      "target": "oh-my-opencode"
+      "source": "level-1-ai-native",
+      "target": "mcp"
     },
     {
       "source": "lays-in-ai",
@@ -2852,6 +2944,18 @@
       "target": "level-4-production"
     },
     {
+      "source": "lays-in-ai",
+      "target": "maxi-model-capacity"
+    },
+    {
+      "source": "lays-in-ai",
+      "target": "hadoop"
+    },
+    {
+      "source": "vibe-coding",
+      "target": "future-vibecoding"
+    },
+    {
       "source": "career",
       "target": "future-vibecoding"
     },
@@ -2862,6 +2966,10 @@
     {
       "source": "summary",
       "target": "career"
+    },
+    {
+      "source": "career",
+      "target": "future-vibecoding"
     },
     {
       "source": "level-1-ai-native",
@@ -2896,6 +3004,14 @@
       "target": "summary"
     },
     {
+      "source": "summary",
+      "target": "prompt"
+    },
+    {
+      "source": "summary",
+      "target": "career"
+    },
+    {
       "source": "overview",
       "target": "level-1-ai-native"
     },
@@ -2912,16 +3028,84 @@
       "target": "level-4-production"
     },
     {
+      "source": "overview",
+      "target": "summary"
+    },
+    {
+      "source": "overview",
+      "target": "lays-in-ai"
+    },
+    {
+      "source": "overview",
+      "target": "level-4-production"
+    },
+    {
       "source": "level-3-agent",
       "target": "level-4-production"
+    },
+    {
+      "source": "level-4-production",
+      "target": "summary"
+    },
+    {
+      "source": "level-4-production",
+      "target": "career"
+    },
+    {
+      "source": "overview",
+      "target": "level-3-agent"
     },
     {
       "source": "level-2-rag",
       "target": "level-3-agent"
     },
     {
+      "source": "level-3-agent",
+      "target": "level-4-production"
+    },
+    {
+      "source": "level-3-agent",
+      "target": "maxi-model-capacity"
+    },
+    {
+      "source": "overview",
+      "target": "level-2-rag"
+    },
+    {
       "source": "level-1-ai-native",
       "target": "level-2-rag"
+    },
+    {
+      "source": "level-2-rag",
+      "target": "level-3-agent"
+    },
+    {
+      "source": "overview",
+      "target": "level-1-ai-native"
+    },
+    {
+      "source": "level-1-ai-native",
+      "target": "level-2-rag"
+    },
+    {
+      "source": "level-1-ai-native",
+      "target": "mcp"
+    },
+    {
+      "source": "level-1-ai-native",
+      "target": "prompt"
+    },
+    {
+      "source": "level-1-ai-native",
+      "target": "wsl-opencode"
+    },
+    {
+      "source": "level-1-ai-native",
+      "target": "oh-my-opencode"
+    },
+    {
+      "source": "level-1-ai-native",
+      "target": "vibe-coding"
     }
   ]
 }
