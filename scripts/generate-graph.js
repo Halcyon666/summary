@@ -46,8 +46,12 @@ function generateGraph() {
     
     const node = {
       id: id,
+      // Fix: routeBasePath is "" in docusaurus.config.ts, so remove '/docs' prefix
+      // Use absolute path relative to baseUrl
       path: baseUrl + '/' + docPath, 
       name: data.title || data.sidebar_label || id,
+      description: data.description || "", // Add description
+      allTags: data.tags || [], // Add all tags for display
       group: data.tags ? data.tags[0] : 'other', // Color by first tag
       val: 1, // Default size
       sources: data.sources || [],

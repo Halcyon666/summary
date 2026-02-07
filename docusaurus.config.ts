@@ -99,6 +99,20 @@ const config: Config = {
             return `https://github.com/Halcyon666/summary/edit/main/docs/${docPath}`;
           },
         },
+        blog: {
+          showReadingTime: true,
+          blogTitle: '博客',
+          blogDescription: '技术博客与分享',
+          postsPerPage: 10,
+          blogSidebarCount: 'ALL',
+          feedOptions: {
+            type: 'all',
+            copyright: `Copyright © ${new Date().getFullYear()} Halcyon666`,
+          },
+          editUrl: ({ blogPath }) => {
+            return `https://github.com/Halcyon666/summary/edit/main/blog/${blogPath}`;
+          },
+        },
         theme: {
           customCss: "./src/css/custom.css",
         },
@@ -164,7 +178,7 @@ const config: Config = {
           label: "docs",
         },
         {to: '/graph', label: 'Graph', position: 'left'},
-        // {to: '/blog', label: 'Blog', position: 'left'},
+        {to: '/blog', label: 'Blog', position: 'left'},
         {
           href: "https://github.com/Halcyon666/",
           label: "GitHub",

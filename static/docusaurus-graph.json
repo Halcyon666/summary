@@ -1,0 +1,908 @@
+[
+  {
+    "id": "AI-formula",
+    "title": "AI Formula",
+    "linkTo": [],
+    "referencedBy": [
+      "lays-in-ai"
+    ]
+  },
+  {
+    "id": "lays-in-ai",
+    "title": "AI 开发核心技术栈",
+    "linkTo": [
+      "AI-formula",
+      "maxi-model-capacity"
+    ],
+    "referencedBy": [
+      "career",
+      "level-2-rag",
+      "level-3-agent",
+      "level-4-production",
+      "overview"
+    ]
+  },
+  {
+    "id": "ai-problems",
+    "title": "AI Problems",
+    "linkTo": [],
+    "referencedBy": [
+      "level-1-ai-native"
+    ]
+  },
+  {
+    "id": "level-1-ai-native",
+    "title": "阶段一: AI-Native 工作流与基础设施 (Level 1)",
+    "linkTo": [
+      "ai-problems",
+      "mcp",
+      "oh-my-opencode-installation-guide",
+      "level-2-rag",
+      "summary",
+      "prompt",
+      "vibe-coding",
+      "wsl-opencode"
+    ],
+    "referencedBy": [
+      "overview"
+    ]
+  },
+  {
+    "id": "career",
+    "title": "Java Developer's AI Crossroads",
+    "linkTo": [
+      "future-vibecoding",
+      "lays-in-ai",
+      "future-vibecoding"
+    ],
+    "referencedBy": [
+      "level-4-production",
+      "summary",
+      "level-4-production",
+      "summary"
+    ]
+  },
+  {
+    "id": "future-vibecoding",
+    "title": "🔮 Vibe Coding 进化指南：未来生存法则与实战手册",
+    "linkTo": [],
+    "referencedBy": [
+      "career",
+      "vibe-coding"
+    ]
+  },
+  {
+    "id": "level-4-production",
+    "title": "阶段四: 全栈落地与生产优化 (Level 4)",
+    "linkTo": [
+      "career",
+      "summary"
+    ],
+    "referencedBy": [
+      "lays-in-ai",
+      "level-3-agent",
+      "overview"
+    ]
+  },
+  {
+    "id": "summary",
+    "title": "Prompt 质量评估与总结",
+    "linkTo": [
+      "career",
+      "prompt"
+    ],
+    "referencedBy": [
+      "level-4-production",
+      "overview"
+    ]
+  },
+  {
+    "id": "oh-my-opencode",
+    "title": "oh-my-opencode",
+    "linkTo": [],
+    "referencedBy": [
+      "future-vibecoding",
+      "mcp",
+      "level-1-ai-native",
+      "vibe-coding",
+      "wsl-opencode"
+    ]
+  },
+  {
+    "id": "vibe-coding",
+    "title": "🚀 Vibe Coding 实战配置指南 (Java + React 全栈版)",
+    "linkTo": [
+      "future-vibecoding"
+    ],
+    "referencedBy": [
+      "oh-my-opencode-installation-guide",
+      "level-1-ai-native",
+      "wsl-opencode"
+    ]
+  },
+  {
+    "id": "level-2-rag",
+    "title": "阶段二: RAG 应用开发与异构系统架构 (Level 2)",
+    "linkTo": [
+      "level-3-agent",
+      "summary"
+    ],
+    "referencedBy": [
+      "lays-in-ai",
+      "level-1-ai-native",
+      "overview"
+    ]
+  },
+  {
+    "id": "level-3-agent",
+    "title": "阶段三: Agent 架构与可观测性 (Level 3)",
+    "linkTo": [
+      "maxi-model-capacity",
+      "level-4-production",
+      "summary"
+    ],
+    "referencedBy": [
+      "lays-in-ai",
+      "level-2-rag",
+      "overview"
+    ]
+  },
+  {
+    "id": "maxi-model-capacity",
+    "title": "基于 ReAct 的 Agent 智能体设计完整指南",
+    "linkTo": [],
+    "referencedBy": [
+      "lays-in-ai",
+      "mcp",
+      "level-3-agent",
+      "prompt"
+    ]
+  },
+  {
+    "id": "overview",
+    "title": "AI Prompt 工程与全栈开发路线图",
+    "linkTo": [
+      "lays-in-ai",
+      "level-1-ai-native",
+      "level-2-rag",
+      "level-3-agent",
+      "level-4-production",
+      "summary"
+    ],
+    "referencedBy": []
+  },
+  {
+    "id": "prompt",
+    "title": "Prompt",
+    "linkTo": [],
+    "referencedBy": [
+      "maxi-model-capacity",
+      "level-1-ai-native",
+      "summary"
+    ]
+  },
+  {
+    "id": "mcp",
+    "title": "MCP",
+    "linkTo": [],
+    "referencedBy": [
+      "maxi-model-capacity",
+      "oh-my-opencode-installation-guide",
+      "level-1-ai-native"
+    ]
+  },
+  {
+    "id": "wsl-opencode",
+    "title": "WSL + OpenCode 环境说明书",
+    "linkTo": [
+      "oh-my-opencode-installation-guide"
+    ],
+    "referencedBy": [
+      "mcp",
+      "level-1-ai-native",
+      "vibe-coding"
+    ]
+  },
+  {
+    "id": "oh-my-opencode-installation-guide",
+    "title": "Oh My OpenCode 安装配置指南",
+    "linkTo": [
+      "vibe-coding",
+      "mcp"
+    ],
+    "referencedBy": [
+      "level-1-ai-native",
+      "wsl-opencode"
+    ]
+  },
+  {
+    "id": "flink docker-compose",
+    "title": "flink docker-compose",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "full-hadoop-reference",
+    "title": "hadoop",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "hadoop-overview",
+    "title": "Hadoop",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "hadoop",
+    "title": "hadoop",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "HBASE",
+    "title": "HBASE",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "Base-Sort",
+    "title": "Base-Sort",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "Binary-Insert",
+    "title": "Binary-Insert",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "bubble-sort",
+    "title": "bubble-sort",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "head-sort",
+    "title": "head-sort",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "insert-sort",
+    "title": "insert-sort",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "KMP",
+    "title": "KMP",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "leet-code-4-power",
+    "title": "leet-code-4-power",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "leet-code-return-twomedian-of-two-positive-intergers",
+    "title": "leet-code-return-twomedian-of-two-positive-intergers",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "leet-code-two-link-table-add",
+    "title": "leet-code-two-link-table-add",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "merge-sort",
+    "title": "merge-sort",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "quick-sort",
+    "title": "quick-sort",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "select-sort",
+    "title": "select-sort",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "shell-sort",
+    "title": "shell-sort",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "Java-Case-Distribution",
+    "title": "Java-Case-Distribution",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "mybatis-plus-code-generate",
+    "title": "mybatis-plus-code-generate",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "mybatis-Plus-quick-start",
+    "title": "mybatis-Plus-quick-start",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "mysql-procedure",
+    "title": "mysql-procedure",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "oracle-procedure",
+    "title": "Oracle 相关",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "transaction-process",
+    "title": "transaction-process",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "CPU memory domain",
+    "title": "CPU memory domain",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "final memory domain",
+    "title": "final memory domain",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "Java Concurrent Cases",
+    "title": "Java 并发编程",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "JAVA Virtual Machine",
+    "title": "JAVA虚拟机",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "JMM",
+    "title": "JMM",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "lock",
+    "title": "lock",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "volatile-memory-domain",
+    "title": "volatile-memory-domain",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "Design Pattern",
+    "title": "设计模式",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "functional-register-engine",
+    "title": "功能注册引擎设计文档",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "Java-Case-Interview-one",
+    "title": "Java-Case-Interview-one",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "Java-Case-Interview-two",
+    "title": "Java-Case-Interview-two",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "annotation processor",
+    "title": "annotation processor",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "class description",
+    "title": "Java类描述",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "file upload",
+    "title": "Java 文件相关",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "lambda",
+    "title": "lambda",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "netty",
+    "title": "netty",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "trace",
+    "title": "Jaeger Trace MDC",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "github problems",
+    "title": "github problems",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "Java problems",
+    "title": "Java问题汇总",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "Junit-Stuff",
+    "title": "jUnit Stuff",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "Oracle",
+    "title": "Oracle",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "Production",
+    "title": "生产问题",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "Spring Boot",
+    "title": "Spring Boot",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "advice",
+    "title": "advice",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "aspect",
+    "title": "aspect",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "aspectj-overview",
+    "title": "aspectj-overview",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "aspectj-weaving",
+    "title": "aspectj-weaving",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "full-aspectj-temp",
+    "title": "full-aspectj-temp",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "joinpoint",
+    "title": "joinpoint",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "pointcut",
+    "title": "pointcut",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "schema-configuration",
+    "title": "schema-configuration",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "weaving-autoproxy",
+    "title": "weaving-autoproxy",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "weaving-programmatic",
+    "title": "weaving-programmatic",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "application-context",
+    "title": "application-context",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "bean-creating-process",
+    "title": "bean-creating-process",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "bean-factory-post-processor",
+    "title": "bean-factory-post-processor",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "spring-core",
+    "title": "Spring Core",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "ioc-advanced",
+    "title": "ioc-advanced",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "ioc-basics",
+    "title": "ioc-basics",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "Camunda",
+    "title": "Camunda",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "Kafka",
+    "title": "Kafka",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "RabbitMQ",
+    "title": "RabbitMQ",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "Redis",
+    "title": "Redis",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "python-problems",
+    "title": "Python 使用问题",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "python-replacement-script",
+    "title": "在多个文件中替换多个相应的内容",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "Docker-Command-and-Dockerfile",
+    "title": "Docker-Command-and-Dockerfile",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "docker-compose-configure-redis-cluster-jenkins",
+    "title": "docker-compose-configure-redis-cluster-jenkins",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "docker-destop-configuration",
+    "title": "docker-destop-configuration",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "idea-docker-deployment",
+    "title": "idea-docker-deployment",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "centos8-instal-k8s",
+    "title": "centos8-instal-k8s",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "k8s-common-used-command",
+    "title": "k8s-common-used-command",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "awk-sed-quick-start",
+    "title": "awk",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "Common-Shell-Command",
+    "title": "shell基础命令",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "drag-drop-container-movement",
+    "title": "Building a Robust Draggable Element: A Step-by-Step Bug Fixing Journey",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "docusaurus",
+    "title": "docusaurus",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "firebase-database",
+    "title": "Firebase",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "JQuery-revese-selector",
+    "title": "JQuery-revese-selector",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "react-learn-2025",
+    "title": "Becomes React Developer",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "react-naming-conventions",
+    "title": "React TypeScript Naming Conventions",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "react-problems",
+    "title": "React Problem",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "react-reference",
+    "title": "Basic React",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "css",
+    "title": "`CSS`学习",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "tailwind",
+    "title": "`How to use tailwind css in your project?`",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "Integrate-husky-prettier-etc",
+    "title": "How to integrate husky prettier etc in Vue project?",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "pnpm",
+    "title": "pnpm",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "uni-app",
+    "title": "uni-app",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "vue-grammar-one",
+    "title": "vue-grammar-one",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "vue-grammer-two",
+    "title": "vue-grammer-two",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "vue-project-notes",
+    "title": "vue-project-notes",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "vue-route",
+    "title": "如何在Vue3 ts项目中使用 Vue Route",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "vue3-starter",
+    "title": "vue3-starter",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "intro",
+    "title": "Introduction",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "computer-composition-theory",
+    "title": "computer-composition-theory",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "computer-network-apps",
+    "title": "计算机网络 - 网络应用",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "computer-network-concept",
+    "title": "计算机网络 - 网络概述",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "computer-network-transmit-layer",
+    "title": "计算机网络 - 传输层",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "os-lean-notes",
+    "title": "os-lean-notes",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "connitive-awaking-unloc-the-drrving-force-for-self-change",
+    "title": "connitive-awaking-unloc-the-drrving-force-for-self-change",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "useful_links",
+    "title": "useful_links",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "cnblogs-simple-memory-theme-beautification",
+    "title": "cnblogs-simple-memory-theme-beautification",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "cnblogs-theme-silence-configure-plain-style-theme",
+    "title": "cnblogs-theme-silence-configure-plain-style-theme",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "command-usage",
+    "title": "Bash or PS Command Usage",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "environment-recovery",
+    "title": "一些环境的快速恢复方法",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "win11-release-update",
+    "title": "win11-release-update",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "develop-software-tips",
+    "title": "常用开发软件",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "git-commands",
+    "title": "Git Commands",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "gradle-maven-configuration",
+    "title": "gradle-maven-configuration",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "adoc",
+    "title": "adoc",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "Everything",
+    "title": "Everything",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "not-develop-software-tips",
+    "title": "常用软件",
+    "linkTo": [],
+    "referencedBy": []
+  },
+  {
+    "id": "regex",
+    "title": "正则大全",
+    "linkTo": [],
+    "referencedBy": []
+  }
+]

@@ -1,9 +1,26 @@
 {
   "nodes": [
     {
+      "id": "roadmap-context",
+      "path": "/summary/roadmap-context",
+      "name": "roadmap-context",
+      "description": "",
+      "allTags": [],
+      "group": "other",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
       "id": "intro",
       "path": "/summary/intro",
       "name": "Introduction",
+      "description": "Overview of the documentation structure and contents",
+      "allTags": [
+        "documentation",
+        "getting-started",
+        "introduction"
+      ],
       "group": "documentation",
       "val": 1,
       "sources": [],
@@ -13,6 +30,11 @@
       "id": "regex",
       "path": "/summary/tools/NonDevelopment/regex",
       "name": "正则大全",
+      "description": "Comprehensive regular expression patterns collection for common text processing tasks",
+      "allTags": [
+        "development",
+        "tools"
+      ],
       "group": "development",
       "val": 1,
       "sources": [],
@@ -22,6 +44,11 @@
       "id": "not-develop-software-tips",
       "path": "/summary/tools/NonDevelopment/not-develop-software-tips",
       "name": "常用软件",
+      "description": "设置exe程序以兼容性方式运行即可。 copytrans",
+      "allTags": [
+        "development",
+        "tools"
+      ],
       "group": "development",
       "val": 1,
       "sources": [],
@@ -31,6 +58,11 @@
       "id": "everything",
       "path": "/summary/tools/NonDevelopment/Everything",
       "name": "Everything 使用",
+      "description": "Everything search syntax guide including file extensions, paths, sizes, and modification dates",
+      "allTags": [
+        "development",
+        "tools"
+      ],
       "group": "development",
       "val": 1,
       "sources": [],
@@ -40,6 +72,11 @@
       "id": "adoc",
       "path": "/summary/tools/NonDevelopment/adoc",
       "name": "adoc",
+      "description": "adoc [source,java] ---- include::TxData.java[lines=6..7;22..36] ---- ",
+      "allTags": [
+        "development",
+        "tools"
+      ],
       "group": "development",
       "val": 1,
       "sources": [],
@@ -49,6 +86,11 @@
       "id": "gradle-maven-configuration",
       "path": "/summary/tools/Development/gradle-maven-configuration",
       "name": "gradle 和 maven 配置",
+      "description": "1. 配置本地仓库路径 <localRepository>d:/mvnrepository</localRepository> 2. 配置远程库地址 xml <mirror> <id>nexus-aliyun</id>",
+      "allTags": [
+        "development",
+        "tools"
+      ],
       "group": "development",
       "val": 1,
       "sources": [],
@@ -58,6 +100,11 @@
       "id": "git-commands",
       "path": "/summary/tools/Development/git-commands",
       "name": "Git Commands",
+      "description": "Comprehensive Git command reference: config, log, diff, rebase, merge, stash",
+      "allTags": [
+        "development",
+        "tools"
+      ],
       "group": "development",
       "val": 1,
       "sources": [],
@@ -67,6 +114,11 @@
       "id": "develop-software-tips",
       "path": "/summary/tools/Development/develop-software-tips",
       "name": "常用开发软件",
+      "description": "DBeaver中如何调整SQL编辑器的字体大小 在vscode设置界面，搜索terminal.integrated.profiles.windows,然后edit in setting.js",
+      "allTags": [
+        "development",
+        "tools"
+      ],
       "group": "development",
       "val": 1,
       "sources": [],
@@ -76,6 +128,11 @@
       "id": "win11-release-update",
       "path": "/summary/misc/Others/win11-release-update",
       "name": "W11更新 跳过TPM",
+      "description": "[](https://www.microsoft.com/zh-cn/software-download/windows11) 打开解压后的 sources文件夹，删除appraiserres.dll文件",
+      "allTags": [
+        "books",
+        "learning"
+      ],
       "group": "books",
       "val": 1,
       "sources": [],
@@ -85,6 +142,11 @@
       "id": "environment recovery",
       "path": "/summary/misc/Others/environment-recovery",
       "name": "environment recovery",
+      "description": "一些环境的快速恢复方法",
+      "allTags": [
+        "books",
+        "learning"
+      ],
       "group": "books",
       "val": 1,
       "sources": [],
@@ -94,6 +156,11 @@
       "id": "command-usage",
       "path": "/summary/misc/Others/command-usage",
       "name": "Bash or PS Command Usage",
+      "description": "powershell tree /f  powershell netstat -ano | findstr :8080  powershell taskkill /PID 1234 /F",
+      "allTags": [
+        "books",
+        "learning"
+      ],
       "group": "books",
       "val": 1,
       "sources": [],
@@ -103,6 +170,11 @@
       "id": "cnblogs-theme-silence-configure-plain-style-theme",
       "path": "/summary/misc/Others/cnblogs-theme-silence-configure-plain-style-theme",
       "name": "Cnblogs Theme Silence Configure Plain Style Theme",
+      "description": "本文参考 更改博客皮肤为Custom 1. 勾选禁用模板默认CSS",
+      "allTags": [
+        "books",
+        "learning"
+      ],
       "group": "books",
       "val": 1,
       "sources": [],
@@ -112,6 +184,11 @@
       "id": "cnblogs-simple-memory-theme--beautification",
       "path": "/summary/misc/Others/cnblogs-simple-memory-theme-beautification",
       "name": "Cnblogs Simple Memory Theme  Beautification",
+      "description": "所有内容来自marsggbo'github ，页面效果",
+      "allTags": [
+        "books",
+        "learning"
+      ],
       "group": "books",
       "val": 1,
       "sources": [],
@@ -121,6 +198,11 @@
       "id": "useful-links",
       "path": "/summary/misc/Links/useful_links",
       "name": "有用网站收集",
+      "description": "> this file notes all the useful website , once browser bookmarks dispatch, I can find back all the sites those I need.",
+      "allTags": [
+        "books",
+        "learning"
+      ],
       "group": "books",
       "val": 1,
       "sources": [],
@@ -130,6 +212,11 @@
       "id": "connitive-awaking-unloc-the-drrving-force-for-self-change",
       "path": "/summary/misc/Books/02-literature/connitive-awaking-unloc-the-drrving-force-for-self-change",
       "name": "周岭-认知觉醒-开启自我改变的原动力",
+      "description": "原因：因为人习惯性用潜意识驱动行为，并且潜意识去做事情的成本更低，趋易避难，即时享乐 改变方法： - 找一个自己能坚持做下去的方式(降低要求，)，比单纯按照标准化的时间和方式做更重要； - 不管做什么，不管当前做得怎么样，只要让自己处在舒适区的边缘持续练习，你的舒适区就会不断扩大，拉",
+      "allTags": [
+        "books",
+        "learning"
+      ],
       "group": "books",
       "val": 1,
       "sources": [],
@@ -139,6 +226,11 @@
       "id": "os-lean-notes",
       "path": "/summary/misc/Books/01-computor-theory/os-lean-notes",
       "name": "操作系统",
+      "description": "1. OS作为用户和计算机硬件系统之间的接口 2. OS作为计算机系统资源的管理者 3. OS实现了对计算机资源的抽象 1. 未配置操作系统的计算机 2. 单道批处理系统 3. 多道批处理系统 - 多道、宏观上并行，微观上串行。",
+      "allTags": [
+        "books",
+        "learning"
+      ],
       "group": "books",
       "val": 1,
       "sources": [],
@@ -148,6 +240,11 @@
       "id": "computer-network-transmit-layer",
       "path": "/summary/misc/Books/01-computor-theory/computer-network-transmit-layer",
       "name": "计算机网络 - 传输层",
+      "description": "!20250920191454 UDP多路复用/分用:使用二元组(D-IP, D-Port)",
+      "allTags": [
+        "books",
+        "learning"
+      ],
       "group": "books",
       "val": 1,
       "sources": [],
@@ -157,6 +254,11 @@
       "id": "computer-network-concept",
       "path": "/summary/misc/Books/01-computor-theory/computer-network-concept",
       "name": "计算机网络 - 网络概述",
+      "description": "互连-无主从关系 自治-互联互通 交换网络互连主机 通过 交换节点  完成数据通信 !20250920184352",
+      "allTags": [
+        "books",
+        "learning"
+      ],
       "group": "books",
       "val": 1,
       "sources": [],
@@ -166,6 +268,11 @@
       "id": "computer-network-apps",
       "path": "/summary/misc/Books/01-computor-theory/computer-network-apps",
       "name": "计算机网络 - 网络应用",
+      "description": "CS 客户/服务器 P2P 对等应用 场景：文件共享  特点：高度可伸缩 难以管理 混合结构： ？Napster 文件传输P2P 文件搜索采用C/S结构 ![20250920190143](https://s2.loli.net/2025/09/20/kLOUGnIibsJwNTz.pn",
+      "allTags": [
+        "books",
+        "learning"
+      ],
       "group": "books",
       "val": 1,
       "sources": [],
@@ -175,6 +282,11 @@
       "id": "computer-composition-theory",
       "path": "/summary/misc/Books/01-computor-theory/computer-composition-theory",
       "name": "计算机组成原理",
+      "description": "高级语言 又称算法语言，面向解决实际问题所用的算法，瞄准处理问题和解题过程的程序 汇编语言 是对计算机机器语言进行符号化处理的结果，再增加一些方便程序设计而实现的扩展功能 在汇编语言中，可以用英文或缩写替代二进制的指令代码，更容易记忆和理解",
+      "allTags": [
+        "books",
+        "learning"
+      ],
       "group": "books",
       "val": 1,
       "sources": [],
@@ -184,6 +296,12 @@
       "id": "uni-app",
       "path": "/summary/Frontend/uni-app",
       "name": "uni-app开发",
+      "description": "> 使用vue3 vite ts uni-app uni-ui - 更改路由页面之后，需要重新运行一下 - 750rpx  1334rpx 全屏 iPhone6 - view == div text==span",
+      "allTags": [
+        "frontend",
+        "javascript",
+        "react"
+      ],
       "group": "frontend",
       "val": 1,
       "sources": [],
@@ -193,6 +311,12 @@
       "id": "firebase-database",
       "path": "/summary/Frontend/firebase-database",
       "name": "Firebase Database Setup",
+      "description": "Step-by-step Firebase project setup with Google auth and Firestore",
+      "allTags": [
+        "frontend",
+        "javascript",
+        "react"
+      ],
       "group": "frontend",
       "val": 1,
       "sources": [],
@@ -202,6 +326,12 @@
       "id": "docusaurus",
       "path": "/summary/Frontend/docusaurus",
       "name": "Docusaurus Configuration",
+      "description": "Docusaurus deployment, search configuration, and troubleshooting",
+      "allTags": [
+        "frontend",
+        "javascript",
+        "react"
+      ],
       "group": "frontend",
       "val": 1,
       "sources": [],
@@ -211,6 +341,12 @@
       "id": "vue3-starter",
       "path": "/summary/Frontend/Vue/vue3-starter",
       "name": "vue3 入门",
+      "description": "1. SPA (Single Page Application): - 适用场景: 适用于需要提供高度交互性和实时性的应用，例如Web应用程序、管理后台、社交媒体平台等。 - 优势: 用户体验更接近传统桌面应用，可以更灵活地实现复杂的交互逻辑。",
+      "allTags": [
+        "frontend",
+        "javascript",
+        "react"
+      ],
       "group": "frontend",
       "val": 1,
       "sources": [],
@@ -220,6 +356,12 @@
       "id": "vue-route",
       "path": "/summary/Frontend/Vue/vue-route",
       "name": "use vue route",
+      "description": "1. 安装Nodejs, 官网地址,推荐版本16.xxx 和 18.xxx ; 2. 安装pnpm，按照以下命令安装：npm install -g pnpm。",
+      "allTags": [
+        "frontend",
+        "javascript",
+        "react"
+      ],
       "group": "frontend",
       "val": 1,
       "sources": [],
@@ -229,6 +371,12 @@
       "id": "vue-project-notes",
       "path": "/summary/Frontend/Vue/vue-project-notes",
       "name": "Vue 项目笔记",
+      "description": "说明本文项目知识笔记内容来自 B站尚硅谷视频",
+      "allTags": [
+        "frontend",
+        "javascript",
+        "react"
+      ],
       "group": "frontend",
       "val": 1,
       "sources": [],
@@ -238,6 +386,12 @@
       "id": "vue-grammer-two",
       "path": "/summary/Frontend/Vue/vue-grammer-two",
       "name": "Vue 基础2",
+      "description": "> <font color=\"red\">本文所有内容均来自 书籍《vue.js实战》</font> > > <font color=\"red\">完整代码请查看github</font>",
+      "allTags": [
+        "frontend",
+        "javascript",
+        "react"
+      ],
       "group": "frontend",
       "val": 1,
       "sources": [],
@@ -247,6 +401,12 @@
       "id": "vue-grammer-one",
       "path": "/summary/Frontend/Vue/vue-grammar-one",
       "name": "Vue 基础1",
+      "description": "> <font color=\"red\">本文所有内容均来自 书籍《vue.js实战》</font> > > <font color=\"red\">完整代码请查看github</font>",
+      "allTags": [
+        "frontend",
+        "javascript",
+        "react"
+      ],
       "group": "frontend",
       "val": 1,
       "sources": [],
@@ -256,6 +416,12 @@
       "id": "pnpm",
       "path": "/summary/Frontend/Tools/pnpm",
       "name": "pnpm常用命令",
+      "description": "shell pnpm i pnpm i <package> pnpm add -g <package> pnpm add -D <package> pnpm outdated pnpm update --latest",
+      "allTags": [
+        "frontend",
+        "javascript",
+        "react"
+      ],
       "group": "frontend",
       "val": 1,
       "sources": [],
@@ -265,6 +431,12 @@
       "id": "integrate-husky-prettier-etc",
       "path": "/summary/Frontend/Tools/Integrate-husky-prettier-etc",
       "name": "integrate husky prettier etc",
+      "description": "pnpm create vite-app vue3-ts shell pnpm install husky lint-staged eslint prettier -D  json",
+      "allTags": [
+        "frontend",
+        "javascript",
+        "react"
+      ],
       "group": "frontend",
       "val": 1,
       "sources": [],
@@ -274,6 +446,12 @@
       "id": "tailwind",
       "path": "/summary/Frontend/Styling/tailwind",
       "name": "tailwind usage",
+      "description": "taco shop project written by tailwind and vue",
+      "allTags": [
+        "frontend",
+        "javascript",
+        "react"
+      ],
       "group": "frontend",
       "val": 1,
       "sources": [],
@@ -283,6 +461,12 @@
       "id": "css",
       "path": "/summary/Frontend/Styling/css",
       "name": "CSS相关知识",
+      "description": "原项目地址 css /元素选择器/ html { } /类选择器/ .gray { } /id选择器/",
+      "allTags": [
+        "frontend",
+        "javascript",
+        "react"
+      ],
       "group": "frontend",
       "val": 1,
       "sources": [],
@@ -292,6 +476,12 @@
       "id": "react-reference",
       "path": "/summary/Frontend/React/react-reference",
       "name": "Basic React",
+      "description": "Comprehensive React guide covering hooks, state, events, and routing",
+      "allTags": [
+        "frontend",
+        "javascript",
+        "react"
+      ],
       "group": "frontend",
       "val": 1,
       "sources": [],
@@ -301,6 +491,12 @@
       "id": "react-problems",
       "path": "/summary/Frontend/React/react-problems",
       "name": "React Problems & Solutions",
+      "description": "Common React/TypeScript issues and their solutions",
+      "allTags": [
+        "frontend",
+        "javascript",
+        "react"
+      ],
       "group": "frontend",
       "val": 1,
       "sources": [],
@@ -310,6 +506,12 @@
       "id": "react-naming-conventions",
       "path": "/summary/Frontend/React/react-naming-conventions",
       "name": "React TypeScript Naming Conventions",
+      "description": "File, folder, and code naming conventions for React TypeScript projects",
+      "allTags": [
+        "frontend",
+        "javascript",
+        "react"
+      ],
       "group": "frontend",
       "val": 1,
       "sources": [],
@@ -319,6 +521,12 @@
       "id": "react-learn-2025",
       "path": "/summary/Frontend/React/react-learn-2025",
       "name": "React Learning Roadmap 2025",
+      "description": "Learning path for becoming a React developer in 2025",
+      "allTags": [
+        "frontend",
+        "javascript",
+        "react"
+      ],
       "group": "frontend",
       "val": 1,
       "sources": [],
@@ -328,6 +536,12 @@
       "id": "jquery-revese-selector",
       "path": "/summary/Frontend/jQuery/JQuery-revese-selector",
       "name": "jQuery选择器",
+      "description": "Example From Here $( \"input[name!='newsletter']\" )",
+      "allTags": [
+        "frontend",
+        "javascript",
+        "react"
+      ],
       "group": "frontend",
       "val": 1,
       "sources": [],
@@ -337,6 +551,12 @@
       "id": "drag-drop-container-movement",
       "path": "/summary/Frontend/Cases/drag-drop-container-movement",
       "name": "A Robust Draggable Element",
+      "description": "A Robust Draggable Element",
+      "allTags": [
+        "frontend",
+        "javascript",
+        "react"
+      ],
       "group": "frontend",
       "val": 1,
       "sources": [],
@@ -346,6 +566,12 @@
       "id": "common-shell-command",
       "path": "/summary/devops/Linux/Common-Shell-Command",
       "name": "Shell Common Commands",
+      "description": "Common shell commands, grep patterns, crontab, and Linux utilities",
+      "allTags": [
+        "containerization",
+        "devops",
+        "docker"
+      ],
       "group": "containerization",
       "val": 1,
       "sources": [],
@@ -355,6 +581,12 @@
       "id": "awk-sed-quick-start",
       "path": "/summary/devops/Linux/awk-sed-quick-start",
       "name": "AWK SED 简单使用",
+      "description": "shell tee awk.txt <<-'EOF' john wang male 30 02103213 ludc dasf fama 12 12311321 EOF awk '{print $1,$4}' awk.txt",
+      "allTags": [
+        "containerization",
+        "devops",
+        "docker"
+      ],
       "group": "containerization",
       "val": 1,
       "sources": [],
@@ -364,6 +596,12 @@
       "id": "k8s-common-used-command",
       "path": "/summary/devops/Kubernetes/k8s-common-used-command",
       "name": "K8S常用命令",
+      "description": "shell systemctl status docker.service systemctl status kubelet.service netstat -antp| grep 6443 netstat -pnlt | grep 6443",
+      "allTags": [
+        "containerization",
+        "devops",
+        "docker"
+      ],
       "group": "containerization",
       "val": 1,
       "sources": [],
@@ -373,6 +611,12 @@
       "id": "centos8-instal-k8s",
       "path": "/summary/devops/Kubernetes/centos8-instal-k8s",
       "name": "Centos8 安装K8S",
+      "description": "| 主机   | IP            | 系统 | | ------ | ------------- | ---- | | master | 192.168.3.162 | Centos 8 kernel 4.18.0-240.el8.x8664 |",
+      "allTags": [
+        "containerization",
+        "devops",
+        "docker"
+      ],
       "group": "containerization",
       "val": 1,
       "sources": [],
@@ -382,6 +626,12 @@
       "id": "idea-docker-deployment",
       "path": "/summary/devops/Docker/idea-docker-deployment",
       "name": "idea使用docker部署",
+      "description": "shell systemctl disable firewalld --now setenforce 0 sed  -i -r 's/SELINUX=[ep]./SELINUX=disabled/g' /etc/selinux/config",
+      "allTags": [
+        "containerization",
+        "devops",
+        "docker"
+      ],
       "group": "containerization",
       "val": 1,
       "sources": [],
@@ -391,6 +641,12 @@
       "id": "docker-destop-configuration",
       "path": "/summary/devops/Docker/docker-destop-configuration",
       "name": "docker-destop-configuration",
+      "description": "https://zhuanlan.zhihu.com/p/24461370776 shell cat <<-EOF > /etc/docker/daemon.json { \"registry-mirrors\": [",
+      "allTags": [
+        "containerization",
+        "devops",
+        "docker"
+      ],
       "group": "containerization",
       "val": 1,
       "sources": [],
@@ -400,6 +656,12 @@
       "id": "docker-compose-configure-redis-cluster-jenkins",
       "path": "/summary/devops/Docker/docker-compose-configure-redis-cluster-jenkins",
       "name": "docker-compose使用",
+      "description": "[reference article from here][docker compose redis cluster] > remember to replace the ip 192.168.3.163 to your real ip address",
+      "allTags": [
+        "containerization",
+        "devops",
+        "docker"
+      ],
       "group": "containerization",
       "val": 1,
       "sources": [],
@@ -409,6 +671,12 @@
       "id": "docker-command-and-dockerfile",
       "path": "/summary/devops/Docker/Docker-Command-and-Dockerfile",
       "name": "基础Docker命令",
+      "description": "shell script docker pull xxx docker search xxx docker images docker images -q docker rmi containerId/SOURCEIMAGE[:TAG]",
+      "allTags": [
+        "containerization",
+        "devops",
+        "docker"
+      ],
       "group": "containerization",
       "val": 1,
       "sources": [],
@@ -418,6 +686,12 @@
       "id": "python-replacement-script",
       "path": "/summary/background/Python/python-replacement-script",
       "name": "在多个文件中替换多个相应的内容",
+      "description": "python from rulesmodule import rules import re, os def replacecontentinfile(filepath, replacementrules):",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -427,6 +701,12 @@
       "id": "python-problems",
       "path": "/summary/background/Python/python-problems",
       "name": "Python 使用问题",
+      "description": "Guide to configuring Python pip sources, virtual environments, and Jupyter notebooks in VSCode",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -436,6 +716,12 @@
       "id": "redis",
       "path": "/summary/background/Middleware/Redis",
       "name": "Redis",
+      "description": "Redis common issues, cache penetration, avalanche, and configuration",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -445,6 +731,12 @@
       "id": "rabbitmq",
       "path": "/summary/background/Middleware/RabbitMQ",
       "name": "RabbitMQ",
+      "description": "RabbitMQ reliability, consumption patterns, and queue types",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -454,6 +746,12 @@
       "id": "kafka",
       "path": "/summary/background/Middleware/Kafka",
       "name": "Kafka",
+      "description": "Kafka deployment, Docker Compose, and Spring Boot integration",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -463,6 +761,12 @@
       "id": "camunda",
       "path": "/summary/background/Middleware/Camunda",
       "name": "Camunda Workflow Engine",
+      "description": "Camunda BPMN workflow engine internals, interceptors, and state machine",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -472,6 +776,12 @@
       "id": "ioc-basics",
       "path": "/summary/background/Java/Spring/IOC/ioc-basics",
       "name": "IoC注入方式1",
+      "description": "本文相关代码(来自官方源码spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/sprin",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -481,6 +791,12 @@
       "id": "ioc-advanced",
       "path": "/summary/background/Java/Spring/IOC/ioc-advanced",
       "name": "IoC注入方式2",
+      "description": "本文相关代码(来自官方源码spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/sprin",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -490,6 +806,12 @@
       "id": "spring-core",
       "path": "/summary/background/Java/Spring/Core/spring-core",
       "name": "Spring Core",
+      "description": "1. xml配置方式 proxy-target-class=true：强制使用 CGLib 代理 proxy-target-class=false：Spring 会根据情况自动选择代理方式. import MyHighlight from \"@site/src/components/MyHighLi",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -499,6 +821,12 @@
       "id": "bean-factory-post-processor",
       "path": "/summary/background/Java/Spring/Core/bean-factory-post-processor",
       "name": "BeanFactoryPostProcessor",
+      "description": "本文相关代码(来自官方源码spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/sprin",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -508,6 +836,12 @@
       "id": "bean-creating-process",
       "path": "/summary/background/Java/Spring/Core/bean-creating-process",
       "name": "Bean的构造过程",
+      "description": "本文相关代码(来自官方源码spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/sprin",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -517,6 +851,12 @@
       "id": "application-context",
       "path": "/summary/background/Java/Spring/Core/application-context",
       "name": "ApplicationContext",
+      "description": "本文相关代码(来自官方源码spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/sprin",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -526,6 +866,12 @@
       "id": "schema-configuration",
       "path": "/summary/background/Java/Spring/AOP/schema-configuration",
       "name": "基于Schema的AOPA配置",
+      "description": "本文相关代码(来自官方源码spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/spring-frame",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -535,6 +881,12 @@
       "id": "pointcut",
       "path": "/summary/background/Java/Spring/AOP/pointcut",
       "name": "Spring AOP中的Pointcut",
+      "description": "本文相关代码(来自官方源码spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/sprin",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -544,6 +896,12 @@
       "id": "joinpoint",
       "path": "/summary/background/Java/Spring/AOP/joinpoint",
       "name": "Joinpoint",
+      "description": "本文相关代码(来自官方源码spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/sprin",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -553,6 +911,12 @@
       "id": "aspect",
       "path": "/summary/background/Java/Spring/AOP/aspect",
       "name": "Spring AOP中的Aspect",
+      "description": "本文相关代码(来自官方源码spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/sprin",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -562,6 +926,12 @@
       "id": "advice",
       "path": "/summary/background/Java/Spring/AOP/advice",
       "name": "Spring AOP中的Advice",
+      "description": "本文相关代码(来自官方源码spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/sprin",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -571,6 +941,12 @@
       "id": "weaving-programmatic",
       "path": "/summary/background/Java/Spring/AOP/Weaving/weaving-programmatic",
       "name": "Spring AOP的织入1",
+      "description": "本文相关代码(来自官方源码spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/sprin",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -580,6 +956,12 @@
       "id": "weaving-autoproxy",
       "path": "/summary/background/Java/Spring/AOP/Weaving/weaving-autoproxy",
       "name": "Spring AOP的织入2",
+      "description": "本文相关代码(来自官方源码spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/sprin",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -589,6 +971,12 @@
       "id": "full-aspectj-temp",
       "path": "/summary/background/Java/Spring/AOP/AspectJ/full-aspectj-temp",
       "name": "AspectJ形式AOP使用",
+      "description": "本文相关代码(来自官方源码spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/sprin",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -598,6 +986,12 @@
       "id": "aspectj-weaving",
       "path": "/summary/background/Java/Spring/AOP/AspectJ/aspectj-weaving",
       "name": "AspectJ织入方法",
+      "description": "本文相关代码(来自官方源码spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/sprin",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -607,6 +1001,12 @@
       "id": "aspectj-overview",
       "path": "/summary/background/Java/Spring/AOP/AspectJ/aspectj-overview",
       "name": "AspectJ形式AOP概述",
+      "description": "本文相关代码(来自官方源码spring-test模块)请参见[spring-framework](https://github.com/Halcyon666/sprin",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -616,6 +1016,12 @@
       "id": "spring-boot",
       "path": "/summary/background/Java/Problems/Spring Boot",
       "name": "Spring Boot",
+      "description": "A bug finds in those of tasks where you need change the date by the nature. <br/> Firstly You should inject a prototype bean to spring context, instea",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -625,6 +1031,12 @@
       "id": "production",
       "path": "/summary/background/Java/Problems/Production",
       "name": "生产问题",
+      "description": "- 问题定界，确定是系统内部问题还是，其它系统问题、或者网络原因 - 如果严重先考虑回退(或者重启应用)，先解决掉问题，再找问题的原因 - 原因：连接池问题（线程池中使用）、慢SQL问题、Full GC 问题等",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -634,6 +1046,12 @@
       "id": "oracle",
       "path": "/summary/background/Java/Problems/Oracle",
       "name": "Oracle相关问题处理",
+      "description": "安装步骤地址  ORA-01078: failure in processing system parameters",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -643,6 +1061,12 @@
       "id": "junit-stuff",
       "path": "/summary/background/Java/Problems/Junit-Stuff",
       "name": "jUnit Stuff",
+      "description": "本文整理了两种常用的测试方式： 1. 纯单元测试（Mockito + JUnit） 2. Spring Boot 测试（@SpringBootTest 排除自动装配） 特点： - 不依赖 Spring 容器",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -652,6 +1076,12 @@
       "id": "java-problems",
       "path": "/summary/background/Java/Problems/Java problems",
       "name": "Java问题汇总",
+      "description": "先去Maven Repository找到对应的依赖，并下载。 去下载目录下执行如下命令，注意替换掉-DgroupId，-DartifactId，-Dversion，-Dfile",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -661,6 +1091,12 @@
       "id": "github-problems",
       "path": "/summary/background/Java/Problems/github problems",
       "name": "github相关问题处理",
+      "description": "just execute this will be ok. shell title=\"handler method\" git config --global https.proxy http://127.0.0.1:7890",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -670,6 +1106,12 @@
       "id": "trace",
       "path": "/summary/background/Java/JavaBase/trace",
       "name": "Jaeger Trace MDC",
+      "description": "Simple Demo Code",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -679,6 +1121,12 @@
       "id": "netty",
       "path": "/summary/background/Java/JavaBase/netty",
       "name": "netty ",
+      "description": "!20250922233019 !20250922233035",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -688,6 +1136,12 @@
       "id": "lambda",
       "path": "/summary/background/Java/JavaBase/lambda",
       "name": "lambda 使用",
+      "description": "> NOTES: 所有内容摘自 Java 8函数式编程 java public Set<String> findLongTracks(List<Album> albums) { Set<String> trackNames=new HashSet<>();",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -697,6 +1151,12 @@
       "id": "file-upload",
       "path": "/summary/background/Java/JavaBase/file upload",
       "name": "Java 文件相关",
+      "description": "使用 Spring-Boot 时集成 Resttemplate 无需额外导包<br/> <details> <summary>Controller</summary> java package whalefall.filedownloadorup;",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -706,6 +1166,12 @@
       "id": "class-description",
       "path": "/summary/background/Java/JavaBase/class description",
       "name": "Java类描述",
+      "description": "重载：同一个类，方法名相同，其它部分不同 重写：父子类，方法名相同，（一同两小一大）相同参数列表，返回值、异常类型，修饰符 | 特性 | 抽象类 | 接口 | | --- | --- | --- | | 继承 | 只能继承一个抽象类 | 可以实现多个接口 |",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -715,6 +1181,12 @@
       "id": "annotation-processor",
       "path": "/summary/background/Java/JavaBase/annotation processor",
       "name": "APT 使用",
+      "description": "How to write a annotation processor and use in Java Project",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -724,6 +1196,12 @@
       "id": "java-case-interview-two",
       "path": "/summary/background/Java/Interview/Java-Case-Interview-two",
       "name": "java 面试题2",
+      "description": "参见博客 1. 降低资源消耗 2. 提高响应速度 3. 提高线程的可管理性 corePoolSize 核心线程数 \t\t正常工作创建的线程数",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -733,6 +1211,12 @@
       "id": "java-case-interview-one",
       "path": "/summary/background/Java/Interview/Java-Case-Interview-one",
       "name": "java 面试题1",
+      "description": "面向对象和面向过程的区别： - 面向过程更注重每一个步骤以及其顺序，面向对象更注重哪些对象，他们具有哪些能力 - 面向过程比较直接，而面向对象更易于复用、扩展和维护 三大特性: 封装：内部细节隐藏 只提供对外的接口",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -742,6 +1226,12 @@
       "id": "functional-register-engine",
       "path": "/summary/background/Java/DesignPatterns/functional-register-engine",
       "name": "功能注册引擎设计文档",
+      "description": "本设计实现了一个基于注解驱动的业务-模板注册引擎，通过 @UseTemplate 注解在启动时自动绑定业务实现类与对应的处理模板，实现业务逻辑与处理流程的解耦。 - ✅ 注解驱动的自动注册机制 - ✅ 泛型类型安全检查",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -751,6 +1241,12 @@
       "id": "design-pattern",
       "path": "/summary/background/Java/DesignPatterns/Design Pattern",
       "name": "设计模式",
+      "description": "<details> <summary>全局异常处理类ExceptionHandlingController</summary> java package com.whalefall.learncases.exception;",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -760,6 +1256,12 @@
       "id": "volatile-memory-domain",
       "path": "/summary/background/Java/Concurrent-JVM/volatile-memory-domain",
       "name": "volatile域内存知识",
+      "description": "避免使用锁：无锁并发编程，多线程竞争锁时，会引起上下问文切换，所以多线程处理时，可以用一些办法来避免使用锁，如将数据的ID按照Hash算法取模分段，不同的线程处理不同段的数据 CAS算法：java的atomic包使用CAS算法来更新数据，而不需要加锁",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -769,6 +1271,12 @@
       "id": "lock",
       "path": "/summary/background/Java/Concurrent-JVM/lock",
       "name": "锁",
+      "description": "![](https://s2.loli.net/2023/07/15/T2tYREiaSpo3eyx.png) 锁是面向使用者的，它定义了使用者与锁交互的接口（比如可以允许两个线程并行访问），隐藏了实现细节；",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -778,6 +1286,12 @@
       "id": "jmm",
       "path": "/summary/background/Java/Concurrent-JVM/JMM",
       "name": "JMM相关内容",
+      "description": "详情请见 对于会改变程序执行结果的重排序，JMM要求编译器和处理器必须禁止这种重排序。 对于不会改变程序执行结果的重排序，JMM对编译器和处理器不做要求（JMM允许这种重排序）。",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -787,6 +1301,12 @@
       "id": "java-virtual-machine",
       "path": "/summary/background/Java/Concurrent-JVM/JAVA Virtual Machine",
       "name": "JAVA虚拟机",
+      "description": "!20250922223849 1. 取二进制流：通过一个类的全限定名获取定义此类的二进制流。",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -796,6 +1316,11 @@
       "id": "java-concurrent-cases",
       "path": "/summary/background/Java/Concurrent-JVM/Java Concurrent Cases",
       "name": "Java 并发编程",
+      "description": "Using Executor and CompletableFuture to concurrent execute the Many Queries. Below is commit changes.",
+      "allTags": [
+        "case-study",
+        "frontend"
+      ],
       "group": "case-study",
       "val": 1,
       "sources": [],
@@ -805,6 +1330,12 @@
       "id": "final-memory-domain",
       "path": "/summary/background/Java/Concurrent-JVM/final memory domain",
       "name": "final域内存知识",
+      "description": "在构造函数内对一个final域的写入，与随后把这个被构造对象的引用赋值给一个引用变量，这两个操作之间不能重排序。 初次读一个包含final域的对象的引用，与随后初次读这个final域，这两个操作之间不能重排序",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -814,6 +1345,12 @@
       "id": "cpu-memory-domain",
       "path": "/summary/background/Java/Concurrent-JVM/CPU memory domain",
       "name": "处理器内存模型",
+      "description": "放松程序中写-读操作的顺序，由此产生了Total Store Ordering内存模型（简称为TSO）。 在上面的基础上，继续放松程序中写-写操作的顺序，由此产生了Partial Store Order内存模型（简称为PSO）。",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -823,6 +1360,12 @@
       "id": "transaction-process",
       "path": "/summary/background/Database/transaction-process",
       "name": "事务处理",
+      "description": "<font color='red'>本文摘自 周志明 凤凰架构：构建可靠的大型分布式系统</font>",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -832,6 +1375,12 @@
       "id": "oracle-procedure",
       "path": "/summary/background/Database/oracle-procedure",
       "name": "Oracle 相关",
+      "description": "sql CREATE [OR REPLACE] PROCEDURE [schema.] procedurename [parametername] [[IN] datatype [{:=|DEFAULT} expression]",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -841,6 +1390,12 @@
       "id": "mysql-procedure",
       "path": "/summary/background/Database/mysql-procedure",
       "name": "mysql存储过程",
+      "description": "创建user表 sql SET NAMES utf8mb4; SET FOREIGNKEYCHECKS = 0; -- ---------------------------- -- Table structure for user",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -850,6 +1405,12 @@
       "id": "mybatis-plus-quick-start",
       "path": "/summary/background/Database/mybatis-Plus-quick-start",
       "name": "Mybatis Plus快速开始",
+      "description": "此文章借鉴MyBatis官网，使用gradle构建项目，使用oracle数据库",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -859,6 +1420,12 @@
       "id": "mybatis-plus-code-generate",
       "path": "/summary/background/Database/mybatis-plus-code-generate",
       "name": "Mybatis Plus代码生成",
+      "description": "本文代码来自MyBatis Plus官网 1. 配置依赖",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -868,6 +1435,12 @@
       "id": "java-case-distribution",
       "path": "/summary/background/Database/Java-Case-Distribution",
       "name": "分布式问题",
+      "description": "1. 基于XA协议的：二阶段提交和三阶段提交 2. 基于时间补偿机制：TCC 基于业务层面实现 3. 本地消息表：基于数据库+mq，通过mq调用服务，完成响应后回调，将状态盖好才能完成。需要配合定时任务扫描，重发消息调用服务，需要保证幂等性；(不推荐使用)",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -877,6 +1450,12 @@
       "id": "shell-sort",
       "path": "/summary/background/Algorithm/shell-sort",
       "name": "希尔排序",
+      "description": "代码参考该视频  算法思维：  说明 arr.length = n; 增量序列为 seq; 间隔  span = seq[p]",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -886,6 +1465,12 @@
       "id": "select-sort",
       "path": "/summary/background/Algorithm/select-sort",
       "name": "选择排序",
+      "description": " 算法思维：从0到n-1每次取一个为i， 和i后面的元素进行比较  令int k = i;如果发现比i位置上的还小，则将该位置的角标赋值给k。  最后交换i 和 k的位置；每一趟都能排好一个最小的值。",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -895,6 +1480,12 @@
       "id": "quick-sort",
       "path": "/summary/background/Algorithm/quick-sort",
       "name": "快速排序",
+      "description": "代码源自该视频 算法思想：选择一个中心点，将比中心点小的移动到左边，反之移动到右边； 这时形成两个子序列，对子序列递归直至，每个序列只有一个元素为止；",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -904,6 +1495,12 @@
       "id": "merge-sort",
       "path": "/summary/background/Algorithm/merge-sort",
       "name": "归并排序",
+      "description": " 视频链接  算法思路：将两个局部有序的数组归并为一个有序的数组",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -913,6 +1510,12 @@
       "id": "leet-code-two-link-table-add",
       "path": "/summary/background/Algorithm/leet-code-two-link-table-add",
       "name": "两个单链表相加",
+      "description": "题目 NOTE 1. 要点不要忘了最后的进位 2. 两个单链表可以长度任意 java",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -922,6 +1525,12 @@
       "id": "leet-code-return-twomedian-of-two-positive-intergers",
       "path": "/summary/background/Algorithm/leet-code-return-twomedian-of-two-positive-intergers",
       "name": "返回两个正序数组中位数",
+      "description": "代码来自",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -931,6 +1540,12 @@
       "id": "leet-code-4-power",
       "path": "/summary/background/Algorithm/leet-code-4-power",
       "name": "求4的幂",
+      "description": "java package whale.leetcode.simple; /  @Author: WhaleFall541  @Date: 2021/5/31 23:22 / public class PowerOfFour {",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -940,6 +1555,12 @@
       "id": "kmp",
       "path": "/summary/background/Algorithm/KMP",
       "name": "KMP算法",
+      "description": "本文代码来自于中国大学MOOC",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -949,6 +1570,12 @@
       "id": "insert-sort",
       "path": "/summary/background/Algorithm/insert-sort",
       "name": "插入排序",
+      "description": "插入排序 将i元素插入到下标为0~i-1的位置上，逐个比较，如果发现前面的元素比arr[i]大 则将该元素后移 否则将i元素放入到空位置上 java package whale.simpleAlgorithm;",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -958,6 +1585,12 @@
       "id": "head-sort",
       "path": "/summary/background/Algorithm/head-sort",
       "name": "堆排序",
+      "description": "代码来自该视频 github仓库",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -967,6 +1600,12 @@
       "id": "bubble-sort",
       "path": "/summary/background/Algorithm/bubble-sort",
       "name": "冒泡排序",
+      "description": "算法思维：第一层for循环控制趟数，第二层for循环从j=0和j=1开始比较 如果发现前面比后面大则互换位置 优化：当第一趟下来 没有元素交换，说明该数组已经有序了不需要排序 java",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -976,6 +1615,12 @@
       "id": "binary-insert",
       "path": "/summary/background/Algorithm/Binary-Insert",
       "name": "二分插入",
+      "description": "代码来自改视频改写  算法思维：该算法是在插入排序的基础上优化的  插入元素下标i，从0 ~ i-1找插入该元素的位置，",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -985,6 +1630,12 @@
       "id": "base-sort",
       "path": "/summary/background/Algorithm/Base-Sort",
       "name": "基数排序",
+      "description": "参考视频 github仓库地址",
+      "allTags": [
+        "algorithm",
+        "computer-science",
+        "data-structures"
+      ],
       "group": "algorithm",
       "val": 1,
       "sources": [],
@@ -994,6 +1645,11 @@
       "id": "hbase",
       "path": "/summary/ai-bigdata/BigData/HBASE",
       "name": "HBASE",
+      "description": "HBase中，如果需要删除一张表，那么首先需要先禁用这张表 在创建表的时候，如果不指定名称空间，那么默认在default下 HBase是基于Hadoop存储的，即本质上是基于HDFS来存储的。HDFS的特点是一次写入多次读取，不允许修改；HBase提供了完整的增删改查的能力，其中的\"改\"怎么实现的？",
+      "allTags": [
+        "ai",
+        "machine-learning"
+      ],
       "group": "ai",
       "val": 1,
       "sources": [],
@@ -1003,6 +1659,11 @@
       "id": "hadoop",
       "path": "/summary/ai-bigdata/BigData/hadoop",
       "name": "Hadoop Full Reference",
+      "description": "Complete Hadoop guide covering HDFS, MapReduce, YARN, and cluster setup",
+      "allTags": [
+        "ai",
+        "machine-learning"
+      ],
       "group": "ai",
       "val": 1,
       "sources": [],
@@ -1012,6 +1673,11 @@
       "id": "flink-docker-compose",
       "path": "/summary/ai-bigdata/BigData/flink docker-compose",
       "name": "Flink Docker Compose",
+      "description": "shell tee flink.yml <<- 'EOF' version: \"2.2\" services: jobmanager: image: flink:1.15.4-scala2.12 ports:",
+      "allTags": [
+        "ai",
+        "machine-learning"
+      ],
       "group": "ai",
       "val": 1,
       "sources": [],
@@ -1021,6 +1687,11 @@
       "id": "hadoop-overview",
       "path": "/summary/ai-bigdata/BigData/Hadoop/hadoop-overview",
       "name": "Hadoop Overview",
+      "description": "1. Hadoop1.0：包括Common、HDFS、MapReduce 2. Hadoop2.0：包括Common、HDFS、MapReduce、YARN。Hadoop1.0和Hadoop2.0不兼容。从Hadoop2.7版本开始，包含了Ozone，从Hadoop2.10版本开始，包含了Subma",
+      "allTags": [
+        "ai",
+        "machine-learning"
+      ],
       "group": "ai",
       "val": 1,
       "sources": [],
@@ -1030,6 +1701,11 @@
       "id": "full-hadoop-reference",
       "path": "/summary/ai-bigdata/BigData/Hadoop/full-hadoop-reference",
       "name": "hadoop",
+      "description": "1. Hadoop1.0：包括Common、HDFS、MapReduce 2. Hadoop2.0：包括Common、HDFS、MapReduce、YARN。Hadoop1.0和Hadoop2.0不兼容。从Hadoop2.7版本开始，包含了Ozone，从Hadoop2.10版本开始，包含了Subma",
+      "allTags": [
+        "ai",
+        "machine-learning"
+      ],
       "group": "ai",
       "val": 1,
       "sources": [],
@@ -1039,6 +1715,13 @@
       "id": "wsl-opencode",
       "path": "/summary/ai-bigdata/AI/wsl-opencode",
       "name": "WSL + OpenCode",
+      "description": "WSL + OpenCode 安装配置指南",
+      "allTags": [
+        "ai",
+        "open-code",
+        "development-tool",
+        "tutorial"
+      ],
       "group": "ai",
       "val": 8,
       "sources": [
@@ -1053,14 +1736,18 @@
       "id": "vibe-coding",
       "path": "/summary/ai-bigdata/AI/vibe-coding",
       "name": "Vibe Coding Tools",
+      "description": "Vibe Coding Tools",
+      "allTags": [
+        "ai",
+        "machine-learning"
+      ],
       "group": "ai",
-      "val": 9,
+      "val": 8,
       "sources": [
         "level-1-ai-native"
       ],
       "references": [
         "future-vibecoding",
-        "oh-my-opencode",
         "wsl-opencode"
       ]
     },
@@ -1068,6 +1755,11 @@
       "id": "prompt",
       "path": "/summary/ai-bigdata/AI/prompt",
       "name": "Prompt",
+      "description": "Prompt",
+      "allTags": [
+        "ai",
+        "machine-learning"
+      ],
       "group": "ai",
       "val": 7,
       "sources": [
@@ -1082,8 +1774,15 @@
       "id": "oh-my-opencode",
       "path": "/summary/ai-bigdata/AI/oh-my-opencode-installation-guide",
       "name": "Oh My OpenCode",
+      "description": "Oh My OpenCode 安装配置指南",
+      "allTags": [
+        "ai",
+        "open-code",
+        "development-tool",
+        "tutorial"
+      ],
       "group": "ai",
-      "val": 10,
+      "val": 8,
       "sources": [
         "level-1-ai-native",
         "wsl-opencode"
@@ -1097,6 +1796,11 @@
       "id": "mcp",
       "path": "/summary/ai-bigdata/AI/mcp",
       "name": "MCP",
+      "description": "MCP 协议详解",
+      "allTags": [
+        "ai",
+        "machine-learning"
+      ],
       "group": "ai",
       "val": 8,
       "sources": [
@@ -1112,6 +1816,11 @@
       "id": "maxi-model-capacity",
       "path": "/summary/ai-bigdata/AI/maxi-model-capacity",
       "name": "Agent 智能体设计完整指南",
+      "description": "基于 ReAct 的 Agent 智能体设计完整指南",
+      "allTags": [
+        "ai",
+        "machine-learning"
+      ],
       "group": "ai",
       "val": 9,
       "sources": [
@@ -1127,6 +1836,11 @@
       "id": "lays-in-ai",
       "path": "/summary/ai-bigdata/AI/lays-in-ai",
       "name": "AI开发核心技术栈",
+      "description": "AI开发核心技术栈",
+      "allTags": [
+        "ai",
+        "machine-learning"
+      ],
       "group": "ai",
       "val": 13,
       "sources": [
@@ -1143,20 +1857,29 @@
       "id": "future-vibecoding",
       "path": "/summary/ai-bigdata/AI/future-vibecoding",
       "name": "Future Vibe Coding",
+      "description": "A forward-looking coding philosophy emphasizing intuition, creative flow, and human–AI collaboration in software development",
+      "allTags": [
+        "vibecoding",
+        "ai-assisted-development",
+        "programming-mindset"
+      ],
       "group": "vibecoding",
-      "val": 6,
+      "val": 5,
       "sources": [
         "vibe-coding",
         "career"
       ],
-      "references": [
-        "oh-my-opencode"
-      ]
+      "references": []
     },
     {
       "id": "career",
       "path": "/summary/ai-bigdata/AI/career",
       "name": "Career Paths",
+      "description": "A forward-looking career paths emphasizing Java/React full-stack background and AI core technology",
+      "allTags": [
+        "career",
+        "ai"
+      ],
       "group": "career",
       "val": 8,
       "sources": [
@@ -1172,6 +1895,11 @@
       "id": "ai-problems",
       "path": "/summary/ai-bigdata/AI/ai-problems",
       "name": "AI Problems",
+      "description": "AI Problems",
+      "allTags": [
+        "ai",
+        "machine-learning"
+      ],
       "group": "ai",
       "val": 2,
       "sources": [
@@ -1183,6 +1911,11 @@
       "id": "ai-formula",
       "path": "/summary/ai-bigdata/AI/AI-formula",
       "name": "AI Formula",
+      "description": "AI Formula",
+      "allTags": [
+        "ai",
+        "machine-learning"
+      ],
       "group": "ai",
       "val": 2,
       "sources": [
@@ -1194,6 +1927,12 @@
       "id": "summary",
       "path": "/summary/ai-bigdata/AI/prompt-engineering-roadmap/summary",
       "name": "Prompt 质量评估与总结",
+      "description": "Prompt 质量标准、技能组合、面试突击清单和核心理念总结",
+      "allTags": [
+        "ai",
+        "prompt-engineering",
+        "interview"
+      ],
       "group": "ai",
       "val": 12,
       "sources": [
@@ -1212,6 +1951,13 @@
       "id": "overview",
       "path": "/summary/ai-bigdata/AI/prompt-engineering-roadmap/overview",
       "name": "AI Prompt Engineering Roadmap - 概述",
+      "description": "系统化的 AI Prompt 工程与全栈开发能力成长路径概述",
+      "allTags": [
+        "ai",
+        "prompt-engineering",
+        "full-stack",
+        "architecture"
+      ],
       "group": "ai",
       "val": 13,
       "sources": [],
@@ -1228,6 +1974,13 @@
       "id": "level-4-production",
       "path": "/summary/ai-bigdata/AI/prompt-engineering-roadmap/level-4-production",
       "name": "Level 4 - 全栈落地与生产优化",
+      "description": "完成前后端全栈交付,掌握模型微调,建立生产级 LLMOps 体系",
+      "allTags": [
+        "ai",
+        "production",
+        "fine-tuning",
+        "level-4"
+      ],
       "group": "ai",
       "val": 11,
       "sources": [
@@ -1244,6 +1997,13 @@
       "id": "level-3-agent",
       "path": "/summary/ai-bigdata/AI/prompt-engineering-roadmap/level-3-agent",
       "name": "Level 3 - Agent 架构与可观测性",
+      "description": "掌握智能决策与路由,建立 Agent 行为的可观测性和审计能力",
+      "allTags": [
+        "ai",
+        "agent",
+        "langgraph",
+        "level-3"
+      ],
       "group": "ai",
       "val": 12,
       "sources": [
@@ -1260,6 +2020,12 @@
       "id": "level-2-rag",
       "path": "/summary/ai-bigdata/AI/prompt-engineering-roadmap/level-2-rag",
       "name": "Level 2 - RAG 应用开发与异构系统架构",
+      "description": "掌握检索增强生成 (RAG),理解 Java-Python 异构系统通信,建立评估体系",
+      "allTags": [
+        "ai",
+        "rag",
+        "level-2"
+      ],
       "group": "ai",
       "val": 10,
       "sources": [
@@ -1275,6 +2041,12 @@
       "id": "level-1-ai-native",
       "path": "/summary/ai-bigdata/AI/prompt-engineering-roadmap/level-1-ai-native",
       "name": "Level 1 - AI-Native 工作流与基础设施",
+      "description": "建立 AI 优先的开发习惯,搭建本地 AI 基础设施",
+      "allTags": [
+        "ai",
+        "prompt-engineering",
+        "level-1"
+      ],
       "group": "ai",
       "val": 17,
       "sources": [
@@ -1310,10 +2082,6 @@
     {
       "source": "vibe-coding",
       "target": "future-vibecoding"
-    },
-    {
-      "source": "vibe-coding",
-      "target": "oh-my-opencode"
     },
     {
       "source": "vibe-coding",
@@ -1406,10 +2174,6 @@
     {
       "source": "career",
       "target": "future-vibecoding"
-    },
-    {
-      "source": "future-vibecoding",
-      "target": "oh-my-opencode"
     },
     {
       "source": "level-4-production",
