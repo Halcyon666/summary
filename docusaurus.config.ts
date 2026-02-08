@@ -211,7 +211,7 @@ const config: Config = {
       // docSearch for  https://halcyon666.top/
       appId: "L275Z6TKIP",
       apiKey: "b7ad70468b747f35a31be48d304f725d",
-      indexName: "halcyon666top",
+      indexName: "halcyon666.top",
 
       // Optional: see doc section below
       contextualSearch: true,  // 自动根据当前 locale 过滤搜索结果
