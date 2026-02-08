@@ -13,64 +13,98 @@ permissions:
 jobs:
   moderate:
     runs-on: ubuntu-latest
+    # 防止 Bot 触发工作流导致死循环
+    if: github.actor != 'github-actions[bot]'
     steps:
       - name: Check for inappropriate content
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            // 敏感词列表（可以根据需要添加更多）
+            // === 敏感词配置区域 ===
             const bannedWords = [
-              // 垃圾信息
-              'spam', '广告', '推广', '加微信', '加QQ',
-              // 不当内容
-              '色情', '赌博', '毒品',
-              // 可以添加更多敏感词
+              // 1. 垃圾广告 / Spam
+              'spam', '广告', '推广', '营销', '代开', '发票', 
+              '加微信', '加qq', '加群', '联系我', '私聊',
+              '兼职', '刷单', '刷钻', '领皮肤', '免费送',
+              'discount', 'sale', 'promo', 'buy now', 'click here',
+              
+              // 2. 违禁内容 / Illegal
+              'VPN', '翻墙', '梯子', '科学上网',
+              '色情', '赌博', '毒品', 'porn', 'gamble', 'drug',
+              '枪支', '迷药', '监听',
+              
+              // 3. 侮辱谩骂 / Insult (慎用，防止误伤)
+              '傻逼', '脑残', '弱智', '废物', '死妈', '垃圾', 
+              'fuck', 'shit', 'bitch', 'asshole', 'idiot', 'stupid',
+              'nigger', 'chink'
             ];
             
-            // 获取评论内容
-            let commentBody = '';
-            let commentId = null;
-            let discussionNumber = null;
-            
-            if (context.eventName === 'discussion_comment') {
-              commentBody = context.payload.comment.body;
-              commentId = context.payload.comment.node_id;
-              discussionNumber = context.payload.discussion.number;
-            } else if (context.eventName === 'discussion') {
-              commentBody = context.payload.discussion.body || '';
-              discussionNumber = context.payload.discussion.number;
-            }
-            
-            // 检查是否包含敏感词
-            const lowerBody = commentBody.toLowerCase();
-            const foundWords = bannedWords.filter(word => 
-              lowerBody.includes(word.toLowerCase())
-            );
-            
-            if (foundWords.length > 0) {
-              console.log(`⚠️ Found inappropriate content: ${foundWords.join(', ')}`);
-              
-              // 如果是评论，添加警告回复
-              if (context.eventName === 'discussion_comment') {
-                await github.rest.discussions.createDiscussionComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  discussion_number: discussionNumber,
-                  body: `⚠️ **内容审核提醒** / **Content Moderation Notice**\n\n您的评论可能包含不当内容，已被标记审核。管理员会尽快处理。\n\nYour comment may contain inappropriate content and has been flagged for review. The administrator will handle it soon.\n\n---\n*This is an automated message.*`
-                });
+            // === 逻辑处理区域 ===
+            try {
+              let commentBody = '';
+              let commentId = null;
+              let discussionNumber = null;
+              let author = context.actor;
+
+              // 安全获取 payload 数据
+              if (context.eventName === 'discussion_comment' && context.payload.comment) {
+                commentBody = context.payload.comment.body || '';
+                commentId = context.payload.comment.node_id;
+                discussionNumber = context.payload.discussion ? context.payload.discussion.number : null;
+              } else if (context.eventName === 'discussion' && context.payload.discussion) {
+                commentBody = context.payload.discussion.body || '';
+                discussionNumber = context.payload.discussion.number;
+              }
+
+              if (!commentBody || !discussionNumber) {
+                console.log('Skipping: No comment body or discussion number found.');
+                return;
               }
               
-              // 记录到日志
-              core.warning(`Inappropriate content detected in discussion #${discussionNumber}`);
+              // 检查是否包含敏感词
+              const lowerBody = commentBody.toLowerCase();
+              const foundWords = bannedWords.filter(word => 
+                lowerBody.includes(word.toLowerCase())
+              );
               
-              // 可选：自动锁定讨论（取消注释以启用）
-              // await github.rest.discussions.lockDiscussion({
-              //   owner: context.repo.owner,
-              //   repo: context.repo.repo,
-              //   discussion_number: discussionNumber,
-              //   lock_reason: 'spam'
-              // });
-            } else {
-              console.log('✅ Content passed moderation check');
+              if (foundWords.length > 0) {
+                console.log(`⚠️ Found inappropriate content by ${author}: ${foundWords.join(', ')}`);
+                
+                // 1. 删除违规评论 / Delete the comment
+                if (context.eventName === 'discussion_comment') {
+                  try {
+                    await github.rest.discussions.deleteDiscussionComment({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      comment_id: commentId
+                    });
+                    console.log(`🗑️ Deleted comment ${commentId}`);
+                  } catch (err) {
+                    console.error('Failed to delete comment:', err);
+                  }
+                } else if (context.eventName === 'discussion') {
+                  // 如果是整个讨论帖违规，则删除讨论 / Delete the discussion
+                  try {
+                     await github.rest.discussions.deleteDiscussion({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      discussion_number: discussionNumber
+                    });
+                    console.log(`🗑️ Deleted discussion #${discussionNumber}`);
+                  } catch (err) {
+                    console.error('Failed to delete discussion:', err);
+                  }
+                }
+
+                // 2. (可选) 记录日志或发送通知 / Log warning
+                // 由于评论已被删除，这里仅记录到 Action 日志
+                core.warning(`🗑️ Automatically deleted inappropriate content in discussion #${discussionNumber} by ${author}. Keywords: ${foundWords.join(', ')}`);
+                
+              } else {
+                console.log('✅ Content passed moderation check');
+              }
+            } catch (error) {
+              console.error('Error in moderation script:', error);
+              core.setFailed(`Moderation script failed: ${error.message}`);
             }
