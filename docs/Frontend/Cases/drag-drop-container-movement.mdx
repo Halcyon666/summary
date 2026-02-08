@@ -1,9 +1,9 @@
 ---
 id: drag-drop-container-movement
-title: A Robust Draggable Element
-sidebar_label: A Robust Draggable Element
+title: 构建健壮的拖拽元素
+sidebar_label: 构建健壮的拖拽元素
 sidebar_position: 10
-description: A Robust Draggable Element
+description: 构建健壮的拖拽元素
 tags:
 - frontend
 - javascript
@@ -12,13 +12,13 @@ last_update:
   date: '2026-01-25'
   author: halcyon666
 ---
-# Building a Robust Draggable Element: A Step-by-Step Bug Fixing Journey
+# 构建健壮的拖拽元素：一步步修复 Bug 的旅程
 
-Creating a draggable element seems simple at first, but there are many edge cases and bugs that can ruin the user experience. This guide walks through building a draggable icon with text, and most importantly, how to fix all the common issues that arise.
+创建可拖拽元素起初看起来很简单，但有很多边界情况和 Bug 可能会破坏用户体验。本指南介绍了如何构建一个带文字的可拖拽图标，最重要的是，如何修复所有常见问题。
 
-## The Initial Implementation
+## 初始实现
 
-Let's start with a basic draggable container containing an icon and text:
+让我们从一个包含图标和文字的基本可拖拽容器开始：
 
 ```html
 <!DOCTYPE html>
@@ -102,13 +102,13 @@ Let's start with a basic draggable container containing an icon and text:
 </html>
 ```
 
-## Bug #1: Container Sticks to Cursor After Mouse Release
+## Bug #1：鼠标释放后容器仍跟随光标
 
-**Problem**: After dragging and releasing the mouse button, the container continues to follow the cursor.
+**问题**：拖动并释放鼠标按钮后，容器继续跟随光标。
 
-**Root Cause**: The `mouseup` event doesn't reliably report which button was released across all browsers. The condition `e.button !== 0` sometimes fails.
+**根本原因**：`mouseup` 事件在所有浏览器中都不能可靠地报告释放了哪个按钮。条件 `e.button !== 0` 有时会失败。
 
-**Solution**: Remove the button check in the mouseup handler and simplify the logic:
+**解决方案**：移除 mouseup 处理程序中的按钮检查并简化逻辑：
 
 ```javascript
 // Fixed mouse up handler
@@ -120,13 +120,13 @@ document.addEventListener('mouseup', () => {
 });
 ```
 
-## Bug #2: Memory Leaks from Persistent Event Listeners
+## Bug #2：持久事件监听器导致的内存泄漏
 
-**Problem**: Event listeners remain active even when not dragging, causing performance issues.
+**问题**：事件监听器即使在不拖动时也保持活动状态，导致性能问题。
 
-**Root Cause**: The `mousemove` listener runs continuously, checking `isDragging` on every mouse movement across the entire page.
+**根本原因**：`mousemove` 监听器持续运行，在每次鼠标移动时检查 `isDragging`。
 
-**Solution**: Add and remove event listeners dynamically:
+**解决方案**：动态添加和移除事件监听器：
 
 ```javascript
 // Event handler functions
@@ -161,13 +161,13 @@ container.addEventListener('mousedown', (e) => {
 });
 ```
 
-## Bug #3: Dragging Fails When Cursor Leaves Window
+## Bug #3：光标离开窗口时拖动失败
 
-**Problem**: If you drag outside the browser window and release the mouse button, the element stays "stuck" to the cursor.
+**问题**：如果你拖到浏览器窗口外并释放鼠标按钮，元素会保持"粘"在光标上。
 
-**Root Cause**: The `mouseup` event doesn't fire when the mouse is released outside the browser window.
+**根本原因**：当鼠标在浏览器窗口外释放时，`mouseup` 事件不会触发。
 
-**Solution**: Use `e.buttons` to detect button state during mouse movement:
+**解决方案**：使用 `e.buttons` 在鼠标移动期间检测按钮状态：
 
 ```javascript
 const handleMouseMove = (e) => {
@@ -184,19 +184,19 @@ const handleMouseMove = (e) => {
 };
 ```
 
-**How `e.buttons` works**:
-- `0` = No buttons pressed
-- `1` = Left button pressed
-- `2` = Right button pressed
-- `4` = Middle button pressed
+**`e.buttons` 的工作原理**：
+- `0` = 没有按钮被按下
+- `1` = 左键被按下
+- `2` = 右键被按下
+- `4` = 中键被按下
 
-## Bug #4: Image Drag Interference
+## Bug #4：图片拖动干扰
 
-**Problem**: Clicking on the image doesn't trigger dragging because the browser's default image drag behavior interferes.
+**问题**：点击图片不会触发拖动，因为浏览器的默认图片拖动行为会产生干扰。
 
-**Root Cause**: Images have built-in draggable behavior that conflicts with custom drag logic.
+**根本原因**：图片具有内置的可拖动行为，与自定义拖动逻辑冲突。
 
-**Solution**: Disable default image drag behavior:
+**解决方案**：禁用默认图片拖动行为：
 
 ```javascript
 // Create icon with drag prevention
@@ -208,13 +208,13 @@ img.draggable = false; // Disable default drag
 img.style.pointerEvents = 'none'; // Let clicks pass through to container
 ```
 
-## Bug #5: Click Events Trigger During Fast Drags
+## Bug #5：快速拖动时触发点击事件
 
-**Problem**: When dragging quickly, the click event still fires, showing unwanted notifications.
+**问题**：快速拖动时，点击事件仍然会触发，显示不必要的通知。
 
-**Root Cause**: The click event detection was based on time and distance calculations, which can fail during rapid movements.
+**根本原因**：点击事件检测基于时间和距离计算，在快速移动时可能会失败。
 
-**Solution**: Track actual dragging state with a flag:
+**解决方案**：使用标志跟踪实际拖动状态：
 
 ```javascript
 // Add drag tracking
@@ -253,13 +253,13 @@ container.addEventListener('click', (e) => {
 });
 ```
 
-## Bug #6: Element Can Be Dragged Off Screen
+## Bug #6：元素可被拖出屏幕
 
-**Problem**: The draggable element can be moved completely outside the visible area, making it inaccessible.
+**问题**：可拖拽元素可以被完全移到可见区域之外，使其无法访问。
 
-**Root Cause**: No boundary checking in the drag logic.
+**根本原因**：拖动逻辑中没有边界检查。
 
-**Solution**: Add viewport boundary constraints:
+**解决方案**：添加视口边界约束：
 
 ```javascript
 const handleMouseMove = (e) => {
@@ -294,9 +294,9 @@ const handleMouseMove = (e) => {
 };
 ```
 
-## Adding Click Functionality with Hint System
+## 使用提示系统添加点击功能
 
-To make the element interactive, we can add a click handler that shows a notification:
+为了使元素具有交互性，我们可以添加一个显示通知的点击处理程序：
 
 ```javascript
 // Hint display function
@@ -344,9 +344,9 @@ const showHint = (message) => {
 };
 ```
 
-## Final Complete Code
+## 最终完整代码
 
-Here's the final, fully debugged version:
+这是最终的、完全调试好的版本：
 
 ```html
 <!DOCTYPE html>
@@ -508,17 +508,17 @@ Here's the final, fully debugged version:
 </html>
 ```
 
-## Key Takeaways
+## 关键要点
 
-1. **Always clean up event listeners** to prevent memory leaks
-2. **Use `e.buttons` for reliable button state detection** during mouse movement
-3. **Disable default drag behavior** for images and other draggable elements
-4. **Track actual movement** rather than relying on time/distance for click detection
-5. **Implement boundary checking** to keep elements accessible
-6. **Test edge cases** like dragging outside the window
-7. **Consider performance** by adding listeners only when needed
+1. **始终清理事件监听器**以防止内存泄漏
+2. **使用 `e.buttons` 进行可靠的按钮状态检测**在鼠标移动期间
+3. **禁用默认拖动行为**对于图片和其他可拖动元素
+4. **跟踪实际移动**而不是依赖时间/距离进行点击检测
+5. **实现边界检查**以保持元素可访问
+6. **测试边界情况**如拖到窗口外
+7. **考虑性能**仅在需要时添加监听器
 
-This implementation provides a smooth, reliable dragging experience with proper click detection and boundary constraints. The step-by-step debugging process shows how small issues can compound into major usability problems, and how systematic testing and fixing leads to a robust solution.
+此实现提供了流畅、可靠的拖动体验，具有适当的点击检测和边界约束。一步步的调试过程展示了小问题如何累积成主要的可用性问题，以及系统性的测试和修复如何产生健壮的解决方案。
 
 
 import TailProtocal from "@site/src/components/TailProtocal";

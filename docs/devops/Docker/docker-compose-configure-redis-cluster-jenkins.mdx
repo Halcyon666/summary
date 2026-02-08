@@ -15,13 +15,13 @@ last_update:
 sources:
 - docker-command-and-dockerfile
 ---
-## set up redis cluster 
+## 搭建 Redis 集群
 
-[reference article from here][docker compose redis cluster]
+[参考文章][docker compose redis cluster]
 
-### write config file for redis 
+### 编写 Redis 配置文件
 
-> remember to replace the ip 192.168.3.163 to your real ip address
+> 记得将 IP 192.168.3.163 替换为你的真实 IP 地址
 
 ```shell script
 cd /docker/redis
@@ -55,7 +55,7 @@ auto-aof-rewrite-min-size 64mb
 EOF
 ```
 
-### script for create multiple
+### 创建多个节点的脚本
 
 ```shell script
 tee redis-cluster-config.sh <<- 'EOF'
@@ -71,7 +71,7 @@ chmod 777 redis-cluster-config.sh
 ```
 
 
-###  create docker-compose file 
+### 创建 docker-compose 文件 
 
 ```shell script
 tee docker-compose.yml <<- 'EOF'
@@ -176,19 +176,19 @@ services:
 EOF
 ```
 
-### launch redis cluster
+### 启动 Redis 集群
 
 `docker-compose -f docker-compose-redis-cluster.yml up`
 
 
 
-stop to use this command down including Removing network rediscluster_default
+停止并删除网络 rediscluster_default 使用以下命令
 
 `docker-compose -f docker-compose-redis-cluster.yml down`
 
 `docker-compose -f docker-compose-redis-cluster.yml stop`
 
-### arrange slots
+### 分配槽位
 
 ```shell
 docker exec -it redis7001 redis-cli -p 7001 --cluster create 192.168.3.163:7001 192.168.3.163:7002 192.168.3.163:7003 192.168.3.163:7004 192.168.3.163:7005 192.168.3.163:7006 --cluster-replicas 1
@@ -196,12 +196,12 @@ docker exec -it redis7001 redis-cli -p 7001 --cluster create 192.168.3.163:7001 
 
 
 
-If slots not served，here some resolutions:
+如果槽位未分配，这里有一些解决方案：
 
 [solve slots not served][slots not served]
 
 
-### connect redis
+### 连接 Redis
 
 `docker exec -it redis7001 redis-cli -p 7001`
 
@@ -209,11 +209,11 @@ If slots not served，here some resolutions:
 
 [slots not served]: https://blog.csdn.net/one312/article/details/104983140
 
-## jenkins in docker compose
+## Docker Compose 中的 Jenkins
 
-[this article from here][docker compose jenkins]
+[本文参考][docker compose jenkins]
 
-### docker-compose configuration
+### docker-compose 配置
 
 ```
 tee docker-compose-jenkins.yml <<- 'EOF'
@@ -234,11 +234,11 @@ services:
 EOF
 ```
 
-### run the docker compose
+### 运行 docker compose
 
 `docker-compose -f docker-compose-jenkins.yml up -d`
 
-### get the initial admin pwd
+### 获取初始管理员密码
 
 `docker exec my-jenkins-3 cat /var/jenkins_home/secrets/initialAdminPassword`
 
@@ -248,7 +248,7 @@ EOF
 > [参考博客 redis cluster搭建][docker compose redis cluster]
 > [参考博客 slots not served][slots not served]
 
-### 配置idea project-docker
+### 配置 IDEA Project-Docker
 
 ```yml
 version: '3.7'
@@ -266,7 +266,7 @@ services:
       - TZ=Asia/Shanghai
 ```
 
-### mysql docer-compose
+### MySQL Docker Compose
 
 ```shell
 mkdir -p /dockerlearn/docker-compose/mysql/{mydir,datadir,conf,source}
@@ -322,7 +322,7 @@ EOF
 
 
 
-## Redis sentinel
+## Redis 哨兵
 
 
 import TailProtocal from "@site/src/components/TailProtocal";

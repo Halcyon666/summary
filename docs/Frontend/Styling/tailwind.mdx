@@ -1,9 +1,9 @@
 ---
 id: tailwind
-title: tailwind usage
-sidebar_label: tailwind usage
+title: Tailwind CSS 使用指南
+sidebar_label: Tailwind CSS 使用指南
 sidebar_position: 10
-description: taco shop project written by tailwind and vue
+description: 使用 Tailwind 和 Vue 编写的 taco shop 项目
 tags:
 - frontend
 - javascript
@@ -12,46 +12,46 @@ last_update:
   date: '2026-01-25'
   author: halcyon666
 ---
-# `How to use tailwind css in your project?`
+# `如何在项目中使用 Tailwind CSS？`
 
 
 
-**All contents base on tailwind `3.4.1`, and this is my [GitHub Repository](https://github.com/Halcyon666/taco-shop).**
+**所有内容基于 Tailwind `3.4.1`，这是我的 [GitHub 仓库](https://github.com/Halcyon666/taco-shop)。**
 
-**Happy news, You can visit my deploy website [here](https://halcyon666.github.io/taco-shop/)**
+**好消息，你可以访问我部署的网站 [这里](https://halcyon666.github.io/taco-shop/)**
 
-### Prerequisite
+### 前置条件
 
 - [`MDN` Cascading Style Sheets](https://developer.mozilla.org/en-US/docs/Web/CSS)
 
-- [The css course learned from](https://youtu.be/OXGznpKZ_sA?si=KTPSZgU2-h7IHr_d)
+- [CSS 课程学习来源](https://youtu.be/OXGznpKZ_sA?si=KTPSZgU2-h7IHr_d)
 
-- [Official `Vue` Website](https://vuejs.org/)
+- [Vue 官方网站](https://vuejs.org/)
 
 - [TypeScript](https://www.typescriptlang.org/)
 
-### Learn Background
+### 学习背景
 
-First I learned a basic [css course](https://youtu.be/OXGznpKZ_sA?si=KTPSZgU2-h7IHr_d) given by ***Dave Gray***(Thanks for you), second the thought throw out when I learning, I can rewrite this by other technology that html replace by vue and ts, css replace by tailwind css. 
+首先我学习了一个基础的 [CSS 课程](https://youtu.be/OXGznpKZ_sA?si=KTPSZgU2-h7IHr_d)，由 ***Dave Gray*** 主讲（感谢他），其次在学习过程中产生的想法是，我可以用其他技术重写这个项目，用 Vue 和 TypeScript 替换 HTML，用 Tailwind CSS 替换 CSS。
 
-So this article the summary to record all of the key point, you will get great beneficial from here.
+所以这篇文章是总结，记录所有的关键点，你会在这里受益匪浅。
 
-### Install Tailwind Css
+### 安装 Tailwind CSS
 
-If you wanna initiate a new project, you can read [this article](https://halcyon666.github.io/summary/Frontend/Integrate%20husky%20prettier%20etc), 
-then install the tailwind Css by reading [this tutorial](https://tailwindcss.com/docs/installation/using-vite).
+如果你想创建一个新项目，你可以阅读 [这篇文章](https://halcyon666.github.io/summary/Frontend/Integrate%20husky%20prettier%20etc)，
+然后通过阅读 [这个教程](https://tailwindcss.com/docs/installation/using-vite) 安装 Tailwind CSS。
 
-Also you can skip all steps above, just execute the following command,
+你也可以跳过上述所有步骤，只需执行以下命令，
 
 ```shell
 pnpm add -D tailwindcss postcss @tailwindcss/postcss
 ```
 
-| package name             |     function           |
+| 包名                     | 功能                           |
 | ------------------------ | ------------------------------ |
-| **tailwindcss**          | Tailwind core      |
-| **postcss**              | CSS compiler, used to run Tailwind         |
-| **@tailwindcss/postcss** | Tailwind v4 PostCSS integration plugin (required) |
+| **tailwindcss**          | Tailwind 核心                  |
+| **postcss**              | CSS 编译器，用于运行 Tailwind  |
+| **@tailwindcss/postcss** | Tailwind v4 PostCSS 集成插件（必需） |
 
 
 ```js  title="postcss.config.js"
@@ -74,15 +74,15 @@ export default {
 } */
 ```
 
-[example commit](https://github.com/Halcyon666/react-daily-learn/commit/782abb369a624a792802b8fd6702b4614ce81bd7)
+[示例提交](https://github.com/Halcyon666/react-daily-learn/commit/782abb369a624a792802b8fd6702b4614ce81bd7)
 
-### Tailwind Usage
+### Tailwind 使用
 
-I will skip most simple usage, you can look up in [official site](https://tailwindcss.com).
+我会跳过大多数简单的用法，你可以在 [官方网站](https://tailwindcss.com) 查阅。
 
 #### `margin-bottom`
 
-If you wanna define margin-bottom space, custom definition is below,
+如果你想定义 margin-bottom 间距，自定义定义如下，
 
 ```css
 .mb-4 {
@@ -90,9 +90,9 @@ If you wanna define margin-bottom space, custom definition is below,
 }
 ```
 
-> All essay will omit basic css used in html.
+> 所有文章将省略 HTML 中使用的基础 CSS。
 
-the tailwind css,
+Tailwind CSS，
 
 ```html
 <div class="mb-4">
@@ -100,11 +100,11 @@ the tailwind css,
 </div>
 ```
 
-another more complicated case, if wanna declare a space with a clamp function,this `clamp(1em, 2.5vh, 1.5em) 0` is setting a margin for an element that will vary between `1em` and `1.5em`, with a preference for `2.5vh` and an initial margin of `0`. The actual margin will depend on the viewport size and how it fits within the specified range.
+另一个更复杂的例子，如果你想声明一个带有 clamp 函数的间距，这个 `clamp(1em, 2.5vh, 1.5em) 0` 是设置一个元素的边距，它将在 `1em` 和 `1.5em` 之间变化，首选值为 `2.5vh`，初始边距为 `0`。实际边距将取决于视口大小以及它如何适应指定的范围。
 
-`2.5vh` is equivalent to 2.5% of the viewport height. It's a responsive unit that adjusts based on the height of the user's viewport (the visible area in the browser).
+`2.5vh` 相当于视口高度的 2.5%。这是一个响应式单位，根据用户的视口高度（浏览器中的可见区域）进行调整。
 
-custom css
+自定义 CSS
 
 ```css
 .mb-clamp {
@@ -122,7 +122,7 @@ tailwind css
 
 #### `text-shadow`
 
-- custom css
+- 自定义 CSS
 
 ```css
 .custom-shadow {
@@ -130,7 +130,7 @@ tailwind css
 }
 ```
 
-- tailwind css
+- Tailwind CSS
 
 ```html
 <div class="[text-shadow:2px_2px_5px_#333]">
@@ -140,7 +140,7 @@ tailwind css
 
 #### `font-family`
 
-If you wanna set font family, custom Css is below 
+如果你想设置字体族，自定义 CSS 如下
 
 ```css
 .custom-font-family {
@@ -165,7 +165,7 @@ export default {
 } satisfies Config
 ```
 
-and use in html,
+并在 HTML 中使用，
 
 ```html
 <div class="font-headings">
@@ -174,7 +174,7 @@ and use in html,
 ```
 #### `border`
 
-The custom border composite css 
+自定义 border 复合 CSS
 
 ```css
 .div {
@@ -182,7 +182,7 @@ The custom border composite css
 }
 ```
 
-but there is not composite tailwind css style, define by sevaral field
+但是没有复合的 Tailwind CSS 样式，需要通过多个字段定义
 
 ```html
 <div class="border-solid border border-black"></div>
@@ -190,7 +190,7 @@ but there is not composite tailwind css style, define by sevaral field
 
 #### `animate`
 
-This custom css define a animate, from top `-100px` down the window.
+这个自定义 CSS 定义了一个动画，从顶部 `-100px` 向下移动到窗口。
 
 ```css
 .hero__h2 {
@@ -247,7 +247,7 @@ export default {
 } satisfies Config
 ```
 
-use animate in html
+在 HTML 中使用动画
 
 ```html
 <div class="animate-[showWelcome_0.5s_ease-in-out_1s_forwards]">
@@ -255,9 +255,9 @@ use animate in html
 </div>
 ```
 
-#### pseudo `first-child` and `last-child`
+#### 伪类 `first-child` 和 `last-child`
 
-custom css
+自定义 CSS
 
 ```css
 .main__article:first-child {
@@ -269,7 +269,7 @@ custom css
 }
 ```
 
-tailwind css 
+Tailwind CSS
 
 ```html
 <div class="first:mt-4 last:min-h-[calc(100vh-20rem)]">
@@ -286,11 +286,11 @@ tailwind css
 > </div>
 > ```
 >
-> **and be careful with the function usage, must not contains blank in `last-of-type:min-h-[calc(100vh-20rem)]`, if you really wanna add, just use `last-of-type:min-h-[calc(100vh_-_20rem)]` instead of `last-of-type:min-h-[calc(100vh - 20rem)]`.**
+> **注意函数的使用，在 `last-of-type:min-h-[calc(100vh-20rem)]` 中不能包含空格，如果你确实想添加空格，请使用 `last-of-type:min-h-[calc(100vh_-_20rem)]` 代替 `last-of-type:min-h-[calc(100vh - 20rem)]`。**
 
-#### pseudo `before` and `after`
+#### 伪类 `before` 和 `after`
 
-use pseudo `before` or `after` custom css add some content, custom css
+使用伪类 `before` 或 `after` 通过自定义 CSS 添加一些内容，自定义 CSS
 
 ```css
 .header__h1::before {
@@ -302,7 +302,7 @@ use pseudo `before` or `after` custom css add some content, custom css
 }
 ```
 
-tailwind `css`
+Tailwind CSS
 
 ```html
 <div class="before:content-['🌮'] after:content-['🌮']">
@@ -310,11 +310,11 @@ tailwind `css`
 </div>
 ```
 
-> '🌮' must need single quote** ,🌮 will does not work.
+> '🌮' 必须使用单引号，🌮 不会生效。
 
-#### `@media` query  
+#### `@media` 查询
 
-custom css 
+自定义 CSS
 
 ```css
 @media screen and (min-width: 576px) {
@@ -343,15 +343,15 @@ use in tailwind css
 </div>
 ```
 
-It look more concise, I like this.
+它看起来更简洁，我喜欢这个。
 
-#### text color opacity
+#### 文字颜色透明度
 
-directly use `text-black/[.6]` instead of `text-[rgba(0, 0, 0, 0.6)]`, because it doesn't support yet. 
+直接使用 `text-black/[.6]` 代替 `text-[rgba(0, 0, 0, 0.6)]`，因为后者还不支持。
 
-If the color is `rgba(52, 178, 52, 0.75)`,first you should convert it to hex color, then use `text-[#34b234bf]`.
+如果颜色是 `rgba(52, 178, 52, 0.75)`，首先你应该将其转换为十六进制颜色，然后使用 `text-[#34b234bf]`。
 
-Here give a example, custom css
+这里给个例子，自定义 CSS
 
 ```css
 .header__h1 {
@@ -371,7 +371,7 @@ tailwind css
 
 #### `text-shadow`
 
-custom css,
+自定义 CSS，
 
 ```css
 :root {
@@ -399,7 +399,7 @@ tailwind css,
 
 #### `box-shadow`
 
-custom css
+自定义 CSS
 
 ```css
 :root {
@@ -424,11 +424,11 @@ tailwind css,
       <!--  ... -->
 </div>
 ```
-sometimes you can define in seperate way, more details plz check [here](https://tailwindcss.com/docs/box-shadow),
+有时候你可以用单独的方式定义，更多详情请查看 [这里](https://tailwindcss.com/docs/box-shadow)，
 
-and below I give a tailwind css example in react, relative style `shadow-lg shadow-cyan-500/50 opacity-85`, define `box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);`
+下面我给出 Tailwind CSS 在 React 中的示例，相关样式 `shadow-lg shadow-cyan-500/50 opacity-85`，定义 `box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);`
 
-and border color, box opacity.
+以及边框颜色、盒子透明度。
 
 ```jsx
 <div className="text-center text-2xl font-bold mt-4 p-2 border border-purple-400 border-solid shadow-lg shadow-cyan-500/50 bg-cyan-500 opacity-85">
@@ -437,58 +437,58 @@ and border color, box opacity.
 ```
 
 
-### Problems Fix
+### 问题修复
 
-##### Picture not display
+##### 图片不显示
 
-I used static picture in my vue file, once I deploy to github page picture disappear, because `vite` don't include the png in `src/assets/img/tacos_delicioso_1000x667.png`, I check the solution on the [vite official website](https://vitejs.dev/guide/assets.html), both of this ways below works, just choose one you prefer. [Here](https://github.com/Halcyon666/taco-shop/commit/ae52cfc97ea40a73a5a32e9fd86ed971cb535ebf) is solution of commit change.
+我在 Vue 文件中使用了静态图片，一旦部署到 GitHub Pages 图片就消失了，因为 `vite` 没有将 `src/assets/img/tacos_delicioso_1000x667.png` 包含在内，我查看了 [Vite 官网](https://vitejs.dev/guide/assets.html) 上的解决方案，以下两种方法都有效，选择你喜欢的一种即可。这是解决方案的 [提交记录](https://github.com/Halcyon666/taco-shop/commit/ae52cfc97ea40a73a5a32e9fd86ed971cb535ebf)。
 
-- First method
+- 第一种方法
 
 ```ts
 const img = new URL('@/assets/img/tacos_delicioso_1000x667.png', import.meta.url).href
 ```
 
-- Second method
+- 第二种方法
 
 ```ts
-// but this will get a error hint, so I prefer to the first method
+// 但这会报错，所以我更喜欢第一种方法
 // Cannot find module '@/assets/img/tacos_and_drink_1000x667.png' or its corresponding type declarations.
 import img from '@/assets/img/tacos_delicioso_1000x667.png'
 ```
 
-##### My page lost all the styles
+##### 页面丢失所有样式
 
-Because of making mistake in `postcss.config.js`, I delete the line `tailwindcss: { config: './tailwind.config.ts' },`;
+因为 `postcss.config.js` 配置错误，我删除了 `tailwindcss: { config: './tailwind.config.ts' },` 这一行；
 
-You can see the official [guide](https://tailwindcss.com/docs/configuration#creating-your-configuration-file), [Here](https://github.com/Halcyon666/taco-shop/commit/4a136de832103a85edee410b3847ffafefd76b5f) is solution of commit change.
+你可以查看官方 [指南](https://tailwindcss.com/docs/configuration#creating-your-configuration-file)，这是解决方案的 [提交记录](https://github.com/Halcyon666/taco-shop/commit/4a136de832103a85edee410b3847ffafefd76b5f)。
 
 ```js {4} showLineNumbers
 module.exports = {
   plugins: {
-    // config location, defaullt is tailwind.config.js,here must indicate the file name
+    // 配置位置，默认是 tailwind.config.js，这里必须指明文件名
     tailwindcss: { config: './tailwind.config.ts' },
     autoprefixer: {},
     cssnano: {},
-    // nest css
+    // 嵌套 CSS
     'tailwindcss/nesting': 'postcss-nesting',
     'postcss-preset-env': {
       features: { 'nesting-rules': false },
     },
-    // optimizing for production, compres css
+    // 生产环境优化，压缩 CSS
     ...(process.env.NODE_ENV === 'production' ? { cssnano: {} } : {}),
   },
 }
 
 ```
 
-### Conclusion
+### 总结
 
-Almost 20-days learning and rewriting this project, maybe the project is too small, but I have learned a lot about tailwind css, vue acknowledge. I wish you move on, you will find unlock fashioned tailwind css.
+大约 20 天的学习和重写这个项目，也许项目太小了，但我学到了很多关于 Tailwind CSS、Vue 的知识。我希望你继续前进，你会发现解锁时尚的 Tailwind CSS。
 
 
 
-Thank you for your time. If my article helps you, please give it a clap. Also feel free to ask any questions you may have.
+感谢你的时间。如果我的文章对你有帮助，请给我点赞。也欢迎提出任何问题。
 
 
 import TailProtocal from "@site/src/components/TailProtocal";

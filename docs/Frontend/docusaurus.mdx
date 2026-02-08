@@ -1,9 +1,9 @@
 ---
 id: docusaurus
-title: Docusaurus Configuration
-sidebar_label: Docusaurus Configuration
+title: Docusaurus 配置
+sidebar_label: Docusaurus 配置
 sidebar_position: 11
-description: Docusaurus deployment, search configuration, and troubleshooting
+description: Docusaurus 部署、搜索配置和故障排除
 tags:
 - frontend
 - javascript
@@ -14,15 +14,15 @@ last_update:
 ---
 # docusaurus
 
-## github workflow configuration
+## GitHub 工作流配置
 
-### deploy script
+### 部署脚本
 
-[refers article](https://juejin.cn/post/7115631818736402440)
+[参考文章](https://juejin.cn/post/7115631818736402440)
 
-> besides: you need install yarn and run yarn install in your docs project
+> 另外：你需要安装 yarn 并在文档项目中运行 yarn install
 
-[Docusaurus Deployment](https://docusaurus.io/docs/deployment#deploying-to-github-pages)
+[Docusaurus 部署](https://docusaurus.io/docs/deployment#deploying-to-github-pages)
 
 ```yml title="deploy.yml"
 name: Deploy taco shop
@@ -69,7 +69,7 @@ jobs:
 
 ```
 
-### configuration secrets
+### 配置密钥
 
 ![20251020205913](https://s2.loli.net/2025/10/20/J2Z7CxXQPNjc8UW.png)
 ![20251103223927](https://s2.loli.net/2025/11/03/m8RPDfWd1TYsGwN.png)
@@ -82,9 +82,9 @@ jobs:
 | ⚙️ **Actions**  | Read and write | ✅ 可选：如果你的 Workflow 需要触发其他 Actions（例如 re-run workflows） |
 
 
-### deploy error css net::ERR_ABORTED 404 (Not Found)
+### 部署错误 css net::ERR_ABORTED 404 (Not Found)
 
-Use Vercel deploy firstly, if need not visited by China Mainland.
+如果不需要在中国大陆访问，可以先使用 Vercel 部署。
 
 ```ts
 import { defineConfig } from "vite";
@@ -100,26 +100,26 @@ export default defineConfig({
 });
 ```
 
-## DocSearch v2 not working in my site
+## DocSearch v2 在我的网站上无法工作
 
-### Background
+### 背景
 
-My Docusaurus(version 3.1.0) blog deploy on GitHub Page, before I change my domain from 
+我的 Docusaurus（版本 3.1.0）博客部署在 GitHub Pages 上，在我将域名从
 
-`https://halcyon666.github.io/summary/` to `https://halcyon666.top`, the DocSearch v2 works in my site. When I apply the 
+`https://halcyon666.github.io/summary/` 更改为 `https://halcyon666.top` 之前，DocSearch v2 在我的网站上可以正常工作。当我为新域名重新申请
 
-DocSearch again for my new domain, I just do the same as before doing, the search doesn't work.
+DocSearch 时，我按照之前的方法操作，但搜索无法正常工作。
 
-### The URL Ignorance
+### URL 被忽略
 
-Firstly I checked the crawler admin [https://crawler.algolia.com/](https://crawler.algolia.com/), I found many website url be ignore, because there are many 302 redirection in my new application.
+首先我检查了爬虫管理后台 [https://crawler.algolia.com/](https://crawler.algolia.com/)，发现很多网站 URL 被忽略，因为新应用中存在很多 302 重定向。
 
-I try search in the Preview Search, There is not a result about my markdown blogs except homepage informations.
+我尝试在预览搜索中搜索，除了首页信息外，没有关于我的 Markdown 博客的结果。
 
 ![image-20240202002105462](https://s2.loli.net/2024/02/02/eM7Vc45PLlyGJYw.png)
 
 
-you can see my correct configuration above, and the wrong configuration below, in this case solve the scrawler ignore problems.
+你可以在上面看到我的正确配置，下面是错误的配置，在这种情况下解决了爬虫忽略问题。
 
 ```react
 new Crawler({
@@ -128,24 +128,24 @@ new Crawler({
 });
 ```
 
-In this time I can search in the Search Preview, but not in my site.
+这次我可以在搜索预览中搜索，但在我的网站上不行。
 
-### The Invalid Application-ID or API key
+### 无效的 Application-ID 或 API 密钥
 
-resolve Invalid Application-ID or API key, I check the helpful [url](https://support.algolia.com/hc/en-us/articles/11217017604497-Why-am-I-getting-403-error-message-Invalid-Application-ID-or-API-key-status-403-with-DocSearch), and find my API Key is wrong, given by the DocSearch rely email, so when you encounter this error, you need check your API key in your [dashboard](https://dashboard.algolia.com/account/api-keys)
+解决无效的 Application-ID 或 API 密钥问题，我查看了有帮助的[链接](https://support.algolia.com/hc/en-us/articles/11217017604497-Why-am-I-getting-403-error-message-Invalid-Application-ID-or-API-key-status-403-with-DocSearch)，发现我的 API 密钥是错误的，由 DocSearch 回复邮件给出，所以当你遇到此错误时，你需要在你的[仪表板](https://dashboard.algolia.com/account/api-keys)中检查你的 API 密钥。
 
 
-### The misunderstand faceFilters
+### 误解 facetFilters
 
-Has result in Preview Search , but not in my site.
+在预览搜索中有结果，但在我的网站上没有。
 
-I get both payload from Preview Search and my site, I compare those parameters, and find that there some different with my parameters.So I checked the [docusaurus docs](https://docusaurus.io/docs/search#contextual-search), and fix this by changing the configuration.
+我从预览搜索和我的网站获取了两个 payload，我比较了这些参数，发现与我的参数有些不同。所以我查看了 [docusaurus 文档](https://docusaurus.io/docs/search#contextual-search)，并通过更改配置修复了此问题。
 
-> This is the wrong payload Parameter in the end of the request url.
+> 这是请求 URL 末尾的错误 payload 参数。
 >
 > `facetFilters=["language:zh",["docusaurus_tag:default","docusaurus_tag:docs-default-current"]]`
 >
-> and my wrong configuration is 
+> 我的错误配置是
 >
 > ```ts
 > contextualSearch: true,
@@ -153,7 +153,7 @@ I get both payload from Preview Search and my site, I compare those parameters, 
 > ```
 >
 
-You need to indicate the contextualSearch to false(*hint: this configuration in `docusaurus.config.ts` or `docusaurus.config.js`*), and write you language filter to in brackets. You can see my fixed example below.
+你需要将 contextualSearch 设置为 false（*提示：此配置在 `docusaurus.config.ts` 或 `docusaurus.config.js` 中*），并将你的语言过滤器写在括号中。你可以看到我下面的修复示例。
 
 ```ts
 contextualSearch: false,
@@ -186,7 +186,7 @@ searchParameters: {
 修复commit[记录](https://github.com/Halcyon666/summary/commit/00b6ea74b68b586919e0a2c41a67ef0037defe7b)
 
 
-## rspack crack on cache
+## rspack 缓存崩溃
 
 ```shell
 > summary@0.2.0 start D:\summary
