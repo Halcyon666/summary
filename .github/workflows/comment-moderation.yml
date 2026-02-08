@@ -2,9 +2,9 @@ name: Comment Moderation
 
 on:
   discussion_comment:
-    types: [created]
+    types: [created, edited]
   discussion:
-    types: [created]
+    types: [created, edited]
 
 permissions:
   discussions: write
