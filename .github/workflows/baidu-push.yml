@@ -7,13 +7,14 @@ on:
       - main  # 确认一下你的主分支是 main 还是 master
   schedule:
     - cron: '0 23 * * *' # 每天北京时间早上7点自动跑一次（UTC 23:00）
+  workflow_dispatch:
 
 jobs:
   baidu-push:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Utilities
         run: sudo apt-get install -y libxml2-utils
