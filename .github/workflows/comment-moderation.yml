@@ -20,25 +20,28 @@ jobs:
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          env:
+            BANNED_WORDS_JSON: ${{ secrets.BANNED_WORDS }}
           script: |
             // === 敏感词配置区域 ===
-            const bannedWords = [
-              // 1. 垃圾广告 / Spam
-              'spam', '广告', '推广', '营销', '代开', '发票', 
-              '加微信', '加qq', '加群', '联系我', '私聊',
-              '兼职', '刷单', '刷钻', '领皮肤', '免费送',
-              'discount', 'sale', 'promo', 'buy now', 'click here',
-              
-              // 2. 违禁内容 / Illegal
-              'VPN', '翻墙', '梯子', '科学上网',
-              '色情', '赌博', '毒品', 'porn', 'gamble', 'drug',
-              '枪支', '迷药', '监听',
-              
-              // 3. 侮辱谩骂 / Insult (慎用，防止误伤)
-              '傻逼', '脑残', '弱智', '废物', '死妈', '垃圾', 
-              'fuck', 'shit', 'bitch', 'asshole', 'idiot', 'stupid',
-              'nigger', 'chink'
-            ];
+            // 从 GitHub Secrets 获取敏感词列表 (JSON 格式)
+            let bannedWords = [];
+            try {
+              const envWords = process.env.BANNED_WORDS_JSON;
+              if (envWords) {
+                bannedWords = JSON.parse(envWords);
+              } else {
+                console.log('⚠️ Warning: BANNED_WORDS secret is not set or empty.');
+              }
+            } catch (e) {
+              console.error('❌ Error parsing BANNED_WORDS secret:', e);
+            }
+            
+            // 如果 Secrets 为空，使用最小默认列表（防止未配置时的完全失效）
+            if (bannedWords.length === 0) {
+              bannedWords = ['spam', '广告']; 
+              console.log('ℹ️ Using default minimal banned words list.');
+            }
             
             // === 逻辑处理区域 ===
             try {
