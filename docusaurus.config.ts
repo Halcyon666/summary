@@ -185,7 +185,7 @@ const config: Config = {
           type: "docSidebar",
           sidebarId: "tutorialSidebar",
           position: "left",
-          label: "docs",
+          label: "文档",
         },
         { to: '/blog', label: 'blog', position: 'left' },
         { to: '/graph', label: 'graph', position: 'left' },

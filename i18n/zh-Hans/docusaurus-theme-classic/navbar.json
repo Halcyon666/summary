@@ -7,9 +7,9 @@
     "message": "My Site Logo",
     "description": "The alt text of navbar logo"
   },
-  "item.label.docs": {
-    "message": "docs",
-    "description": "Navbar item with label docs"
+  "item.label.文档": {
+    "message": "文档",
+    "description": "Navbar item with label 文档"
   },
   "item.label.blog": {
     "message": "blog",
