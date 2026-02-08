@@ -37,3 +37,5 @@ jobs:
           # Build output to publish to the `gh-pages` branch:
           publish_dir: ./build # 文档打包产物的目录名就是build
           commit_message: ${{ github.event.head_commit.message }}
+          # Custom domain configuration
+          cname: halcyon666.top

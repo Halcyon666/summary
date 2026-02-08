@@ -39,15 +39,15 @@ const config: Config = {
   favicon: "img/favicon.png",
 
   // custom domain config
-  // url: "https://halcyon666.top/",
-  // baseUrl: "/",
+  url: "https://halcyon666.top/",
+  baseUrl: "/",
 
   // github domain
   // Set the production url of your site here
-  url: "https://halcyon666.github.io/",
+  // url: "https://halcyon666.github.io/",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/summary/",
+  // baseUrl: "/summary/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -67,7 +67,17 @@ const config: Config = {
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: "zh-Hans",
-    locales: ["zh-Hans"],
+    locales: ["zh-Hans", "en"],
+    localeConfigs: {
+      "zh-Hans": {
+        label: "中文",
+        htmlLang: "zh-Hans",
+      },
+      en: {
+        label: "English",
+        htmlLang: "en-US",
+      },
+    },
   },
   themes: ["@docusaurus/theme-mermaid"],
   presets: [
@@ -184,31 +194,27 @@ const config: Config = {
           label: "GitHub",
           position: "right",
         },
-        // {
-        //   type: "localeDropdown",
-        //   position: "left",
-        // },
+        {
+          type: "localeDropdown",
+          position: "right",
+        },
       ],
     },
     algolia: {
       // docSearch for  https://halcyon666.github.io/summary/
       // The application ID provided by Algolia
       // Public API key: it is safe to commit it
-      appId: "T5OO103S1G",
-      apiKey: "8980e7549b3164ed7f36a8394542f0eb",
-      indexName: "halcyon666",
+      // appId: "T5OO103S1G",
+      // apiKey: "8980e7549b3164ed7f36a8394542f0eb",
+      // indexName: "halcyon666",
 
       // docSearch for  https://halcyon666.top/
-      // appId: "L275Z6TKIP",
-      // apiKey: "079effc53c1845b2f995ab9f8f9e27a0",
-      // indexName: "halcyon666top",
+      appId: "L275Z6TKIP",
+      apiKey: "079effc53c1845b2f995ab9f8f9e27a0",
+      indexName: "halcyon666top",
 
       // Optional: see doc section below
-      contextualSearch: false,
-      searchParameters: {
-        // todo need dynamic locale
-        facetFilters: ["zh"],
-      },
+      contextualSearch: true,  // 自动根据当前 locale 过滤搜索结果
 
       // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
       // externalUrlRegex: 'external\\.com|domain\\.com',

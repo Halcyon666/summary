@@ -118,10 +118,10 @@ function generateGraph() {
     // Fix: Normalize path separators for Windows to ensure forward slashes in URL
     docPath = docPath.split(path.sep).join('/');
 
-    // Fix: Add baseUrl '/summary' because Docusaurus history.push needs absolute path
+    // Fix: Add baseUrl '' because Docusaurus history.push needs absolute path
     // or relative to current, but absolute is safer.
     // NOTE: If you change baseUrl in docusaurus.config.ts, change it here too.
-    const baseUrl = '/summary';
+    const baseUrl = '';
 
     const node = {
       id: id,
