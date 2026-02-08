@@ -619,5 +619,35 @@
   },
   "tailProtocol.docs.condition.sharealike.desc": {
     "message": ": If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original."
+  },
+  "homepage.exploreBlogs": {
+    "message": "Explore Blogs"
+  },
+  "homepage.aboutMe": {
+    "message": "About Me"
+  },
+  "homepage.featuredBlogs": {
+    "message": "Featured Blogs"
+  },
+  "homepage.popularArticles": {
+    "message": "Check out some of the most popular articles!"
+  },
+  "homepage.reactTutorial": {
+    "message": "React Tutorial"
+  },
+  "homepage.reactTutorialDesc": {
+    "message": "Learn the basics of React and build amazing apps."
+  },
+  "homepage.dockerGuide": {
+    "message": "Docker Guide"
+  },
+  "homepage.dockerGuideDesc": {
+    "message": "Master containerization with Docker."
+  },
+  "homepage.functionalRegisterEngine": {
+    "message": "Functional Register Engine in Java"
+  },
+  "homepage.functionalRegisterEngineDesc": {
+    "message": "Explore the design of a functional register engine."
   }
 }

@@ -13,7 +13,7 @@ export default function GiscusComment() {
   const giscusLang = isEnglish ? 'en' : 'zh-CN';
 
   return (
-    <div className="giscus-wrapper" style={{ marginTop: '3rem', width: '100%', minHeight: '200px' }}>
+    <div className="giscus-container">
       <Giscus
         id="comments"
         repo="Halcyon666/summary"
@@ -21,11 +21,11 @@ export default function GiscusComment() {
         category="Announcements"
         categoryId="DIC_kwDOJ7hui84C2Cc0"
         mapping="pathname"
-        strict="1"
+        strict="0"
         reactionsEnabled="1"
         emitMetadata="0"
         inputPosition="top"
-        theme={colorMode === 'dark' ? 'dark' : 'light'}
+        theme={colorMode === 'dark' ? 'transparent_dark' : 'light'}
         lang={giscusLang}
         loading="lazy"
       />

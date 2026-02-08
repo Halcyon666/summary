@@ -4,11 +4,11 @@
     "description": "The title in the navbar"
   },
   "logo.alt": {
-    "message": "Site Logo",
+    "message": "My Site Logo",
     "description": "The alt text of navbar logo"
   },
   "item.label.docs": {
-    "message": "Docs",
+    "message": "docs",
     "description": "Navbar item with label docs"
   },
   "item.label.blog": {

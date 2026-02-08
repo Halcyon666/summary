@@ -1,6 +1,7 @@
 import React, { JSX } from "react";
 import clsx from "clsx";
 import Link from "@docusaurus/Link";
+import Translate, { translate } from "@docusaurus/Translate";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
 import Heading from "@theme/Heading";
@@ -74,22 +75,22 @@ export default function Home(): JSX.Element {
               to="/frontend/react/basic-react"
               className={styles.featureCard}
             >
-              <h3>React Tutorial</h3>
-              <p>Learn the basics of React and build amazing apps.</p>
+              <h3><Translate id="homepage.reactTutorial">React 教程</Translate></h3>
+              <p><Translate id="homepage.reactTutorialDesc">学习 React 基础并构建出色的应用。</Translate></p>
             </Link>
             <Link
               to="/devops/docker/Docker-Command-and-Dockerfile"
               className={styles.featureCard}
             >
-              <h3>Docker Guide</h3>
-              <p>Master containerization with Docker.</p>
+              <h3><Translate id="homepage.dockerGuide">Docker 指南</Translate></h3>
+              <p><Translate id="homepage.dockerGuideDesc">掌握 Docker 容器化技术。</Translate></p>
             </Link>
             <Link
               to="/background/Java/design-pattern/functional-register-engine"
               className={styles.featureCard}
             >
-              <h3>Functional Register Engine in Java</h3>
-              <p>Explore the design of a functional register engine.</p>
+              <h3><Translate id="homepage.functionalRegisterEngine">Java 函数式注册引擎</Translate></h3>
+              <p><Translate id="homepage.functionalRegisterEngineDesc">探索函数式注册引擎的设计。</Translate></p>
             </Link>
           </div>
         </section>
