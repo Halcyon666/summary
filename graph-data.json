@@ -2010,7 +2010,7 @@
     {
       "id": "firebase-database",
       "path": "/Frontend/firebase-database",
-      "name": "Firebase Database Setup",
+      "name": "Firebase 数据库配置",
       "description": "Step-by-step Firebase project setup with Google auth and Firestore",
       "allTags": [
         "frontend",
@@ -2025,8 +2025,8 @@
     {
       "id": "docusaurus",
       "path": "/Frontend/docusaurus",
-      "name": "Docusaurus Configuration",
-      "description": "Docusaurus deployment, search configuration, and troubleshooting",
+      "name": "Docusaurus 配置",
+      "description": "Docusaurus 部署、搜索配置和故障排除",
       "allTags": [
         "frontend",
         "javascript",
@@ -2160,7 +2160,7 @@
     {
       "id": "integrate-husky-prettier-etc",
       "path": "/Frontend/Tools/Integrate-husky-prettier-etc",
-      "name": "integrate husky prettier etc",
+      "name": "集成 Husky、Prettier 等工具",
       "description": "pnpm create vite-app vue3-ts shell pnpm install husky lint-staged eslint prettier -D  json",
       "allTags": [
         "frontend",
@@ -2177,8 +2177,8 @@
     {
       "id": "tailwind",
       "path": "/Frontend/Styling/tailwind",
-      "name": "tailwind usage",
-      "description": "taco shop project written by tailwind and vue",
+      "name": "Tailwind CSS 使用指南",
+      "description": "使用 Tailwind 和 Vue 编写的 taco shop 项目",
       "allTags": [
         "frontend",
         "javascript",
@@ -2277,8 +2277,8 @@
     {
       "id": "drag-drop-container-movement",
       "path": "/Frontend/Cases/drag-drop-container-movement",
-      "name": "A Robust Draggable Element",
-      "description": "A Robust Draggable Element",
+      "name": "构建健壮的拖拽元素",
+      "description": "构建健壮的拖拽元素",
       "allTags": [
         "frontend",
         "javascript",
