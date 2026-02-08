@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunksummary=self.webpackChunksummary||[]).push([["8416"],{56600(e){e.exports=JSON.parse('{"authors":[{"name":"halcyon666","title":"Full Stack Developer","url":"https://github.com/Halcyon666","imageURL":"/img/logo.png","key":"halcyon666","page":null,"count":1}]}')}}]);

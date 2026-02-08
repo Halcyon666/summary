@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://halcyon666.github.io/summary/blog</id>
+    <id>https://halcyon666.top/blog</id>
     <title>halcyon666 Blog</title>
     <updated>2025-02-07T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://halcyon666.github.io/summary/blog"/>
+    <link rel="alternate" href="https://halcyon666.top/blog"/>
     <subtitle>halcyon666 Blog</subtitle>
-    <icon>https://halcyon666.github.io/summary/img/favicon.png</icon>
+    <icon>https://halcyon666.top/img/favicon.png</icon>
     <rights>Copyright © 2026 Halcyon666</rights>
     <entry>
         <title type="html"><![CDATA[欢迎来到博客]]></title>
-        <id>https://halcyon666.github.io/summary/blog/2025/02/07/welcome</id>
-        <link href="https://halcyon666.github.io/summary/blog/2025/02/07/welcome"/>
+        <id>https://halcyon666.top/blog/2025/02/07/welcome</id>
+        <link href="https://halcyon666.top/blog/2025/02/07/welcome"/>
         <updated>2025-02-07T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[欢迎来到我的技术博客！]]></summary>
         <content type="html"><![CDATA[<p>欢迎来到我的技术博客！</p>

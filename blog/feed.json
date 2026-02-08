@@ -1,13 +1,13 @@
 {
     "version": "https://jsonfeed.org/version/1",
     "title": "halcyon666 Blog",
-    "home_page_url": "https://halcyon666.github.io/summary/blog",
+    "home_page_url": "https://halcyon666.top/blog",
     "description": "halcyon666 Blog",
     "items": [
         {
-            "id": "https://halcyon666.github.io/summary/blog/2025/02/07/welcome",
+            "id": "https://halcyon666.top/blog/2025/02/07/welcome",
             "content_html": "<p>欢迎来到我的技术博客！</p>\n<p>这里将分享我在软件开发、DevOps、前端技术等方面的学习笔记和经验总结。</p>\n<!-- -->\n<p>希望这些内容对你有所帮助！</p>",
-            "url": "https://halcyon666.github.io/summary/blog/2025/02/07/welcome",
+            "url": "https://halcyon666.top/blog/2025/02/07/welcome",
             "title": "欢迎来到博客",
             "summary": "欢迎来到我的技术博客！",
             "date_modified": "2025-02-07T00:00:00.000Z",

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunksummary=self.webpackChunksummary||[]).push([["2245"],{8082(t){t.exports=JSON.parse('{"tag":{"label":"introduction","permalink":"/tags/introduction","allTagsPath":"/tags","count":1,"items":[{"id":"intro","title":"Introduction","description":"Overview of the documentation structure and contents","permalink":"/intro"}],"unlisted":false}}')}}]);

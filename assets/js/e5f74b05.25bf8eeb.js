@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunksummary=self.webpackChunksummary||[]).push([["7108"],{30364(t){t.exports=JSON.parse('{"tag":{"label":"getting-started","permalink":"/tags/getting-started","allTagsPath":"/tags","count":1,"items":[{"id":"intro","title":"Introduction","description":"Overview of the documentation structure and contents","permalink":"/intro"}],"unlisted":false}}')}}]);

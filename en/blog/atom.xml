@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://halcyon666.top/en/blog</id>
+    <title>halcyon666 Blog</title>
+    <updated>2025-02-07T00:00:00.000Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://halcyon666.top/en/blog"/>
+    <subtitle>halcyon666 Blog</subtitle>
+    <icon>https://halcyon666.top/en/img/favicon.png</icon>
+    <rights>Copyright © 2026 Halcyon666</rights>
+    <entry>
+        <title type="html"><![CDATA[欢迎来到博客]]></title>
+        <id>https://halcyon666.top/en/blog/2025/02/07/welcome</id>
+        <link href="https://halcyon666.top/en/blog/2025/02/07/welcome"/>
+        <updated>2025-02-07T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[欢迎来到我的技术博客！]]></summary>
+        <content type="html"><![CDATA[<p>欢迎来到我的技术博客！</p>
+<p>这里将分享我在软件开发、DevOps、前端技术等方面的学习笔记和经验总结。</p>
+<!-- -->
+<p>希望这些内容对你有所帮助！</p>]]></content>
+        <author>
+            <name>halcyon666</name>
+            <uri>https://github.com/Halcyon666</uri>
+        </author>
+        <category label="博客" term="博客"/>
+        <category label="介绍" term="介绍"/>
+    </entry>
+</feed>
