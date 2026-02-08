@@ -71,34 +71,53 @@ jobs:
               if (foundWords.length > 0) {
                 console.log(`⚠️ Found inappropriate content by ${author}: ${foundWords.join(', ')}`);
                 
-                // 1. 删除违规评论 / Delete the comment
+                // 1. 删除违规评论 / Delete the comment via GraphQL
                 if (context.eventName === 'discussion_comment') {
                   try {
-                    await github.rest.discussions.deleteDiscussionComment({
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      comment_id: commentId
+                    // 使用 GraphQL 删除评论
+                    const mutation = `
+                      mutation deleteComment($id: ID!) {
+                        deleteDiscussionComment(input: {id: $id}) {
+                          clientMutationId
+                        }
+                      }
+                    `;
+                    
+                    await github.graphql(mutation, {
+                      id: commentId
                     });
+                    
                     console.log(`🗑️ Deleted comment ${commentId}`);
                   } catch (err) {
                     console.error('Failed to delete comment:', err);
+                    core.setFailed(`Failed to delete comment: ${err.message}`);
                   }
                 } else if (context.eventName === 'discussion') {
-                  // 如果是整个讨论帖违规，则删除讨论 / Delete the discussion
+                  // 如果是整个讨论帖违规，则删除讨论 via GraphQL
                   try {
-                     await github.rest.discussions.deleteDiscussion({
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      discussion_number: discussionNumber
+                    // 这里的 commentId 对于 discussion 事件来说是 discussion.node_id
+                    const discussionNodeId = context.payload.discussion.node_id;
+                    
+                    const mutation = `
+                      mutation deleteDiscussion($id: ID!) {
+                        deleteDiscussion(input: {id: $id}) {
+                          clientMutationId
+                        }
+                      }
+                    `;
+
+                    await github.graphql(mutation, {
+                      id: discussionNodeId
                     });
-                    console.log(`🗑️ Deleted discussion #${discussionNumber}`);
+
+                    console.log(`🗑️ Deleted discussion ${discussionNodeId}`);
                   } catch (err) {
                     console.error('Failed to delete discussion:', err);
+                    core.setFailed(`Failed to delete discussion: ${err.message}`);
                   }
                 }
 
-                // 2. (可选) 记录日志或发送通知 / Log warning
-                // 由于评论已被删除，这里仅记录到 Action 日志
+                // 2. 记录日志
                 core.warning(`🗑️ Automatically deleted inappropriate content in discussion #${discussionNumber} by ${author}. Keywords: ${foundWords.join(', ')}`);
                 
               } else {
