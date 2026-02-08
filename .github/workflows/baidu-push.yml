@@ -1,0 +1,47 @@
+name: Baidu SEO Push
+
+# 触发条件：当 main 分支有 push 操作，或者每天定时触发
+on:
+  push:
+    branches:
+      - main  # 确认一下你的主分支是 main 还是 master
+  schedule:
+    - cron: '0 23 * * *' # 每天北京时间早上7点自动跑一次（UTC 23:00）
+
+jobs:
+  baidu-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Utilities
+        run: sudo apt-get install -y libxml2-utils
+
+      # 这一步会自动去抓取你网站的 sitemap.xml
+      - name: Fetch and Push URLs to Baidu
+        env:
+          BAIDU_TOKEN: ${{ secrets.BAIDU_TOKEN }}
+          SITE_URL: "https://halcyon666.top"
+        run: |
+          # 1. 下载最新的 sitemap.xml
+          echo "Downloading sitemap..."
+          curl -sL "$SITE_URL/sitemap.xml" -o sitemap.xml
+          
+          # 2. 提取 sitemap 中的所有 URL 并存入 urls.txt
+          # Docusaurus 生成的 sitemap 标准格式，使用 xmllint 提取
+          echo "Extracting URLs..."
+          xmllint --xpath "//*[local-name()='loc']/text()" sitemap.xml > urls.txt
+          
+          # 检查一下提取了多少个链接
+          COUNT=$(cat urls.txt | wc -l)
+          echo "Found $COUNT URLs to push."
+          
+          # 3. 调用百度 API 推送
+          if [ $COUNT -gt 0 ]; then
+            echo "Pushing to Baidu..."
+            result=$(curl -H 'Content-Type:text/plain' --data-binary @urls.txt "http://data.zz.baidu.com/urls?site=$SITE_URL&token=$BAIDU_TOKEN")
+            echo "Baidu Response: $result"
+          else
+            echo "No URLs found in sitemap."
+          fi

@@ -2,6 +2,7 @@ import React from 'react';
 import Giscus from '@giscus/react';
 import { useColorMode } from '@docusaurus/theme-common';
 import { useLocation } from '@docusaurus/router';
+import CommentGuidelines from './CommentGuidelines';
 
 export default function GiscusComment() {
   const { colorMode } = useColorMode();
@@ -14,6 +15,7 @@ export default function GiscusComment() {
 
   return (
     <div style={{ marginTop: '2rem' }}>
+      <CommentGuidelines />
       <Giscus
         id="comments"
         repo="Halcyon666/summary"

@@ -1,0 +1,76 @@
+name: Comment Moderation
+
+on:
+  discussion_comment:
+    types: [created]
+  discussion:
+    types: [created]
+
+permissions:
+  discussions: write
+  contents: read
+
+jobs:
+  moderate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for inappropriate content
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // 敏感词列表（可以根据需要添加更多）
+            const bannedWords = [
+              // 垃圾信息
+              'spam', '广告', '推广', '加微信', '加QQ',
+              // 不当内容
+              '色情', '赌博', '毒品',
+              // 可以添加更多敏感词
+            ];
+            
+            // 获取评论内容
+            let commentBody = '';
+            let commentId = null;
+            let discussionNumber = null;
+            
+            if (context.eventName === 'discussion_comment') {
+              commentBody = context.payload.comment.body;
+              commentId = context.payload.comment.node_id;
+              discussionNumber = context.payload.discussion.number;
+            } else if (context.eventName === 'discussion') {
+              commentBody = context.payload.discussion.body || '';
+              discussionNumber = context.payload.discussion.number;
+            }
+            
+            // 检查是否包含敏感词
+            const lowerBody = commentBody.toLowerCase();
+            const foundWords = bannedWords.filter(word => 
+              lowerBody.includes(word.toLowerCase())
+            );
+            
+            if (foundWords.length > 0) {
+              console.log(`⚠️ Found inappropriate content: ${foundWords.join(', ')}`);
+              
+              // 如果是评论，添加警告回复
+              if (context.eventName === 'discussion_comment') {
+                await github.rest.discussions.createDiscussionComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  discussion_number: discussionNumber,
+                  body: `⚠️ **内容审核提醒** / **Content Moderation Notice**\n\n您的评论可能包含不当内容，已被标记审核。管理员会尽快处理。\n\nYour comment may contain inappropriate content and has been flagged for review. The administrator will handle it soon.\n\n---\n*This is an automated message.*`
+                });
+              }
+              
+              // 记录到日志
+              core.warning(`Inappropriate content detected in discussion #${discussionNumber}`);
+              
+              // 可选：自动锁定讨论（取消注释以启用）
+              // await github.rest.discussions.lockDiscussion({
+              //   owner: context.repo.owner,
+              //   repo: context.repo.repo,
+              //   discussion_number: discussionNumber,
+              //   lock_reason: 'spam'
+              // });
+            } else {
+              console.log('✅ Content passed moderation check');
+            }
