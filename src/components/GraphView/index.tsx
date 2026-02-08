@@ -24,7 +24,7 @@ const GraphViewContent = () => {
 
   // 加载数据
   useEffect(() => {
-    fetch('/summary/graph-data.json')
+    fetch('/graph-data.json')
       .then(res => res.json())
       .then(graphData => {
         // 保存所有节点用于搜索（即使被过滤掉的也可以考虑搜到？不，只搜显示的）
