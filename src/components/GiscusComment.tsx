@@ -1,9 +1,16 @@
 import React from 'react';
 import Giscus from '@giscus/react';
 import { useColorMode } from '@docusaurus/theme-common';
+import { useLocation } from '@docusaurus/router';
 
 export default function GiscusComment() {
   const { colorMode } = useColorMode();
+  const location = useLocation();
+  
+  // 根据当前路径判断语言
+  // Docusaurus 的英文路径通常是 /en/xxx
+  const isEnglish = location.pathname.startsWith('/en/') || location.pathname === '/en';
+  const giscusLang = isEnglish ? 'en' : 'zh-CN';
 
   return (
     <div style={{ marginTop: '2rem' }}>
@@ -19,7 +26,7 @@ export default function GiscusComment() {
         emitMetadata="0"
         inputPosition="bottom"
         theme={colorMode === 'dark' ? 'dark' : 'light'}
-        lang="zh-CN"
+        lang={giscusLang}
         loading="lazy"
       />
     </div>
