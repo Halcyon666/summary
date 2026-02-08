@@ -1,0 +1,119 @@
+---
+id: aspectj-weaving
+title: AspectJ Weaving Methods
+sidebar_label: AspectJ Weaving Methods
+sidebar_position: 10
+description: Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) for code related to this article (from official source spring-test module)
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) under `org.springframework.mylearntest` package for code related to this article (from [official source](https://github.com/spring-projects/spring-framework.git "official source") spring-test module).
+
+## Two Ways to Weave Aspect
+
+Suppose we have a target object `Foo`, there are two ways to weave Aspect definition into this target object class, to achieve interception of Joinpoints conforming to Pointcut definition.
+
+<details>
+	<summary>Foo</summary>
+
+```java
+public class Foo {
+	public void method1() {
+		System.out.println("method1 executed");
+	}
+
+	public void method2() {
+		System.out.println("method2 executed");
+	}
+}
+```
+</details>
+
+
+### Programmatic Weaving
+
+<details>
+	<summary>Implemented via AspectJProxyFactory</summary>
+
+```java
+public class Test4AspectJProxyFactory {
+	public static void main(String[] args) {
+		AspectJProxyFactory weaver = new AspectJProxyFactory();
+		weaver.setProxyTargetClass(true);
+		weaver.setTarget(new Foo());
+		weaver.addAspect(PerformanceTraceAspect.class);
+		Object proxy = weaver.getProxy();
+		((Foo)proxy).method1();
+		((Foo)proxy).method2();
+	}
+}
+```
+</details>
+
+### Weaving via Auto-Proxy
+
+For @AspectJ style AOP, Spring AOP specifically provides an `AutoProxyCreator` implementation class for automatic proxying, to avoid excessive coding and configuration work. It is an extension class based on `AbstractAdvisorAutoProxyCreator`.
+
+Like `AutoProxyCreator`, we just need to register `AnnotationAwareAspectJAutoProxyCreator` in IoC container configuration file.
+
+![](https://s2.loli.net/2023/07/15/hrGdFWtgxbfa78l.png)
+
+
+<details>
+	<summary>xml configuration</summary>
+
+```xml
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+
+		 http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	<!--	Equivalent to line above-->
+	<!--<bean class="org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator">
+		<property name="proxyTargetClass" value="true"/>
+	</bean>-->
+
+	<bean id="performanceAspect" class="org.springframework.mylearntest.aop2.aspectj.PerformanceTraceAspect"/>
+
+	<bean id="target" class="org.springframework.mylearntest.aop2.aspectj.Foo"/>
+</beans>
+```
+</details>
+
+<details>
+	<summary>TestAutoAspectJ</summary>
+
+```java
+public class Test4AutoAspectJ {
+	public static void main(String[] args) {
+		ApplicationContext context = new ClassPathXmlApplicationContext("annotationawareaspectJautoproxycreator\\annotationawareaspectJautoproxycreator.xml");
+		Object proxy = context.getBean("target");
+		((Foo)proxy).method1();
+		((Foo)proxy).method2();
+	}
+}
+```
+</details>
+
+If `target` is injected as dependency object into other bean definitions, then what dependency subject object holds is also proxied target object.
+
+**Tip**
+> When using @AspectJ style AOP, should try to use automatic proxy support in container. Usually, programmatic weaving operations are only used for testing puproses. In process of use, you will find that actually there are differences between these two ways, some behaviors are not unified.
+> 
+> Using @Aspect style AOP needs to introduce `aspectjweaver.jar` and `aspectjrt.jar`.
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

@@ -1,0 +1,197 @@
+---
+id: computer-network-concept
+title: Computer Network - Network Overview
+sidebar_label: Network Overview
+sidebar_position: 10
+description: Interconnection - No Master-Slave Relationship, Autonomy - Interconnectivity. Exchange Network interconnects hosts via Switching Nodes to complete data communication.
+tags:
+- books
+- learning
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- command-usage
+---
+# Computer Network - Network Overview
+
+## Features
+
+Interconnection - No Master-Slave Relationship
+
+Autonomy - Interconnectivity
+
+Exchange Network interconnects hosts via Switching Nodes to complete data communication.
+
+![20250920184352](https://s2.loli.net/2025/09/20/9brfl3nZKXwmtvQ.png)
+
+## Network Protocols
+
+Network **Protocol**, is a rule, standard, or convention established for data exchange in progress.
+
+**Three Elements**
+
+Syntax: Protocol structure or format
+
+Semantics: What control information needs to be sent, error control
+
+Timing: Event sequence, speed matching
+
+Authoritative Internet Protocol `RFC`
+
+## **Network Edge** Access Core Network
+
+Access Network Three Elements:
+
+- Computing devices accessing the network
+- Communication links
+- Packet switching (Routers, Switches)
+
+Access Network Methods:
+
+- Residential
+- Institutional Access Network
+- Mobile Access Network
+
+| Access Method | Simple Understanding | Main Features |
+| --- | --- | --- |
+| **Fiber Access (FTTx, e.g., FTTH Fiber To The Home)** | Fiber directly to community/building/home | Large bandwidth, low latency, many home broadband services are now FTTH |
+| **Cable Modem** | Use cable TV coaxial cable to access internet | Once popular, faster than ordinary telephone lines, now gradually replaced by fiber |
+| **DSL (Digital Subscriber Line) Access (ADSL/VDSL)** | Phone line can also access internet (ADSL Modem) | Once common, now gradually eliminated (slow speed, poor upload) |
+| **Ethernet Access** | Plug in network cable at home/company (RJ45 interface) | Highest popularity, low cost, fast speed (now generally 100M/Gigabit) |
+| **LAN (Local Area Network) Access** | Internal network, school/company uses switches/routers to connect | Local internal high-speed connection, usually combined with Ethernet |
+
+## Network Core **Interconnection**
+
+- **Routing:** *Routing Algorithm*
+- **Forwarding:** *Switch packet from router's input port to correct output port*
+
+ISP (Internet Service Provider) Interconnection
+
+Peering Link: Uses `BGP` protocol, **`BGP`** stands for **Border Gateway Protocol, a protocol for exchanging routing information between different Autonomous Systems (AS).**
+
+> Peering Link is not used within the same AS
+> 
+
+Upstream Link (Transit Link)
+
+`IXP` (Internet Exchange Point)
+
+```mathematica
+                   🌍 International Internet Backbone Network (Tier 1)
+        ┌────────────────┬────────────────┐
+        │                │                │
+┌───────▼───────┐  ┌─────▼─────┐  ┌───────▼───────┐
+│  Level 3 (US) │◄►│  NTT (JP) │◄►│  Telia (EU)   │
+86: └───────────────┘  └───────────┘  └───────────────┘
+87: 		▲                ▲                ▲
+88: 		│ Private Peering │ Private Peering│
+89: 		▼                ▼                ▼
+90: ┌────────────────────────────────────┐
+91: │     National/Regional Backbone (e.g. China Telecom)    │
+92: └─────────────────┬──────────────────┘
+93: 									│
+94: 							┌────▼────┐
+95: 							│   IXP   │ ← Domestic IXP: CHN-IX, HKIX etc.
+96: 							└────┬────┘
+97: 		┌───────────────┼───────────────┐
+98: 		│               │               │
+99: 		┌─────▼─────┐   ┌─────▼─────┐   ┌─────▼─────┐
+100: 		│   ISP A   │◄──►   CDN     │◄──► Content Platform   │
+101: 		└───────────┘  Peering Links └──────────────┘
+102: 		│
+103: 		┌─────▼─────┐
+104: 		│  User PC  │
+105: 		└───────────┘
+```
+
+Large Interconnected Networks:
+
+Tier-1 ISP (Unicom, Telecom)
+
+Content Provider Networks (Google: Private network, its data centers connect to Internet, usually bypassing Tier-1 ISPs and regional `ISPs`)
+
+Small operators access global network via IP Transit to access the entire Internet.
+
+# Dynamic Switching
+
+## Multiplexing
+
+- `FDM` Frequency Division Multiplexing
+- `TDM` Time Division Multiplexing
+- `WDM` (Actually `FDM`) Wavelength Division Multiplexing
+- `CDM` Code Division Multiplexing `Encoded Signal = Original Data X Chip Sequence`
+    
+![20250920184452](https://s2.loli.net/2025/09/20/ibnofD5mWL63Vgs.png)
+    
+
+![](https://s2.loli.net/2025/09/20/BnKTmqsXv1oAdGP.png)
+
+1. Circuit Switching
+- Establish Connection (Call/Circuit Setup)
+- Communication
+- Release Connection (Teardown Circuit)
+
+Exclusive Resources (Multiplexing)
+
+*One fiber is greater than resources needed for one phone call*
+
+2. Message Switching
+
+Must send the entire packet, too slow, also occupies switch memory
+
+3. Packet Switching (Mainstream)
+
+Allow more users to use the network simultaneously;
+
+Store-and-forward switching mode
+
+> Suitable for bursty data transmission networks
+> 
+
+## Layered Network Structure
+
+![20250920184534](https://s2.loli.net/2025/09/20/ALo2aDePp3vJyBk.png)
+
+### `OSI` Model
+
+ Open System Interconnection: Heterogeneous network system interconnection  
+
+| Layer Name | Function | Description |
+| --- | --- | --- |
+| Physical Layer | Interface Characteristics, Bit Verification, Data Rate, Bit Synchronization, Transmission Mode | Bit Transmission |
+| Data Link Layer (Non-end-to-end) | Framing, Physical Addressing, Flow Control, Error Control, Access Control | Data transmission between adjacent network elements (hosts, switches, routers, etc.) |
+| Network Layer (Non-end-to-end) | Routing, Packet Forwarding | Data packet routing and forwarding from source host to destination host |
+| Transport Layer | Segmentation and Reassembly, SAP Addressing, Connection Control, Flow Control, Error Control | Ensure message submitted to correct process, e.g., port number |
+| ~~Session Layer~~ | ~~Dialogue Control, Synchronization~~ | ~~Generally does not exist alone (very thin layer)~~ |
+| ~~Presentation Layer~~ | ~~Data Representation Conversion, Encryption/Decryption, Compression/Decompression~~ | ~~Generally does not exist alone. Handles syntax and semantics issues of transaction information between two systems~~ |
+| Application Layer | `FTP`, `SMTP`, `HTTP` | Support users using network via user agent or network interface |
+
+### `TCP/IP` Model
+
+![20250920184551](https://s2.loli.net/2025/09/20/Ax5NZujl9kOhbGH.png)
+
+### Five-Layer Model
+
+![20250920184559](https://s2.loli.net/2025/09/20/2AMjwro8qYs1GQ5.png)
+
+![20250920184617](https://s2.loli.net/2025/09/20/rBzIDSL3y9clET1.png)
+
+| Layer Name | Description | Protocol | Data Format |
+| --- | --- | --- | --- |
+| Physical Layer | Bit Transmission | None | Bit |
+| Data Link Layer | Data transmission between adjacent network elements | Ethernet, 802.11(`Wifi`), `PPP` | Frame |
+| Network Layer | Data packet routing and forwarding from source to destination | IP Protocol, Routing Protocols | Datagram |
+| Transport Layer | Ensure message submitted to correct process | `TCP`, `UDP` | Segment |
+| Application Layer | Support users using network | `FTP`, `SMTP`, `HTTP` | Message |
+
+**All content comes from sources, course copyright reserved. Document is for learning use only.**
+
+**If there is any infringement, contact `whalefallcl@icloud.com`**
+
+**https://www.icourse163.org/learn/HIT-154005?tid=1474180488#/learn/announce**
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

@@ -1,0 +1,256 @@
+---
+id: computer-composition-theory
+title: Computer Composition Theory
+sidebar_label: Computer Composition Theory
+sidebar_position: 10
+description: High-level languages, Assembly language, Machine language, VON NEUMANN architecture, CPU structure, and Bus communication
+tags:
+- books
+- learning
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- command-usage
+---
+## Overview
+
+**High-Level Language**: Also known as algorithmic language, oriented towards algorithms for solving practical problems, aiming at programs for problem processing and solving.
+
+**Assembly Language**: The result of symbolic processing of computer machine language, adding some extended functions to facilitate program design.
+In assembly language, English words or abbreviations are used to replace binary instruction codes, making them easier to remember and understand.
+
+**Machine Language**: A collection of instructions that computer hardware can directly recognize and run, consisting of binary codes.
+The smallest execution unit of a program is an instruction.
+
+**Translator**: Software that translates high-level language into machine language programs.
+
+- *Compiler*: Translates all statements of a high-level language program written by a user into a machine language program at once.
+- *Interpreter*: Translates one statement of the source program into a corresponding machine language statement and executes it immediately.
+
+**Computer Architecture**: Refers to the attributes of the computer system that can be seen by programmers, i.e., conceptual structure and functional characteristics.
+
+**Computer Organization**: Refers to how to implement the attributes embodied in the computer architecture, including many hardware details transparent to programmers.
+
+**Von Neumann Computer**
+
+1. The computer consists of five major components: Arithmetic Unit, Memory, Controller, Output Device, and Input Device.
+2. Instructions and data are stored in the memory with equal status and can be accessed by address.
+3. Both instructions and data are represented by binary numbers.
+4. Instructions consist of opcodes and address codes. The opcode indicates the attribute of the operation, and the address code indicates the location of the operand in the memory (the operand field can contain the operand itself, the operand address, or the calculation method of the operand address).
+5. Instructions are stored sequentially in the memory and are usually executed sequentially. Under specific conditions, the execution order can be changed based on calculation results or set conditions.
+6. The machine is centered on the arithmetic unit, and data transmission between I/O devices and memory is completed through the arithmetic unit (hence the bus).
+
+***CPU (Central Processing Unit)***
+
+**ALU** (Arithmetic Logic Unit): Used to complete arithmetic and logic operations.
+
+- **ACC** (Accumulator)
+- **MQ** (Multiplier-Quotient Register)
+- **X** (Operand Register)
+
+**CU** (Control Unit): Used to interpret instructions in memory and issue various operation commands to execute instructions.
+
+- **PC** (Program Counter): Used to store the address of the instruction currently to be executed, has a path with MAR.
+- **IR** (Instruction Register): Used to store the current instruction read from MDR.
+- **CU** (Control Unit): Used to analyze the operations required by the current instruction and issue various micro-operation command sequences to control all controlled objects.
+
+*The execution of an instruction includes three processes: Fetch, Analyze, Execute*
+
+- Fetch: The command register reads an instruction.
+- Analyze: Analyze the instruction to indicate what operation to complete and indicate the address of the operand according to the addressing characteristics.
+- Execute: Complete a certain operation according to the address of the operand and the opcode of the instruction.
+
+***MM (Main Memory)***
+
+- **MAR** (Memory Address Register): Used to store the address of the access unit, the number of bits represents the number of storage units.
+- **MDR** (Memory Data Register): Used to store the code fetched from a memory unit or the code prepared to be stored into a memory unit.
+
+*Modern CPUs integrate MAR and MDR*
+
+**Machine Word Length**: Refers to the number of bits that the CPU can process at one time, usually related to the number of bits in the registers.
+
+**Storage Capacity** = Number of Storage Units (MAR) × Storage Word Length (MDR)
+
+**Operation Speed**: Measured by the average number of instructions executed per unit time, using MIPS (Million Instructions Per Second) as the unit.
+
+**CPI** (Cycles Per Instruction): The clock cycles required to execute one instruction (the reciprocal of the machine main frequency).
+
+**FLOPS** (Floating Point Operations Per Second)
+
+## Bus
+
+Evolution from single bus to multiple buses:
+
+* Single bus to Dual bus: Separate lower speed I/O devices from the single bus.
+* Dual bus to Triple bus: Connect high-speed devices in the I/O bus to the DMA bus.
+* Triple bus to Quadruple bus: Split the main memory bus into Local Bus (CPU and Cache) and System Bus (MM and Cache).
+  ![Triple Bus](https://s2.loli.net/2023/07/15/iOzsyWID9xk4cHL.jpg)
+
+#### Bus Communication Control
+
+Synchronous Communication
+![Synchronous Communication](https://s2.loli.net/2023/07/15/83qWzFMnCYEhxgo.jpg)
+CPU sends address information at the rising edge of T1; sends a read command at the rising edge of T2; before the rising edge of T3 arrives, sends the data required by the CPU to the data bus; sends the information on the data line to the internal register within the T3 clock cycle; withdraws the read command and withdraws the drive to the data bus at the rising edge of T4.
+
+> Suitable for occasions where the bus length is short and the access cycle of each component is consistent.
+
+Asynchronous Communication
+
+Asynchronous communication is divided into non-interlocked, semi-interlocked, and fully interlocked.
+
+![Asynchronous Communication](https://s2.loli.net/2023/07/15/WuvBFiN5wYmM2rt.jpg)
+Non-interlocked: After the master module sends a request signal, it does not need to wait for the answer signal from the slave module. Instead, after a period of time, after confirming that the slave module has received the request signal, it withdraws its request signal.
+
+Semi-interlocked: The master module sends a request signal and must wait for the answer signal from the slave module before withdrawing its request signal, creating an interlock relationship; while the slave module sends an answer signal after receiving the request signal, but does not need to wait to know that the master module's request signal has been withdrawn, but automatically withdraws the answer signal after a period of time, no interlock relationship.
+
+Fully interlocked: The master module sends a request signal and must wait for the slave module to answer before withdrawing its request signal; the slave module sends an answer signal and must wait to know that the master module request signal has been withdrawn before withdrawing its answer signal.
+
+![Semi-synchronous Communication](https://s2.loli.net/2023/07/15/W5RAByDHbJh4vZr.jpg)
+If the slave module works slowly and cannot provide data in the T3 clock cycle, it must notify the master module before T3 arrives, giving a low level signal; if the master module detects a low level signal before the T3 cycle arrives, insert a clock cycle Tw.
+
+*Split transaction communication omitted*
+
+## Memory
+
+RAM (Random Access Memory): Access time is independent of the physical location of the storage unit.
+
+- Static SRAM (stores information based on flip-flop principle) and Dynamic DRAM (stores information based on capacitor charge and discharge principle, requires refreshing with refresh amplifier every 2ms to prevent data loss).
+
+ROM (Read Only Memory): Can only be read, not written.
+
+- MROM: Made by manufacturers, cannot be written again. Intersection of row and column selection lines can have MOS transistors or not.
+- PROM: Consists of bipolar circuits and fuses, can be written once and cannot be modified.
+- EPROM: Uses floating gate MOS circuits. Applying high voltage to the drain causes the floating gate to float up and block the circuit; erased by UV irradiation.
+- EEPROM: Electrically Erasable Programmable Read-Only Memory, Flash Memory.
+
+Auxiliary Memory
+
+- Disk, Optical Disc, Tape
+
+Buffer
+
+- Cache
+
+Serial Memory: When reading/writing, need to search for addresses in the order of their physical locations.
+
+Storage Capacity = Number of storage units x Storage word length (Total number of binary bits that can be stored)
+
+Storage Capacity = Number of storage units x Storage word length / 8 (Total number of bytes that can be stored)
+
+Storage Speed
+
+- Memory Cycle (Minimum interval time required for two consecutive independent storage operations, MOS 100ns, TTL 10ns)
+- Access Time (Read or Write time)
+
+Memory Bandwidth: Amount of information stored per unit time (T 500ns 16 bits, Bandwidth is 32M bits/sec)
+
+### Connection between Memory and CPU
+
+Expansion of Storage Capacity
+
+1. Bit expansion: Increase storage word length
+2. Word expansion: Increase the number of memories
+3. Simultaneous word and bit expansion
+
+Connection of Address Lines: Usually connect the low bits of CPU address lines to the low bits of the memory chip. CPU high bits are used for memory chip expansion, chip selection lines, etc.
+
+Connection of Data Lines: The memory chip must be expanded so that its data bits are equal to the CPU.
+
+Connection of Read/Write Command Lines: CPU read/write command lines are generally directly connected to the read/write terminals of the memory chip, usually high level for read, low level for write.
+
+Connection of Chip Select Lines: Memory is composed of many memory chips. Which chip is selected depends entirely on whether the chip select control terminal of the memory chip receives a chip select valid signal from the CPU; and the chip select valid signal is related to the memory access control signal (if accessing I/O, the memory access control signal is high level, indicating that memory is not required to work); high-order address lines in the CPU that are not connected to memory chips must generate chip select signals for memory chips together with memory access control signals.
+
+### Memory Verification
+
+Binary bits are n, require k check bits, forming n+k bit code satisfying: `2^k >= n + k + 1`
+
+Hamming Code Even Parity: Just ⊕ `1, 3, 5, 7` `2, 3, 6, 7` `4, 5, 6, 7` to get C1, C2, C3
+
+### Improving Memory Access Speed
+
+Single-body Multi-word System: Suitable for instructions and data stored consecutively in main memory.
+
+Multi-body Parallel System: Uses memory composed of multi-body modules. Each module has the same capacity and storage speed, and each module has independent MAR, MDR, address decoder, drive circuit, and read/write circuit. They can work in parallel or in an interleaved manner.
+
+Multi-body modules are controlled by a memory controller. It consists of a arbiter, control circuit, beat generator, and flag flip-flop.
+
+## I/O System
+
+### Program Query Mode
+
+Represents the working process of inputting a character from the keyboard to the processor, and then outputting this character to the display. When the DONE flag is "1", it means that a character has been input from the keyboard to the device buffer register. After this character is taken away by the CPU, the DONE flag is reset. The READY flag setting of the output device is exactly the opposite of the input device. When the READY flag is "1", it means that the device buffer register is empty and ready to receive data from the CPU. When there is data in the device buffer register, the READY flag is reset, indicating that the output device is outputting data in the buffer register to the device.
+
+![Program Query](https://s2.loli.net/2023/07/15/lECS7ULAnZ2oqHk.png)
+
+### Interrupt I/O Mode
+
+When the input device has prepared data or the output device is idle, it should proactively send a service request to the CPU. On the CPU side, after executing each instruction, it must test whether there is an interrupt service request from a peripheral device. If an interrupt service request from a peripheral device is found, the currently executing program must be temporarily stopped to serve the peripheral device first, and then continue executing the original program after the service is completed.
+
+The definition of interrupt I/O mode is: When any exceptional event occurs from outside the system, inside the machine, or even the processor itself, or although pre-arranged but occurring at an unknown place in the current program, the CPU pauses the execution of the current program, turns to handle these events, and then returns to continue executing the original program after completion.
+
+### Direct Memory Access (DMA)
+
+For input devices:
+
+- Read a byte or word from the input medium to the data buffer register BD in the DMA controller. If the input device is character-oriented, the read characters must be assembled into words.
+- If a word has not been assembled yet, return to the above; if a verification error occurs, issue an interrupt request; if a word has been assembled, send the data in BD to the main memory data register.
+- Send the address in the main memory address register BA (in the DMA controller) to the main memory address register, and increment the address in BA to the next word address.
+- Decrement the content of the data exchange count counter BC in the DMA controller by "1".
+- If the content of BC is "0", the entire DMA process ends, otherwise return to the top and continue.
+
+For output devices:
+
+- Send the address in the main memory address register BA (in the DMA controller) to the main memory address register, start the main memory, and increment the address in BA to the next word address.
+- Send the data in the main memory data register to the data buffer register BD of the DMA controller. If the output device is character-oriented, the data in BD must be disassembled into characters.
+- Write the data in BD character by character (for character-oriented devices) or entire words to the output medium.
+- Decrement the content of the data exchange count counter BC in the DMA controller by "1".
+- If the content of BC is "0", the entire DMA process ends, otherwise return to the top and continue.
+
+### Channel Processor
+
+1. In the user program, use a supervisor call instruction to enter the management program. The CPU organizes a channel program through the management program and starts the channel.
+
+2. The channel processor executes the channel program organized for it by the CPU to complete the specified data input/output work. After the channel is started, the CPU can exit the operating system's management program and return to the user program to continue executing the original program, while the channel begins data transmission with the device. When the channel processor executes the last channel instruction "Disconnect Channel Instruction" of the channel program, the channel's data transmission work is completely finished.
+
+3. After the channel program ends, it sends an interrupt request to the CPU. After the CPU responds to this interrupt request, it enters the operating system for the second time and calls the management program to process the input/output interrupt request. If it ends normally, the management program performs necessary registration work. If it is a fault, error, or other abnormal situation, exception handling is performed. Then, the CPU returns to the user program to continue execution.
+
+- Byte Multiplexer Channel
+
+*If each device connected to the channel takes turns occupying a short time slice (usually less than 100 microseconds) to transmit a byte, or different devices establish different transmission connections with the channel logically within their allocated time slices, it is called Byte-interleave Mode. If a device is allowed to occupy the channel for a relatively long time to transmit a group of data at a time, or the connection between the device and the channel can be maintained until a group of data is completely transmitted as needed, it is called Block Mode.*
+
+- Selector Channel
+  ![Selector Channel](https://s2.loli.net/2023/07/15/rn9DRqcwjZ1aCQW.png)
+
+*High-speed peripheral devices must have dedicated channels to serve a single peripheral device for a period of time, but different devices can be selected at different times. Once a device is selected, the channel enters a "busy" state until the data transmission work of that device is completely finished. This is the Selector Channel.*
+
+- Block Multiplexer Channel
+
+*Process of reading a file from disk storage*
+
+> The first step is positioning, moving the read/write head to the track where the file is recorded. This relies on mechanical action, called positioning time or seek time, usually takes about ten milliseconds.
+
+> The second step is finding the sector, waiting for the read/write head to rotate to the start sector position where the file is recorded, called seek sector time or latency time. The length of the latency time is mainly related to two factors: one is the rotation speed of the disk, and the other is the relative distance between the position of the head and the start sector position recorded when the head is positioned to the required track. Therefore, the length of latency time is random, the longest is the time required for the disk to rotate one revolution, and the shortest is zero. Taking the average value, it is usually called average latency time. Currently, the speed of high-speed disks has reached more than 5000 revolutions per minute, so the average latency time of disk storage is generally less than 10 milliseconds.
+
+> The third step is reading data. Currently, the data transfer rate of high-speed disk storage has reached more than 33 megabytes per second. Therefore, reading a sector (512 bytes) only takes a dozen microseconds.
+
+> The block multiplexer channel logically disconnects from a high-speed device immediately after sending a positioning command, connects again when positioning is completed, disconnects again after sending a seek sector command, until data transmission begins. Therefore, the actual working mode of the block multiplexer channel is: when the channel is transmitting data for a high-speed device, multiple high-speed devices can be positioning or seeking sectors.
+
+### Input Output Processor
+
+![Input Output Processor](https://s2.loli.net/2023/07/15/nqpjtTo9xG8iBAy.png)
+The Input Output Processor is usually an independent processor with certain computing functions, which can undertake input/output, control operations, and arithmetic processing tasks of general peripheral processors. In addition, since the Input Output Processor has its own memory, it can complete data exchange with peripheral devices without passing through the main memory.
+
+
+
+> References
+
+> [^1] Computer Composition Principles, Tang Shuofei, Second Edition
+
+> [^2] Computer Architecture, Zheng Weimin, Tang Zhizhong, Second Edition
+
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

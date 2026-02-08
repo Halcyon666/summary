@@ -1,0 +1,72 @@
+---
+id: pnpm
+title: Common pnpm Commands
+sidebar_label: Common pnpm Commands
+sidebar_position: 10
+description: shell pnpm i pnpm i <package> pnpm add -g <package> pnpm add -D <package>
+  pnpm outdated pnpm update --latest
+tags:
+- frontend
+- javascript
+- react
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+
+references:
+- integrate-husky-prettier-etc
+---
+## Common pnpm Commands
+
+```shell
+# install dependencies
+pnpm i
+
+pnpm i <package>
+
+pnpm add -g <package>
+
+pnpm add -D <package>
+# -D or --save-dev means installing the package as a development dependency, which means the package is only used during development and not needed in production. Development dependencies usually include testing tools, build tools, packaging tools, etc.
+# -P or --save-prod means installing the package as a production dependency, which means the package is required when running in production. Production dependencies include the application's core functions and dependencies.
+
+# Show outdated packages and their current versions.
+pnpm outdated
+# update all the outdated dependencies
+pnpm update --latest
+
+# Update all packages to their latest versions based on the version ranges specified in the package.json file.
+# highlight-start
+# do not use it for normal situations, as it may introduce breaking changes.
+# for best practice to use this, then delete pnpm-lock.yaml and run pnpm install again.
+# highlight-end
+pnpm update
+
+# Run a script defined in the scripts section of the package.json file.
+pnpm run <script>
+
+# Uninstall a package and remove it from the package.json file.
+pnpm uninstall <package>
+
+#  Remove extraneous packages not listed in the package.json file.
+pnpm prune
+
+# Force update pnpm-lock.yaml
+pnpm install --no-frozen-lockfile
+```
+
+
+
+## Problems
+
+ `GET https://registry.npm.taobao.org/pnpm error (CERT_HAS_EXPIRED). Will retry in 10 seconds. 2 retries left.`
+
+![image.png](https://s2.loli.net/2024/03/06/F5OPANkdLpwbD8z.png)
+
+Just delete the directory,display on the console `C:\Users\xx\AppData\Local\pnpm`
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

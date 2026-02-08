@@ -1,0 +1,290 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.tutorialSidebar.category.📚 Background Knowledge": {
+    "message": "📚 Background Knowledge",
+    "description": "The label for category '📚 Background Knowledge' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.📚 Background Knowledge.link.generated-index.description": {
+    "message": "Core technical knowledge including Java, databases, middleware, and algorithms.",
+    "description": "The generated-index page description for category '📚 Background Knowledge' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.☕ Java": {
+    "message": "☕ Java",
+    "description": "The label for category '☕ Java' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.☕ Java.link.generated-index.description": {
+    "message": "Comprehensive Java knowledge from basics to advanced topics.",
+    "description": "The generated-index page description for category '☕ Java' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🔤 Java Basics": {
+    "message": "🔤 Java Basics",
+    "description": "The label for category '🔤 Java Basics' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🔤 Java Basics.link.generated-index.description": {
+    "message": "Fundamental Java concepts and features.",
+    "description": "The generated-index page description for category '🔤 Java Basics' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.💼 Interview Cases": {
+    "message": "💼 Interview Cases",
+    "description": "The label for category '💼 Interview Cases' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.💼 Interview Cases.link.generated-index.description": {
+    "message": "Real-world Java interview questions and solutions.",
+    "description": "The generated-index page description for category '💼 Interview Cases' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.Spring Framework": {
+    "message": "Spring Framework",
+    "description": "The label for category 'Spring Framework' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.Spring Framework.link.generated-index.description": {
+    "message": "Comprehensive guides on Spring Framework including Core concepts, IoC/DI, and AOP.",
+    "description": "The generated-index page description for category 'Spring Framework' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.Core Concepts": {
+    "message": "Core Concepts",
+    "description": "The label for category 'Core Concepts' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.IoC / Dependency Injection": {
+    "message": "IoC / Dependency Injection",
+    "description": "The label for category 'IoC / Dependency Injection' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.AOP (Aspect-Oriented Programming)": {
+    "message": "AOP (Aspect-Oriented Programming)",
+    "description": "The label for category 'AOP (Aspect-Oriented Programming)' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.Weaving": {
+    "message": "Weaving",
+    "description": "The label for category 'Weaving' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.AspectJ Integration": {
+    "message": "AspectJ Integration",
+    "description": "The label for category 'AspectJ Integration' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.⚡ Concurrency & JVM": {
+    "message": "⚡ Concurrency & JVM",
+    "description": "The label for category '⚡ Concurrency & JVM' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.⚡ Concurrency & JVM.link.generated-index.description": {
+    "message": "Java concurrency, memory models, and JVM internals.",
+    "description": "The generated-index page description for category '⚡ Concurrency & JVM' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🐛 Problem Solutions": {
+    "message": "🐛 Problem Solutions",
+    "description": "The label for category '🐛 Problem Solutions' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🐛 Problem Solutions.link.generated-index.description": {
+    "message": "Common problems and their solutions across Java ecosystem.",
+    "description": "The generated-index page description for category '🐛 Problem Solutions' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🎯 Design Patterns": {
+    "message": "🎯 Design Patterns",
+    "description": "The label for category '🎯 Design Patterns' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🎯 Design Patterns.link.generated-index.description": {
+    "message": "Java design patterns and architectural approaches.",
+    "description": "The generated-index page description for category '🎯 Design Patterns' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🗄️ Database": {
+    "message": "🗄️ Database",
+    "description": "The label for category '🗄️ Database' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🗄️ Database.link.generated-index.description": {
+    "message": "Database technologies, procedures, and ORM frameworks.",
+    "description": "The generated-index page description for category '🗄️ Database' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🔌 Middleware": {
+    "message": "🔌 Middleware",
+    "description": "The label for category '🔌 Middleware' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🔌 Middleware.link.generated-index.description": {
+    "message": "Message queues, caching, and workflow engines.",
+    "description": "The generated-index page description for category '🔌 Middleware' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🐍 Python": {
+    "message": "🐍 Python",
+    "description": "The label for category '🐍 Python' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🐍 Python.link.generated-index.description": {
+    "message": "Python scripting and problem solutions.",
+    "description": "The generated-index page description for category '🐍 Python' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🧮 Algorithms": {
+    "message": "🧮 Algorithms",
+    "description": "The label for category '🧮 Algorithms' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🧮 Algorithms.link.generated-index.description": {
+    "message": "Sorting algorithms and LeetCode solutions.",
+    "description": "The generated-index page description for category '🧮 Algorithms' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🎨 Frontend Development": {
+    "message": "🎨 Frontend Development",
+    "description": "The label for category '🎨 Frontend Development' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🎨 Frontend Development.link.generated-index.description": {
+    "message": "Modern frontend technologies including React, Vue, CSS, and development tools.",
+    "description": "The generated-index page description for category '🎨 Frontend Development' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.React": {
+    "message": "React",
+    "description": "The label for category 'React' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.React.link.generated-index.description": {
+    "message": "Comprehensive React guides covering hooks, state management, routing, and best practices.",
+    "description": "The generated-index page description for category 'React' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.Vue.js": {
+    "message": "Vue.js",
+    "description": "The label for category 'Vue.js' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.Styling (CSS/Tailwind)": {
+    "message": "Styling (CSS/Tailwind)",
+    "description": "The label for category 'Styling (CSS/Tailwind)' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.Frontend Tools": {
+    "message": "Frontend Tools",
+    "description": "The label for category 'Frontend Tools' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.jQuery": {
+    "message": "jQuery",
+    "description": "The label for category 'jQuery' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.Case Studies": {
+    "message": "Case Studies",
+    "description": "The label for category 'Case Studies' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🚀 DevOps & Infrastructure": {
+    "message": "🚀 DevOps & Infrastructure",
+    "description": "The label for category '🚀 DevOps & Infrastructure' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🚀 DevOps & Infrastructure.link.generated-index.description": {
+    "message": "Linux, Docker, Kubernetes, and deployment infrastructure.",
+    "description": "The generated-index page description for category '🚀 DevOps & Infrastructure' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🐧 Linux": {
+    "message": "🐧 Linux",
+    "description": "The label for category '🐧 Linux' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🐧 Linux.link.generated-index.description": {
+    "message": "Linux commands and shell scripting.",
+    "description": "The generated-index page description for category '🐧 Linux' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🐳 Docker": {
+    "message": "🐳 Docker",
+    "description": "The label for category '🐳 Docker' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🐳 Docker.link.generated-index.description": {
+    "message": "Docker containers and Docker Compose.",
+    "description": "The generated-index page description for category '🐳 Docker' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.☸️ Kubernetes": {
+    "message": "☸️ Kubernetes",
+    "description": "The label for category '☸️ Kubernetes' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.☸️ Kubernetes.link.generated-index.description": {
+    "message": "Kubernetes orchestration and deployment.",
+    "description": "The generated-index page description for category '☸️ Kubernetes' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🛠️ Development Tools": {
+    "message": "🛠️ Development Tools",
+    "description": "The label for category '🛠️ Development Tools' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🛠️ Development Tools.link.generated-index.description": {
+    "message": "Essential development tools including Git, Maven, Gradle, and IDEs.",
+    "description": "The generated-index page description for category '🛠️ Development Tools' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.💻 Development Tools": {
+    "message": "💻 Development Tools",
+    "description": "The label for category '💻 Development Tools' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.💻 Development Tools.link.generated-index.description": {
+    "message": "Tools for software development.",
+    "description": "The generated-index page description for category '💻 Development Tools' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🔨 General Tools": {
+    "message": "🔨 General Tools",
+    "description": "The label for category '🔨 General Tools' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🔨 General Tools.link.generated-index.description": {
+    "message": "General productivity and utility tools.",
+    "description": "The generated-index page description for category '🔨 General Tools' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🤖 AI & Big Data": {
+    "message": "🤖 AI & Big Data",
+    "description": "The label for category '🤖 AI & Big Data' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🤖 AI & Big Data.link.generated-index.description": {
+    "message": "Big data technologies (Hadoop, Flink, HBase) and AI/ML concepts.",
+    "description": "The generated-index page description for category '🤖 AI & Big Data' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🤖 AI & LLM": {
+    "message": "🤖 AI & LLM",
+    "description": "The label for category '🤖 AI & LLM' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🤖 AI & LLM.link.generated-index.description": {
+    "message": "Artificial Intelligence, Large Language Models, MCP, and AI development resources",
+    "description": "The generated-index page description for category '🤖 AI & LLM' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.AI Prompt Engineering Roadmap": {
+    "message": "AI Prompt Engineering Roadmap",
+    "description": "The label for category 'AI Prompt Engineering Roadmap' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🐘 Big Data": {
+    "message": "🐘 Big Data",
+    "description": "The label for category '🐘 Big Data' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🐘 Big Data.link.generated-index.description": {
+    "message": "Hadoop Ecosystem, HBase, Flink, and big data infrastructure",
+    "description": "The generated-index page description for category '🐘 Big Data' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.Hadoop": {
+    "message": "Hadoop",
+    "description": "The label for category 'Hadoop' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.Hadoop.link.generated-index.description": {
+    "message": "Comprehensive guide to Hadoop ecosystem including HDFS, MapReduce, and YARN.",
+    "description": "The generated-index page description for category 'Hadoop' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.📖 Miscellaneous": {
+    "message": "📖 Miscellaneous",
+    "description": "The label for category '📖 Miscellaneous' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.📖 Miscellaneous.link.generated-index.description": {
+    "message": "Reading notes, useful links, and other resources.",
+    "description": "The generated-index page description for category '📖 Miscellaneous' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.📚 Books & Reading Notes": {
+    "message": "📚 Books & Reading Notes",
+    "description": "The label for category '📚 Books & Reading Notes' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.📚 Books & Reading Notes.link.generated-index.description": {
+    "message": "Technical books and reading summaries.",
+    "description": "The generated-index page description for category '📚 Books & Reading Notes' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.computor-theory": {
+    "message": "computor-theory",
+    "description": "The label for category 'computor-theory' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.literature": {
+    "message": "literature",
+    "description": "The label for category 'literature' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🔗 Useful Links": {
+    "message": "🔗 Useful Links",
+    "description": "The label for category '🔗 Useful Links' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.🔗 Useful Links.link.generated-index.description": {
+    "message": "Curated collection of useful resources and links.",
+    "description": "The generated-index page description for category '🔗 Useful Links' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.📝 Others": {
+    "message": "📝 Others",
+    "description": "The label for category '📝 Others' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.📝 Others.link.generated-index.description": {
+    "message": "Miscellaneous notes and configurations.",
+    "description": "The generated-index page description for category '📝 Others' in sidebar 'tutorialSidebar'"
+  }
+}

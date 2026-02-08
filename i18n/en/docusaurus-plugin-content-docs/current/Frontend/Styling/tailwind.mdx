@@ -1,0 +1,494 @@
+---
+id: tailwind
+title: Tailwind CSS Usage Guide
+sidebar_label: Tailwind CSS Usage Guide
+sidebar_position: 10
+description: Taco shop project written with Tailwind and Vue
+tags:
+- frontend
+- javascript
+- react
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+---
+# `How to use Tailwind CSS in your project?`
+
+**All content is based on Tailwind `3.4.1`, here is my [GitHub Repository](https://github.com/Halcyon666/taco-shop).**
+
+**Good news, you can visit my deployed website [here](https://halcyon666.github.io/taco-shop/)**
+
+### Prerequisites
+
+- [`MDN` Cascading Style Sheets](https://developer.mozilla.org/en-US/docs/Web/CSS)
+
+- [CSS Course Learning Source](https://youtu.be/OXGznpKZ_sA?si=KTPSZgU2-h7IHr_d)
+
+- [Vue Official Website](https://vuejs.org/)
+
+- [TypeScript](https://www.typescriptlang.org/)
+
+### Learning Background
+
+First, I learned a basic [CSS course](https://youtu.be/OXGznpKZ_sA?si=KTPSZgU2-h7IHr_d), lectured by ***Dave Gray*** (thanks to him). Secondly, the idea I had during the learning process was that I could rewrite this project with other technologies, replacing HTML with Vue and TypeScript, and replacing CSS with Tailwind CSS.
+
+So this article is a summary, recording all the key points, and you will benefit a lot from it.
+
+### Install Tailwind CSS
+
+If you want to create a new project, you can read [this article](https://halcyon666.github.io/summary/Frontend/Integrate%20husky%20prettier%20etc),
+and then install Tailwind CSS by reading [this tutorial](https://tailwindcss.com/docs/installation/using-vite).
+
+You can also skip all the above steps and just run the following command,
+
+```shell
+pnpm add -D tailwindcss postcss @tailwindcss/postcss
+```
+
+| Package Name | Function |
+| :--- | :--- |
+| **tailwindcss** | Tailwind Core |
+| **postcss** | CSS compiler, used to run Tailwind |
+| **@tailwindcss/postcss** | Tailwind v4 PostCSS integration plugin (Required) |
+
+
+```js  title="postcss.config.js"
+export default {
+  plugins: {
+    '@tailwindcss/postcss': {},
+  },
+}
+```
+
+```index.css title="src/index.css"
+@import "tailwindcss";
+
+/* @layer base {
+    select,
+    textarea,
+    input {
+        all: revert;
+    }
+} */
+```
+
+[Example Commit](https://github.com/Halcyon666/react-daily-learn/commit/782abb369a624a792802b8fd6702b4614ce81bd7)
+
+### Tailwind Usage
+
+I will skip most simple usages, you can check them on the [Official Website](https://tailwindcss.com).
+
+#### `margin-bottom`
+
+If you want to define specific margin-bottom spacing, define it customly like this,
+
+```css
+.mb-4 {
+    margin-bottom: 1rem/* 16px */;
+}
+```
+
+> All articles will omit the base CSS used in HTML.
+
+Tailwind CSS,
+
+```html
+<div class="mb-4">
+      <!--  ... -->
+</div>
+```
+
+Another more complex example, if you want to declare a spacing with a clamp function, this `clamp(1em, 2.5vh, 1.5em) 0` sets the margin of an element to vary between `1em` and `1.5em`, with a preferred value of `2.5vh`, and an initial margin of `0`. The actual margin will depend on the viewport size and how it fits within the specified range.
+
+`2.5vh` is equivalent to 2.5% of the viewport height. This is a responsive unit that adjusts based on the user's viewport height (the visible area in the browser).
+
+Custom CSS
+
+```css
+.mb-clamp {
+    margin-bottom: clamp(1em, 2.5vh, 1.5em) 0;
+}
+```
+
+tailwind css
+
+```html
+<div class="m-[clamp(1em,2.5vh,1.5em)_0] ">
+      <!--  ... -->
+</div>
+```
+
+#### `text-shadow`
+
+- Custom CSS
+
+```css
+.custom-shadow {
+    text-shadow: 2px 2px 5px #333;
+}
+```
+
+- Tailwind CSS
+
+```html
+<div class="[text-shadow:2px_2px_5px_#333]">
+      <!--  ... -->
+</div>
+```
+
+#### `font-family`
+
+If you want to set the font family, custom CSS is as follows
+
+```css
+.custom-font-family {
+    font-family: Fugaz One, cursive;
+}
+```
+
+In tailwind css, you need put config into you `tailwind.config.ts`
+
+```ts
+export default {
+  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        headings: ['Fugaz One', 'cursive'],
+      },
+    },
+  },
+  plugins: [],
+} satisfies Config
+```
+
+And use it in HTML,
+
+```html
+<div class="font-headings">
+      <!--  ... -->
+</div>
+```
+#### `border`
+
+Custom border compound CSS
+
+```css
+.div {
+  border: 1px solid #999;
+}
+```
+
+But there is no compound Tailwind CSS style, it needs to be defined by multiple fields
+
+```html
+<div class="border-solid border border-black"></div>
+```
+
+#### `animate`
+
+This custom CSS defines an animation that moves down from top `-100px` to the window.
+
+```css
+.hero__h2 {
+    top: -100px;
+    animation: showWelcome 0.5s ease-in-out 1s forwards;
+}
+
+@keyframes showWelcome {
+    0% {
+        top: -20px;
+        transform: skew(0deg, -5deg) scaleY(0);
+    }
+
+    80% {
+        top: 30px;
+        transform: skew(10deg, -5deg) scaleY(1.2);
+    }
+
+    100% {
+        top: 20px;
+        transform: skew(-10deg, -5deg) scaleY(1);
+    }
+}
+```
+
+In tailwind css, you need put config into you `tailwind.config.ts`
+
+```css
+export default {
+  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}']
+  theme: {
+    extend: {
+      keyframes: {
+        showWelcome: {
+          '0%': {
+            top: '-20px',
+            transform: 'skew(0deg, -5deg) scaleY(0)',
+          },
+
+          '80%': {
+            top: '30px',
+            transform: 'skew(10deg, -5deg) scaleY(1.2)',
+          },
+
+          '100%': {
+            top: '20px',
+            transform: 'skew(-10deg, -5deg) scaleY(1)',
+          },
+        },
+      },
+    },
+  },
+  plugins: [],
+} satisfies Config
+```
+
+Use animation in HTML
+
+```html
+<div class="animate-[showWelcome_0.5s_ease-in-out_1s_forwards]">
+      <!--  ... -->
+</div>
+```
+
+#### Pseudo-classes `first-child` and `last-child`
+
+Custom CSS
+
+```css
+.main__article:first-child {
+    margin-top: 1em;
+}
+
+.main__article:last-child {
+    min-height: calc(100vh-20rem);
+}
+```
+
+Tailwind CSS
+
+```html
+<div class="first:mt-4 last:min-h-[calc(100vh-20rem)]">
+      <!--  ... -->
+</div>
+
+```
+
+>  *Style an element if it’s the first child of its type using the first-of-type modifier*, you need define this way.
+>
+> ```html
+> <div class="first-of-type:mt-4 last-of-type:min-h-[calc(100vh-20rem)]">
+>       <!--  ... -->
+> </div>
+> ```
+>
+> **Note the use of functions, spaces cannot be included in `last-of-type:min-h-[calc(100vh-20rem)]`. If you really want to add spaces, please use `last-of-type:min-h-[calc(100vh_-_20rem)]` instead of `last-of-type:min-h-[calc(100vh - 20rem)]`.**
+
+#### Pseudo-classes `before` and `after`
+
+Use pseudo-classes `before` or `after` to add some content via custom CSS, Custom CSS
+
+```css
+.header__h1::before {
+    content: '🌮 '
+}
+
+.header__h1::after {
+    content: ' 🌮'
+}
+```
+
+Tailwind CSS
+
+```html
+<div class="before:content-['🌮'] after:content-['🌮']">
+      <!--  ... -->
+</div>
+```
+
+> '🌮' must use single quotes, 🌮 will not effect.
+
+#### `@media` Query
+
+Custom CSS
+
+```css
+@media screen and (min-width: 576px) {
+    .header__h1::before {
+        content: '🌮 '
+    }
+
+    .header__h1::after {
+        content: ' 🌮'
+    }
+
+    .menu__header,
+    .menu__cr,
+    .menu__sf,
+    .menu__cs {
+        font-size: 125%;
+    }
+}
+```
+
+use in tailwind css
+
+```html
+<div class="min-[576px]:before:content-['🌮'] min-[576px]:after:content-['🌮']">
+      <!--  ... -->
+</div>
+```
+
+It looks cleaner and I like it.
+
+#### Text Color Opacity
+
+Use `text-black/[.6]` directly instead of `text-[rgba(0, 0, 0, 0.6)]` because the latter is not supported yet.
+
+If the color is `rgba(52, 178, 52, 0.75)`, first you should convert it to hex color, then use `text-[#34b234bf]`.
+
+Here is an example, Custom CSS
+
+```css
+.header__h1 {
+    color: rgba(52, 178, 52, 0.75);
+}
+```
+
+tailwind css
+
+```html
+<div class="text-[#34b234bf]">
+      <!--  ... -->
+</div>
+```
+
+
+
+#### `text-shadow`
+
+Custom CSS,
+
+```css
+:root {
+    --BORDER-COLOR: #333;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --BORDER-COLOR: whitesmoke;
+    }
+}
+
+.hero__h2 {
+    text-shadow: 2px 2px 5px var(--BORDER-COLOR);
+}
+```
+
+tailwind css,
+
+```html
+<div class="[text-shadow:2px_2px_5px_#333] dark:[text-shadow:2px_2px_5px_white]">
+      <!--  ... -->
+</div>
+```
+
+#### `box-shadow`
+
+Custom CSS
+
+```css
+:root {
+    --BORDER-COLOR: #333;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --BORDER-COLOR: whitesmoke;
+    }
+}
+
+body {
+    box-shadow: 0 0 10px var(--BORDER-COLOR);
+}
+```
+
+tailwind css,
+
+```html
+<div class="shadow-[0_6px_5px_-5px_#333] dark:shadow-[0_6px_5px_-5px__whitesmoke]">
+      <!--  ... -->
+</div>
+```
+Sometimes you can define it in separate ways, see [here](https://tailwindcss.com/docs/box-shadow) for more details.
+
+Below I give an example of Tailwind CSS in React, related styles `shadow-lg shadow-cyan-500/50 opacity-85`, defining `box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);`
+
+And border color, box opacity.
+
+```jsx
+<div className="text-center text-2xl font-bold mt-4 p-2 border border-purple-400 border-solid shadow-lg shadow-cyan-500/50 bg-cyan-500 opacity-85">
+  {tips}
+</div>
+```
+
+
+### Troubleshooting
+
+##### Image Not Showing
+
+I used static images in Vue files, once deployed to GitHub Pages the images disappeared because `vite` did not include `src/assets/img/tacos_delicioso_1000x667.png`. I checked the solution on the [Vite Official Website](https://vitejs.dev/guide/assets.html), both following methods work, choose the one you like. Here is the [commit record](https://github.com/Halcyon666/taco-shop/commit/ae52cfc97ea40a73a5a32e9fd86ed971cb535ebf) for the solution.
+
+- Method 1
+
+```ts
+const img = new URL('@/assets/img/tacos_delicioso_1000x667.png', import.meta.url).href
+```
+
+- Method 2
+
+```ts
+// But this will throw an error, so I prefer method 1
+// Cannot find module '@/assets/img/tacos_and_drink_1000x667.png' or its corresponding type declarations.
+import img from '@/assets/img/tacos_delicioso_1000x667.png'
+```
+
+##### Page Lost All Styles
+
+Because `postcss.config.js` configuration was wrong, I deleted the line `tailwindcss: { config: './tailwind.config.ts' },`;
+
+You can check the official [guide](https://tailwindcss.com/docs/configuration#creating-your-configuration-file), here is the [commit record](https://github.com/Halcyon666/taco-shop/commit/4a136de832103a85edee410b3847ffafefd76b5f) for the solution.
+
+```js {4} showLineNumbers
+module.exports = {
+  plugins: {
+    // Config location, default is tailwind.config.js, here must specify file name
+    tailwindcss: { config: './tailwind.config.ts' },
+    autoprefixer: {},
+    cssnano: {},
+    // Nesting CSS
+    'tailwindcss/nesting': 'postcss-nesting',
+    'postcss-preset-env': {
+      features: { 'nesting-rules': false },
+    },
+    // Production environment optimization, compress CSS
+    ...(process.env.NODE_ENV === 'production' ? { cssnano: {} } : {}),
+  },
+}
+
+```
+
+### Summary
+
+About 20 days of learning and rewriting this project, maybe the project is too small, but I learned a lot about Tailwind CSS and Vue. I hope you keep moving forward and you will find yourself unlocking the stylish Tailwind CSS.
+
+
+
+Thank you for your time. If my article helps you, please give me a thumbs up. Also welcome to ask any questions.
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

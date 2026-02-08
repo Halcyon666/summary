@@ -1,0 +1,62 @@
+---
+id: docker-destop-configuration
+title: Docker Desktop Configuration
+sidebar_label: Docker Desktop Configuration
+sidebar_position: 10
+description: 'https://zhuanlan.zhihu.com/p/24461370776 shell cat <<-EOF > /etc/docker/daemon.json
+  { "registry-mirrors": ['
+tags:
+- containerization
+- devops
+- docker
+last_update:
+  date: '2026-02-01'
+  author: halcyon666
+sources:
+- docker-command-and-dockerfile
+---
+
+
+# Docker Desktop Configuration
+
+## Configure `Docker Engine`
+
+```json 
+{
+  "builder": {
+    "gc": {
+      "defaultKeepStorage": "20GB",
+      "enabled": true
+    }
+  },
+  "experimental": false,
+  "registry-mirrors": [
+    "https://igq6a6t6.mirror.aliyuncs.com",
+    "https://docker.1ms.run",
+    "https://docker.m.daocloud.io",
+    "https://docker.1panel.live",
+    "https://docker.xuanyuan.me"
+  ]
+}
+```
+In Linux, you can refer to [Reference](https://zhuanlan.zhihu.com/p/24461370776)
+
+```shell
+# Restart docker after modifying configuration
+systemctl daemon-reload
+systemctl restart docker
+```
+
+## Windows 10 WSL2 Issue
+
+```powershell
+wsl --install 
+wsl --update
+```
+
+![20260201181712](https://s2.loli.net/2026/02/01/8ka7UvlSMdHDyjw.png)
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

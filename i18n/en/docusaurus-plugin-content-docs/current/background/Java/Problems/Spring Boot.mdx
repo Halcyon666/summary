@@ -1,0 +1,169 @@
+---
+id: spring-boot
+title: Spring Boot
+sidebar_label: Spring Boot
+sidebar_position: 10
+description: A bug finds in those of tasks where you need change the date by the nature.
+  <br/> Firstly You should inject a prototype bean to spring context, instea
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+# Spring Boot
+
+## Singleton Inject but need dynamic changing value
+
+A bug finds in those of tasks where you need change the date by the nature. <br/>
+Firstly You should inject a prototype bean to spring context, instead of injecting a singleton object; Secondly you need use this way.
+
+```java
+@Component
+public class SingletonService {
+
+    // Use ObjectFactory (can also use javax.inject.Provider or Spring's Provider)
+    @Resource
+    // highlight-next-line
+    private ObjectFactory<PrototypeBean> prototypeBeanFactory;
+
+    public void callTest() {
+        PrototypeBean prototypeBean = prototypeBeanFactory.getObject();
+        prototypeBean.doSomething();
+    }
+}
+```
+
+## Startup Problems
+
+### Springboot startup error org.springframework.boot does not exist
+
+***Suggest using method 2 to input `mvn idea:idea` in terminal, method 1 in Spring Boot project, when running other Main method test classes, will restart SpringBoot project, if you still get from ApplicationContext, then you will receive error container already closed.***
+[See blog](https://blog.csdn.net/qq_35456400/article/details/107190640)
+
+### spring boot source code running SpringApplication error
+
+Could not find artifact lifecycle-mapping:lifecycle-mapping:jar:sources:1.0.0
+[See blog Already paid to view! Speechless](https://blog.csdn.net/awecoder/article/details/101159870)
+
+### gradle spring boot 3.0 import error
+
+[Invalid source release: 17](https://stackoverflow.com/questions/69696321/intellij-invalid-source-release-17)
+
+Ensure gradle version JDK 17 and JDK version are correct.
+
+![image-20230728021351697](https://s2.loli.net/2023/07/28/UzsD4BnrPYSbo1T.png)
+
+## Log Related
+
+### Startup console log has no color
+
+Introduce in spring-logback.xml
+```xml
+<include resource="org/springframework/boot/logging/logback/base.xml"/>
+<logger name="org.springframework.web" level="INFO"/>
+<logger name="org.springboot.sample" level="TRACE"/>
+```
+
+### logback modify log print content
+
+Code: extends ThrowableHandlingConverter
+impl convert method
+
+logback config
+```xml
+<conversionRule convertionWord="someKeyMsg" convertClass="com.xxx.xxx.Xclass"/>
+```
+
+
+## Packaging Problems
+
+### after run the packaged jar occurs this unable to find main class
+
+Method 1. Replace plugin
+```xml
+<!--<plugin>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-maven-plugin</artifactId>
+	<configuration>
+		<mainClass>none</mainClass>
+		<classifier>execute</classifier>
+	</configuration>
+	<executions>
+		<execution>
+			<goals>
+				<goal>repackage</goal>
+			</goals>
+		</execution>
+	</executions>
+</plugin>-->
+<plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-source-plugin</artifactId>
+	<version>3.0.1</version>
+	<executions>
+		<execution>
+			<id>attach-sources</id>
+			<goals>
+				<goal>jar</goal>
+			</goals>
+		</execution>
+	</executions>
+</plugin>
+```
+
+Method 2: Remove spring-boot parent, then use spring boot plugin to package
+
+---
+
+## Get Real Class Annotation of AOP Proxy Object
+
+In Spring Boot, after using AOP technologies like `@Aspect`, injected Bean is **proxy object**.
+Directly through `getClass().getAnnotation()` often cannot get annotation on original class (especially JDK dynamic proxy).
+
+Core Solution: Use Spring provided `AopProxyUtils` to penetrate proxy, get final **original business class**.
+
+<details>
+<summary>Click to view</summary>
+```java
+import org.springframework.aop.framework.AopProxyUtils;
+// ...
+@Component
+public class MyAnnotationScanner implements ApplicationRunner {
+
+    private final ApplicationContext context;
+    private final Map<String, MyAnnotation> cacheMap = new ConcurrentHashMap<>();
+
+    public MyAnnotationScanner(ApplicationContext context) {
+        this.context = context;
+    }
+
+    @Override
+    public void run(ApplicationArguments args) {
+        // 1. Get all Beans with specific annotation
+        Map<String, Object> beans = context.getBeansWithAnnotation(MyAnnotation.class);
+
+        beans.forEach((name, bean) -> {
+            // 2. Penetrate proxy, get real class (TargetClass)
+            Class<?> targetClass = AopProxyUtils.ultimateTargetClass(bean);
+            
+            // 3. Extract annotation information
+            MyAnnotation anno = AnnotationUtils.findAnnotation(targetClass, MyAnnotation.class);
+            
+            if (anno != null) {
+                cacheMap.put(targetClass.getName(), anno);
+            }
+        });
+    }
+}
+```
+</details>
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

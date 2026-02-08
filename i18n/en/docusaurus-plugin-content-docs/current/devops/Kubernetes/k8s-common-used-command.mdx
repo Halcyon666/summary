@@ -1,0 +1,62 @@
+---
+id: k8s-common-used-command
+title: Common K8S Commands
+sidebar_label: Common K8S Commands
+sidebar_position: 10
+description: shell systemctl status docker.service systemctl status kubelet.service
+  netstat -antp| grep 6443 netstat -pnlt | grep 6443
+tags:
+- containerization
+- devops
+- docker
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+
+references:
+- centos8-instal-k8s
+---
+### [Status Check](https://blog.csdn.net/weixin_38007578/article/details/117586266)
+
+```shell
+# Check docker status
+systemctl status docker.service
+# Check kubelet status
+systemctl status kubelet.service
+# Check kubelet port
+netstat -antp| grep 6443
+netstat -pnlt | grep 6443
+# View system log
+tail -200f /var/log/messages
+#  
+kubectl get cs
+
+```
+
+### Restart Command
+
+```shell
+systemctl restart docker.service
+systemctl restart kubelet.service
+systemctl restart kubelet
+```
+
+```csharp
+[root@master01 ~]# wget https://docs.projectcalico.org/v3.14/manifests/calico.yaml --no-check-certificate
+Output….
+ [root@master01 ~]# ls
+anaconda-ks.cfg  calico.yaml
+```
+
+[Cleanup Command](https://www.51cto.com/article/696675.html)
+
+```shell
+
+```
+
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

@@ -1,0 +1,125 @@
+---
+id: develop-software-tips
+title: Common Development Software
+sidebar_label: Common Development Software
+sidebar_position: 10
+description: Tips for DBeaver font size, VS Code terminal profiles, and AI assistant settings
+tags:
+- development
+- tools
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- git-commands
+references:
+- git-commands
+- gradle-maven-configuration
+---
+
+# Common Development Software
+
+## Adjust Font Size in DBeaver Connection to MySQL
+
+[How to adjust SQL Editor font size in DBeaver](https://www.cnblogs.com/guolaoshi/p/11750723.html)
+
+## Use `git bash` Terminal in VS Code
+
+In VS Code settings, search for `terminal.integrated.profiles.windows`, then "Edit in settings.json".
+
+![image-20250921132552404](https://s2.loli.net/2025/09/21/ahpwFIRPrqTKZ9z.png)
+
+Search for `terminal.integrated.profiles.windows` in the JSON file, modify the value corresponding to `terminal.integrated.profiles.windows`, and append a property `terminal.integrated.defaultProfile.windows`.
+
+```json
+"terminal.integrated.profiles.windows": {
+  "PowerShell": {
+    "source": "PowerShell",
+    "icon": "terminal-powershell"
+  },
+  "Command Prompt": {
+    "path": [
+      "${env:windir}\\Sysnative\\cmd.exe",
+      "${env:windir}\\System32\\cmd.exe"
+    ],
+    "args": [],
+    "icon": "terminal-cmd"
+  },
+  "Git Bash": {
+    "path": "D:\\software\\Git\\bin\\bash.exe",
+    "icon": "terminal-bash"
+  }
+},
+"terminal.integrated.defaultProfile.windows": "Git Bash"
+
+```
+
+## Disable AI Assistant Suggestions in VS Code
+
+- Effective for all projects:
+Search for `inlineSuggest.enabled` in settings, then uncheck it.
+
+- How to set for a single project? Where to create the file?
+Create `.vscode/settings.json` file in the project root directory, add the following content:
+
+```json
+{
+    "editor.inlineSuggest.enabled": false
+}
+```
+
+## Solution for PowerShell Chinese Encoding `<AA>` in IDEA
+
+```powershell
+powershell.exe -NoExit -Command "[Console]::OutputEncoding=[System.Text.Encoding]::UTF8; $env:LANG='C.UTF-8'; $env:LC_ALL='C.UTF-8'"
+```
+
+## Reset MobaXterm Master Password
+
+[Reference Link](https://www.cnblogs.com/johnsonzzz/p/15158499.html)
+
+## Reset IDEA
+
+`C:\Users\xxxx\AppData\Roaming\JetBrains\IntelliJIdea2021.1\eval`
+
+Delete `idea211.evaluation.key` in the directory above.
+
+## Configure Java Environment in VS Code
+
+This is the most recommended way because it manages both "Execution Program" and "Configuration File".
+
+1. Press `Ctrl + Shift + P`.
+2. Enter **"Open User Settings (JSON)"** and press Enter.
+3. Add the following content to the configuration file (Replace with your actual paths):
+
+```json
+{
+    "git.autofetch": true,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "diffEditor.hideUnchangedRegions.enabled": true,
+    "git.confirmSync": false,
+    "files.autoSave": "onFocusChange",
+    "workbench.colorTheme": "Solarized Light",
+    "editor.minimap.sectionHeaderFontSize": 10,
+    "security.workspace.trust.untrustedFiles": "open",
+    "redhat.telemetry.enabled": true,
+    // Configure Java Home (Point to your JDK root directory)
+    // Note: Slashes in Windows path should be double backslashes \\ or forward slash /
+    "java.jdt.ls.java.home": "D:\\software\\Java\\jdk-17.0.7",
+    // Configure Gradle Home (Point to your Gradle installation directory)
+    // If you use wrapper (gradlew), this line is optional, but safer to have
+    "java.import.gradle.home": "D:\\software\\gradle-8.7",
+    // Optional: Specify Java version for Gradle runtime (Usually consistent with project)
+    "java.import.gradle.java.home": "D:\\software\\Java\\jdk-17.0.7",
+    // 1. Specify Maven executable path (Note: point to mvn or mvn.cmd in bin directory)
+    "maven.executable.path": "D:\\software\\apache-maven-3.8.7\\bin\\mvn.cmd",
+    // 2. Critical! Specify your settings.xml path (To read Aliyun mirror config)
+    "java.configuration.maven.userSettings": "D:\\software\\apache-maven-3.8.7\\conf\\settings.xml",
+    // 3. (Optional) If your Maven needs specific JDK to run
+    "maven.terminal.useJavaHome": true
+}
+```
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

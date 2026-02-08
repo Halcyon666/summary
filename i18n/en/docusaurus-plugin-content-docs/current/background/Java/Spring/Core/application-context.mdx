@@ -1,0 +1,520 @@
+---
+id: application-context
+title: ApplicationContext
+sidebar_label: ApplicationContext
+sidebar_position: 10
+description: Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) for code related to this article (from official source spring-test module)
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) under `org.springframework.mylearntest` package for code related to this article (from [official source](https://github.com/spring-projects/spring-framework.git "official source") spring-test module).
+
+## Unified Resource Loading Strategy
+
+Spring proposes a set of resource abstraction and loading strategies based on `org.springframework.core.io.Resource` and `org.springframework.core.io.ResourceLoader` interfaces.
+
+Resource: Interface can provide corresponding specific implementations according to different types of resources, or different occasions where resources are located. It can help us query resource status, access resource content, and even create new relative resources based on current resources. We can inherit `org.springframework.core.io.AbstractResource` abstract class.
+
+ResourceLoader: But how to find and locate these resources should be the responsibility of ResourceLoader. `org.springframework.core.io.ResourceLoader` interface is the unified abstraction of resource lookup and positioning strategy, and specific resource lookup and positioning strategies are given by corresponding ResourceLoader implementation classes.
+
+DefaultResourceLoader: ResourceLoader has a default implementation class, namely `org.springframework.core.io.DefaultResourceLoader`, the default resource lookup processing logic of this class is as follows.
+
+* First check if the resource path starts with classpath: prefix, if so, try to construct ClassPathResource type resource and return.
+* Otherwise, (a) try to locate via URL based on resource path, if no MalformedURLException is thrown, then construct UrlResource type resource and return; (b) if still unable to locate specified resource based on resource path, then delegate getResourceByPath(String) method to locate, DefaultResourceLoader's getResourceByPath(String) method default implementation logic is to construct ClassPathResource type resource and return.
+
+![](https://s2.loli.net/2023/07/15/3S4uLnEjAsDTgJa.png)
+
+![](https://s2.loli.net/2023/07/15/gXVo8SKvnThpwZm.png)
+
+## Four Loading Models
+
+### Using ApplicationContext as ResourceLoader
+
+`ResourceLoader resourceLoader = new ClassPathXmlApplicationContext("config file path");`
+
+### ResourceLoader Type Injection
+
+1. Depend on ResourceLoader
+
+<details>
+	<summary>resourceloader.xml </summary>
+
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="resourceLoader" class="org.springframework.core.io.DefaultResourceLoader">
+	</bean>
+
+	<bean id="fooBar" class="org.springframework.mylearntest.ioc.resourceloader.FooBar">
+		<property name="resourceLoader" ref="resourceLoader"/>
+	</bean>
+</beans>
+```
+</details>
+
+2. Instance class implementing ResourceLoaderAware or ApplicationContextAware interface
+
+<details>
+	<summary>resourceloader4ContextBoo.xml</summary>
+
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="fooBar" class="org.springframework.mylearntest.ioc.resourceloader.FooBarImplApplicationContextAware">
+	</bean>
+</beans>
+```
+</details>
+
+3. Resource Type Injection
+
+<details>
+	<summary>xmailer.xml</summary>
+
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="xMailer" class="org.springframework.mylearntest.ioc.resourceloader.XMailer">
+		<property name="template" value="resourceloader/resources.default_template.vm"/>
+	</bean>
+</beans>
+```
+</details>
+
+4. ApplicationContext Resource Loading Behavior
+   When ClassPathXmlApplicationContext is instantiated, even if classpath: or classpath*: prefixes are not specified, it will default to load bean definition configuration file from classpath, while FileSystemXmlApplicationContext is somewhat different, if we specify conf/appContext.xml like the following code, it will try to load bean definition file from file system
+
+## Internationalization Information Support (i18n MessageSource)
+
+Internationalization support provided by Java SE
+
+* Locale
+
+Different Locales represent different countries and regions, each country and region has corresponding short code representation in Locale, including language code and country code, these codes are ISO standard codes. E.g., Locale.CHINA represents China.
+
+* ResourceBundle
+
+ResourceBundle is used to save information specific to a certain Locale (can be String type information, can also be any type of object). Usually ResourceBundle manages a set of information sequences, all information sequences have a unified basename, then specific Locale information can be distinguished by language or region code appended after basename. For example, we use a set of properties files to save information of different countries and regions separately, we can name corresponding properties files like this:
+
+```
+messages.properties
+messages_zh.properties
+messages_zh_CN.properties
+messages_en.properties
+messages_en_US.properties
+```
+
+Among them, messages part in file name is called basename of resources that ResourceBundle will load, resources of other languages or regions append Locale specific code on basis of basename.
+
+![](https://s2.loli.net/2023/07/15/8Y4A7NIqHhxa6Qb.png)
+
+If a business object needs internationalization information support, then the simplest way is to let it implement MessageSourceAware interface, and then register to ApplicationContext container. But in this way, this business object's dependency on ApplicationContext container is too strong, making the container appear to have strong intrusiveness. And actually, if a business object really needs to depend on MessageSource, just declaring dependency via constructor injection or setter method injection is enough.
+
+## Container Internal Event Publishing
+1. Custom Event Publishing
+   Give custom event type (define your own event object). In order to distinguish specific event types for specific scenarios, we need to give definitions of our own event types, usually by extending java.util.EventObject class to implement custom event types.
+
+<details>
+	<summary>Define Event Type</summary>
+
+```java
+package org.springframework.mylearntest.ioc.eventpublication.applicationevent;
+
+import org.springframework.context.ApplicationEvent;
+import org.springframework.mylearntest.ioc.eventpublication.event.MethodExecutionStatus;
+
+public class MethodExecutionEvent extends ApplicationEvent {
+	private static final long serialVersionUID = -71960369269303337L;
+	private String methodName;
+	private MethodExecutionStatus methodExecutionStatus;
+
+	public MethodExecutionEvent(Object source) {
+		super(source);
+	}
+	
+	public MethodExecutionEvent(Object source, String methodName, MethodExecutionStatus methodExecutionStatus) {
+		super(source);
+		this.methodName = methodName;
+		this.methodExecutionStatus = methodExecutionStatus;
+	}
+	
+	public String getMethodName() {
+		return methodName;
+	}
+	
+	public void setMethodName(String methodName) {
+		this.methodName = methodName;
+	}
+	
+	public MethodExecutionStatus getMethodExecutionStatus() {
+		return methodExecutionStatus;
+	}
+	
+	public void setMethodExecutionStatus(MethodExecutionStatus methodExecutionStatus) {
+		this.methodExecutionStatus = methodExecutionStatus;
+	}
+}
+```
+</details>
+
+<details>
+	<summary>Define Event Listener Interface</summary>
+
+
+  ```java
+  package org.springframework.mylearntest.ioc.eventpublication.event;
+  
+  
+  import java.util.EventListener;
+  
+  /**
+   * Custom Event Listener
+   */
+  public interface MethodExecutionEventListener extends EventListener {
+  	/**
+  	 * Handle MethodExecutionEvent published when method starts executing
+  	 */
+  	void onMethodBegin(MethodExecutionEvent evt);
+  	/**
+  	 * Handle MethodExecutionEvent published when method execution is about to end
+  	 */
+  	void onMethodEnd(MethodExecutionEvent evt);
+  }
+  
+  ```
+</details>
+
+<details>
+	<summary>Custom Event Listener Implementation</summary>
+
+```java
+package org.springframework.mylearntest.ioc.eventpublication.event;
+
+/**
+ * Custom Event Listener Implementation
+ */
+public class SimpleMethodExecutionEventListener implements MethodExecutionEventListener {
+
+	public void onMethodBegin(MethodExecutionEvent evt) {
+		String methodName = evt.getMethodName();
+		System.out.println("start to execute the method[" + methodName + "].");
+	}
+
+	public void onMethodEnd(MethodExecutionEvent evt) {
+		String methodName = evt.getMethodName();
+		System.out.println("finished to execute the method[" + methodName + "].");
+	}
+}
+```
+</details>
+
+<details>
+	<summary>Define Event Status Enum and Event Publisher</summary>
+
+```java
+package org.springframework.mylearntest.ioc.eventpublication.event;
+
+public enum MethodExecutionStatus {
+	BEGIN,END
+}
+```
+</details>
+
+<details>
+	<summary>Event Publisher Class</summary>
+
+```java
+package org.springframework.mylearntest.ioc.eventpublication.event;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MethodExecutionEventPublisher {
+	private List<MethodExecutionEventListener> listeners = new ArrayList<>();
+
+	public void methodToMonitor() {
+		MethodExecutionEvent event2Publish = new MethodExecutionEvent(this, "methodToMonitor");
+		publishEvent(MethodExecutionStatus.BEGIN, event2Publish);
+		// Execute actual method logic
+		// ...
+		publishEvent(MethodExecutionStatus.END, event2Publish);
+	}
+
+	// To avoid listener registration or removal affecting processing during event handling, we make a safe-copy of listener list at event publishing time
+	protected void publishEvent(MethodExecutionStatus status, MethodExecutionEvent methodExecutionEvent) {
+		List<MethodExecutionEventListener> copyListeners = new ArrayList<>(listeners);
+		for (MethodExecutionEventListener listener : copyListeners) {
+			if (MethodExecutionStatus.BEGIN.equals(status)) {
+				listener.onMethodBegin(methodExecutionEvent);
+			} else {
+				listener.onMethodEnd(methodExecutionEvent);
+			}
+		}
+	}
+
+	public void addMethodExecutionEventListener(MethodExecutionEventListener listener) {
+		this.listeners.add(listener);
+	}
+
+	public void removeListener(MethodExecutionEventListener listener) {
+		this.listeners.remove(listener);
+	}
+
+	public void removeAllListeners() {
+		this.listeners.clear();
+	}
+
+}
+```
+</details>
+
+<details>
+	<summary>Test Class</summary>
+
+```java
+package org.springframework.mylearntest.ioc.eventpublication.event;
+
+public class Test4Event {
+	public static void main(String[] args) {
+		MethodExecutionEventPublisher eventPublisher = new MethodExecutionEventPublisher();
+		eventPublisher.addMethodExecutionEventListener(new SimpleMethodExecutionEventListener());
+		eventPublisher.methodToMonitor();
+		eventPublisher.removeAllListeners();
+	}
+}
+```
+</details>
+
+
+In implementation, need to note that, to avoid event listener registration or removal operations affecting processing process during event handling, we made a safe-copy of listener list at point of event publishing. In addition, event publishing is sequential execution, so in order not to affect processing performance, event listener processing logic should be as short as possible.
+
+<img src="https://s2.loli.net/2023/07/15/Qmwxcpa4qDJGMYu.png"  />
+
+Spring Container Internal Event Publishing Structure Analysis
+
+Spring's ApplicationContext container allows internally publishing events in form of `org.springframework.context.ApplicationEvent`, `org.springframework.context.ApplicationListener` type bean definitions registered in container will be automatically identified by ApplicationContext container, they are responsible for listening to all ApplicationEvent type events published inside container.
+
+
+
+ApplicationEvent: Custom event type within Spring container, inherits from java.util.EventObject, it is an abstract class, need to provide corresponding subclasses according to situation to distinguish different situations. By default, Spring provides three implementations.
+
+* ContextClosedEvent: Event type published when ApplicationContext container is about to close.
+* ContextRefreshedEvent: Event type published when ApplicationContext container initializes or refreshes.
+* RequestHandledEvent: Event published after Web request processing, it has a subclass ServletRequestHandledEvent providing Servlet related events specific to Java EE.
+
+
+
+ApplicationListener: Custom event listener interface definition used within ApplicationContext container, inherits from java.util.EventListener.
+
+ApplicationContext: When container starts, it will automatically identify and load EventListener type bean definitions, once there is event publishing inside container, it will notify these EventListeners registered to container.
+
+<details>
+	<summary>MethodExecutionEventListener</summary>
+
+```java
+package org.springframework.mylearntest.eventpublication.applicationevent;
+
+
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationListener;
+
+@SuppressWarnings("rawtypes")
+public class MethodExecutionEventListener implements ApplicationListener {
+    public void onApplicationEvent(ApplicationEvent evt) {
+        if (evt instanceof MethodExecutionEvent) {
+            // Execute processing logic
+        }
+    }
+}
+```
+</details>
+
+ApplicationContext: Remember definition of ApplicationContext? Besides previous ResourceLoader and MessageSource, ApplicationContext interface definition also inherits ApplicationEventPublisher interface, which provides `void publishEvent(ApplicationEvent event)` method definition. It is not difficult to see that ApplicationContext container now assumes the role of event publisher. Specific implementation classes of ApplicationContext container do not do everything personally in terms of event publishing and event listener registration, but delegate these jobs to an interface called `org.springframework.context.event.ApplicationEventMulticaster`.
+
+<details>
+	<summary>MethodExeuctionEventPublisher</summary>
+
+```java
+package org.springframework.mylearntest.eventpublication.applicationevent;
+
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
+import org.springframework.mylearntest.eventpublication.event.MethodExecutionStatus;
+
+public class MethodExeuctionEventPublisher implements ApplicationEventPublisherAware {
+    private ApplicationEventPublisher eventPublisher;
+
+    public void methodToMonitor() {
+        MethodExecutionEvent beginEvt = new
+                MethodExecutionEvent(this, "methodToMonitor", MethodExecutionStatus.BEGIN);
+        this.eventPublisher.publishEvent(beginEvt);
+        // Execute actual method logic
+        // ...
+        MethodExecutionEvent endEvt = new
+                MethodExecutionEvent(this, "methodToMonitor", MethodExecutionStatus.END);
+        this.eventPublisher.publishEvent(endEvt);
+    }
+
+    public void setApplicationEventPublisher(ApplicationEventPublisher appCtx) {
+        this.eventPublisher = appCtx;
+    }
+}
+```
+</details>
+
+<details>
+	<summary>applicationevent.xml</summary>
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="methodExecListener" class="org.springframework.mylearntest.eventpublication.applicationevent.MethodExecutionEventListener">
+    </bean>
+    <bean id="evtPublisher" class="org.springframework.mylearntest.eventpublication.applicationevent.MethodExeuctionEventPublisher">
+    </bean>
+
+</beans>
+```
+</details>
+
+<details>
+	<summary>Test4AppEvent</summary>
+
+```java
+package org.springframework.mylearntest.eventpublication.applicationevent;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test4AppEvent {
+    public static void main(String[] args) {
+        ApplicationContext context = new ClassPathXmlApplicationContext("eventpublication/applicationevent.xml");
+        MethodExeuctionEventPublisher evtPublisher = (MethodExeuctionEventPublisher) context.getBean("evtPublisher");
+        evtPublisher.methodToMonitor();
+    }
+}
+```
+</details>
+
+ApplicationEventMulticaster has an abstract implementation class—`org.springframework.context.event.AbstractApplicationEventMulticaster`, which implements event listener management functions. Event publishing function is delegated to its subclass `org.springframework.context.event.SimpleApplicationEventMulticaster`. It defaults to using SyncTaskExecutor for event publishing. To avoid potential performance issues with this method, we can provide other types of TaskExecutor implementation classes for it.
+
+When container starts, it will check if there is an ApplicationEventMulticaster object instance named applicationEventMulticaster in the container. If so, use provided implementation, otherwise default initialize a SimpleApplicationEventMulticaster as ApplicationEventMulticaster to be used.
+
+<img src="https://s2.loli.net/2023/07/15/TvPHprcI9eL4DSz.png"  />
+
+## IoC Related Annotations
+
+Looking at dependency injection related information, half is scattered in Java source code (@Autowired annotated information), half still remains in XML configuration file, many bean tags still exist.
+When using @Autoware annotation can find two or more object instances of same type at the same time, can use @Qualifier to further limit dependency injection conditions, specify specific id.
+
+<details>
+	<summary>xml way</summary>
+
+```xml
+<beans>
+    <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
+    <bean id="newsProvider" class="..FXNewsProvider"/>
+    <bean id="djNewsListener" class="..DowJonesNewsListener"/>
+    <bean id="reutersNewsListner" class="..ReutersNewsListener"/>
+    <bean id="djNewsPersister" class="..DowJonesNewsPersister"/>
+</beans>
+```
+</details>
+
+<details>
+	<summary>@Qualifier located on property</summary>
+
+```java
+public class FXNewsProvider {
+    @Autowired
+    @Qualifier("reutersNewsListner")// At this time inject id=reutersNewsListner
+    private IFXNewsListener newsListener;
+    @Autowired
+    private IFXNewsPersister newPersistener;
+    //...
+}
+```
+</details>
+
+<details>
+	<summary>@Qualifier annotation located on parameter</summary>
+
+```java
+// @Qualifier annotation located on parameter
+public class FXNewsProvider{
+    // ...
+    @Autowired
+    public void setUp(@Qualifier("reutersNewsListner") IFXNewsListener newsListener,IFXNewsPersister newPersistener) {
+        this.newsListener = newsListener;
+        this.newPersistener = newPersistener;
+    }
+    // ...
+}
+```
+</details>
+
+@Resource is different from @Autowired, it follows byName automatic binding behavior guidelines, that is, IoC container will look up beanName corresponding instance in container according to name specified by @Resource, then inject found object instance to object annotated by @Resource.
+
+@PostConstruct and @PreDestroy do not serve dependency injection, they are mainly used to mark object lifecycle management related methods, playing similar role to Spring's InitializingBean and DisposableBean interfaces, and init-method and destroy-method in configuration items.
+
+Just like @Autowired needs AutowiredAnnotationBeanPostProcessor to bridge it with IoC container, these JSR250 annotations also need a BeanPostProcessor to help them realize their value. This BeanPostProcessor is `org.springframework.context.annotation.CommonAnnotationBeanPostProcessor`, only adding CommonAnnotationBeanPostProcessor to container, JSR250 related annotations can work.
+
+<details>
+	<summary>XML Configuration</summary>
+
+```xml
+<beans>
+    <bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor"/>
+    <bean id="newsProvider" class="..FXNewsProvider"/>
+    <bean id="djNewsListener" class="..DowJonesNewsListener"/>
+    <bean id="djNewsPersister" class="..DowJonesNewsPersister"/>
+</beans>
+```
+</details>
+
+`<context:annotation-config>` not only registers AutowiredAnnotationBeanPostProcessor and CommonAnnotationBeanPostProcessor to container for us, but also registers PersistenceAnnotationBeanPostProcessor and RequiredAnnotationBeanPostProcessor together, killing four birds with one stone!
+
+After using corresponding annotations to mark related classes composing application, classpath-scanning function can start scanning from a top-level package (base package). When scanning a class marked with corresponding annotation, it will extract relevant information of this class, construct corresponding BeanDefinition, then register constructed BeanDefinition to container.
+<details>
+	<summary>XML Configuration</summary>
+
+```xml
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:context="http://www.springframework.org/schema/context"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+    <context:component-scan base-package="org.spring21"/>
+</beans>
+```
+</details>
+
+
+> References
+>
+> 1. Book Name: Spring Unveiled Author: Wang Fuqiang
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

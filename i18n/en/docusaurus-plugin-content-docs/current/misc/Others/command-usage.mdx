@@ -1,0 +1,58 @@
+---
+id: command-usage
+title: Bash or PS Command Usage
+sidebar_label: Bash or PS Command Usage
+sidebar_position: 3
+description: powershell tree /f  powershell netstat -ano | findstr :8080  powershell
+tags:
+- books
+- learning
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+---
+# Bash or PS Command Usage
+
+## View Directory Structure
+
+```powershell
+tree /f
+```
+
+## View Port Usage
+
+```powershell
+netstat -ano | findstr :8080
+```
+
+## Kill Process Occupying Port
+
+```powershell
+taskkill /PID 1234 /F
+```
+
+## Temporarily Set Java Home to Another Path
+```powershell
+$env:JAVA_HOME="D:\software\Java\jdk-17.0.7"
+$env:PATH="$env:JAVA_HOME\bin;$env:PATH"
+
+./gradlew test --daemon
+```
+
+```bash
+export JAVA_HOME="/d/software/Java/jdk-17.0.7"
+export PATH="$JAVA_HOME/bin:$PATH"
+```
+
+## Start docusaurus `bat` script
+
+`start-docusaurus.ps1` in project
+
+```shell
+@echo off
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "D:\summary\start-docusaurus.ps1"
+```
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

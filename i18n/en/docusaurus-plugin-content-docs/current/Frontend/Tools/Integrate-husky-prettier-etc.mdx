@@ -1,0 +1,112 @@
+---
+id: integrate-husky-prettier-etc
+title: Integrate Husky, Prettier, etc.
+sidebar_label: Integrate Husky, Prettier, etc.
+sidebar_position: 10
+description: pnpm create vite-app vue3-ts shell pnpm install husky lint-staged eslint
+  prettier -D  json
+tags:
+- frontend
+- javascript
+- react
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- pnpm
+---
+# How to Integrate Husky, Prettier, etc. in a Vue Project?
+
+## Create Project using Vite
+
+`pnpm create vite-app vue3-ts`
+
+## Install Dependencies
+
+```shell
+pnpm install husky lint-staged eslint prettier -D
+```
+
+## Configure Prettier
+
+```json
+// .prettierrc.json
+{
+  "singleQuote": true,
+  "semi": true,
+  "printWidth": 100,
+  "trailingComma": "all",
+  "endOfLine": "auto"
+}
+```
+
+You can use `pnpx prettier --write .` command to format code.
+
+## Configure ESLint
+
+```shell
+# Initialize ESLint
+pnpm create @eslint/config
+```
+
+The following options are optional, you can choose the same configuration as mine.
+
+![image-20231231160250767](https://s2.loli.net/2023/12/31/194DgcJLWNP2V5y.png)
+
+Run command `pnpx eslint .` to check ESLint rules;
+
+## Install and Configure Husky
+
+```shell
+# Initialize husky
+pnpm husky install
+# Configure husky
+pnpx husky add .husky/pre-commit "pnpm lint-staged"
+```
+
+After executing the above commands, your project structure will be as follows, a .husky directory and a pre-commit file will be automatically created.
+
+![image-20231231154728294](https://s2.loli.net/2023/12/31/NtE6ZeXCjAdHfGV.png)
+
+Wait, another configuration is needed.
+
+```shell
+// package.json
+  "scripts": {
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "prepare": "husky install",
+    "lint-staged": "lint-staged"
+  },
+ "lint-staged": {
+    "*.{js,ts,vue}": [
+      "eslint --fix"
+    ]
+  },
+```
+
+## Verify Husky 
+
+Run the following commands to submit some files
+
+```shell
+git add .
+
+git commit -m 'test for husky'
+```
+
+You will see the following in the console:
+
+![image-20231231160344135](https://s2.loli.net/2023/12/31/f1Ap5UPsdYVjOMG.png)
+
+Congratulations, you successfully triggered lint-staged using `git commit`.
+
+This includes ESLint fixing code and Prettier formatting code.
+
+## Conclusion
+
+Thank you for your time, if you learned something from my article, please give me a thumbs up, meanwhile, if you have any questions, feel free to ask.
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

@@ -1,0 +1,211 @@
+---
+id: java-virtual-machine
+title: JAVA Virtual Machine
+sidebar_label: JAVA Virtual Machine
+sidebar_position: 10
+description: '!20250922223849 1. Fetch binary stream: Get the binary stream defining the class by its fully qualified name.'
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+# JAVA Virtual Machine
+
+
+## Class Loading Process
+
+![20250922223849](https://s2.loli.net/2025/09/22/EN7Pan6oDrVgqXh.png)
+
+### Loading
+
+1. Fetch binary stream: Get the binary stream defining the class by its fully qualified name.
+2. Convert to runtime data structure: Convert the byte stream static storage structure into the runtime data structure of the method area.
+3. Generate class: Generate a class object representing this class in memory as the access entry for various data of this class in the method area.
+
+### Verification
+
+1. File format verification: Byte stream enters method area for storage.
+2. Metadata verification
+3. Bytecode verification: Use type checking to complete data flow analysis and verification.
+4. Symbol reference verification:
+
+### Preparation
+
+Formally allocate memory for class variables and set initial values for class variables, all allocated in the method area.
+
+## Resolution
+
+The process where the virtual machine replaces symbol references with direct references.
+
+### Initialization
+
+`<clinit>` `<init>`
+
+The six situations triggering initialization are as follows:
+
+1. New creates class instance.
+2. Accessing a static variable of a class or interface, or assigning a value to the static variable.
+3. Calling a static method of a class.
+4. Reflection `class.forName("com.xxx.xxx")`.
+5. Initializing a subclass of a class.
+6. The class marked as the startup class when the Java virtual machine starts.
+
+## Dynamic Invocation
+
+### Static Allocation
+
+Corresponds to method overloading: Relies on static types to locate the version of method execution, belongs to multiple dispatch.
+
+### Dynamic Allocation
+
+Corresponds to method overriding, belongs to single dispatch.
+
+Steps to confirm the method:
+
+1. Find the actual type of the object pointed to by the first element of the operand stack, i.e., the type after the new keyword.
+2. If a method matching the description and simple method name is found in the constant pool, and permission check passes, reference directly.
+3. Otherwise, perform the second step from bottom to top according to the inheritance relationship, re-finding other subclasses.
+4. If still not found, throw an exception.
+
+Definitions of several related terms:
+
+Quantity: Method receiver and method parameters.
+Single dispatch: Select target method based on one quantity.
+Multiple dispatch: Select target method based on multiple quantities.
+
+JAVA language is a **Static Multiple Dispatch** **Dynamic Single Dispatch** language.
+
+## Lock
+
+Spin: Spin refers to when a thread needs to acquire a lock, but the lock is already occupied by another thread, the thread will not be suspended, but will continue to consume CPU time, constantly trying to acquire the lock.
+
+### Biased Lock
+
+Biased lock is introduced to minimize unnecessary lightweight lock execution paths in the absence of multi-thread competition, because the acquisition and release of lightweight locks rely on multiple CAS atomic instructions, while biased locks only rely on one CAS atomic instruction when replacing ThreadID.
+When only one thread competes for the lock, we do not need to block or spin, because only one thread is competing, we only need to check if the ThreadID in the biased lock is the current thread. If it is, execute the synchronous code; if not, try to modify the ThreadID using CAS. If successful, execute the synchronous code; if unsuccessful, upgrade the biased lock to a lightweight lock.
+
+### Lightweight Lock
+
+The process of obtaining a lightweight lock is different from a biased lock. The thread competing for the lock first needs to copy the Mark Word in the object header to the lock record in the stack frame. After successful copying, use CAS operation to try to update the object's Mark Word to a pointer pointing to the current thread. If this update action is successful, the thread owns the lock of the object. If the update fails, it means multiple threads are competing.
+When a competing thread fails to occupy the lightweight lock multiple times (using spinning), the lightweight lock will inflate into a heavyweight lock. The heavyweight thread pointer points to the competing thread, and the competing thread will also be blocked, waiting for the lightweight thread to wake it up after releasing the lock.
+
+### Heavyweight Lock
+
+The locking and unlocking process of a heavyweight lock is similar to a lightweight lock. The difference is: after competition failure, the thread blocks. After releasing the lock, the blocked thread is woken up. It does not use spin locks and does not consume CPU as much, so heavyweight locks are suitable for cases where the synchronous block execution time is long.
+
+
+### synchronized and volatile
+
+1. Volatile essentially tells the jvm that the value of the current variable in the register (working memory) is uncertain and needs to be read from the main memory; synchronize locks the current variable, only the current thread can access the variable, other threads are blocked.
+2. Volatile can only be used at the variable level; synchronize can be used on variables, methods, and classes.
+3. Volatile only implements visibility of variable modifications and cannot guarantee atomicity; while synchronized can guarantee both.
+4. Volatile will not cause thread blocking; synchronized will cause thread blocking.
+5. Volatile variables will not be optimized by the compiler; variables marked by synchronized can be optimized by the compiler.
+
+
+### synchronize and ReentrantLock
+
+ReentrantLock extends synchronized.
+ReentrantLock can set the wait time for the lock, thus avoiding deadlocks.
+ReentrantLock can obtain information about various locks.
+ReentrantLock can flexibly implement multi-way notification.
+
+
+The locking mechanisms of the two are different:
+ReentrantLock basically calls Unsafe's park method to lock.
+Synchronized operates on the mark word information in the object header to lock.
+
+### Parent Delegation Model
+
+Class loader classification: Each class loader has an independent namespace.
+
+Bootstrap Class Loader: Part of the virtual machine itself, used to load classes in the `JAVA_HOME/lib/` directory.
+Extension Class Loader: Responsible for loading all class libraries in the path specified by the `java.ext.dirs` system variable.
+Application Class Loader: Responsible for loading specified class libraries on the user class path, the default class loader used.
+
+If a class loader receives a class loading request, it will not load the class first, but delegate the request to the parent class loader to complete. This is true for every layer of loaders, so all loading requests will be passed to the top-level bootstrap class loader. Only when the parent class loader cannot complete the loading request, the child loader will try to load the class.
+
+### Order of Attribute Loading in Parent and Child Classes During Class Instantiation
+
+1. Parent class static variable
+2. Parent class static code block
+3. Child class static variable
+4. Child class static code block
+5. Parent class non-static variable
+6. Parent class constructor
+7. Child class non-static variable
+8. Child class constructor
+9. Static variable -> Static code block -> Non-static variable -> Constructor
+
+## Optimize GC
+
+1. Appropriately adjust the ratio of `-XX:SurvivorRatio`.
+2. Choose a garbage collector suitable for your business, web services are generally ParNew+CMS.
+3. Adjust the proportions of JVM old generation, young generation and permanent generation, test out a satisfactory value.
+4. Set `-XX:MaxTenuringThreshold` to let the young generation enter the old generation in advance, reducing copying in the survivor area.
+5. Adjust `-XX:CMSInitiatingOccupancyFraction=60` to control minor gc frequency.
+6. `-XX+UseCMSCompactAtFullCollection` eliminates cms fragmentation.
+
+## Garbage Collection and Algorithms
+
+Reference Counting: When a place uses +1 to count value, -1 when invalid, 0 means object can no longer be referenced.
+Disadvantage: Circular references, some objects cannot be recycled.
+
+Reachability Analysis Algorithm: Search downwards starting from a series of objects called GCROOTS (path is reference chain). When an object is not connected to any GC reference chain, these objects are unreachable.
+GCROOTS objects include:
+
+1. Objects referenced in the virtual machine stack.
+2. Objects referenced by static attributes or constants in the method area.
+3. Objects referenced by native methods.
+
+Garbage Collection Algorithms:
+
+1. Mark-Sweep (causes fragmentation).
+2. Copying Algorithm (memory usage 50%).
+3. Mark-Compact (one more step than Mark-Sweep, moves surviving objects to one end, clears other objects).
+4. Generational Algorithm (Young generation: Copying algorithm; Old generation: Mark-Sweep or Mark-Compact).
+
+Garbage Collectors:
+ParNew (Multi-thread, High Throughput)
+
+CMS (Initial Mark, Concurrent Mark (long time), Remark, Concurrent Sweep (long time), Low Latency)
+![](https://s2.loli.net/2023/07/15/jX4mntlDOTis3QH.jpg)
+
+<center>CMS Garbage Collection Process Diagram</center>
+
+G1 (Divides the entire heap into small blocks, 1-32M, RememberSet points to the block's memory address) Adjust small `-XX:InitiatingHeapOccupancyPercent=45%` Increase Minor GC frequency, reduce Full GC frequency.
+![](https://s2.loli.net/2023/07/15/mCdVOHFJ2htgLqc.jpg)
+
+<center>G1 Garbage Collection Process Diagram</center>
+
+
+## Memory Area
+
+### String Type
+
+- All strings created by literals (such as `"hello"`) will be put into the string constant pool for reuse. `String hello = "hello";`
+- But this creates a new object in the heap `String hello1 = new String("hello");`
+- So `hello` and `hello1` are different references.
+
+### Other Types
+
+- **`Integer`** Caches integers in the range `-128` to `127`.
+- **`Character`** Caches common characters (usually `\u0000` to `\u007F`).
+- **`Long`**, **`Short`**, **`Byte`** etc. also cache small range values `-128` to `127`.
+- **`Boolean`** Caches `Boolean.TRUE` and `Boolean.FALSE`.
+
+> `\u0000` to `\u007F` are usually used to represent basic control characters, numbers, letters and some common symbols
+
+:::info
+ Zhou Zhiming "Understanding the JAVA Virtual Machine" Second Edition
+:::
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

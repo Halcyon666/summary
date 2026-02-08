@@ -1,0 +1,103 @@
+---
+id: jquery-revese-selector
+title: jQuery Selectors
+sidebar_label: jQuery Selectors
+sidebar_position: 10
+description: Example From Here $( "input[name!='newsletter']" )
+tags:
+- frontend
+- javascript
+- react
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+---
+## jQuery Selectors
+
+### Filtering by name attribute in Input elements
+
+[Example From Here](https://api.jquery.com/attribute-not-equal-selector/)
+
+`$( "input[name!='newsletter']" )`
+
+`$("input").not("[name=newsletter]")`
+
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>attributeNotEqual demo</title>
+  <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+</head>
+<body>
+
+<div>
+  <input type="radio" name="newsletter" value="Hot Fuzz">
+  <span>name is newsletter</span>
+</div>
+<div>
+  <input type="radio" value="Cold Fusion">
+  <span>no name</span>
+</div>
+<div>
+  <input type="radio" name="accept" value="Evil Plans">
+  <span>name is accept</span>
+</div>
+
+<script>
+$( "input[name!='newsletter']" ).next().append( "<b>; not newsletter</b>" );
+</script>
+
+</body>
+</html>
+```
+
+![image-20211102230352413](https://s2.loli.net/2023/07/15/ogv7OYWx2DzkytS.png)
+
+### Negated Attribute Selector
+
+Select input elements within div elements with keys that are not equal to 'a' in the form
+
+`$( "form div:not(#a) input" )`
+
+`$( "form div:not([id='a']) input" )`
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>attributeNotEqual demo</title>
+  <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+</head>
+<body>
+
+<form class="">
+    <div id="a" class="form-floating mb-3">
+      <input type="email" class="form-control rounded-4" id="floatingInput" placeholder="name@example.com">
+      <label for="floatingInput">Email address</label>
+    </div>
+    <div id="b" class="form-floating mb-3">
+      <input type="password" class="form-control rounded-4" id="floatingPassword" placeholder="Password">
+      <label for="floatingPassword">Password</label>
+    </div>
+
+</form>
+
+<script>
+    $( "form div:not(#a) input" ).css("background-color","pink");
+</script>
+
+</body>
+</html>
+```
+
+![image-20211102231338241](https://s2.loli.net/2023/07/15/HsKBpjJUXtC2FwG.png)
+
+> For more selector usage please [see here](https://api.jquery.com/category/selectors/)
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

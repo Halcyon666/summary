@@ -1,0 +1,103 @@
+---
+id: aspect
+title: Aspect in Spring AOP
+sidebar_label: Aspect in Spring AOP
+sidebar_position: 10
+description: Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) for code related to this article (from official source spring-test module)
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) under `org.springframework.mylearntest` package for code related to this article (from [official source](https://github.com/spring-projects/spring-framework.git "official source") spring-test module).
+
+Aspect is the conceptual entity of AOP that encapsulates cross-cutting concern logic in the system. Usually, Aspect can contain multiple Pointcuts and related Advice definitions.
+
+![](https://s2.loli.net/2023/07/15/9p6abQqSsHTxLFX.png)
+
+Advisor represents Aspect in Spring, but unlike normal Aspect, Advisor usually only holds one Pointcut and one Advice. Theoretically, Aspect definition can have multiple Pointcuts and multiple Advices, so Advisor is a special kind of Aspect.
+
+## PointcutAdvisor
+
+![](https://s2.loli.net/2023/07/15/Iy3GrnFvNWlB92k.png)
+
+***
+
+![](https://s2.loli.net/2023/07/15/yqwr2TXstDvE4YM.png)
+
+Actually, `org.springframework.aop.PointcutAdvisor` is the real definition of Advisor having one Pointcut and one Advice, most Advisor implementations are under `PointcutAdvisor`.
+
+### DefaultPointcutAdvisor
+
+```xml
+<beans>
+    <bean id="pointcut"
+      class="org.springframework.mylearntest.aop.pointcut.selfdefinepointcut.QueryMethodPointcut"/>
+    <bean id="advice" class="org.springframework.mylearntest.aop.advice.perclass.DiscountMethodInterceptor"/>
+
+    <bean id="advisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+        <property name="pointcut" ref="pointcut"/>
+        <property name="advice" ref="advice"/>
+    </bean>
+</beans>
+```
+
+### NameMatchMethodPointcutAdvisor
+
+This class internally holds a `NameMatchMethodPointcut` type Pointcut instance. When setting method names to be intercepted via `setMappedName` and `setMappedNames` methods exposed by `NameMatchMethodPointcutAdvisor`, it is actually operating on the `NameMatchMethodPointcut` instance inside `NameMatchMethodPointcutAdvisor`.
+
+```java
+Advice advice = new DiscountMethodInterceptor();
+NameMatchMethodPointcutAdvisor advisor = new NameMatchMethodPointcutAdvisor(advice);
+advisor.setMappedName("invoke");
+```
+
+### RegexpMethodPointcutAdvisor
+
+Can only set corresponding Pointcut for it via regular expression, internally holds an instance of `AbstractRegexpMethodPointcut`. `AbstractRegexpMethodPointcut` has two implementation classes, `Perl5RegexpMethodPointcutAdvisor` and `JdkRegexpMethodPointcut`. Defaults to using `JdkRegexpMethodPointcut`. If forced to use `Perl5RegexpMethodPointcutAdvisor`, then can be achieved via `RegexpMethodPointcutAdvisor`'s `setPerl5(boolean)`.
+
+### DefaultBeanFactoryPointcutAdvisor
+
+`DefaultBeanFactoryPointcutAdvisor` itself is bound to `BeanFactory`. To use `DefaultBeanFactoryPointcutAdvisor`, need to bind to Spring IoC container. Associate corresponding Advice via `beanName` of Advice registered in container. Only after corresponding Pointcut matches successfully, instantiate corresponding Advice, reducing coupling between Advisor and Advice during container startup phase.
+
+### IntroductionAdvisor
+
+`IntroductionAdvisor` can only be applied to class-level interception, can only use Introduction type Advice, and cannot use arbitrary types of Pointcut like `PointcutAdvisor`, as well as almost any type of Advice.
+
+![IntroductionAdvisor Class Structure](https://s2.loli.net/2023/07/15/8pNE2drJ1BfLn4D.png "IntroductionAdvisor Class Structure")
+
+### Order
+
+Most of the time, there will be multiple cross-cutting concern points, so there will be multiple Advisors in system implementation. When Pointcuts of some Advisors match the same Joinpoint, cross-cutting logic of multiple Advices will be executed at this same Joinpoint. Once there is priority dependency among these Advice logics that need to be executed at same Joinpoint, we need to intervene.
+
+![](https://s2.loli.net/2023/07/15/87ohZirCFMmLq46.png)
+
+When Spring handles multiple Advisors at same Joinpoint, it will execute them according to specified order priority. Smaller order number means higher priority, higher priority ones are executed first. (By default, Spring will apply them according to their declaration order, the first declared one has smallest order number but highest priority, followed by others)
+
+![](https://s2.loli.net/2023/07/15/cnDqxbIEChpBNlz.png)
+
+Each Advisor implementation class actually has implemented `Order` interface. When using, we can directly specify it.
+
+```xml
+<beans>
+    <bean id="permissionAuthAdvisor" class="...PermissionAuthAdvisor">
+        <property name="order" value="1"/>
+        ...
+    </bean>
+
+    <bean id="exceptionBarrierAdvisor" class="...ExceptionBarrierAdvisor">
+        <property name="order" value="0"/>
+        ...
+    </bean>
+</beans>
+```
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

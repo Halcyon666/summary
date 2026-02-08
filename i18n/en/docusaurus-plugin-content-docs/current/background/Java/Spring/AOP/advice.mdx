@@ -1,0 +1,281 @@
+---
+id: advice
+title: Advice in Spring AOP
+sidebar_label: Advice in Spring AOP
+sidebar_position: 10
+description: Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) for code related to this article (from official source spring-test module)
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) under `org.springframework.mylearntest` package for code related to this article (from [official source](https://github.com/spring-projects/spring-framework.git "official source") spring-test module).
+
+
+1. Before Advice
+
+2. After Advice
+
+
+> After returning
+> 
+> After throwing
+> 
+> After Advice(finally)
+
+
+3. After Around
+
+![](https://s2.loli.net/2023/07/15/jhWAx2tqe6EzoNU.png)
+
+## Introduction
+
+It is called Inter-Type Declaration in AspectJ, and Mix-in in JBoss AOP, both refer to the same type of Advice. Unlike other types of Advice mentioned before, Introduction is not distinguished by the execution timing at Joinpoint based on cross-cutting logic, but is distinguished from other Advice types based on the functions it can complete.
+
+AspectJ uses static weaving, so when the object is used, the Introduction logic has already been woven during compilation. Theoretically, Introduction type Advice provided by AspectJ has the best performance among AOP implementations on the existing Java platform; while AOP implementations using dynamic weaving like JBoss AOP or Spring AOP have slightly inferior performance for Introduction.
+
+![](https://s2.loli.net/2023/07/15/xVSYeWcNrbk3aqg.png)
+
+In Spring, Advice can be divided into two main categories based on whether its own instance can be shared among all instances of the target object class: <font style={{ color: 'green' }}>per-class type Advice and per-instance type Advice</font>.
+
+### per-class
+
+per-class Advice means that the instance of this type of Advice can be shared among all instances of the target object class. Usually, this type of Advice only provides method interception functions and does not save any state or add new features to the target object class.
+
+#### BeforeAdvice
+
+<details>
+	<summary>ResourceSetupBeforeAdvice</summary>
+
+```java
+package org.springframework.mylearntest.aop.advice;
+
+import org.apache.commons.io.FileUtils;
+import org.springframework.aop.MethodBeforeAdvice;
+import org.springframework.core.io.Resource;
+
+import java.lang.reflect.Method;
+
+public class ResourceSetupBeforeAdvice implements MethodBeforeAdvice {
+    private Resource resource;
+
+    public ResourceSetupBeforeAdvice(Resource resource) {
+        this.resource = resource;
+    }
+
+    @Override
+    public void before(Method method, Object[] args, Object target) throws Throwable {
+        if (!resource.exists()) {
+            FileUtils.forceMkdir(resource.getFile());
+        }
+    }
+}
+```
+</details>
+
+#### ThrowsAdvice
+
+<details>
+	<summary>ExceptionBarrierThrowsAdvice</summary>
+
+```java
+package org.springframework.mylearntest.aop.advice;
+
+import org.omg.CORBA.portable.ApplicationException;
+import org.springframework.aop.ThrowsAdvice;
+
+import java.lang.reflect.Method;
+
+public class ExceptionBarrierThrowsAdvice implements ThrowsAdvice {
+    public void afterThrowing(Throwable t) {
+        // Normal exception handling
+    }
+
+    public void afterThrowing(RuntimeException t) {
+        // Runtime exception handling
+    }
+
+    public void afterThrowing(Method m, Object[] args, Object target, ApplicationException e) {
+        // Handle application-generated exceptions
+    }
+}
+```
+</details>
+
+#### AfterReturningAdvice
+
+This Advice can access the return value, method, method arguments, and the target object of the current Joinpoint, but cannot change the return value. You can use Around Advice to change the return value.
+
+#### Around Advice
+
+Spring does not define Around Advice, but directly uses the standard interface of AOP Alliance, implementing `MethodInterceptor` is enough.
+
+### per-instance
+
+per-instance type Advice will not be shared among all object instances of the target class, but will save their respective states and related logic for different instance objects. In Spring, Introduction is the only per-instance type Advice.
+
+Introduction can add new attributes and behaviors to the target class without changing the target class definition.
+
+In Spring, to add new attributes and behaviors to the target object, corresponding interfaces and implementations must be declared. Then, through a specific interceptor, the new interface definition and the logic in the implementation class are attached to the target object. After that, the target object has new states and behaviors. This specific interceptor is `org.springframework.aop.IntroductionInterceptor`.
+
+Introduction inherits `MethodInterceptor` and `DynamicIntroductionAdvice`. Through `DynamicIntroductionAdvice`, we can define for which interface classes the current `IntroductionInterceptor` provides corresponding interception functions. Through `MethodInterceptor`, `IntroductionInterceptor` can handle method calls on the newly added interfaces. Usually, for `IntroductionInterceptor`, if it is a method call on a newly added interface, there is no need to call the `proceed()` method of `MethodInterceptor`. The currently intercepted method is actually the only method to be executed in the entire call chain.
+
+![Introduction Class Diagram](https://s2.loli.net/2023/07/15/64GVq9mJlEk7wMc.png "Introduction Class Diagram")
+
+* Introduction type Advice has two branches: dynamic branch headed by `DynamicIntroductionAdvice` (non-shared) and static branch headed by `IntroductionInfo` (shared).
+
+* `DynamicIntroductionAdvice` does not need to pre-set the target interface type; while `IntroductionInfo` is completely opposite, the implementation class must return the pre-determined target interface type.
+
+<details>
+	<summary>IntroductionInfo</summary>
+
+```java
+public interface IntroductionInfo {
+    Class[] getInterfaces();
+}
+```
+</details>
+
+If you need to intercept the target object and add Introduction logic, you can use two existing implementation classes: `DelegatingIntroductionInterceptor`, `DelegatePerTargetObjectIntroductionInterceptor`.
+
+#### DelegatingIntroductionInterceptor
+
+`DelegatingIntroductionInterceptor` will not implement the new logic behavior to be added to the target object itself, but delegate it to other implementation classes.
+
+Use `DelegatingIntroductionInterceptor` to enhance Developer. Interface omitted.
+
+<details>
+	<summary>Developer</summary>
+
+```java
+package org.springframework.mylearntest.aop.advice.perinstance.delegatingIntroductionInterceptor;
+
+public class Developer implements IDeveloper{
+    @Override
+    public void developSoftware() {
+        System.out.println(" do some developing ...");
+    }
+}
+```
+</details>
+
+Define interface for new state and behavior. To add enhanced functions to the implementation class, first we need to declare the required functions in the form of interface definition.
+
+<details>
+	<summary>ITester</summary>
+
+```java
+package org.springframework.mylearntest.aop.advice.perinstance.delegatingIntroductionInterceptor;
+
+public interface ITester {
+    boolean isBusyAsTester();
+    void testSoftware();
+}
+```
+</details>
+
+Provide implementation class for the new interface. The interface implementation class gives the concrete logic to be added to the target object. When the target object wants to exercise the new function, it will seek help through this implementation class.
+
+<details>
+	<summary>Tester</summary>
+
+```java
+package org.springframework.mylearntest.aop.advice.perinstance.delegatingIntroductionInterceptor;
+
+public class Tester implements ITester{
+    private  boolean busyAsTester;
+
+    public void setBusyAsTester(boolean busyAsTester) {
+        this.busyAsTester = busyAsTester;
+    }
+
+    @Override
+    public boolean isBusyAsTester() {
+        return busyAsTester;
+    }
+
+    @Override
+    public void testSoftware() {
+        System.out.println("do some developing and test ...");
+    }
+}
+```
+</details>
+
+Perform Introduction interception via `DelegatingIntroductionInterceptor`. With the interface of newly added functions and corresponding implementation class, using `DelegatingIntroductionInterceptor`, we can delegate specific Introduction interception to concrete implementation class to complete.
+
+<details>
+	<summary>How to weave</summary>
+
+```java
+ITester delegator = new Tester();
+DelegatingIntroductionInterceptor interceptor = new DelegatingIntroductionInterceptor(delegator);
+
+// Weaver
+ITester tester = (ITester)weaver.weave(developer).with(interceptor).getProxy();
+tester.testSoftware();
+```
+</details>
+
+Although `DelegatingIntroductionInterceptor` is an implementation of Introduction type Advice, its implementation fundamentally does not fulfill the promise of Introduction being per-instance type. actually `DelegatingIntroductionInterceptor` will use the same "delegate" interface instance it holds, shared by all instances of the same target class. If we strictly want to achieve the effect of Introduction type Advice, we should use `DelegatePerTargetObjectIntroductionInterceptor`.
+
+#### DelegatePerTargetObjectIntroductionInterceptor
+
+Unlike `DelegatingIntroductionInterceptor`, `DelegatePerTargetObjectIntroductionInterceptor` will internally hold a mapping relationship between target object and corresponding Introduction logic implementation class. When new defined interface method on each object is called, `DelegatePerTargetObjectIntroductionInterceptor` will intercept these calls, then use target object instance as key to get Introduction implementation instance corresponding to current target object instance from the mapping relationship it holds.
+
+```java 
+DelegatePerTargetObjectIntroductionInterceptor interceptor1 =
+                new DelegatePerTargetObjectIntroductionInterceptor(Tester.class,ITester.class);
+```
+
+#### Extending DelegatingIntroductionInterceptor
+
+<details>
+	<summary>TesterFeatureIntroductionInterceptor</summary>
+
+```java
+package org.springframework.mylearntest.aop.advice.perinstance;
+
+import org.aopalliance.intercept.MethodInvocation;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.aop.support.DelegatingIntroductionInterceptor;
+
+public class TesterFeatureIntroductionInterceptor extends DelegatingIntroductionInterceptor implements ITester {
+
+    public static final long serialVersionUID = -3387097489523045796L;
+    private boolean busyAsTester;
+
+    @Override
+    public Object invoke(MethodInvocation mi) throws Throwable {
+        if (isBusyAsTester() && StringUtils.contains(mi.getMethod().getName(), "developSoftware")) {
+            throw new RuntimeException("I'am so tired");
+        }
+        return super.invoke(mi);
+    }
+
+    @Override
+    public boolean isBusyAsTester() {
+        return busyAsTester;
+    }
+
+    public void setBusyAsTester(boolean busyAsTester) {
+        this.busyAsTester = busyAsTester;
+    }
+
+    @Override
+    public void testSoftware() {
+        System.out.println("I will ensure the quality");
+    }
+}
+```
+</details>
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

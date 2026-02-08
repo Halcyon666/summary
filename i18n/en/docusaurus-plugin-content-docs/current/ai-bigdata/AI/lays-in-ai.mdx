@@ -1,0 +1,129 @@
+---
+id: lays-in-ai
+title: AI Development Core Tech Stack
+sidebar_label: AI Development Core Tech Stack
+sidebar_position: 3
+description: AI Development Core Tech Stack
+tags:
+- ai
+- machine-learning
+sources:
+- overview
+references:
+- level-2-rag
+- level-3-agent
+- level-4-production
+- maxi-model-capacity
+- hadoop
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+---
+# AI Development Core Tech Stack
+
+> **Abstract**: Knowing how to write Python and call Ollama is just getting started. To build high-availability, high-precision, landing-capable enterprise-level AI applications, developers must establish deep cognition in four dimensions: **Data**, **Retrieval**, **Orchestration**, **Ops**.
+
+------
+
+## 📐 Dimension 1: Advanced Retrieval Technology (Advanced RAG)
+
+**—— Solving Core Pain Points of "Irrelevant Answers" and "Low Recall Rate"**
+
+Basic `Embedding -> Search` flow is often not enough when facing professional fields (such as law, medical, precision manufacturing). You need to master the following enhancement technologies:
+
+### 1. Hybrid Search
+
+- **Principle**: Combine **Keyword Search (BM25)** and **Vector Semantic Search (Vector Search)**.
+- **Solving Pain Point**: Vectors are good at understanding semantics ("Apple" vs "Fruit"), but are extremely insensitive to proper nouns ("iPhone 15 Pro Max") and exact matching ("Error Code 502"). Hybrid search can complement shortcomings.
+- **Tools/Libraries**: `Elasticsearch`, `Milvus`, `Pinecone` (All support Hybrid).
+
+### 2. Re-ranking [Key Technology]
+
+- **Principle**: First retrieve Top-50 rough results, then use a precision ranking model (Cross-Encoder) to score these 50 results one by one, and select most relevant Top-5 for LLM.
+- **Solving Pain Point**: Significantly improve precision of RAG. This is currently the most cost-effective means to improve RAG effect.
+- **Tools/Libraries**: `BGE-Reranker`, `Cohere Rerank`, `Jina Reranker`.
+
+### 3. GraphRAG (Knowledge Graph Enhancement)
+
+- **Principle**: Use Knowledge Graph to extract relationships between entities, making up for fragmentation problem of vector retrieval.
+- **Solving Pain Point**: Solve "Global Summary" problem (e.g.: "Summarize all related transactions between Company A and Company B"), which traditional RAG cannot do.
+- **Tools/Libraries**: `Neo4j`, `Microsoft GraphRAG`, `LangChain GraphCypherQAChain`.
+
+------
+
+## 🗄️ Dimension 2: Vector Database and Data Processing (Vector Ops)
+
+**—— Solving Problems of "Data Scaling" and "Garbage In Garbage Out"**
+
+Don't just stay at local Chroma/Faiss, enterprise-level environments need high performance and complex ETL processing.
+
+### 1. Production-Grade Vector Database
+
+- **Milvus**: Cloud-native, distributed vector database standard. Suitable for billion-level data volume, supports Scalar Filtering.
+- **pgvector (PostgreSQL)**: If company already has PG database, this is first choice. It allows mixing relational data and vector data in same SQL query (e.g.: *Query documents about "Contract" uploaded "Yesterday"*).
+
+### 2. Advanced Unstructured Data ETL
+
+- **Difficulty**: How to handle **Multi-column Layout**, **Tables**, **Header/Footer** and **Images** in PDF? Simple extraction leads to semantic confusion.
+- **Solution**:
+  - **Unstructured.io**: Powerful open source ETL library, supports cleaning various formats.
+  - **LlamaParse**: Tool launched by LlamaIndex specifically for complex PDF table parsing.
+  - **LayoutParser**: Deep learning based document layout analysis.
+
+------
+
+## 🎼 Dimension 3: Orchestration and Logic Framework (Orchestration)
+
+**—— Solving Problems of "Linear Process Not Enough" and "Complex Decision"**
+
+Evolved from simple "Chain" to "Graph" and "Autonomous Agent".
+
+### 1. LangGraph (Stateful Agents)
+
+- **Core**: Introduced concepts of **State** and **Loop**.
+- **Scenario**:
+  - **Human-in-the-loop**: AI pauses before executing key operations, waiting for manual approval.
+  - **Multi-step Reasoning**: Agent finds search results unsatisfied, automatically decides to change keyword and research (Loop).
+  - **Multi-role Collaboration**: Researcher Agent checks materials -> Editor Agent writes article.
+
+### 2. LlamaIndex (Data-Centric Framework)
+
+- **Positioning**: If your application focuses on **Search** and **Data Indexing**, LlamaIndex is often more frequent than LangChain.
+- **Core**: Provides extremely rich index structures (Tree Index, Keyword Table Index, Vector Store Index).
+
+------
+
+## 📊 Dimension 4: Evaluation and Ops (LLMOps / Eval)
+
+**—— Solving Problems of "Black Box Debugging" and "Effect Cannot Be Quantified"**
+
+In enterprise, you can't say "I think this Prompt is better", you need to come up with data to prove.
+
+### 1. Automated Evaluation (Evaluation)
+
+- **Ragas**: Automated scoring framework for RAG systems.
+  - **Faithfulness**: Is answer faithful to document? (Anti-hallucination)
+  - **Answer Relevance**: Did answer solve user question?
+  - **Context Precision**: Are retrieved documents really useful?
+- **TruLens**: Another popular evaluation tool, providing "RAG Triad" evaluation system.
+
+### 2. Link Tracing and Monitoring (Observability)
+
+- **LangSmith**: LangChain official monitoring platform. Can see input/output, Token consumption, latency time of every Step. Essential tool for debugging complex Agent.
+- **Arize Phoenix**: Open source observability tool, supports Trace and Eval visualization.
+
+------
+
+## 🗺️ Technical Learning and Landing Roadmap
+
+Suggest lighting up skill tree in following order:
+
+1. **Level 2 (Application Phase)**:
+   - **Focus**: **Vector Ops** + **Basic RAG**.
+   - **Action**: Deploy **Milvus** with Docker, write Python script to parse PDF and store; Configure hybrid retrieval in **Dify** (if supported) or manually write code to implement.
+2. **Level 3 (Advanced Phase)**:
+   - **Focus**: **Orchestration** + **Advanced RAG**.
+   - **Action**: Learn **LangGraph**, write a Router Agent (Route Milvus and Neo4j); Access **BGE-Reranker** to optimize retrieval results.
+3. **Level 4 (Expert Phase)**:
+   - **Focus**: **LLMOps** + **Fine-tuning**.
+   - **Action**: Introduce **Ragas** to score test your knowledge base; Use **LangSmith** to monitor online Agent running status.

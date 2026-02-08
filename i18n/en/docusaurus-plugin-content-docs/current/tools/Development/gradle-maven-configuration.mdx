@@ -1,0 +1,108 @@
+---
+id: gradle-maven-configuration
+title: Gradle and Maven Configuration
+sidebar_label: Gradle and Maven Configuration
+sidebar_position: 10
+description: 1. Configure local repository path <localRepository>d:/mvnrepository</localRepository> 2. Configure mirror
+tags:
+- development
+- tools
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- develop-software-tips
+---
+## Configure Maven
+
+1. Configure local repository path
+
+`<localRepository>d:/mvnrepository</localRepository>`
+
+2. Configure remote repository address
+
+```xml
+<mirror>  
+    <id>nexus-aliyun</id>  
+    <mirrorOf>central</mirrorOf>    
+    <name>Nexus aliyun</name>  
+    <url>https://maven.aliyun.com/repository/public</url>  
+</mirror>
+```
+
+3. Configure JDK to 1.8
+
+```xml
+<profile>
+    <id>jdk-1.8</id>
+    <activation>
+        <activeByDefault>true</activeByDefault>
+        <jdk>1.8</jdk>
+    </activation>
+
+    <properties>
+      <maven.compiler.source>1.8</maven.compiler.source>
+      <maven.compiler.target>1.8</maven.compiler.target>
+      <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+    </properties>
+  </profile>
+```
+
+## Configure Gradle
+
+1. In the `init.d` file under `GRADLE_HOME`, create a `init.gradle` configuration file:
+
+```json
+allprojects {
+    repositories {
+        maven { url 'file:///D:/mvnrepository'}
+        mavenLocal()
+        maven { name "Alibaba" ; url "https://maven.aliyun.com/repository/public" }
+        maven { name "Bstek" ; url "http://nexus.bsdn.org/content/groups/public/" }
+        mavenCentral()
+    }
+
+    buildscript { 
+        repositories { 
+            maven { name "Alibaba" ; url 'https://maven.aliyun.com/repository/public' }
+            maven { name "Bstek" ; url 'http://nexus.bsdn.org/content/groups/public/' }
+            maven { name "M2" ; url 'https://plugins.gradle.org/m2/' }
+        }
+    }
+}
+```
+
+2. [Gradle Enable Daemon Original Article][gradle enable Daemon] Create a `C:\Users\user\.gradle\gradle.properties` file in user directory, file content:
+   
+   `org.gradle.daemon=true`
+
+```shell
+(if not exist "%USERPROFILE%/.gradle" mkdir "%USERPROFILE%/.gradle") && (echo org.gradle.daemon=true >> "%USERPROFILE%/.gradle/gradle.properties")  
+```
+
+[gradle enable Daemon]: https://www.cnblogs.com/mthoutai/p/7389140.html
+
+3. IDEA configure Gradle local repository address
+
+![image-20211212154508471](https://s2.loli.net/2023/07/15/UKAVJTgs6lYP4Ci.png)
+
+## Handle Gradle Issues when Importing Source Code
+
+When I imported branch 2.5.x version code, using Gradle 5.6.4 caused issues. The reason is that old version of gradle lacks some features, e.g., `OperationCompletionListener`, error as follows:
+![](https://s2.loli.net/2023/07/15/m45ZutFhdGQf1zr.png)
+
+Use wrapper gradle. That is execute `./gradlew` in project root path, but it still reports `failed: timeout`
+![](https://s2.loli.net/2023/07/15/HuKged2EVnWqSz8.png)
+
+Then you need to change command to specify longer timeout, command as follows:
+`./gradlew -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.http.connectionTimeout=60000 --daemon` [Command from](https://baikangwang.gitbooks.io/workingnotes/content/how-to-increase-read-timeout.html)
+
+Of course you can configure via IDE, this will also automatically use wrapper for build
+![](https://s2.loli.net/2023/07/15/Gwk7mLMACQVc6nl.png)
+
+
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

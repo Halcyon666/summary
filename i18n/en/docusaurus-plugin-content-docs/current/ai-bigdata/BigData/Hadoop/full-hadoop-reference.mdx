@@ -1,0 +1,245 @@
+---
+id: full-hadoop-reference
+title: Hadoop
+sidebar_label: Hadoop
+sidebar_position: 10
+description: Complete Hadoop guide covering HDFS, MapReduce, YARN, and cluster setup
+tags:
+- ai
+- machine-learning
+sources:
+- hadoop
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+---
+# Hadoop
+
+## Hadoop Versions
+
+1. **Hadoop 1.0**: Includes Common, HDFS, MapReduce
+2. **Hadoop 2.0**: Includes Common, HDFS, MapReduce, YARN. Hadoop 1.0 and 2.0 are incompatible. Since Hadoop 2.7, includes Ozone. Since Hadoop 2.10, includes Submarine.
+3. **Hadoop 3.0**: Includes Common, HDFS, MapReduce, YARN, and Ozone module. Latest Hadoop 3.0 includes Submarine.
+
+## Hadoop Modules
+
+1. **Hadoop Common**: Supports other modules
+2. **HDFS (Hadoop Distributed File System)**: Distributed storage
+3. **Hadoop YARN**: Task scheduling and resource management
+4. **Hadoop MapReduce**: Distributed computing framework based on YARN
+5. **Hadoop Ozone**: Object storage
+6. **Hadoop Submarine**: Machine Learning engine
+
+## Hadoop Installation
+
+### Standalone and Pseudo-Distributed
+
+- Hadoop Pseudo-Distributed Installation.txt
+- Hadoop Fully Distributed Setup.txt
+
+### Differences between Hadoop 2.0 and 3.0
+
+- [Reference Link](https://www.jianshu.com/p/fb5fa03a2f03)
+
+## HDFS
+
+### NameNode
+
+- **Role**
+    - Manage DataNodes and store metadata.
+
+- **Metadata**
+    - a. File storage path
+    - b. File permissions
+    - c. File size
+    - d. Block size
+    - e. Mapping between File and BlockID
+    - f. Mapping between BlockID and DataNode
+    - g. Replication factor
+
+    - Metadata is irrelevant to specific content of files.
+    - Metadata size is 130~180B.
+    - a. Maintained in memory for fast R/W.
+    - b. Maintained on disk for crash recovery.
+
+    - **Storage files on disk**:
+        - `edits`: Operation file. Records write operations.
+        - `fsimage`: Meta image file. Records metadata. This file's metadata often lags behind metadata in memory.
+
+    - Metadata storage path determined by `hadoop.tmp.dir` property. Defaults to `/tmp` if unspecified.
+    - When NameNode receives write request, it first writes request to `edits_inprogress` file. If successful, updates metadata in memory. If memory update successful, returns ack to client. `fsimage` is not modified in this process.
+
+    - As HDFS runs, `edits_inprogress` grows. Gap between `fsimage` and memory metadata grows. Need to update `fsimage` at appropriate time. `edits_inprogress` will roll, producing an `edits` file and a new `edits_inprogress`.
+        - **Space**: When `edits` file reaches specified size (default 64M, `fs.checkpoint.size`), rolls new `edits_inprogress`.
+        - **Time**: When time interval from last roll reaches condition (default 1H, `fs.checkpoint.period`), rolls new `edits_inprogress`.
+        - **Force**: `hadoop dfsadmin -rollEdits`
+        - **Restart**: NameNode restart triggers `edits` file rolling.
+
+    - NameNode manages DataNode via Heartbeat.
+        - Default heartbeat interval 3s (`dfs.heartbeat.interval`).
+        - If NameNode receives no heartbeat from DataNode for over 10min, considers node lost. Data on this node is backed up to other nodes to ensure replication factor.
+        - **Heartbeat Signal**:
+            - Current DataNode status (Pre-service, In-service, Pre-decommission, Decommission)
+            - BlockIDs in DataNode
+            - clusterID. Generated when NameNode formatted. Sent to DataNode on startup. DataNode carries clusterID in heartbeat for validation.
+
+    - **NameNode/HDFS Restart**: Triggers `edits_inprogress` rolling, updates operations to `fsimage`, loads `fsimage` to memory, waits for DataNode heartbeat, verifies blocks. This process is **Safe Mode**. Automatically exits upon success.
+        - Force exit safe mode: `hadoop dfsadmin -safemode leave`
+
+### DataNode
+
+- **Block**: Data split into specified size blocks.
+    - Meaning: 1) Store huge files 2) Fast backup
+    - **Role**: Store Block on DataNode disk.
+    - Sends heartbeat to NameNode periodically.
+    - Storage location determined by `hadoop.tmp.dir`.
+    - Default 128M (`dfs.blocksize`).
+    - Smaller files use actual size.
+    - Global incremental Block ID.
+
+### SecondaryNameNode
+
+- Not hot backup of NameNode. Assists NameNode in `edits` file rolling.
+- If SecondaryNameNode exists, it handles rolling. If not, NameNode handles it.
+
+### Replica Placement Strategy
+
+- **1st Replica**:
+    - Internal upload: On uploading DataNode.
+    - External upload: NameNode chooses relatively idle DataNode.
+- **2nd Replica**:
+    - Pre-Hadoop 2.7: Different rack from 1st.
+    - Post-Hadoop 2.7: Same rack as 1st.
+- **3rd Replica**:
+    - Pre-Hadoop 2.7: Same rack as 2nd.
+    - Post-Hadoop 2.7: Different rack from 2nd.
+- **More Replicas**: On relatively idle nodes.
+
+### Rack Awareness
+
+- Mapping IP/Hostname to a logical rack ID.
+- Configured via script (Shell/Python).
+
+### Trash Mechanism
+
+- Default disabled.
+- Config in `core-site.xml`: `fs.trash.interval` (minutes). Default 0 (disabled). 1440 (1 day).
+
+### DFS Directory
+
+- Controlled by `hadoop.tmp.dir`. Created on format.
+- Subdirectories: `data` (DataNode), `name` (NameNode), `namesecondary`.
+- `in_use.lock`: Marks process running.
+
+### Read/Write Process
+
+- **Read**:
+    1. Client -> NameNode (Check path).
+    2. NameNode -> Client (Block locations).
+    3. Client -> DataNode (Read Block, verify checksum).
+    4. Repeat for subsequent blocks.
+
+- **Write**:
+    1. Client -> NameNode (Check permission/existence).
+    2. NameNode -> Client (Allow).
+    3. Client -> NameNode (Request 1st Block location).
+    4. NameNode -> Client (DataNode list).
+    5. Client -> Pipeline write (DataNode1 -> DataNode2 -> DataNode3). Acks propagate back.
+    6. Repeat for subsequent blocks.
+    7. Client -> NameNode (Close file).
+
+- **Delete**:
+    1. Client -> NameNode.
+    2. NameNode marks deletion in metadata. Data remains on DataNode.
+    3. DataNode deletes block upon Heartbeat response from NameNode.
+
+## MapReduce
+
+### Overview
+
+1. Distributed computing framework provided by Hadoop.
+2. Based on Google MapReduce.
+3. Split into Map phase and Reduce phase.
+
+### Maven Configuration
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-jar-plugin</artifactId>
+    <configuration>
+        <archive>
+            <manifest>
+                <addClasspath>true</addClasspath>
+                <mainClass>cn.App</mainClass>
+            </manifest>
+        </archive>
+    </configuration>
+</plugin>
+```
+
+### Data Localization Strategy
+
+- JobTracker accesses NameNode for metadata -> Slicing (Logical split).
+- Assign map tasks to nodes holding data (reduce transmission).
+
+### Shuffle
+
+- **Map Side**:
+    1. `context.write` writes to buffer (Ring buffer, default 100M).
+    2. Partition, Sort in buffer (Quicksort).
+    3. Spill to disk when threshold reached (0.8). Generates spill files (Locally ordered).
+    4. Merge spill files to final output (Mergesort). Combiner if applicable.
+- **Reduce Side**:
+    1. ReduceTask starts fetch thread to pull data from MapTask.
+    2. Merge pulled files (Mergesort).
+    3. Grouping (Group values by key).
+
+### Data Skew
+
+- **Map Side**: Rare. Caused by non-splittable uneven files.
+- **Reduce Side**: Common. Caused by key distribution.
+- **Solution**: Two-stage aggregation (Scatter then Aggregate).
+
+### Small File Handling
+
+- **Problems**: High memory usage on NameNode, High thread overhead on MapReduce.
+- **Hadoop Archive**: `hadoop archive -archiveName txt.har -p /result/ /`.
+
+## YARN
+
+### Overview
+
+- Yet Another Resource Negotiator. Introduced in Hadoop 2.0.
+
+### Architecture
+
+- **ResourceManager**: Master. Resource management.
+- **NodeManager**: Slave. Task monitoring and computing.
+
+### Job Execution Flow
+
+1. Client submits job to **ApplicationsManager**.
+2. ApplicationsManager assigns to NodeManager, requesting start of **ApplicationMaster**.
+3. ApplicationMaster starts on NodeManager.
+4. ApplicationMaster splits job to MapTask/ReduceTask.
+5. ApplicationMaster requests resources from ResourceManager.
+6. **ResourceScheduler** returns Container to ApplicationMaster.
+7. ApplicationMaster assigns tasks to NodeManagers.
+8. NodeManager executes tasks.
+9. ApplicationMaster monitors execution.
+
+### Speculative Execution
+
+- Optimization for slow tasks.
+- Run backup task on another node. First data wins.
+- Not suitable for data skew scenarios (wastes resources).
+
+### Uber Reuse
+
+- Run small application tasks within same JVM of ApplicationMaster.
+- Config: `mapreduce.job.ubertask.enable`.
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

@@ -1,0 +1,456 @@
+---
+id: weaving-programmatic
+title: Weaving in Spring AOP 1
+sidebar_label: Weaving in Spring AOP 1
+sidebar_position: 10
+description: Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) for code related to this article (from official source spring-test module)
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) under `org.springframework.mylearntest` package for code related to this article (from [official source](https://github.com/spring-projects/spring-framework.git "official source") spring-test module).
+
+
+AspectJ uses `ajc` compiler as its weaver; JBoss AOP uses custom `ClassLoader` as its weaver; while in Spring AOP, class `org.springframework.aop.framework.ProxyFactory` is used as weaver.
+
+Usage:
+
+1. Pass in object to be woven
+   ```ProxyFactory weaver = new ProxyFactory(target);```
+
+2. Bind Advisor that will be applied to target object to weaver
+   
+* If it is not an `Introduction` Advice type, Proxy will construct corresponding Advisor for these Advices internally, expecting that `Pointcut` used in constructing Advisor for them is `Pointcut.TRUE`.
+* If it is `Introduction` type, it will be distinguished according to specific type of `Introduction`; if it is a subclass implementation of `Introduction`, framework will construct a `DefaultIntroductionAdvisor` for it internally; if it is a subclass implementation of `DynamicIntroductionAdvice`, framework will throw `AOPConfigException` exception (because necessary target object information cannot be obtained from `DynamicIntroductionAdvice`)
+* `weaver.addAdvisor(advisor);`
+
+3. Get proxy object
+   `Object proxyObject =  weaver.getProxy();`
+
+## Interface-based Proxy
+
+<details>
+	<summary>Test4ProxyFactory</summary>
+
+```java
+package org.springframework.mylearntest.aop.weaver;
+
+import org.springframework.aop.framework.ProxyFactory;
+import org.springframework.aop.support.NameMatchMethodPointcutAdvisor;
+
+import java.util.Date;
+
+/**
+ * @Author: whalefall
+ * @Date: 2020/7/15 22:53
+ */
+
+@SuppressWarnings({"rawtypes", "Deprecated"})
+public class Test4ProxyFactory {
+    public static void main(String[] args) {
+        /*// 1. Pass in object to be woven
+        ProxyFactory weaver = new ProxyFactory(new Tester());
+        // weaver.setTarget(new Tester());
+
+        // 2. Bind Advisor that will be applied to target object to weaver
+        ApplicationContext context = new ClassPathXmlApplicationContext("advisor/defaultadvisor/defaultadvisor.xml");
+        Advisor advisor = (Advisor) context.getBean("advisor");
+        weaver.addAdvisor(advisor);
+
+        Object proxyObject =  weaver.getProxy();
+        System.out.println(proxyObject.getClass());
+        // out: class org.springframework.mylearntest.aop.advice.perinstance.Tester$$EnhancerBySpringCGLIB$$8e739b5b
+        */
+
+        // Usage where target class implements interface
+        // As long as optimize and proxyTargetClass of ProxyFactory are not set to true
+        // ProxyFactory will proxy based on interface
+        MockTask task = new MockTask();
+        ProxyFactory weaver = new ProxyFactory(task);
+        // weaver.setInterfaces(new Class[]{ITask.class});
+        NameMatchMethodPointcutAdvisor advisor = new NameMatchMethodPointcutAdvisor();
+        advisor.setMappedNames("execute");
+        advisor.setAdvice(new PerformanceMethodInterceptor());
+        weaver.addAdvisor(advisor);
+        ITask proxyObj = (ITask)weaver.getProxy();
+        // com.sun.proxy.$Proxy0
+        // System.out.println(proxyObj.getClass());
+        // Can only force cast to interface type, cannot cast to implementation class type, otherwise ClassCastException will be thrown
+        // ITask proxyObj = (MockTask)weaver.getProxy();
+        proxyObj.execute(new Date());
+
+    }
+}
+```
+</details>
+
+## Class-based Proxy
+
+<details>
+	<summary>TestCGLib</summary>
+
+```java
+package org.springframework.mylearntest.aop.weaver.baseonclass;
+
+import org.springframework.aop.framework.ProxyFactory;
+import org.springframework.aop.support.NameMatchMethodPointcutAdvisor;
+import org.springframework.mylearntest.aop.advice.perclass.PerformanceMethodInterceptor;
+
+/**
+ * @Author: whalefall
+ * @Date: 2020/7/17 23:31
+ */
+public class Test4CGLib {
+    public static void main(String[] args) {
+        ProxyFactory weaver = new ProxyFactory(new Executable());
+        NameMatchMethodPointcutAdvisor advisor = new NameMatchMethodPointcutAdvisor();
+
+        advisor.addMethodName("execute");
+        advisor.setAdvice(new PerformanceMethodInterceptor());
+        weaver.addAdvisor(advisor);
+
+        Executable proxyObject = (Executable)weaver.getProxy();
+        proxyObject.execute();
+        // org.springframework.mylearntest.aop.weaver.baseonclass.Executable$$EnhancerBySpringCGLIB$$37e40619
+        System.out.println("proxyObject class: " + proxyObject.getClass());
+    }
+}
+```
+</details>
+
+If target class does not implement any interface, regardless of what `proxyTargetClass` attribute is, `ProxyFactoy` will use class-based proxy.
+
+If `proxyTargetClass` attribute of `ProxyFactoy` is set to true, `ProxyFactoy` will use class-based proxy.
+
+If `optimize` attribute of `ProxyFactoy` is set to true, `ProxyFactory` will use class-based proxy.
+
+## Weaving of Introduction
+
+`Introduction` can add new behaviors to existing object types, it can only be applied to object-level interception, not method-level interception of usual `Advice`, so in process of `Introduction` weaving, there is no need to specify `Pointcut`, but only need to specify target interface type.
+
+Spring's `Introduction` support can only add new behaviors to current object by defining interfaces. So, we need to specify type of newly woven interface at time of weaving.
+
+<details>
+	<summary>Test4Introduction</summary>
+
+```java
+package org.springframework.mylearntest.aop.weaver.introduction;
+
+import org.springframework.aop.framework.ProxyFactory;
+import org.springframework.mylearntest.aop.advice.perinstance.Developer;
+import org.springframework.mylearntest.aop.advice.perinstance.IDeveloper;
+import org.springframework.mylearntest.aop.advice.perinstance.ITester;
+import org.springframework.mylearntest.aop.advice.perinstance.TesterFeatureIntroductionInterceptor;
+
+/**
+ * @Author: whalefall
+ * @Date: 2020/7/19 0:02
+ */
+
+@SuppressWarnings("rawtypes")
+public class Test4Introduction {
+    public static void main(String[] args) {
+        ProxyFactory weaver = new ProxyFactory(new Developer());
+        weaver.setInterfaces(new Class[]{IDeveloper.class, ITester.class});
+        TesterFeatureIntroductionInterceptor advice = new TesterFeatureIntroductionInterceptor();
+        weaver.addAdvice(advice);
+        // DefaultIntroductionAdvisor advisor = new DefaultIntroductionAdvisor(advice,advice);
+        // weaver.addAdvisor(advisor);
+
+        Object proxy = weaver.getProxy();
+        ((ITester)proxy).testSoftware();
+        ((IDeveloper)proxy).developSoftware();
+        System.out.println("proxy = " + proxy);
+
+    }
+}
+```
+</details>
+
+## Essence of ProxyFactory
+
+![](https://s2.loli.net/2023/07/15/PpJEQOIGl7dKtj3.png)
+
+Spring AOP framework uses `AopProxy` to moderately abstract proxy implementation mechanisms used, mainly having two `AopProxy` implementations for JDK dynamic proxy and CGLIB mechanisms, namely `Cglib2AopProxy` and `JdkDynamicAopProxy`. Dynamic proxy needs to provide call interception via `InvocationHandler`, so `JdkDynamicAopProxy` also implements `InvocationHandler` interface. Adopting abstract factory pattern, proceeding through `org.springframework.aop.framework.AopProxyFactory`.
+
+<details>
+	<summary>AopProxyFactory</summary>
+
+```java
+public interface AopProxyFactory {
+    AopProxy createAopProxy(AdvisedSupport config) throws AopConfigException;
+}
+```
+</details>
+
+`AopProxyFactory` decides what type of `AopProxy` to generate based on relevant information provided by passed `AdvisedSupport` instance. Specific work is completed by concrete implementation classes of `AopProxyFactory`. I.e., `org.springframework.aop.framework.DefaultAopProxyFactory`.
+
+<details>
+	<summary>DefaultAopProxyFactory</summary>
+
+```java
+package org.springframework.aop.framework;
+
+import java.io.Serializable;
+import java.lang.reflect.Proxy;
+
+import org.springframework.aop.SpringProxy;
+
+@SuppressWarnings("serial")
+public class DefaultAopProxyFactory implements AopProxyFactory, Serializable {
+
+    @Override
+    public AopProxy createAopProxy(AdvisedSupport config) throws AopConfigException {
+        // If isOptimize or isProxyTargetClass method of passed AdvisedSupport instance returns true,
+        // Or target object does not implement any interface, then use CGLIB to generate proxy object, otherwise use dynamic proxy.
+        if (config.isOptimize() || config.isProxyTargetClass() || hasNoUserSuppliedProxyInterfaces(config)) {
+            Class<?> targetClass = config.getTargetClass();
+            if (targetClass == null) {
+                throw new AopConfigException("TargetSource cannot determine target class: " +
+                        "Either an interface or a target is required for proxy creation.");
+            }
+            if (targetClass.isInterface() || Proxy.isProxyClass(targetClass)) {
+                return new JdkDynamicAopProxy(config);
+            }
+            return new ObjenesisCglibAopProxy(config);
+        }
+        else {
+            return new JdkDynamicAopProxy(config);
+        }
+    }
+
+    private boolean hasNoUserSuppliedProxyInterfaces(AdvisedSupport config) {
+        Class<?>[] ifcs = config.getProxiedInterfaces();
+        return (ifcs.length == 0 || (ifcs.length == 1 && SpringProxy.class.isAssignableFrom(ifcs[0])));
+    }
+
+}
+```
+</details>
+
+![](https://s2.loli.net/2023/07/15/pW1gjoys6k47dvm.png)
+
+`AdvisedSupport` is a carrier of information needed to generate proxy object.
+
+* One class headed by `org.springframework.aop.framework.ProxyConfig`, records control information for generating proxy object;
+* One class headed by `org.springframework.aop.framework.Advised`, carries necessary information needed to generate proxy object, such as related target class, Advice, Advisor etc.
+
+`ProxyConfig` is a simple JavaBean, defining five boolean attributes, controlling what measures should be taken when generating proxy object respectively.
+
+* `ProxyTargetClass`: If this attribute is set to true, `ProxyFactory` will use CGLIB to proxy target object. Default value is false.
+* `optimize`: This attribute is mainly used to inform whether proxy object needs to take further optimization measures. If proxy object is generated, even if corresponding `Advice` is added or removed for it, proxy object can ignore this change. If this attribute is set to true, `ProxyFactory` will use CGLIB to proxy target object. Default value is false.
+* `opaque`: This attribute is used to control whether generated proxy object can be forced directly to cast to `Advised`, default value is false, meaning any generated proxy object can be forced cast to `Advised`, we can query some states of proxy object via `Advised`.
+* `exposeProxy`: Setting `exposeProxy` allows Spring AOP framework to bind current proxy object to `ThreadLocal` when generating proxy object. If target object needs to access current proxy object, it can get proxy object via `AopContext.currentProxy()`. For performance considerations, this attribute defaults to false.
+* `frozen`: If `frozen` is set to true, once various information configurations for proxy object are completed, changes are not allowed. For example, `ProxyFactory` is set up, and `frozen` is true, then no changes can be made to `Advice`, this can optimize performance of proxy object, defaults to false.
+
+To generate proxy object, information provided by `ProxyConfig` alone is not enough, we also need some specific information for generating proxy object, for example, for which target classes to generate proxy object, what kind of cross-cutting logic to add to proxy object etc., this information can be set via `org.springframework.aop.framework.Advised`. By default, proxy objects returned by Spring AOP framework can all be forced cast to `Advised`, to query related information of proxy object.
+
+We can use `Advised` interface to access all `Advisor` held by corresponding proxy object, perform actions like adding `Advisor`, removing `Advisor` etc. Even if proxy object has been generated, it can also be operated, operate `Advised` directly, more often used in testing scenarios, can help us check whether generated proxy object is as expected.
+
+![](https://s2.loli.net/2023/07/15/hHNUgpVWqDFlZIw.png)
+
+`ProxyFactory` combines `AopProxy` and `AdvisedSupport` in one, can set relevant information needed to generate proxy object via `AdvisedSupport`, can generate proxy object via `AopProxy`. To reuse relevant logic, Spring AOP framework extracted some common logic to `org.springframework.aop.framework.ProxyCreatorSupport` during implementation, it inherits `AdvisedSupport`, so it can have ability to set relevant information needed to generate proxy object.
+
+In order to simplify work of generating different types of `AopProxy`, `ProxyCreatorSupport` internally holds an `AopProxyFactory` instance, default uses `DefaultAopProxyFactory`.
+
+![](https://s2.loli.net/2023/07/15/TYd9iNmCvOAUcjt.png)
+
+## Essence of ProxyFactoryBean
+
+`ProxyFactoryBean` is essentially a `FactoryBean` used to produce Proxy. Role of `FactoryBean`:
+
+If an object holds a reference to a `FactoryBean`, what it gets is not `FactoryBean` itself, but object returned by `FactoryBean`'s `getObject()` method. So, if an object in container depends on `ProxyFactoryBean`, then it will use proxy object returned by `ProxyFactoryBean`'s `getObject()` method.
+
+To let `ProxyFactoryBean`'s `getObject()` method return proxy object of corresponding target object is actually very simple. Because `ProxyFactoryBean` inherits common parent class `ProxyCreatorSupport` of `ProxyFactory`, and `ProxyCreatorSupport` basically has completed all things to be done (setting target object, configuring other parts, generating corresponding `AopProxy` etc.). We only need to get proxy object via parent class's `createAopProxy()` in `ProxyFactoryBean`'s `getObject()` method, then `return AopProxy.getObject()`.
+
+<details>
+	<summary>getObject()</summary>
+
+```java
+public Object getObject() throws BeansException {
+        initializeAdvisorChain();
+        if (isSingleton()) {
+            return getSingletonInstance();
+        }
+        else {
+            if (this.targetName == null) {
+                logger.info("Using non-singleton proxies with singleton targets is often undesirable. " +
+                        "Enable prototype proxies by setting the 'targetName' property.");
+            }
+            return newPrototypeInstance();
+        }
+    }
+```
+</details>
+
+`ProxyBean` definition requires indicating whether returned object is returned with singleton scope or prototype scope. Different proxy objects are returned for these two cases to satisfy semantics of `FactoryBean`'s `isSingleton()` method.
+
+If `singleton` attribute of `ProxyFactoryBean` is set to true, then after `ProxyFactoryBean` generates proxy object for first time, it will cache generated proxy object via internal instance variable `singletonInstance` (Object type). All subsequent requests return this cached instance, thus satisfying singleton semantics. Conversely, if `singleton` attribute of `ProxyFactoryBean` is set to false, then `ProxyFactoryBean` will re-check all settings every time, and prepare a new set of environment for current call, then return a new proxy object according to latest environment data. Therefore, if `singleton` attribute is false, there is loss in performance of generating proxy object.
+
+## Usage of ProxyFactoryBean
+
+Like `ProxyFactory`, via `ProxyFactoryBean`, we can specify whether to use interface-based proxy or class-based proxy way when generating proxy object for target object, and, because they all inherit from same parent class, most setting items are same. `ProxyFactoryBean` adds its own unique ones besides inheriting all configuration attributes of `ProxyCreatorSupport`:
+
+`proxyInterfaces`: If we want to use interface-based proxy way, then we need to configure corresponding interface types via this attribute, pass interface information of configuration element via `Collection` object. `ProxyFactoryBean` has an `autodetectInterfaces` attribute, this attribute defaults to true, if interface type to be proxied is not explicitly specified, `ProxyFactoryBean` will automatically detect interface types implemented by target object and perform proxy.
+
+`interceptorNames`: Via this attribute, we can specify multiple `Advice`, interceptors and `Advisor` to be woven into target object, instead of adding `Advice` or `addAdvisor` method of `ProxyFactory`, usually we will use configuration element `<list>` to add needed interceptor names.
+
+* If target object is not set, then can place Bean definition name of object at position of last element of `interceptorNames`. It is recommended to define target object directly.
+* By adding * wildcard after specified `interceptorNames` element name, can let `ProxyFactoryBean` search all `Advisor` matching condition in container and apply to target object.
+
+Example using wildcard
+
+```xml
+<beans>
+    <bean id="proxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target" ref="..."/>
+        <property name="interceptorNames">
+            <list>
+                <value>global*</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="global_debug" class="org.springframework.aop.interceptor.DebugInterceptor"/>
+    <bean id="global_performance" class="org.springframework.aop.interceptor.PerformanceMonitorInterceptor">
+</beans>
+```
+
+`singleton`: `ProxyFactoryBean` is essentially a `FactoryBean`, so we can specify whether `getObject` call returns same proxy object or new one via `singleton` attribute.
+
+## ProxyFactoryBean Generating Proxy Object Case
+
+<details>
+	<summary>Configuration File</summary>
+
+```xml
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+    <!--    Bean definition of target object-->
+    <bean id="task"
+          class="org.springframework.mylearntest.aop.weaver.baseoninterface.MockTask" scope="prototype"/>
+
+    <!--    ProxyFactoryBean definition-->
+    <bean id="introducedTask" class="org.springframework.aop.framework.ProxyFactoryBean" scope="prototype">
+        <property name="targetName">
+            <value>task</value>
+        </property>
+        <property name="proxyInterfaces">
+            <list>
+                <value>org.springframework.mylearntest.aop.weaver.baseoninterface.ITask</value>
+                <value>org.springframework.mylearntest.aop.weaver.proxyfactorybean.ICounter</value>
+            </list>
+        </property>
+        <property name="interceptorNames">
+            <list>
+                <value>introductionInterceptor</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--    introductionInterceptor definition-->
+    <bean id="introductionInterceptor"
+          class="org.springframework.aop.support.DelegatingIntroductionInterceptor" scope="prototype">
+        <constructor-arg>
+            <bean class="org.springframework.mylearntest.aop.weaver.proxyfactorybean.CounterImpl"/>
+        </constructor-arg>
+    </bean>
+
+</beans>
+```
+</details>
+
+<details>
+	<summary>ICounter</summary>
+
+```java
+package org.springframework.mylearntest.aop.weaver.proxyfactorybean;
+
+/**
+ * @Author: whalefall
+ * @Date: 2020/7/22 23:34
+ */
+public interface ICounter {
+    void resetCounter();
+    int getCounter();
+}
+```
+</details>
+
+<details>
+	<summary>CounterImpl</summary>
+
+```java
+package org.springframework.mylearntest.aop.weaver.proxyfactorybean;
+
+/**
+ * @Author: whalefall
+ * @Date: 2020/7/22 23:35
+ */
+public class CounterImpl implements ICounter{
+    private int counter;
+
+    @Override
+    public void resetCounter() {
+        counter = 0;
+    }
+
+    @Override
+    public int getCounter() {
+        counter ++;
+        return counter;
+    }
+}
+```
+</details>
+
+<details>
+	<summary>TestProxyFactoryBean</summary>
+
+```java
+package org.springframework.mylearntest.aop.weaver.proxyfactorybean;
+
+import org.springframework.aop.support.DelegatingIntroductionInterceptor;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+/**
+ * @Author: whalefall
+ * @Date: 2020/7/22 23:51
+ * @see DelegatingIntroductionInterceptor
+ */
+public class Test4ProxyFactoryBean {
+    public static void main(String[] args) {
+        ApplicationContext context = new ClassPathXmlApplicationContext("proxyfactorybean\\proxyfactorybean.xml");
+        Object proxy1 = context.getBean("introducedTask");
+        Object proxy2 = context.getBean("introducedTask");
+
+        System.out.println(((ICounter)proxy1).getCounter());//1
+        System.out.println(((ICounter)proxy1).getCounter());//2
+        System.out.println(((ICounter)proxy2).getCounter());//1
+    }
+}
+```
+</details>
+
+
+> References
+> 
+> 1. Book Name: Spring Unveiled Author: Wang Fuqiang
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

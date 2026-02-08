@@ -1,0 +1,218 @@
+---
+id: docusaurus
+title: Docusaurus Configuration
+sidebar_label: Docusaurus Configuration
+sidebar_position: 11
+description: Docusaurus deployment, search configuration, and troubleshooting
+tags:
+- frontend
+- javascript
+- react
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+---
+# Docusaurus
+
+## GitHub Workflow Configuration
+
+### Deployment Script
+
+[Reference Article](https://juejin.cn/post/7115631818736402440)
+
+> Note: You need to install yarn and run yarn install in the documentation project.
+
+[Docusaurus Deployment](https://docusaurus.io/docs/deployment#deploying-to-github-pages)
+
+```yml title="deploy.yml"
+name: Deploy taco shop
+
+on:
+  push:
+    branches:
+      - main
+    # Review gh actions docs if you want to further define triggers, paths, etc
+    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on
+
+jobs:
+  deploy:
+    name: Deploy Chef Claude
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 22.19.0
+          cache: "pnpm"
+      - name: Install dependencies
+        run: |
+          echo ${{ github.workspace }}  # Output workspace context path, which is the project path
+          pnpm install --frozen-lockfile
+      - name: Build Chef Claude
+        run: |
+          pnpm build
+
+      # Popular action to deploy to GitHub Pages:
+      # Docs: https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-docusaurus
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.SECRET_TOKEN }}
+          # Build output to publish to the `gh-pages` branch:
+          publish_dir: ./dist # The document build output directory is build (or dist as configured)
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_message: ${{ github.event.head_commit.message }}
+
+```
+
+### Configure Secrets
+
+![20251020205913](https://s2.loli.net/2025/10/20/J2Z7CxXQPNjc8UW.png)
+![20251103223927](https://s2.loli.net/2025/11/03/m8RPDfWd1TYsGwN.png)
+
+New version page minimized permission configuration TOKEN
+
+| Category | Permission | Access Level |
+| :--- | :--- | :--- |
+| 🧱 **Contents** | Read and write | ✅ Required: Allow Action to push to `gh-pages` branch |
+| ⚙️ **Actions** | Read and write | ✅ Optional: If your Workflow needs to trigger other Actions (e.g., re-run workflows) |
+
+
+### Deployment Error css net::ERR_ABORTED 404 (Not Found)
+
+If you don't need access in Mainland China, you can use Vercel implementation first.
+
+```ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react-swc";
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  // highlight-next-line
+  {/* base: "/tenzies/", // Don't write like this */}
+  // highlight-next-line
+  base: "./"
+});
+```
+
+## DocSearch v2 Not Working on My Site
+
+### Background
+
+My Docusaurus (version 3.1.0) blog is deployed on GitHub Pages. Before I changed the domain from `https://halcyon666.github.io/summary/` to `https://halcyon666.top`, DocSearch v2 worked fine on my site. When I reapplied for DocSearch for the new domain, I followed the previous method, but the search didn't work.
+
+### URL Ignored
+
+First, I checked the crawler management dashboard [https://crawler.algolia.com/](https://crawler.algolia.com/) and found that many website URLs were ignored because there were many 302 redirects in the new application.
+
+I tried searching in the preview search, and except for the homepage information, there were no results about my Markdown blog.
+
+![image-20240202002105462](https://s2.loli.net/2024/02/02/eM7Vc45PLlyGJYw.png)
+
+
+You can see my correct configuration above, and below is the wrong configuration, which solved the crawler ignore problem in this case.
+
+```react
+new Crawler({
+  sitemaps: [],
+  ignoreCanonicalTo: false,
+});
+```
+
+This time I could search in the search preview, but not on my website.
+
+### Invalid Application-ID or API Key
+
+To solve the invalid Application-ID or API key problem, I looked at a helpful [link](https://support.algolia.com/hc/en-us/articles/11217017604497-Why-am-I-getting-403-error-message-Invalid-Application-ID-or-API-key-status-403-with-DocSearch) and found that my API key was wrong, given by the DocSearch reply email. So when you encounter this error, you need to check your API key in your [dashboard](https://dashboard.algolia.com/account/api-keys).
+
+
+### Misunderstanding facetFilters
+
+There were results in the preview search, but not on my website.
+
+I got two payloads from the preview search and my website, compared these parameters, and found some differences from my parameters. So I checked the [docusaurus documentation](https://docusaurus.io/docs/search#contextual-search) and fixed this issue by changing the configuration.
+
+> This is the wrong payload parameter at the end of the request URL.
+>
+> `facetFilters=["language:zh",["docusaurus_tag:default","docusaurus_tag:docs-default-current"]]`
+>
+> My wrong configuration was:
+>
+> ```ts
+> contextualSearch: true,
+> searchParameters: {},
+> ```
+>
+
+You need to set contextualSearch to false (*Tip: This configuration is in `docusaurus.config.ts` or `docusaurus.config.js`*), and write your language filter in brackets. You can see my fix example below.
+
+```ts
+contextualSearch: false,
+searchParameters: {
+  // maybe yours is en
+	facetFilters: ["zh"],
+},
+```
+
+## **React Live Failure in `Docusaurus`**
+
+### **Comparison of Success and Failure**
+
+**Failure Scenario**
+
+![image-20250920214427419](https://s2.loli.net/2025/09/20/A2gkTwlQ3CvBpHi.png)
+
+**Normal Scenario**
+
+![image-20250920214505155](https://s2.loli.net/2025/09/20/6DmZ957BCRWQr8w.png)
+
+### **Commit Record Causing Failure**
+
+[Add component `TailProtocal`](https://github.com/Halcyon666/summary/commit/7b94f431d7bfedb1e8abf6132a0688c510ffa0c2)
+
+### **Fix Solution**
+
+Import components individually, do not use global imports.
+
+Fix commit [record](https://github.com/Halcyon666/summary/commit/00b6ea74b68b586919e0a2c41a67ef0037defe7b)
+
+
+## rspack Cache Crash
+
+```shell
+> summary@0.2.0 start D:\summary
+> docusaurus start --host 0.0.0.0 --no-open
+
+[INFO] Starting the development server...
+[SUCCESS] Docusaurus website is running at: http://localhost:3000/summary/
+● Client ██████████████████████████████████████████████████ (9%) setup compilation
+Panic occurred at runtime. Please file an issue on GitHub with the backtrace below: https://github.com/web-infra-dev/rspack/issues: panicked at crates\rspack_core\src\cache\persistent\occasion\make\module_graph.rs:188:8:
+should mgm exist
+ ELIFECYCLE  Command failed with exit code 3221226505.
+```
+
+Execute in project root directory D:\summary:
+
+```shell
+
+rmdir /s /q .docusaurus
+rmdir /s /q node_modules\.cache
+rmdir /s /q node_modules\.pnpm
+del /f /q pnpm-lock.yaml
+
+
+Then reinstall:
+
+pnpm install
+pnpm start
+```
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

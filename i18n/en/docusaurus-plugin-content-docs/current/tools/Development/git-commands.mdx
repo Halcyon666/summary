@@ -1,0 +1,424 @@
+---
+id: git-commands
+title: Git Commands
+sidebar_label: Git Commands
+sidebar_position: 1
+description: 'Comprehensive Git command reference: config, log, diff, rebase, merge, stash'
+tags:
+- development
+- tools
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- develop-software-tips
+---
+# Git Commands
+
+## Configuration Commands
+
+```shell
+ssh-keygen
+git config --global user.name "whalefall541"
+git config --global user.email "jackchen541@sina.com"
+git config --global alias.ll "log --graph --pretty=format:'%C(yellow)%h%Creset -%C(cyan)%d%Creset %s %Cgreen(%an, %cr)' --abbrev-commit"
+git config --global alias.a '!git add -A && git commit -m'
+```
+
+## Configure Global .gitignore
+
+```shell
+# Better to use absolute path here, sometimes relative path might not work
+git config --global core.excludesfile D:/project/.gitignore 
+
+# .gitignore can only ignore files that are not tracked. If files are already tracked, modifying .gitignore is invalid.
+# Solution is to remove local cache first (change to untracked status), then commit:
+
+git rm -r --cached .
+git add .
+```
+
+## View Commands
+
+```shell
+# View log
+git log --graph --pretty=format:'%C(yellow)%h%Creset -%C(cyan)%d%Creset %s %Cgreen(%an, %cr)' --abbrev-commit
+# View content of a commit
+git show <commit-id>
+# View reference log
+git reflog
+# View file difference
+git diff filename
+
+# View difference of added but uncommitted files
+git diff --staged
+git diff --cached
+# Only view modification statistics
+git diff --stat branch1 branch2
+
+# View difference of a file between two commits. First one is start hash, one earlier than current view.
+git diff <commit> <commit> xxx.java
+# View specific difference between two branches
+git diff dev st 
+
+
+# Diff all modified file contents at once, can also redirect to a file
+git status | awk -F "modified:" '{if($2 != "") print $2}' | xargs git diff
+
+# View committed but not pushed records
+git cherry -v
+
+# View modifier of specific lines
+git blame -L 58,100 filename
+git blame -L 57,+10 filename
+
+## Only view changes in merge commit
+git log --follow -p --merges -- <file>
+
+## View modified parts in merge conflict
+git log --cc -p -- <file>
+
+```
+
+## Undo Commands
+
+```shell
+# Undo all files at once
+git reset . 
+git checkout .
+
+# Undo modify status
+git checkout <filename>
+# Undo added file (untracked if new file, modify status otherwise)
+git restore --staged test.txt
+git rm --cached test.txt
+
+# Undo add commit modify (Deletes commit record entirely, Use with Caution)
+git reset --hard <commit-id>
+# Undo add, commit (Reverts commit record to modify status)
+git reset --mixed <commit-id>
+# Only undo commit (Reverts commit record to add status)
+git reset --soft <commit-id>
+
+# Revert a commit (Create new commit to reverse changes)
+git revert <commit-id>
+
+# Delete all local untracked records
+git clean -df
+```
+
+## Create or Delete Commands
+
+```shell
+# Associate local repo with remote repo
+git remote add origin git@github.com:whalefall541/rebase-learn.git
+# Remove association
+git remote rm origin
+
+# Delete remote branch
+git push origin -d <branch-name>
+
+# Create local branch
+git branch <branch-name>
+# Create and switch
+git chekcout -b <branch-name>
+# Delete local branch
+git branch -D  <branch-name>
+```
+
+## Merge Commands
+
+```shell
+# Turn off auto merge
+git merge --no-ff -m "merge with no-ff" dev
+
+# Auto Rebase: Replay another branch on current branch
+git rebase [<branch-name> | <commit-id> | <head~n>]
+
+# Interactive Rebase
+git rebase -i <commit-id> <commit-id> 
+
+`Usually combine 'p' and 's' to squash multiple commits into one`
+# Note: rebase commit id range is (start, end];
+# Be very careful that the last id in rebase must be the last one, unless you want to discard commit history after that id.
+# If you did it by mistake, re-pull from remote.
+
+# Commands:
+# p, pick <commit> = use commit
+# r, reword <commit> = use commit, but edit the commit message
+# e, edit <commit> = use commit, but stop for amending
+# s, squash <commit> = use commit, but meld into previous commit
+# f, fixup [-C | -c] <commit> = like "squash" but keep only the previous
+#                    commit's log message, unless -C is used, in which case
+#                    keep only this commit's message; -c is same as -C but
+#                    opens the editor
+
+
+# Rebase content of base branch to current branch. Rebase is just moving HEAD pointer.
+git rebase <base-branch>
+
+Example
+A---B---C  main
+         \
+          D---E  feature
+
+git checkout feature
+git rebase main
+
+A---B---C  main
+             \
+              D'--E'  feature
+
+"Whoever wants to 'catch up' with whom, execute rebase on that branch. Target is the 'base'."
+"Use rebase for development, use merge for merging. Do not rebase main. Keep it clean."
+
+feature wants to catch up with main → Execute on feature: git rebase main
+
+main wants to catch up with feature (Not Recommended) → Execute on main: git rebase feature
+
+# rebase --onto can rebase a branch located on a sub-branch to the main branch
+# Before rebase: current-upstream-branch is a sub-branch of base-branch
+# And current-branch is a sub-branch of current-upstream-branch
+# After rebase: current-upstream-branch and current-branch become independent sub-branches of base-branch
+# I.E. git rebase --onto
+git rebase --onto <base-branch> <current-upstream-branch> <current-branch>
+
+Example
+A---B---C  main
+         \
+          D---E---F  feature
+     \
+      X---Y  experiment
+
+git checkout experiment
+git rebase --onto feature A
+
+A---B---C  main
+         \
+          D---E---F  feature
+                    \
+                     X'--Y'  experiment
+Mnemonic:
+Cut: From after B
+
+Paste: To after A
+
+Operation: --onto A B
+
+# Copy a commit from another branch to current branch
+git cherry-pick <commit-id>
+```
+
+## Stash Commands
+
+```shell
+git stash
+git stash list
+git pop
+
+# Stash specific file
+git stash push filename
+
+# Interactive stash
+git stash -p
+```
+
+How to stash partial files: [stash part][stash part]
+
+[stash part]: https://www.jianshu.com/p/fe4d54cb6244
+
+## Commit Commands
+
+```shell
+echo "# 123" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+
+# Modify comment of HEAD; notes: Don’t amend public commits
+git commit --amend -m "an updated commit message" --no-edit
+
+# Modify last commit info
+git add new_file.xxx
+git commit --amend --no-edit
+
+# Modify previous commit info, then reword or edit
+git rebase -i <commit-id>^
+
+git branch -M main
+git remote add origin git@github.com:whalefall541/123.git
+git push -u origin main
+
+# Push directly to all other branches from dev branch. From branch1 push to branch2.
+git push origin refs/heads/branch1:branch2
+```
+
+## Tag Commands
+
+```shell
+# Tag on current commit of current branch:
+git tag v1.0
+
+# If want to tag on a specific historical commit:
+git tag v0.9 f52c633
+git tag -a <tagname> -m "<message>"
+
+# View tag info:
+git show v0.1
+
+# Delete tag if created by mistake:
+git tag -d v0.1
+
+# Push a tag to remote: git push origin <tagname>
+git push origin v1.0
+# Or, push all unpushed local tags at once:
+git push origin --tags    
+# If tag already pushed to remote, deleting remote tag is tricky. Delete local first:
+git tag -d v0.9    
+# Then, delete from remote. Command is also push, but format is:
+git push origin :refs/tags/v0.9
+```
+
+## Update Commands
+
+[Reference Site](https://cloud.tencent.com/developer/section/1138793)
+
+```shell
+# Fetch all branches
+git fetch --all
+# update specific branch. If aggregation project, need --recurse-submodules=no 
+git fetch origin main:main --progress --prune
+ 
+# Rebase when pulling code: fetch and rebase 
+git pull -r origin main
+
+git fetch origin 
+git rebase origin/main
+
+git pull -r
+
+```
+
+## How to sync Github Fork repository
+
+1. [configuring-a-remote-for-a-fork](https://docs.github.com/en/github/collaborating-with-pull-requests/working-with-forks/configuring-a-remote-for-a-fork)
+2. Merging an upstream repository into your fork
+   [syncing-a-fork](https://docs.github.com/en/github/collaborating-with-pull-requests/working-with-forks/syncing-a-fork)
+
+
+## Principle Issues
+
+1. git rebase principle: Sync and keep history clean:
+
+✅ Transfer changes of current branch to after the latest state of target branch
+
+✅ Maintain linear commit history, avoid merge conflict tree
+
+✅ More suitable for syncing feature branch to main: `git rebase main`
+
+⚠️ Ensure workspace is clean before use (`git status` should show no changes)
+
+❌ Do not recommend force push on shared history branches (Unless team allows)
+
+2. git pull --rebase principle: Simplify fetch + rebase
+✅ Shortcut for `git fetch + git rebase`
+
+✅ Recommended to set as default strategy to avoid generating merge commit
+
+3. Branch sync recommended pattern (Two-way sync scenario)
+Assume you develop alternately between `dev` and `feature-x` branches:
+
+🔁 Sync main into feature branch:
+
+`git checkout feature-x`
+
+`git fetch origin`
+
+`git rebase origin/dev`  # or `git rebase dev`
+
+⬆️ Sync feature-x back to dev:
+
+`git checkout dev`
+
+`git rebase feature-x`  # or `git merge --ff-only feature-x`
+
+⚠️ If team shares `dev`, recommend using `merge` to avoid force push
+
+## Problem Records
+
+### Cannot exit `git rebase -i` in PS Terminal in IDEA
+
+import MyHighlight from "@site/src/components/MyHighLight";
+
+`git rebase -i` forces usage of <MyHighlight color="white" background="red">git rebase</MyHighlight> to execute.
+
+After pressing `i` to enter edit mode, if `esc` cannot exit, please use `ctr+c`, `:q!`
+
+:::tip
+IDEA Ultimate 2021.3.1 has encountered this issue
+:::
+
+***The first way***
+
+I understand this is frustrating. Let's try a more comprehensive approach to recover your repository:
+
+1. Let's first check the overall Git status:
+    
+    ```
+    git status
+    
+    ```
+    
+2. If the above command still shows errors, let's try a full reset using ORIG_HEAD:
+    
+    ```
+    git reset --hard ORIG_HEAD
+    
+    ```
+    
+3. If that doesn't work, we can try checking what branches exist:
+    
+    ```
+    git branch -a
+    
+    ```
+    
+4. Then try to get back to your main/master branch:
+    
+    ```
+    git checkout main
+    
+    ```
+    
+    (or `git checkout master` if that's your primary branch name)
+    
+5. If all else fails, we might need a more drastic approach. First, back up any uncommitted changes you care about manually. Then:
+    
+    ```
+    # Create or update a reference to your current HEAD
+    git update-ref HEAD $(git rev-parse HEAD) 2>/dev/null
+    
+    # Clean up all Git temporary files
+    rm -f .git/MERGE_HEAD .git/MERGE_MODE .git/MERGE_MSG
+    rm -rf .git/rebase-merge .git/rebase-apply
+    
+    # Reset the index and working tree
+    git reset --hard
+    
+    ```
+    
+
+If none of these approaches work, please let me know what specific error messages you're seeing now, and we can try a different recovery method.
+
+***the second way***
+
+firstly push the local commit to the remote, even though your broken repository in rebase status.
+
+secondly clone a new copy repository to a different directory, then open with the idea
+
+if idea occurs Cannot resolve symbol ‘xxx’, just Invalidate caches and restart the project, project will run normally.
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

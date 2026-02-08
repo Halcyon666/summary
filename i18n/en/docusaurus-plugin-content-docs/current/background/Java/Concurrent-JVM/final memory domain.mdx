@@ -1,0 +1,74 @@
+---
+id: final-memory-domain
+title: Final Field Memory Knowledge
+sidebar_label: Final Field Memory Knowledge
+sidebar_position: 10
+description: A write to a final field inside a constructor and the subsequent assignment of the reference of the constructed object to a reference variable cannot be reordered. The first read of a reference to an object containing a final field and the subsequent first read of this final field cannot be reordered.
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+## Final Field Reordering Rules
+
+A write to a final field inside a constructor and the subsequent assignment of the reference of the constructed object to a reference variable cannot be reordered.
+
+The first read of a reference to an object containing a final field and the subsequent first read of this final field cannot be reordered.
+
+![](https://s2.loli.net/2023/07/15/Da4P5Cl7dFgKYen.png)
+
+Assume thread A executes writer() method, and subsequently another thread B executes reader() method.
+
+* JMM prohibits compilers from reordering writes to final fields outside of the constructor.
+* The compiler will insert a StoreStore barrier after the write of a final field and before the constructor returns. This barrier prohibits the processor from reordering the write of the final field outside of the constructor.
+
+![](https://s2.loli.net/2023/07/15/Sh4OgLmT1iNGFCf.png)
+
+Read value before ordinary variable initialization
+
+![](https://s2.loli.net/2023/07/15/k96DUOV1gT4Ftso.png)
+
+Operations on ordinary fields of an object are reordered by the processor to before reading the object reference. When reading the ordinary field, the field has not yet been written by write thread A; this is an erroneous read operation. However, the reordering rules for reading final fields "confine" the operation of reading the object's final field to after reading the object reference. At this time, the final field has already been initialized by thread A; this is a correct read operation.
+
+## Type Modified by Final is Reference Type
+
+![](https://s2.loli.net/2023/07/15/TLzvsetCf178j59.png)
+
+A write to a member field of an object referenced by a final field inside a constructor and the subsequent assignment of the reference of the constructed object to a reference variable outside the constructor cannot be reordered.
+
+* 1 is the write to the final field, 2 is the write to the member field of the object referenced by this final field, and 3 is the assignment of the reference of the constructed object to a reference variable. Here, besides the aforementioned rule that 1 cannot be reordered with 3, 2 and 3 also cannot be reordered.
+
+* JMM can ensure that read thread C can at least see the write by write thread A to the member field of the final referenced object in the constructor. That is, C can at least see that the value of array index 0 is 1. As for the write by write thread B to array elements, read thread C may or may not see it. JMM does not guarantee that thread B's write is visible to read thread C because there is a data race between write thread B and read thread C, and the execution result at this time is unpredictable.
+
+* If you want to ensure that read thread C sees the write by write thread B to array elements, synchronization primitives (lock or volatile) need to be used between write thread B and read thread C to ensure memory visibility.
+
+## Why Final Reference Cannot Escape from Constructor
+
+Before the reference variable becomes visible to any thread, the final fields of the object pointed to by the reference variable have already been correctly initialized in the constructor.
+
+Inside the constructor, the reference of the constructed object cannot be seen by other threads, meaning the object reference cannot "escape" from the constructor.
+
+![](https://s2.loli.net/2023/07/15/iKW2PU6vFrCqVT9.png)
+
+The thread executing the read() method may still be unable to see the value of the final field after initialization because operation 1 and operation 2 may be reordered.
+
+![](https://s2.loli.net/2023/07/15/w8cFmhtjfQYyk49.png)
+
+***
+
+![](https://s2.loli.net/2023/07/15/H7jnLcbMDz2WUhi.png)
+
+## Implementation of Final Semantics in Processors
+
+The reordering rule for writing final fields requires the compiler to insert a StoreStore barrier after the write of a final field and before the constructor returns. The reordering rule for reading final fields requires the compiler to insert a LoadLoad barrier before the operation of reading a final field. Since X86 processors do not reorder write-write operations, the StoreStore barrier required for writing final fields will be omitted in X86 processors. Similarly, since X86 processors do not reorder operations with indirect dependencies, the LoadLoad barrier required for reading final fields will also be omitted in X86 processors. That is to say, in X86 processors, reads/writes of final fields will not insert any memory barriers! (Only StoreLoad barriers exist in X86 processors)
+
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

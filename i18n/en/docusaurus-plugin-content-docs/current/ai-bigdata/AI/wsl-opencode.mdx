@@ -1,0 +1,231 @@
+---
+id: wsl-opencode
+title: WSL + OpenCode
+sidebar_label: WSL + OpenCode
+sidebar_position: 2
+description: WSL + OpenCode Installation & Configuration Guide
+tags:
+- ai
+- open-code
+- development-tool
+- tutorial
+sources:
+- level-1-ai-native
+references:
+- oh-my-opencode
+- vibe-coding
+last_update:
+  date: '2026-02-05'
+  author: halcyon666
+---
+
+# WSL + OpenCode Environment Manual
+
+## 1. Basic System
+
+- OS: Windows 10 Pro
+- WSL: WSL2
+- Linux Distro: Ubuntu 22.04 LTS
+- User: ollama
+
+## 2. WSL Installation and Entry
+
+### Install Ubuntu
+
+```shell
+wsl --install -d Ubuntu-22.04
+```
+
+> Download size about 500-700MB, occupies about 1.2-1.6GB after installation
+
+### Enter WSL
+
+```shell
+wsl -d Ubuntu-22.04 -u ollama
+```
+
+### View Installed Distributions
+
+```shell
+wsl -l -v
+```
+
+## 3. Node / Package Management
+
+- Node.js: v20.x (Linux Native Install)
+- Corepack: Enabled
+- pnpm: Corepack managed (pnpm@latest)
+- PNPM_HOME: `~/.local/share/pnpm`
+- PATH already includes PNPM_HOME
+
+### Node Installation Command
+
+```shell
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+### Enable pnpm
+
+```shell
+sudo corepack enable
+sudo corepack prepare pnpm@latest --activate
+pnpm setup
+source ~/.bashrc
+```
+
+## 4. OpenCode Installation
+
+### Recommended Method (Official Binary)
+
+```shell
+curl -fsSL https://opencode.ai/install | bash
+source ~/.bashrc
+```
+
+### Verify
+
+```shell
+which opencode   # Should be /usr/local/bin/opencode
+opencode --version
+```
+
+## 5. OpenCode Server
+
+- Docs: [windows-wsl](https://opencode.ai/docs/windows-wsl/)
+- Start Command: `opencode serve --hostname 0.0.0.0 --port 4096`
+- Usage: Provide Desktop / Web Client remote access
+
+## 6. OpenCode Usage Mode Comparison
+
+| Mode | Context Management | Token Consumption | Suitable Scenario |
+|------|-----------|----------|---------|
+| Desktop | Session History Accumulation | Higher | Decision/Clarify Requirement |
+| Desktop + WSL | Engineering Driven | Medium | Heavy Modification/Debug |
+| CLI | Independent Call | Lowest | Batch/Atomic patch |
+| TUI | Visualized CLI | Low | High Frequency Execution |
+
+### Workflow Suggestions
+
+- **Desktop**: Used for "Thinking clearly what to change"
+- **CLI/TUI**: Used for "Changing code correctly"
+- Use Snapshot to replace history, do one thing per call
+
+## 7. Token Optimization Strategy
+
+### Core Principles
+
+1. Reduce Context: Use Task Snapshot to replace history
+2. Reduce Rounds: Sub-agent call at once
+3. Structured Output: Forbid explanation, only give diff
+
+### Low Token Prompt Template
+
+```text
+Task Snapshot:
+- Project: Spring Boot 2.7
+- Goal: [Clear Goal]
+- Constraints: [Constraints]
+
+Output:
+- Only unified diff
+- No explanation
+```
+
+## 8. Python Environment
+
+```shell
+sudo apt install -y python3 python3-pip python3-venv
+pip3 install --user virtualenv ipython black isort pylint mypy
+```
+
+```shell
+# Use tee to add environment variable (no need to enter editor)
+echo 'export PATH="$HOME/.local/bin:$PATH"' | tee -a ~/.bashrc
+source ~/.bashrc
+```
+
+## 9. Java Environment
+
+```shell
+sudo apt install -y openjdk-17-jdk maven
+```
+
+- JAVA_HOME: Configured
+- Usage: OpenCode code understanding and execution
+
+## 10. Auxiliary Tools
+
+```shell
+sudo apt install -y git build-essential tree ripgrep fd-find curl wget unzip
+```
+
+## 11. tmux Terminal Multiplexer
+
+### Install
+
+```shell
+sudo apt install -y tmux
+```
+
+### Common Commands
+
+```shell
+# Create new session
+tmux new -s dev
+
+# List sessions
+tmux ls
+
+# Attach to session
+tmux attach -t dev
+
+# Detach session (Inside tmux)
+Ctrl+b d
+
+# Close window (Inside tmux)
+Ctrl+d
+
+# Kill session
+tmux kill-session -t dev
+```
+
+### Window Operations (Inside tmux)
+
+| Shortcut | Function |
+|--------|------|
+| `Ctrl+b c` | New Window |
+| `Ctrl+b n` | Next Window |
+| `Ctrl+b p` | Previous Window |
+| `Ctrl+b %` | Vertical Split |
+| `Ctrl+b "` | Horizontal Split |
+| `Ctrl+b Arrow` | Switch Panel |
+
+### Set Container Scrolling
+
+Write to tmux config file
+
+Edit:
+
+```
+~/.tmux.conf
+```
+
+Add a line:
+
+```shell
+echo 'set -g mouse on' | tee -a ~/.tmux.conf
+echo 'bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "clip.exe"' | tee -a ~/.tmux.conf
+```
+
+
+
+### Use with OpenCode
+
+```shell
+# Create dev session and start opencode server in it
+tmux new -s dev -d 'opencode serve --hostname 0.0.0.0 --port 4096'
+
+# Attach to view
+tmux attach -t dev
+```

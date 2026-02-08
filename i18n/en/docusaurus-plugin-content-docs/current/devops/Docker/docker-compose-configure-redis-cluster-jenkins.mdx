@@ -1,0 +1,330 @@
+---
+id: docker-compose-configure-redis-cluster-jenkins
+title: Docker Compose Usage
+sidebar_label: Docker Compose Usage
+sidebar_position: 10
+description: '[reference article from here][docker compose redis cluster] > remember
+  to replace the ip 192.168.3.163 to your real ip address'
+tags:
+- containerization
+- devops
+- docker
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- docker-command-and-dockerfile
+---
+## Build Redis Cluster
+
+[Reference Article][docker compose redis cluster]
+
+### Write Redis Configuration File
+
+> Remember to replace IP 192.168.3.163 with your real IP address
+
+```shell script
+cd /docker/redis
+
+tee redis-cluster.tmpl <<- 'EOF'
+# redis port
+port ${PORT}
+# Turn off protected mode
+protected-mode no
+# Enable cluster
+cluster-enabled yes
+# Cluster node config
+cluster-config-file nodes.conf
+# Timeout
+cluster-node-timeout 5000
+# Cluster node IP host mode is host machine IP
+cluster-announce-ip 192.168.3.163
+# Cluster node port 7001 - 7006
+cluster-announce-port ${PORT}
+cluster-announce-bus-port 1${PORT}
+# Enable appendonly backup mode
+appendonly yes
+# Backup every second
+appendfsync everysec
+# When compressing aof file, whether to perform sync operation
+no-appendfsync-on-rewrite no
+# When current aof file size exceeds 100% of aof file size at last rewrite, rewrite again
+auto-aof-rewrite-percentage 100
+# Min size of AOF file before rewrite default 64mb
+auto-aof-rewrite-min-size 64mb
+EOF
+```
+
+### Script to Create Multiple Nodes
+
+```shell script
+tee redis-cluster-config.sh <<- 'EOF'
+for port in `seq 7001 7006`; do \
+  mkdir -p ./redis-cluster/${port}/conf \
+  && PORT=${port} envsubst < ./redis-cluster.tmpl > ./redis-cluster/${port}/conf/redis.conf \
+  && mkdir -p ./redis-cluster/${port}/data; \
+  done
+EOF
+chmod 777 redis-cluster-config.sh
+./redis-cluster-config.sh
+
+```
+
+
+### Create docker-compose File 
+
+```shell script
+tee docker-compose.yml <<- 'EOF'
+
+version: '3.7'
+
+services:
+  redis7001:
+    image: 'redis'
+    container_name: redis7001
+    command:
+      ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    volumes:
+      - ./redis-cluster/7001/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis-cluster/7001/data:/data
+    ports:
+      - "7001:7001"
+      - "17001:17001"
+    environment:
+      # Set timezone to Shanghai, otherwise time will be wrong
+      - TZ=Asia/Shanghai
+
+
+  redis7002:
+    image: 'redis'
+    container_name: redis7002
+    command:
+      ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    volumes:
+      - ./redis-cluster/7002/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis-cluster/7002/data:/data
+    ports:
+      - "7002:7002"
+      - "17002:17002"
+    environment:
+      # Set timezone to Shanghai, otherwise time will be wrong
+      - TZ=Asia/Shanghai
+
+
+  redis7003:
+    image: 'redis'
+    container_name: redis7003
+    command:
+      ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    volumes:
+      - ./redis-cluster/7003/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis-cluster/7003/data:/data
+    ports:
+      - "7003:7003"
+      - "17003:17003"
+    environment:
+      # Set timezone to Shanghai, otherwise time will be wrong
+      - TZ=Asia/Shanghai
+
+
+  redis7004:
+    image: 'redis'
+    container_name: redis7004
+    command:
+      ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    volumes:
+      - ./redis-cluster/7004/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis-cluster/7004/data:/data
+    ports:
+      - "7004:7004"
+      - "17004:17004"
+    environment:
+      # Set timezone to Shanghai, otherwise time will be wrong
+      - TZ=Asia/Shanghai
+
+
+  redis7005:
+    image: 'redis'
+    container_name: redis7005
+    command:
+      ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    volumes:
+      - ./redis-cluster/7005/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis-cluster/7005/data:/data
+    ports:
+      - "7005:7005"
+      - "17005:17005"
+    environment:
+      # Set timezone to Shanghai, otherwise time will be wrong
+      - TZ=Asia/Shanghai
+
+
+  redis7006:
+    image: 'redis'
+    container_name: redis7006
+    command:
+      ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    volumes:
+      - ./redis-cluster/7006/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis-cluster/7006/data:/data
+    ports:
+      - "7006:7006"
+      - "17006:17006"
+    environment:
+      # Set timezone to Shanghai, otherwise time will be wrong
+      - TZ=Asia/Shanghai
+EOF
+```
+
+### Start Redis Cluster
+
+`docker-compose -f docker-compose-redis-cluster.yml up`
+
+
+
+Stop and delete network rediscluster_default using following command
+
+`docker-compose -f docker-compose-redis-cluster.yml down`
+
+`docker-compose -f docker-compose-redis-cluster.yml stop`
+
+### Allocate Slots
+
+```shell
+docker exec -it redis7001 redis-cli -p 7001 --cluster create 192.168.3.163:7001 192.168.3.163:7002 192.168.3.163:7003 192.168.3.163:7004 192.168.3.163:7005 192.168.3.163:7006 --cluster-replicas 1
+```
+
+
+
+If slots are not allocated, here are some solutions:
+
+[solve slots not served][slots not served]
+
+
+### Connect to Redis
+
+`docker exec -it redis7001 redis-cli -p 7001`
+
+[docker compose redis cluster]: https://www.cnblogs.com/zhangrui153169/p/12835681.html
+
+[slots not served]: https://blog.csdn.net/one312/article/details/104983140
+
+## Jenkins in Docker Compose
+
+[This article references][docker compose jenkins]
+
+### docker-compose Configuration
+
+```
+tee docker-compose-jenkins.yml <<- 'EOF'
+# docker-compose.yml
+version: '3.7'
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    privileged: true
+    user: root
+    ports:
+      - 8083:8080
+      - 50003:50000
+    container_name: my-jenkins-3
+    volumes:
+      - ~/data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+EOF
+```
+
+### Run docker compose
+
+`docker-compose -f docker-compose-jenkins.yml up -d`
+
+### Get Initial Admin Password
+
+`docker exec my-jenkins-3 cat /var/jenkins_home/secrets/initialAdminPassword`
+
+[docker compose jenkins]: https://adamtheautomator.com/jenkins-docker/#Running_Jenkins_in_Docker
+
+> If reprinting, must not delete original address, must not delete address of others' blogs cited in text.
+> [Reference Blog redis cluster build][docker compose redis cluster]
+> [Reference Blog slots not served][slots not served]
+
+### Configure IDEA Project-Docker
+
+```yml
+version: '3.7'
+services:
+  ideau:
+    image: 'jetbrains/projector-idea-u:2020.2-projector-v1.7.0'
+    container_name: ideau
+    volumes:
+      - /project:/home/projector-user
+      
+    ports:
+      - "8887:8887"
+    environment:
+      # Set timezone to Shanghai, otherwise time will be wrong
+      - TZ=Asia/Shanghai
+```
+
+### MySQL Docker Compose
+
+```shell
+mkdir -p /dockerlearn/docker-compose/mysql/{mydir,datadir,conf,source}
+```
+
+```json
+tee my.cnf <<- 'EOF'
+[mysqld]
+skip_ssl
+user=mysql
+default-storage-engine=INNODB
+character-set-server=utf8
+character-set-client-handshake=FALSE
+collation-server=utf8_unicode_ci
+init_connect='SET NAMES utf8'
+[client]
+default-character-set=utf8
+[mysql]
+default-character-set=utf8
+EOF
+```
+
+
+
+```yml
+tee docker-compose.yml <<- 'EOF'
+version: '3'
+services:
+  mysql:
+    restart: always
+    image: mysql:latest
+    container_name: ai-dream
+    volumes:
+      - /dockerlearn/docker-compose/mysql/mydir:/mydir
+      - /dockerlearn/docker-compose/mysql/datadir:/var/lib/mysql
+      - /dockerlearn/docker-compose/mysql/conf/my.cnf:/etc/my.cnf
+      # Database restore directory can place sql files that need to be restored here
+      - /apps/mysql/source:/docker-entrypoint-initdb.d
+    environment:
+      - "MYSQL_ROOT_PASSWORD=root"
+      - "MYSQL_DATABASE=ai-dream"
+      - "TZ=Asia/Shanghai"
+    ports:
+      # Use host's 3306 port mapped to container's 3306 port
+      # host: container
+      - 3306:3306
+EOF
+```
+
+[Solution to Error: Public Key Retrieval is not allowed when connecting to MySQL](https://www.cnblogs.com/zengyu1234/p/16843338.html)
+
+Solution: Connection settings - Driver properties - allowPublicKeyRetrieval=false (Transport public key retrieval is disabled by default here, need to enable it), change to allowPublicKeyRetrieval=true.
+
+
+
+## Redis Sentinel
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

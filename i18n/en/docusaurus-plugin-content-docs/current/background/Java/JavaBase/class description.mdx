@@ -1,0 +1,72 @@
+---
+id: class-description
+title: Java Class Description
+sidebar_label: Java Class Description
+sidebar_position: 10
+description: "Overloading: Same class, same method name, other parts different Overriding: Parent-child class, same method name, (same name, two small, one big) same parameter list, return value, exception type, modifier"
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+# Java Class Description
+
+## Overloading and Overriding
+
+Overloading: Same class, same method name, other parts different
+
+Overriding: Parent-child class, same method name, (same name, two small, one big) same parameter list, return value, exception type, modifier
+
+## Interface and Abstract Class
+
+| Feature | Abstract Class | Interface |
+| --- | --- | --- |
+| **Inheritance** | Can only inherit one abstract class | Can implement multiple interfaces |
+| **Method Implementation** | Can have implemented methods and abstract methods | Methods are abstract by default, can have default methods and static methods |
+| **Member Variables** | Can have instance variables and static variables | Can only have constants (`public static final`) |
+| **Constructors** | Can have constructors | Cannot have constructors |
+| **Access Modifiers** | Can have multiple access modifiers | Methods are `public` by default *（Java 9 introduced private)* |
+| **Usage Scenarios** | Suitable for sharing code, providing basic implementation | Suitable for expressing behavioral specifications, supporting multiple implementations |
+
+- Code from: https://www.cnblogs.com/zimug/p/13806592.html
+
+<details>
+<summary>Java 8 Interface New Features</summary>
+```java title="CustomInterface.java"
+
+interface CustomInterface {
+
+    void abstractMethod();  //Abstract methods cannot be private
+
+    static void staticMethod() {
+        privateStaticMethod(); //public static method can call private static method
+        System.out.println("Static method called");
+    }
+
+    default void defaultMethod() {
+        privateMethod(); //Can call private method in interface
+        privateStaticMethod(); //Can call private static method in interface
+        System.out.println("Normal method called");
+    }
+
+    // this only can use java 9 or later version
+    private void privateMethod() {
+        System.out.println("private method called");
+    }
+
+    // this only can use java 9 or later version
+    private static void privateStaticMethod() {
+        System.out.println("private static method called");
+    }
+}
+```
+</details>
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

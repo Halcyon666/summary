@@ -1,0 +1,159 @@
+---
+id: intro
+title: Introduction
+sidebar_label: Introduction
+sidebar_position: 1
+description: Overview of the documentation structure and contents
+tags:
+  - documentation
+  - getting-started
+  - introduction
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+references: []
+---
+# Introduction
+
+## Blog Usage Guide
+
+### React Component Live Code
+
+```jsx live
+function Clock(props) {
+  const [date, setDate] = useState(new Date());
+  useEffect(() => {
+    const timerID = setInterval(() => tick(), 1000);
+
+    return function cleanup() {
+      clearInterval(timerID);
+    };
+  });
+
+  function tick() {
+    setDate(new Date());
+  }
+
+  return (
+    <div>
+      <h2>It is {date.toLocaleTimeString()}.</h2>
+    </div>
+  );
+}
+```
+
+### Tabs/TabItem Component for Multi-tab Content
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+<Tabs>
+  <TabItem value="java" label="Java">
+    ```java System.out.println("Hello, Java!"); ```
+  </TabItem>
+  <TabItem value="python" label="Python">
+    ```python print("Hello, Python!") ```
+  </TabItem>
+</Tabs>
+
+### CodeBlock Highlighting
+
+import CodeBlock from "@theme/CodeBlock";
+
+<CodeBlock language="js" title="hello.js">
+  {`console.log("Hello, world!");`}
+</CodeBlock>
+ 
+### Details Collapsible Content
+
+<details>
+  <summary>Click to expand details</summary>
+  <div>Here is collapsible content, you can put more instructions or code here.</div>
+</details>
+
+### Page Declaration
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />
+
+### Support Background Highlight, Font Color
+
+import MyHighlight from "@site/src/components/MyHighLight";
+
+<MyHighlight color="white" background="red">White text on red background</MyHighlight>
+
+### Admonitions Supported in MDX
+
+:::note
+Note content
+:::
+
+:::tip
+Tip content
+:::
+
+:::info
+Info content
+:::
+
+:::warning
+Warning content
+:::
+
+:::danger
+Danger warning content
+:::
+
+:::caution
+Caution content
+:::
+
+### Magic in Code Blocks
+
+- `title="HelloWorld.java"` 
+- `showLineNumbers`
+- `{3}` Highlight only line 3
+- `highlight-next-line` Highlight next line
+- `highlight-start` Highlight start `highlight-end` Highlight end
+
+```java title="HelloWorld.java" showLineNumbers
+public class HelloWorld {
+    public static void main(String[] args) {
+        // highlight-next-line
+        String s = "Hello World!";
+        // highlight-start
+        System.out.println(s);
+        System.out.println(s);
+        // highlight-end
+    }
+}
+```
+
+```java showLineNumbers {3}
+public class HelloWorld {
+    public static void main(String[] args) {
+        String s = "Hello World!";
+    }
+}
+```
+
+### Math Formulas
+
+[Home Documentation](https://www.latex-project.org/help/documentation/)
+
+[LaTeX Syntax Documentation](https://www.latex-project.org/help/documentation/amsldoc.pdf)
+
+This is an inline formula $E=mc^2$.
+
+$$
+I = \int_0^{2\pi} \sin(x)\,dx
+$$
+
+$$
+A^{-1} = \frac{1}{ad - bc}
+\begin{bmatrix}
+d & -b \\
+-c & a
+\end{bmatrix}
+$$

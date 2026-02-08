@@ -1,0 +1,290 @@
+---
+id: bean-creating-process
+title: Bean Creation Process
+sidebar_label: Bean Creation Process
+sidebar_position: 10
+description: Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) for code related to this article (from official source spring-test module)
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) under `org.springframework.mylearntest` package for code related to this article (from [official source](https://github.com/spring-projects/spring-framework.git "official source") spring-test module).
+
+After the container starts, it will not instantiate corresponding bean definitions immediately. We know that the container now only possesses BeanDefinitions of all objects to save necessary information to be used in instantiation stage. Only when requester requests an object instance via BeanFactory's `getBean()` method, it is possible to trigger Bean instantiation stage activities. BeanFactory's `getBean()` method can be explicitly called by client object, or implicitly called inside container. Implicit calling has two situations.
+
+For BeanFactory, object instantiation defaults to using lazy initialization. Usually, when object A is requested and needs to be instantiated for the first time, if object B it depends on has not been instantiated before either, then container will first instantiate object B that object A depends on. At this time, container internally will first instantiate object B, as well as other not yet instantiated objects that object A depends on. This situation is container internal calling `getBean()`, which is implicit for requester of this request.
+
+After ApplicationContext starts, it will instantiate all bean definitions, this feature has been mentioned many times in this book. But ApplicationContext implementation still follows two stages of Spring container implementation process, just that it will call `getBean()` instantiation method for all bean registered definitions immediately after startup stage activities are completed. This is why when you get ApplicationContext type container reference, all objects in container have been fully instantiated. If you don't believe it, check `org.AbstractApplicationContext`'s `refresh()` method.
+
+![](https://s2.loli.net/2023/07/15/wGtkiR4ULcpFfQj.png)
+
+## Bean Instantiation and BeanWrapper
+
+### Get BeanWrapper
+
+* When container is implemented internally, it uses "Strategy Pattern" to decide which way to initialize bean instance. Usually, corresponding bean instance can be initialized or its subclass can be dynamically generated via reflection or CGLIB dynamic bytecode generation. `org.springframework.beans.factory.support.InstantiationStrategy` definition is abstract interface for instantiation strategy, its direct subclass SimpleInstantiationStrategy implements simple object instantiation function, can instantiate object instance via reflection, but does not support method injection type object instantiation.
+* CglibSubclassingInstantiationStrategy inherits SimpleInstantiationStrategy's reflection-based object instantiation function, and via CGLIB dynamic bytecode generation function, this strategy implementation class can dynamically generate subclass of a certain class, thereby meeting object instantiation requirements needed by method injection. By default, container internally uses CglibSubclassingInstantiationStrategy.
+* Container only needs to get instantiation information based on corresponding bean definition's BeanDefintion, combine with CglibSubclassingInstantiationStrategy and different bean definition types, then can return instantiated object instance. However, there are some "decorations" on return method. Instead of directly returning constructed object instance, it wraps constructed object instance with BeanWrapper, returning corresponding BeanWrapper instance.
+
+### Set Bean Corresponding Properties
+
+* BeanWrapper interface is usually used internally in Spring framework, it has an implementation class `org.springframework.beans.BeanWrapperImpl`. Its function is to "wrap" a certain bean, then operate on this "wrapped" bean, such as setting or getting corresponding property values of bean. And returning BeanWrapper instance instead of original object instance after first step is exactly for second step "set object properties".
+* BeanWrapper definition inherits `org.springframework.beans.PropertyAccessor` interface, can access object properties in a unified way; BeanWrapper definition simultaneously directly or indirectly inherits PropertyEditorRegistry and TypeConverter interfaces. Do you still remember CustomEditorConfigurer? When registering various PropertyEditors to container, do you know who uses these PropertyEditors later? Yes, it is BeanWrapper! After constructing object in first step, Spring will construct a BeanWrapperImpl instance based on object instance, then copy a copy of PropertyEditors registered by CustomEditorConfigurer previously to BeanWrapperImpl instance (this is why BeanWrapper is also PropertyEditorRegistry). In this way, when BeanWrapper converts types, sets object property values, it will not be at a loss.
+
+![image-20230722171819091](https://s2.loli.net/2023/07/22/Bm7DhsKjL9uAY2v.png)
+
+<details>
+	<summary>Use BeanWrapper to operate object</summary>
+
+```java
+Object provider = Class.forName("package.name.FXNewsProvider").newInstance(); 
+Object listener = Class.forName("package.name.DowJonesNewsListener").newInstance();
+Object persister = Class.forName("package.name.DowJonesNewsPersister").newInstance();
+BeanWrapper newsProvider = new BeanWrapperImpl(provider); 
+newsProvider.setPropertyValue("newsListener", listener);
+newsProvider.setPropertyValue("newPersistener", persister);
+
+assertTrue(newsProvider.getWrappedInstance() instanceof FXNewsProvider);
+assertSame(provider, newsProvider.getWrappedInstance());
+assertSame(listener, newsProvider.getPropertyValue("newsListener"));
+assertSame(persister, newsProvider.getPropertyValue("newPersistener"));
+```
+</details>
+
+<details>
+	<summary>Use Java Reflection API to operate object</summary>
+
+```java
+Object provider = Class.forName("package.name.FXNewsProvider").newInstance();
+Object listener = Class.forName("package.name.DowJonesNewsListener").newInstance();
+Object persister = Class.forName("package.name.DowJonesNewsPersister").newInstance();
+
+Class providerClazz = provider.getClass();
+Field listenerField = providerClazz.getField("newsListener");
+listenerField.set(provider, listener);
+Field persisterField = providerClazz.getField("newsListener");
+persisterField.set(provider, persister);
+assertSame(listener, listenerField.get(provider));
+assertSame(persister, persisterField.get(provider));
+```
+</details>
+
+### Various Aware Interfaces
+
+When object instantiation is completed and related properties and dependencies setting are completed, Spring container will check whether current object instance implements a series of interface definitions ending with Aware naming. If so, dependencies specified in these Aware interface definitions will be injected into current object instance. These Aware interfaces are as follows.
+For BeanFactory container
+
+* org.springframework.beans.factory.BeanNameAware. If Spring container detects that current object instance implements this interface, it will set beanName corresponding to bean definition of this object instance into current object instance.
+* org.springframework.beans.factory.BeanClassLoaderAware. If container detects that current object instance implements this interface, it will inject Classloader corresponding to loading current bean into current object instance. By default, Classloader loading org.springframework.util.ClassUtils class will be used.
+* org.springframework.beans.factory.BeanFactoryAware. When introducing method injection, we mentioned using this interface to get different instances of prototype type bean each time. If object declares implementing BeanFactoryAware interface, BeanFactory container will set itself into current object instance. In this way, current object instance has a reference to BeanFactory container, and can access objects allowed in this container as needed.
+
+* org.springframework.context.ResourceLoaderAware. ApplicationContext implements Spring's ResourceLoader interface (detailed information will be mentioned later). When container detects that current object instance implements ResourceLoaderAware interface, it will set current ApplicationContext itself into object instance, thus current object instance possesses a reference to its ApplicationContext container.
+* org.springframework.context.ApplicationEventPublisherAware. As a container, ApplicationContext also implements ApplicationEventPublisher interface, so it can be used as ApplicationEventPublisher. Therefore, if current ApplicationContext container detects that currently instantiated object instance declares ApplicationEventPublisherAware interface, it will inject itself into current object.
+* org.springframework.context.MessageSourceAware. ApplicationContext provides internationalization information support via MessageSource interface, i.e., I18n (Internationalization). It implements MessageSource interface itself, so when detecting that current object instance implements MessageSourceAware interface, it will inject itself into current object instance.
+* org.springframework.context.ApplicationContextAware. If ApplicationContext container detects that current object implements ApplicationContextAware interface, it will inject itself into current object instance.
+
+### BeanPostProcessor
+
+>  BeanPostProcessor **Just remember BeanPostProcessor exists in object instantiation stage, while BeanFactoryPostProcessor exists in container startup stage.**
+
+<details>
+	<summary>BeanPostProcessor</summary>
+
+```java
+package org.springframework.beans.factory.config;
+
+import org.springframework.beans.BeansException;
+import org.springframework.lang.Nullable;
+
+public interface BeanPostProcessor {
+
+    @Nullable
+    default Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        return bean;
+    }
+
+    @Nullable
+    default Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        return bean;
+    }
+
+}
+```
+
+</details>
+
+#### Custom BeanPostProcessor
+
+Assuming all IFXNewsListener implementation classes in system need to get corresponding server connection password from a certain location, and passwords saved in system are encrypted, then when IFXNewsListener sends this password to news server for connection verification, it first needs to decrypt password obtained from system, then can send.
+
+1. Mark implementation classes needing decryption
+
+In order to identify those IFXNewsListener implementations that need to decrypt server connection password, we declared interface PasswordDecodable, and require related IFXNewsListener implementation classes to implement this interface.
+
+<details>
+	<summary>PasswordDecpdeable</summary>
+
+```java
+package org.springframework.mylearntest.beanpostprocessor;
+
+public interface PasswordDecodable {
+    String getEncodedPassword();
+    void setDecodedPassword(String password);
+}
+```
+
+</details> 
+
+<details>
+	<summary>DowJonesNewsListener</summary>
+
+```java
+package org.springframework.mylearntest.beanpostprocessor;
+
+import org.springframework.mylearntest.directcode.FXNewsBean;
+import org.springframework.mylearntest.directcode.IFXNewsListener;
+
+public class DowJonesNewsListener implements IFXNewsListener,PasswordDecodable {
+    private String password;
+    public String[] getAvailableNewsIds() {
+        // Omitted
+        return new String[0];
+    }
+    public FXNewsBean getNewsByPK(String newsId) {
+        // Omitted
+        return null;
+    }
+    public void postProcessIfNecessary(String newsId) {
+        // Omitted
+    }
+    public String getEncodedPassword() {
+        return this.password;
+    }
+    public void setDecodedPassword(String password) {
+        this.password = password;
+    }
+}
+```
+
+</details>
+
+2. Implement corresponding BeanPostProcessor to process eligible Bean instances
+
+We distinguish object instances to be processed through PasswordDecodable interface declaration, when checking that current object instance implements this interface, it will get encrypted password from current object instance, and decrypt it. Then set decrypted password back to current object instance.
+
+<details>
+	<summary>PasswordDecodePostProcessor</summary>
+
+```java
+package org.springframework.mylearntest.beanpostprocessor;
+
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+
+public class PasswordDecodePostProcessor implements BeanPostProcessor {
+    public Object postProcessAfterInitialization(Object object, String beanName)
+            throws BeansException {
+        return object;
+    }
+    public Object postProcessBeforeInitialization(Object object, String beanName)
+            throws BeansException {
+        if(object instanceof PasswordDecodable){
+            String encodedPassword = ((PasswordDecodable)object).getEncodedPassword();
+            String decodedPassword = decodePassword(encodedPassword);
+            ((PasswordDecodable)object).setDecodedPassword(decodedPassword);
+        }
+        return object;
+    }
+    private String decodePassword(String encodedPassword) {
+        // Implement decoding logic
+        encodedPassword = encodedPassword + "2mingwen";
+        return encodedPassword;
+    }
+}
+```
+
+</details>
+
+3. Register custom BeanPostProcessor to container
+
+<details>
+	<summary>XML Configuration</summary>
+
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       xmlns:aop="http://www.springframework.org/schema/aop">
+    <bean id="dowJonesNewsListener" class="org.springframework.mylearntest.beanpostprocessor.DowJonesNewsListener">
+        <property name="decodedPassword" value="123sjfg@LL"></property>
+    </bean>
+
+    <bean id="passwordDecodePostProcessor" class="org.springframework.mylearntest.beanpostprocessor.PasswordDecodePostProcessor">
+    </bean>
+</beans>
+```
+
+</details>
+
+4. Test Class
+
+<details>
+	<summary>Test4BeanPostProcessor</summary>
+
+```java
+package org.springframework.mylearntest.beanpostprocessor;
+  
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test4BeanPostProcessor {
+    public static void main(String[] args) {
+        ApplicationContext beanFactory = new ClassPathXmlApplicationContext("beanpostprocessor/beanpostprocessor.xml");
+        DowJonesNewsListener dowJonesNewsListener = (DowJonesNewsListener) beanFactory.getBean("dowJonesNewsListener");
+        String encodedPassword = dowJonesNewsListener.getEncodedPassword();
+        System.out.println("encodedPassword = " + encodedPassword);// encodedPassword = 123sjfg@LL2mingwen
+    }
+}
+```
+
+</details>
+
+> Actually, there is a special type of BeanPostProcessor we haven't mentioned, its execution timing is different from usual BeanPostProcessor. `org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor` interface can cause some effect similar to circuit "short circuit" during object instantiation process. In fact, not all bean definitions registered in Spring container are instantiated according to process in Figure 4-10. Before all steps, that is, before step of instantiating bean object, container will first check if there are BeanPostProcessors of InstantiationAwareBeanPostProcessor type registered in container.
+>
+> ***If so, first use corresponding InstantiationAwareBeanPostProcessor to construct object instance. After successful construction, directly return constructed object instance, instead of continuing execution according to "normal process". This is reason why it may cause "short circuit".***
+
+### InitializingBean and init-method
+
+`org.springframework.beans.factory.InitializingBean` is an object lifecycle marker interface widely used inside container.
+
+<details>
+	<summary>InitializingBean</summary>
+
+```java
+public interface InitializingBean {
+	void afterPropertiesSet() throws Exception;
+}
+```
+
+</details>
+
+Its function is, after calling "BeanPostProcessor pre-processing" during object instantiation process, will continue to detect if current object implements InitializingBean interface, if so, will call its afterPropertiesSet() method to further adjust object instance state. For example, in some cases, after a certain business object is instantiated, it cannot be in usable state yet. At this time, we can let this business object implement this interface, and complete subsequent processing of this business object in method afterPropertiesSet().
+
+If system development process regulates: custom initialization operations of all business objects must be named init(), to save trouble of setting init-method for each `<bean>`, we can also uniformly specify this init() method name via default-init-method of top-level `<beans>`.
+
+> References
+>
+> 1. Book Name: Spring Unveiled Author: Wang Fuqiang
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

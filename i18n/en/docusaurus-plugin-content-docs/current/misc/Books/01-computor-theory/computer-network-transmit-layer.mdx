@@ -1,0 +1,142 @@
+---
+id: computer-network-transmit-layer
+title: Computer Network - Transport Layer
+sidebar_label: Transport Layer
+sidebar_position: 10
+description: UDP Multiplexing/Demultiplexing using 2-tuple (D-IP, D-Port). TCP Multiplexing/Demultiplexing using 4-tuple. Rdt2.0 FSM.
+tags:
+- books
+- learning
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- command-usage
+---
+# Computer Network - Transport Layer
+
+## Multiplexing/Demultiplexing (Transport Layer)
+
+![20250920191454](https://s2.loli.net/2025/09/20/nlXfId69z8ekqYO.png)
+
+`UDP` Multiplexing/Demultiplexing: Uses 2-tuple (D-IP, D-Port)
+
+![20250920191512](https://s2.loli.net/2025/09/20/GZKfc1owT9U6bBC.png)
+
+`TCP` Multiplexing/Demultiplexing: Uses 4-tuple (S-IP, S-Port, D-IP, D-Port)
+
+![20250920191531](https://s2.loli.net/2025/09/20/biTfZXmRq1CMh3z.png)
+
+## Rdt2.0 FSM (Finite State Machine) Specification
+
+> Bit errors may occur: 0 becomes 1, 1 becomes 0
+> 
+
+![20250920191554](https://s2.loli.net/2025/09/20/XESGxKRD9Le7sO1.png)
+
+**Sender handles corrupted ACK, NAK packets**
+
+rdt2.1 adds sequence number to ensure messages are not processed repeatedly
+
+![20250920191611](https://s2.loli.net/2025/09/20/wVujiqHrAoKlZyS.png)
+
+When `ACK` received, process next message, seq + 1.
+
+**Receiver handles corrupted ACK, NAK packets**
+
+![20250920191649](https://s2.loli.net/2025/09/20/v2synfHgBto9jUk.png)
+
+rdt2.2 removes NAK
+
+Receiver resends previous ACK and sequence number when message processing fails
+
+![20250920191709](https://s2.loli.net/2025/09/20/a68wN7HCDAvQpLT.png)
+
+rdt3.0 Packets may be lost
+
+![20250920191726](https://s2.loli.net/2025/09/20/WwJnzN3ut8TvXEm.png)
+
+![20250920191747](https://s2.loli.net/2025/09/20/PNIFQGvnqsxlJ2o.png)
+
+![20250920191802](https://s2.loli.net/2025/09/20/XgrnjAFJk9EoVSU.png)
+
+![20250920191947](https://s2.loli.net/2025/09/20/59P1BjMzNaqVZhs.png)
+
+## Go-Back-N
+
+![20250920192003](https://s2.loli.net/2025/09/20/KzHhDan7fcki3WP.png)
+
+## Selective Repeat
+
+![20250920192018](https://s2.loli.net/2025/09/20/Oprog1tvG7zXceS.png)
+
+![20250920192043](https://s2.loli.net/2025/09/20/4JexPzGNVmcOpBD.png)
+
+### Correct Mathematical Constraint Relationship
+
+> 2^k ≥ 2N
+> 
+> 
+> That is:
+> 
+> ```
+> 
+> Ns + Nr ≤ 2^k / 2 = N_max
+> 
+> 2N ≤ 2^k
+> N ≤ 2^(k-1)
+> ```
+> 
+> Where:
+> 
+> - `k`: Number of bits for sequence number
+> - `2^k`: Sequence number space size
+> - `N`: Sender window size (Sender and Receiver windows are generally equal)
+> - `Ns`: Sender window size
+> - `Nr`: Receiver window size (In SR, often set `Ns = Nr = N`)
+> 
+
+| k (Seq bits) | Sequence Number Space (2^k) | Max Window Size (N ≤) |
+| --- | --- | --- |
+| 3 | 8 | 4 |
+| 4 | 16 | 8 |
+| 5 | 32 | 16 |
+
+## TCP Structure
+
+![20250920192058](https://s2.loli.net/2025/09/20/8GDRBbfoi6qgE17.png)
+
+![20250920192127](https://s2.loli.net/2025/09/20/FXeci54zt91joKZ.png)
+
+- Represents: Host A sent data `'C'`, which is its 42nd byte.
+- Also ACK = 79: It tells B: "I have received your data up to byte 78, the next one I want is byte 79."
+- B sent data byte number 79 (This is byte number in B's sending direction)
+- ACK = 43: B tells A: "I received your 42nd byte ('C'), now I am waiting for the 43rd byte."
+- Host A's next byte is 43 (It finished previous 42)
+- Its ACK = 80, indicates it received byte 79 from B, next byte is 80.
+
+## TCP Connection Establishment and Termination
+
+Connection Establishment
+
+![20250920192158](https://s2.loli.net/2025/09/20/b7jnoeawMxcTlYQ.png)
+
+Connection Termination
+
+![20250920192549](https://s2.loli.net/2025/09/20/7LMl9NgQmuAoqSp.png)
+
+![20250920192558](https://s2.loli.net/2025/09/20/o2IYexb3vnMQKqd.png)
+
+![20250920192610](https://s2.loli.net/2025/09/20/8PebymMl1HNqwR7.png)
+
+
+**All content comes from sources, course copyright reserved. Document is for learning use only.**
+
+**If there is any infringement, contact `whalefallcl@icloud.com`**
+
+**https://www.icourse163.org/learn/HIT-154005?tid=1474180488#/learn/announce**
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

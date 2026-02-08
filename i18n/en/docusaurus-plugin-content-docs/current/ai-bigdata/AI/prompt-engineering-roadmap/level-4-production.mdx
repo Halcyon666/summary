@@ -1,0 +1,306 @@
+---
+id: level-4-production
+title: Level 4 - Full Stack Landing & Production Optimization
+sidebar_label: Level 4 - Full Stack Landing
+sidebar_position: 5
+description: Complete Frontend & Backend Full Stack Delivery, Master Model Fine-tuning, Establish Production-grade LLMOps System
+tags:
+- ai
+- production
+- fine-tuning
+- level-4
+sources:
+- overview
+- level-3-agent
+references:
+- summary
+- career
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+---
+
+# Phase 4: Full Stack Landing & Production Optimization (Level 4)
+
+**Cycle**: Weeks 9-12
+**Core Goal**: Complete Frontend & Backend Full Stack Delivery, Master Model Fine-tuning, Establish Production-grade LLMOps System
+
+## Prerequisite Capabilities
+
+- ✅ Mastered Agent Architecture (Level 3)
+- ✅ Established Observability and Audit Capability
+- ✅ Implemented Complete Java-Python Communication
+
+## Why this phase is needed
+
+First three phases solved "AI Capability" problems, but enterprise applications also need "Engineering Capability": Frontend Delivery, Model Optimization, Production Deployment, Monitoring & Ops. This phase upgrades you from "Making Demo" to "Going to Production".
+
+## Core Capability 1: Frontend Application Delivery
+
+### Tool Selection Strategy
+
+- **Streamlit**: For internal AI debugging tools (Fast prototype, no need for complex UI)
+- **React**: For actual end-user products (Professional UI, Good UX)
+
+### React + FastAPI Full Stack Practice
+
+**⭐ Frontend: Streaming Output + Markdown Rendering**
+
+```typescript
+// React Component: Chat Interface
+import { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+
+function ChatInterface() {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState('');
+  const [streaming, setStreaming] = useState(false);
+
+  const sendMessage = async () => {
+    setStreaming(true);
+    
+    // Call FastAPI Streaming Interface
+    const response = await fetch('/api/agent/stream', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question: input })
+    });
+
+    const reader = response.body.getReader();
+    let currentMessage = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      const chunk = new TextDecoder().decode(value);
+      currentMessage += chunk;
+      
+      // Update UI in real-time
+      setMessages(prev => [...prev.slice(0, -1), { role: 'assistant', content: currentMessage }]);
+    }
+
+    setStreaming(false);
+  };
+
+  return (
+    <div className="chat-container">
+      {messages.map((msg, idx) => (
+        <div key={idx} className={`message ${msg.role}`}>
+          <ReactMarkdown>{msg.content}</ReactMarkdown>
+        </div>
+      ))}
+      <input value={input} onChange={e => setInput(e.target.value)} />
+      <button onClick={sendMessage} disabled={streaming}>Send</button>
+    </div>
+  );
+}
+```
+
+**Backend: FastAPI Streaming Output**
+
+```python
+from fastapi import FastAPI
+from fastapi.responses import StreamingResponse
+
+app = FastAPI()
+
+@app.post("/api/agent/stream")
+async def stream_agent_response(request: AgentRequest):
+    async def generate():
+        # Run Agent, generate answer step by step
+        for chunk in agent_app.stream({"question": request.question}):
+            yield chunk["content"]
+    
+    return StreamingResponse(generate(), media_type="text/plain")
+```
+
+## Core Capability 2: Model Fine-tuning
+
+### When Fine-tuning is Needed
+
+When Prompt Engineering cannot satisfy requirements:
+- Require specific output format (e.g. Strict JSON Schema)
+- Require domain expertise (e.g. Medical, Legal terms)
+- Require specific writing style (e.g. Code comment style)
+
+### Tech Stack
+
+- **LoRA / QLoRA**: Parameter-Efficient Fine-Tuning, only train small amount of parameters
+- ⭐ **LLaMA-Factory**: Recommended, provides Web UI, simplifies fine-tuning process
+- **HuggingFace PEFT**: Code-level control, suitable for advanced users
+
+### Practical Task: Fine-tune Qwen 2.5 to Write Java Code Comments
+
+**1. Prepare Training Data** (At least 100 samples):
+
+```json
+[
+  {
+    "instruction": "Add Javadoc comments for the following Java method",
+    "input": "public User findById(Long id) { return userRepository.findById(id).orElse(null); }",
+    "output": "/**\n * Query user info by user ID\n * @param id User ID\n * @return User object, return null if not exists\n */\npublic User findById(Long id) { return userRepository.findById(id).orElse(null); }"
+  }
+]
+```
+
+**2. Fine-tune using LLaMA-Factory**:
+
+```bash
+# Start LLaMA-Factory Web UI
+llamafactory-cli webui
+
+# Or use command line
+llamafactory-cli train \
+  --model_name_or_path Qwen/Qwen2.5-7B \
+  --dataset java_comments \
+  --finetuning_type lora \
+  --output_dir ./output/qwen-java-comments \
+  --num_train_epochs 3 \
+  --per_device_train_batch_size 4
+```
+
+**3. Evaluate Fine-tuning Effect**:
+
+```python
+# Compare output quality before and after fine-tuning
+base_model = load_model("Qwen/Qwen2.5-7B")
+finetuned_model = load_model("./output/qwen-java-comments")
+
+test_code = "public void saveUser(User user) { userRepository.save(user); }"
+
+print("Base model:", base_model.generate(test_code))
+print("Finetuned model:", finetuned_model.generate(test_code))
+```
+
+## ⭐ Core Capability 3: Production Grade Deployment
+
+### ⭐ Deployment Scheme Selection
+
+**Development Environment**: Ollama
+- Pros: Simple easy to use, suitable for local development
+- Cons: Weak concurrency (5-10 QPS)
+
+**⭐ Production Environment**: vLLM
+- Pros: High throughput (100+ QPS), PagedAttention optimizes VRAM
+- Cons: Complex configuration, Requires GPU Server
+
+**⭐ Quantitative Comparison** (Performance metrics must master):
+
+| Metric | Ollama | vLLM | Difference Explanation |
+|------|--------|------|----------|
+| ⭐ **QPS** (Queries Per Second) | 5-10 | 100+ | vLLM concurrency capability is 10-20 times of Ollama |
+| **First Token Latency** | ~500ms | ~200ms | vLLM response speed 60% faster |
+| ⭐ **Concurrency Support** | Weak (Single Request Queue) | Strong (PagedAttention) | vLLM supports high concurrency scenarios |
+| **VRAM Optimization** | None | PagedAttention | vLLM VRAM utilization improved 30-40% |
+| **Applicable Scenario** | Dev/Test | Production | Choose based on concurrency needs |
+
+**⭐ Decision Criteria**: 
+- **Use Ollama**: Single user scenario, QPS < 10, e.g. Personal Assistant, Internal Tools
+- **Use vLLM**: Multi-user scenario, QPS > 50, e.g. Enterprise App, Public Service
+
+### vLLM Deployment Example
+
+```bash
+# Install vLLM
+pip install vllm
+
+# Start vLLM Service
+python -m vllm.entrypoints.openai.api_server \
+  --model Qwen/Qwen2.5-7B \
+  --tensor-parallel-size 2 \
+  --max-num-seqs 256
+
+# Call vLLM API (Compatible with OpenAI format)
+curl http://localhost:8000/v1/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "Qwen/Qwen2.5-7B",
+    "prompt": "Hello",
+    "max_tokens": 100
+  }'
+```
+
+## Core Capability 4: LLMOps Evaluation & Ops
+
+### Perfect Evaluation System (Ragas / TruLens)
+
+Based on Level 2, add more metrics:
+
+```python
+from ragas.metrics import (
+    faithfulness,           # Answer Faithfulness (Whether based on retrieved content)
+    answer_relevancy,       # Answer Relevancy (Whether answered probability)
+    context_precision,      # Context Precision (Whether retrieved content is relevant)
+    context_recall          # Context Recall (Whether retrieved all relevant content)
+)
+
+results = evaluate(
+    golden_qa,
+    metrics=[faithfulness, answer_relevancy, context_precision, context_recall]
+)
+
+# Set Quality Threshold
+assert results['faithfulness'] > 0.8, "Answer Faithfulness Insufficient"
+assert results['answer_relevancy'] > 0.7, "Answer Relevancy Insufficient"
+```
+
+### LangSmith Monitoring
+
+```python
+from langsmith import Client
+
+client = Client()
+
+# View Token Consumption and Cost
+runs = client.list_runs(project_name="my-rag-app")
+total_tokens = sum(run.total_tokens for run in runs)
+total_cost = sum(run.total_cost for run in runs)
+
+print(f"Total tokens: {total_tokens}")
+print(f"Total cost: ${total_cost:.2f}")
+
+# View Trace Link
+for run in runs:
+    print(f"Run ID: {run.id}")
+    print(f"Latency: {run.latency_ms}ms")
+    print(f"Steps: {run.child_runs}")
+```
+
+## Phase Output Standards
+
+**Deliverables Must Complete** (As final verification for Full Stack AI Engineer):
+
+**Full Stack Application Layer**:
+- [ ] Complete at least 1 Full Stack AI App (React + FastAPI + LangGraph), containing complete UI and backend service
+- [ ] ⭐ Implement streaming output and Markdown rendering, smooth UX
+
+**Model Optimization Layer**:
+- [ ] Complete at least 1 model fine-tuning experiment, prepare 100+ training samples, quantifiable improvement after fine-tuning (e.g. accuracy improved by 10% or output format compliance reached 95%)
+
+**Evaluation System Layer**:
+- [ ] Establish complete evaluation system (Ragas/TruLens), containing at least 4 metrics (Faithfulness, Answer Relevancy, Context Precision, Context Recall)
+- [ ] **Quality Threshold**: Faithfulness > 0.8, Answer Relevancy > 0.7, Context Precision > 0.7
+
+**Production Deployment Layer**:
+- [ ] ⭐ Understand production grade deployment schemes (vLLM/TGI), able to explain performance difference between Ollama vs vLLM (QPS, Latency, Concurrency Support)
+- [ ] Integrate LangSmith monitoring, able to trace Token consumption and Trace link
+- [ ] ⭐ Establish monitoring and alert mechanism (Latency > 2s alert, cost over budget alert, error rate > 5% alert)
+
+**Capability Verification**:
+- [ ] Able to independently design and implement a complete Full Stack AI App, from frontend to backend to model deployment
+- [ ] ⭐ Able to choose appropriate deployment scheme (Ollama vs vLLM) based on business needs and provide data support
+
+**Time Checkpoint**: If not completed after 3 weeks, suggest completing frontend delivery first, then gradually add fine-tuning and production deployment functions
+
+## Roadmap Optimization Suggestions
+
+**Practical Project**: 
+- Use **Streamlit** to build internal AI debugging tool (Visualize RAG retrieval results, Agent decision process)
+- Use **React** to build end-user facing product (Professional UI, Streaming Output, Markdown Rendering)
+
+---
+
+**Previous Phase**: [Level 3 - Agent Architecture & Observability](./level-3-agent)
+
+**Next Phase**: [Prompt Quality Evaluation & Summary](./summary)

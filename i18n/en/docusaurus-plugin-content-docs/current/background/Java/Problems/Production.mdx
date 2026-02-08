@@ -1,0 +1,33 @@
+---
+id: production
+title: Production Problems
+sidebar_label: Production Problems
+sidebar_position: 10
+description: '- Problem definition, determine whether it is internal system problem or other system problem, or network reason - If serious, consider rollback (or restart application) first, solve problem first, then find reason for problem - Reason: Connection pool problem (used in thread pool), slow SQL problem, Full GC problem etc.'
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+# Production Problems
+
+## Problem Handling Ideas
+- Problem definition, determine whether it is internal system problem or, other system problem, or network reason
+- If serious, consider rollback (or restart application) first, solve problem first, then find reason for problem
+- Reason: Connection pool problem (used in thread pool), slow SQL problem, `Full GC` problem etc.
+
+
+## Common Problem Handling Solutions:
+
+- High CPU usage: Check if there are infinite loops, resource contention, etc., use performance analysis tools to locate specific code positions
+- Memory leak: Through heap dump analysis, find objects occupying large memory, check if object lifecycle management is reasonable
+- Database connection exception: Check connection pool configuration, network status, and if there are connections not released in time
+
+import TailProtocal from '@site/src/components/TailProtocal';
+
+<TailProtocal />

@@ -1,0 +1,679 @@
+---
+id: full-aspectj-temp
+title: Usage of AspectJ style AOP
+sidebar_label: Usage of AspectJ style AOP
+sidebar_position: 10
+description: Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) for code related to this article (from official source spring-test module)
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) under `org.springframework.mylearntest` package for code related to this article (from [official source](https://github.com/spring-projects/spring-framework.git "official source") spring-test module).
+
+
+No need to implement corresponding interfaces like in 1.0, the only thing to do is to add an `@Aspect` annotation on this Aspect class. This way we can determine which classes in ClassPath are Aspect definitions we are looking for. Define Pointcut via `@Pointcut`, specify which methods define corresponding Advice logic via annotations like `Around`.
+
+<details>
+	<summary>PerformanceTraceAspect</summary>
+
+```java
+package org.springframework.mylearntest.aop2.aspectj;
+
+import org.apache.commons.lang3.time.StopWatch;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+
+/**
+ * @Author: whalefall
+ * @Date: 2020/7/28 22:46
+ * After Spring 2.0 no need to implement interfaces to define pointcut
+ */
+@Aspect
+public class PerformanceTraceAspect {
+	private final Log logger = LogFactory.getLog(PerformanceTraceAspect.class);
+
+	@Pointcut("execution(public  void *.method1()) || execution(public  void *.method2())")
+	public void pointcutName() {}
+
+	@Around("pointcutName()")
+	public Object performanceTrace(ProceedingJoinPoint joinPoint) throws Throwable {
+		StopWatch sw = new StopWatch();
+		try {
+			sw.start();
+			return joinPoint.proceed();
+		} finally {
+				System.out.println("pt in method["
+						+ joinPoint.getSignature().getName()
+				+ "]>>>>>>" + sw.toString());
+		}
+	}
+}
+```
+</details>
+
+## Two Ways to Weave Aspect
+
+Suppose we have a target object `Foo`, there are two ways to weave Aspect definition into this target object class, to achieve interception of Joinpoints conforming to Pointcut definition.
+
+<details>
+	<summary>Foo</summary>
+
+```java
+public class Foo {
+	public void method1() {
+		System.out.println("method1 executed");
+	}
+
+	public void method2() {
+		System.out.println("method2 executed");
+	}
+}
+```
+</details>
+
+
+### Programmatic Weaving
+
+<details>
+	<summary>Implemented via AspectJProxyFactory</summary>
+
+```java
+public class Test4AspectJProxyFactory {
+	public static void main(String[] args) {
+		AspectJProxyFactory weaver = new AspectJProxyFactory();
+		weaver.setProxyTargetClass(true);
+		weaver.setTarget(new Foo());
+		weaver.addAspect(PerformanceTraceAspect.class);
+		Object proxy = weaver.getProxy();
+		((Foo)proxy).method1();
+		((Foo)proxy).method2();
+	}
+}
+```
+</details>
+
+### Weaving via Auto-Proxy
+
+For @AspectJ style AOP, Spring AOP specifically provides an `AutoProxyCreator` implementation class for automatic proxying, to avoid excessive coding and configuration work. It is an extension class based on `AbstractAdvisorAutoProxyCreator`.
+
+Like `AutoProxyCreator`, we just need to register `AnnotationAwareAspectJAutoProxyCreator` in IoC container configuration file.
+
+![](https://s2.loli.net/2023/07/15/hrGdFWtgxbfa78l.png)
+
+
+<details>
+	<summary>xml configuration</summary>
+
+```xml
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+
+		 http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	<!--	Equivalent to line above-->
+	<!--<bean class="org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator">
+		<property name="proxyTargetClass" value="true"/>
+	</bean>-->
+
+	<bean id="performanceAspect" class="org.springframework.mylearntest.aop2.aspectj.PerformanceTraceAspect"/>
+
+	<bean id="target" class="org.springframework.mylearntest.aop2.aspectj.Foo"/>
+</beans>
+```
+</details>
+
+<details>
+	<summary>TestAutoAspectJ</summary>
+
+```java
+public class Test4AutoAspectJ {
+	public static void main(String[] args) {
+		ApplicationContext context = new ClassPathXmlApplicationContext("annotationawareaspectJautoproxycreator\\annotationawareaspectJautoproxycreator.xml");
+		Object proxy = context.getBean("target");
+		((Foo)proxy).method1();
+		((Foo)proxy).method2();
+	}
+}
+```
+</details>
+
+If `target` is injected as dependency object into other bean definitions, then what dependency subject object holds is also proxied target object.
+
+**Tip**
+> When using @AspectJ style AOP, should try to use automatic proxy support in container. Usually, programmatic weaving operations are only used for testing puproses. In process of use, you will find that actually there are differences between these two ways, some behaviors are not unified.
+> 
+> Using @Aspect style AOP needs to introduce `aspectjweaver.jar` and `aspectjrt.jar`.
+
+## @AspectJ style Pointcut
+
+Before Spring framework released version 2.0, Spring AOP did not have formal Pointcut description language like AspectJ, and only supported method-level interception. So usually, simple method name specification and regular expressions basically could achieve purpose well.
+
+After Spring released version 2.0, Spring AOP framework integrated parts of AspectJ functions, including AspectJ's Pointcut language support. Transitioned from DTD to XSD era.
+
+### @AspectJ style Pointcut Declaration Way
+
+@AspectJ style Pointcut declaration is attached to `@AspectJ`, by using `org.aspectj.lang.annotation.Pointcut` annotation, after specifying AspectJ style Pointcut expression, mark this annotation specified with corresponding expression on a method of Aspect definition class.
+
+@AspectJ style Pointcut declaration contains following two parts.
+
+* Pointcut Expression
+
+*Carrier of Pointcut Expression is `@Pointcut`, this annotation is method-level annotation, so Pointcut Expression cannot be declared separately from a method*
+
+Expression consists of two parts, namely Pointcut Signature and Expression Matching Pattern.
+
+* Pointcut Signature
+
+It is a definition of a method, acting as carrier of Pointcut Expression. Method definition where Pointcut Signature is located has no other restrictions except that return type must be void. Method modifiers play same semantic role as in java language, public Pointcut Signature can be referenced in other Aspect definitions, while private can only be referenced in current Aspect definition. Can use Pointcut Signature as identifier of corresponding Pointcut Expression, replacing repetitive Pointcut expression definitions in Pointcut Expression definition.
+
+<details>
+	<summary>YourAspect</summary>
+
+```java
+@Aspect
+public class YourAspect {
+    @Pointcut("execution(void method1())")
+    public void method1Execution() {}
+    
+    @Pointcut("method1Execution()")
+    private void stillMethod1Execution() {}
+
+    // ...
+}
+```
+</details>
+
+### Identifiers of AspectJ style Pointcut Expression
+
+#### execution
+
+Using it will help us match Joinpoints having specified method signature, usage format as follows
+
+`execution(modifiers-pattern ? ret-type-pattern declaring-type-pattern ? name-pattern(param-pattern) throws-pattern?)`
+
+Where method return type, method name, and parameter part matching patterns must be specified, matching patterns of other parts can be omitted.
+
+<details>
+	<summary>Foo Example</summary>
+
+```java
+public class Foo {
+    public void doSomething(String arg) {
+        // ...
+}
+}
+```
+</details>
+
+Then can specify following Pointcut expression to match `doSomething` method of `Foo`
+
+```java
+execution(public void Foo.doSomething(String))
+
+execution(void Foo.doSomething(String))
+```
+
+**\*** can be used in matching pattern of any part, can match multiple adjacent characters **\***
+
+```java
+execution(* *(String))
+
+execution(* *(*))
+```
+
+**..** wildcard can be used in two positions
+
+1. Use specified multi-level type declaration at `declaring-type-pattern`
+
+```java
+// Can only locate all types under layer cn.spring21
+execution(void cn.spring21.*.doSomething(*) 
+
+// Can match all under cn.spring21 package including descendant packages
+execution(void cn.spring21..*.doSomething(*) 
+```
+
+2. Used in method list matching position, indicates that method can have 0 to multiple parameters, parameter types unlimited. If `..` is replaced by `*`, then can only match one parameter.
+
+```java
+execution(void *.doSomething(..))
+
+// Indicates first parameter is String, second parameter is any type
+execution(void doSomething(String,*)) 
+
+// Indicates unlimited parameter format, unlimited type, but last parameter type must be String
+execution(void doSomething(..,String)) 
+```
+
+#### within
+
+`within` identifier only accepts type declarations, it will match all Joinpoint methods under specified type.
+
+*within pointcut expression usage*
+
+```java
+within(cn.spring21.aop.target.MockTarget)
+// Match method-level Joinpoints inside all classes under target package
+within(cn.spring21.aop.target.*) 
+// Match method-level Joinpoints inside all classes under aop package and descendant packages
+within(cn.spring21.aop..*) 
+```
+
+*within pointcut expression usage*
+
+```java
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD,ElementType.TYPE})
+public @interface AnyJoinpointAnnotation {}
+```
+
+```java
+@AnyJoinpointAnnotation
+public class Foo{
+    public void method1(){}
+    public void method2(){}
+}
+```
+
+When using Pointcut expression `@within(AnyJoinpointAnnotation)`, methods like `method1`, `method2` in `Foo` class will all be matched by Pointcut expression. Because this class is marked with `@AnyJoinpointAnnotation`, if other classes are also marked with this annotation, will also be matched.
+
+*Note @within only accepts annotation types, and takes effect on classes marked by specified annotation type*
+
+#### this and target
+
+In AspectJ, `this` refers to object where calling method is located, `target` refers to object where called method is located, so usually these two identifiers can be used simultaneously to limit calling relationship of methods. For example, if `Object1`, `Object2` both call a method of `Object3`, then Pointcut expression definition `this(Object2) && target(Object3)` will only match when `Object2` calls method on `Object3`, while `Object1` calling method on `Object3` will not be matched.
+
+Semantics of `this` and `target` in Spring AOP differ from AspectJ, `this` refers to proxy object of target object, while `target` is target object.
+
+Regardless of using interface-based proxy mode or class-based proxy mode, `this(ProxyInterface)` and `target(ProxyInterface)` have similar effects.
+
+If specifying concrete type `this(TargetFoo)` and `target(TargetFoo)`, `target(TargetFoo)` matches all Joinpoints in target object, because target object is indeed `TargetFoo` type, while `this(TargetFoo)` cannot.
+
+`this` and `target` identifiers are both used in combination with other identifiers in Pointcut expressions to further strengthen matching qualification rules.
+
+```java
+execution(void cn.spring21.*.doSomething(*)) && this(TargetFoo)
+
+execution(void cn.spring21.*.doSomething(*)) && targe(ProxyInterface)
+
+// Match implementing both ProxyInterface and ProxyInterface2
+this(ProxyInterface) && target(proxyInterface2)
+```
+
+In Spring AOP `@within` and `@target` do not have much difference. It's just that `@within` belongs to static matching, while `@target` matches Joinpoint dynamically at runtime.
+
+#### args
+
+Function of this identifier is to help us capture method-level Joinpoints with specified parameter types and specified parameter amount, regardless of what type method is declared in. For example, `args(cn.spring21.unveilspring.domain.User)` then following method signatures will be matched
+
+```java
+public class Foo {
+    public boolean login(User user) {
+        // ...
+    }
+}
+
+public class Bar {
+    public boolean isLogin(User user) {
+        // ...
+    }
+}
+```
+
+To capture `public boolean login(Object user)`, using expression like `execution(* *(User))` cannot capture (because it is static Pointcut), need to use `args` identifier.
+
+Pointcut expression using `@args` identifier will check method parameter types of current method-level Joinpoint, if passed parameter type this time has annotation specified by `@args`, current Joinpoint will be matched.
+
+![](https://s2.loli.net/2023/07/15/hvlZ4iRWjtozqS3.png)
+
+*@args will attempt to dynamically check specified annotation for parameters of every method execution of all objects in system. As long as parameter type is marked with annotation type specified by @args, current method execution will match.*
+
+#### annotation
+
+Pointcut expression using `annotation` identifier will attempt to check all method-level Joinpoints of all objects in system. If checked method is marked with annotation type specified by `@annotation` identifier, then Joinpoint where current method is located will be matched by Pointcut expression.
+
+Want following method to support transaction mechanism, just need to add an annotation `@Transactional` on corresponding method, then use Pointcut expression to specify `@annotation(org.springframework.transaction.annotation.Transactional)`. Note `@Transactional` annotation is defined as `@Target(ElementType.METHOD)`.
+
+**Even though Pointcut expression identifiers in AspectJ can be used in Spring AOP, their semantics and final semantics in AspectJ will differ. So, rather than saying Spring AOP can now use AspectJ's Pointcut expression language, it is better to say Spring AOP borrowed "outer cloak" of AspectJ's Pointcut expression language, while actually underlying semantics and final matching still follow original mechanism of Spring AOP. In addition, Spring AOP may add new identifiers based on original expressions, such as bean(..). AspectJ extended Java language, now Spring AOP's Pointcut expressions will extend AspectJ's Pointcut.**
+
+True face of @AspectJ style Pointcut in Spring AOP
+
+Actually, all Pointcut expressions declared in @AspectJ style will be parsed and converted into concrete Pointcut objects inside Spring AOP. Because Spring AOP has its own Pointcut definition structure, so declaring these Pointcut expressions in @AspectJ style will ultimately be converted into a Pointcut implementation specifically oriented towards AspectJ.
+
+`org.springframework.aop.aspectj.AspectJExpressionPointcut` represents concrete implementation of Pointcut oriented towards AspectJ in Spring AOP. Although it uses corresponding support of `AspectJ`, it still follows Pointcut definition of Spring AOP.
+
+![](https://s2.loli.net/2023/07/15/QXc4awHlyRibeIj.png)
+
+Defining `ExpressionPointcut` and `AbstractExpressionPointcut` is mainly for future extensibility. If there are forms other than AspectJ's Pointcut description language, we can integrate on basis of these two.
+
+After `AspectJProxyFactory` or `AnnotationAwareAspectJAutoProxyCreator` obtains definition in @AspectJ style defined by `@Pointcut` in AspectJ via reflection, a corresponding `AspectJExpressionPointcut` object instance will be constructed inside Spring AOP framework. `AspectJExpressionPointcut` internally holds Pointcut expression obtained via reflection.
+
+![](https://s2.loli.net/2023/07/15/SlIhfBd7UZtmqEC.png)
+
+`AspectJExpressionPointcut` belongs to one of Spring AOP's Pointcut definitions, logic of Spring AOP framework internally processing Pointcut matching does not need to change, still uses original matching mechanism, i.e., performing matching work of concrete Joinpoint via `ClassFilter` and `MethodMatcher`. However, when implementing corresponding method logic of `ClassFilter` and `MethodMatcher`, `AspectJExpressionPointcut` will delegate specific work to relevant classes of AspectJ library. `AspectJExpressionJoinpoint` (should be Pointcut) will delegate `PointcutParser` in AspectJ library to parse @AspectJ style Pointcut expression held by it. After `PointcutParser` parsing is completed, it will return a `PointcutExpression` object (still a class in AspectJ library), afterwards whether matching or not is directly delegated to relevant methods of this `PointcutExpression` object for processing.
+
+`AspectJExpressionPointcut` belongs to Pointcut implementation oriented towards AspectJ, we can use it like other various Pointcut implementation classes in Spring AOP. Only that, after construction, instead of setting method name or regular expression for it, set @AspectJ style Pointcut as shown below
+
+```java
+AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
+pointcut.setExpression("execution( * someMethodName(..))");
+```
+
+## @AspectJ style Advice
+
+Definition in @AspectJ style is actually ordinary methods in Aspect definitions class marked with `@AspectJ`, only that these methods need to be marked with annotations corresponding to different Advice types.
+
+<details>
+	<summary>Use Pointcut to set BeforeAdvice</summary>
+
+```java
+/**
+ * Use AspectJ style
+ */
+@Aspect
+public class ResourceSetupAspectJ {
+    private Resource resource;
+    
+    @Before("execution(boolean *.execute())")
+    public void setupResourcesBefore() throws Throwable {
+        if(!getResource().exists())
+            FileUtils.forceMkdir(getResource().getFile());
+    }
+    // Omit getter setter
+}
+```
+</details>
+
+Use Pointcut Signature to reference Pointcut
+
+Parameter passing in Advice
+
+In some cases, we may need to access method parameters at Joinpoint in Advice definition. In 1.x Spring AOP, we can access corresponding method parameters via Object array passed in `MethodBeforeAdvice` method. Now there are two ways to achieve same purpose.
+
+* Via `org.aspectj.lang.JoinPoint`. In @AspectJ style Aspect, method defining Before Advice can declare first parameter as `org.aspectj.lang.JoinPoint` type. Through `Joinpoint` we can access argument values of corresponding Joinpoint method via its `getArgs()` method. In addition we can use `getThis()` to get current proxy object, `getTarget()` to get target object.
+
+* Binding via `args` identifier. We have already introduced `args` identifier before, we can further limit Pointcut definition by specifying corresponding object type for it. When `args` identifier accepts not concrete object type but a parameter name, it will bind parameter value corresponding to this parameter name to call of Advice method.
+
+Note parameter name specified by `args` must be same as parameter name of method where Advice definition is located. Here value specified by `args` and parameter name of `setupResourceBefore` method are both `taskName`. If Advice references independent Pointcut definition, using `args` binding form is also similar.
+<details>
+	<summary>Advice references independent Pointcut definition</summary>
+
+```java
+@Pointcut("execution(boolean *.execute(String,..)) && args(taskName)")
+private void resourceSetupJoinpoints(String taskName) {}
+
+@Before(value="resourceSetupJoinpoints(taskName)")
+public void setupResourcesBefore(String taskName) throws Throwable{}
+```
+</details>
+
+<details>
+	<summary>Function of simultaneously using JoinPoint and using args parameter name binding</summary>
+
+```java
+@Before(value="execution(boolean *.execute(String,..)) && args(taskName)")
+public void setupResourcesBefore1(JoinPoint joinpoint, String taskName) throws Throwable {
+    // ...
+}
+```
+</details>
+
+**Two ways for Before Advice to access method parameters**
+
+**In Advice declaration way of AspectJ style, not only first parameter of Before Advice method can be declared as `org.aspectj.lang.JoinPoint` type, actually, except `Around Advice` and `Introduction` cannot use, method declarations of remaining Advice types all follow this rule**
+
+**Not only `args` identifier can be used to bind parameter declaration to method, actually in Pointcut identifiers, except `execution` identifier which does not directly specify object type, others like `this`, `target`, `@within`, `@target`, `@annotation`, `@args` etc. originally all specify object types. Like `args`, in such occasions, if they specify parameter name**
+
+#### Configuration declaration way of various Advice in Spring 2.0 based on XSD
+
+<details>
+	<summary>AspectAdvice</summary>
+
+```java
+package org.springframework.mylearntest.aop2.schemaapsect;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
+import org.springframework.core.io.Resource;
+import org.springframework.util.StopWatch;
+
+/**
+ * @Author: WhaleFall541
+ * @Date: 2020/8/13 20:56
+ */
+@Aspect
+public class AspectAdvice {
+    private Resource resource;
+
+    public Resource getResource() {
+        return resource;
+    }
+
+    public void setResource(Resource resource) {
+        this.resource = resource;
+    }
+
+    @AfterThrowing(pointcut = "execution(boolean *.execute(String, ..))", throwing = "e")
+    public void afterThrowing(RuntimeException e) {
+        final String exceptionMsg = ExceptionUtils.getStackTrace(e);
+        // ...
+    }
+
+    @AfterReturning(value = "execution(boolean *.execute(String, ..))",returning = "retValue")
+    public void taskExceptionCompleted(JoinPoint jp,boolean retValue) {
+        //Class clazz = jp.getTarget().getClass();
+        //getSqlMapClientTemplate().insert("BATCH.insertTaskStatus", clazz.getName());
+    }
+
+    @After("execution(boolean *.execute(String, ..))")
+    public void cleanUpResourcesIfNecessary() throws Throwable {
+        if (getResource().exists())
+            FileUtils.forceMkdir(getResource().getFile());
+    }
+
+    @Around("execution(boolean *.execute(String, ..))")
+    public Object performanceTrace(ProceedingJoinPoint pjp) throws Throwable {
+        StopWatch watch = new StopWatch();
+        try {
+            watch.start();
+            return pjp.proceed();
+        } finally {
+            watch.stop();
+            System.out.println("watch.toString() = " + watch.toString());
+        }
+    }
+}
+```
+</details>
+
+#### Introduction
+
+In Spring, implementation of `Introduction` is by adding new behavioral logic to be added as new interface definition to target object. To declare `Introduction` in @AspectJ style, we need to declare an instance variable in Aspect, its type corresponds to type of newly added interface, then use `org.aspectj.lang.annotatioin.DeclareParents` to mark it. Specify implementation class of newly added interface definition via `@DeclareParents` and target object to which it will be added.
+
+<details>
+	<summary>IntroductionAspect</summary>
+
+```java
+package org.springframework.mylearntest.aop2.introduction;
+
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.DeclareParents;
+import org.springframework.mylearntest.aop1.weaver.proxyfactorybean.CounterImpl;
+import org.springframework.mylearntest.aop1.weaver.proxyfactorybean.ICounter;
+
+/**
+ * @Author: WhaleFall541
+ * @Date: 2020/8/9 16:50
+ * Introduce ICounter behavior to ITask
+ */
+@Aspect
+public class IntroductionAspect {
+	// value attribute specifies an object to be applied to, can also be all classes under a package value="cn.spring21.unveilspring.service.*"
+	// Specify implementation class of newly added interface definition via defaultImpl, here implementation class of ICounter is org.springframework.mylearntest.aop1.weaver.proxyfactorybean.CounterImpl
+	@DeclareParents(value = "org.springframework.mylearntest.aop1.weaver.baseoninterface.MockTask", defaultImpl =
+			CounterImpl.class)
+	public ICounter counter;// ICounter is object type to be added to target object
+}
+```
+</details>
+
+<details>
+	<summary>xml configuration</summary>
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation=
+			   "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+              	  http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd"
+	   xmlns:aop="http://www.springframework.org/schema/aop">
+
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+
+	<bean id="task" class="org.springframework.mylearntest.aop1.weaver.baseoninterface.MockTask" scope="prototype"/>
+
+	<bean id="counterIntroduction" class="org.springframework.mylearntest.aop2.introduction.IntroductionAspect"/>
+</beans>
+```
+</details>
+
+<details>
+	<summary>Test4IntroductionAspect</summary>
+
+```java
+package org.springframework.mylearntest.aop2.introduction;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.mylearntest.aop1.weaver.proxyfactorybean.ICounter;
+
+/**
+ * @Author: WhaleFall541
+ * @Date: 2020/8/9 17:10
+ */
+public class Test4IntroductionAspect {
+	public static void main(String[] args) {
+		ApplicationContext context = new ClassPathXmlApplicationContext("introductionaspect/introductionaspect.xml");
+		Object task1 = context.getBean("task");
+		Object task2 = context.getBean("task");
+
+		System.out.println(((ICounter)task1).getCounter()); // 1
+		System.out.println(((ICounter)task1).getCounter()); // 2
+		System.out.println(((ICounter)task2).getCounter()); // 1
+	}
+}
+```
+</details>
+
+***Note Introduction belongs to per-instance type Advice, so do not forget that scope of target object should usually be set to prototype***
+
+#### Execution Order of Advice
+
+If multiple Advices matching same Joinpoint are declared in same Aspect definition, then execution order of these Advices is determined by their declaration order in Aspect. Advice declared first has highest priority. For `Before Advice`, highest priority runs first, while for `AfterReturningAdvice`, highest priority runs last.
+
+<details>
+	<summary>MultiAdviceAspect</summary>
+
+```java
+package org.springframework.mylearntest.aop2.priorityofadvice;
+
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+
+/**
+ * @Author: WhaleFall541
+ * @Date: 2020/8/9 18:00
+ * If this AspectJ is woven into target object, result obtained can be
+ * before one
+ * before two
+ * after returning two
+ * after returning one
+ */
+@Aspect
+public class MultiAdviceAspect {
+	@Pointcut("execution(boolean *.execute(String, ..))")
+	public void taskExecution(){}
+
+	@Before("taskExecution()")
+	public void beforeOne() {
+		System.out.println("before one");
+	}
+
+	@Before("taskExecution()")
+	public void beforeTwo() {
+		System.out.println("before two");
+	}
+
+	@AfterReturning("taskExecution()")
+	public void afterReturningOne() {
+		System.out.println("after retuning one");
+	}
+
+	@AfterReturning("taskExecution()")
+	public void afterReturningTwo() {
+		System.out.println("after retuning two");
+	}
+}
+```
+</details>
+
+When these Advices are declared in different Aspects. If Pointcut definitions corresponding to multiple Advice declarations match same Joinpoint, but they are not declared in same Aspect. We need to use Spring's `org.springframework.core.Ordered` interface, just need corresponding Aspect definition to implement `Ordered` interface, otherwise execution order of Advice is undefined.
+
+![](https://s2.loli.net/2023/07/15/NoimsEaDcIgdwMp.png)
+
+**Note: If these Aspects are used via programmatic way, execution order of Advice inside Aspect is completely determined by order added to `AspectJProxyFactory`, not order prescribed by `Ordered` interface. If order of following code is adopted, then Advice in `AnotherAspect` will execute prior to Advice in `MultiAdviceAspect`.**
+
+![](https://s2.loli.net/2023/07/15/aXrGAu1x6KwJgBj.png)
+
+### Instantiation Mode of Aspect
+
+For each Aspect registered to container, its default instantiation mode uses `singleton`, single instance of each Aspect definition will be instantiated and held in container (behavior coincides exactly with behavior of container `singleton` type scope).
+
+Besides instantiation mode, AspectJ also supports instantiation modes like `perthis`, `pertarget`, `percflow`, `percflowbelow` and `perwithin`, but after Spring 2.0 AOP only supports default `singleton`, `perthis` and `pertarget` three instantiation modes.
+
+To specify instantiation mode of corresponding Aspect, can specify `perthis` or `pertarget` statement via `@Aspect`. If want to chang instantiation mode of `MultiAdviceAspect` from default `singleton` to `perthis`. Can specify as follows
+
+```java
+@Aspect("perthis(execution(boolean *.execute(String, ..)))")
+public class MultiAdviceAspect {
+
+    @Pointcut("execution(boolean *.execute(String, ..))")
+    public void taskExecution(){}
+    
+    // ..
+
+}
+```
+
+After Pointcut definition specified by `perthis` matches, respective Aspect instances will be instantiated for corresponding proxy objects. For `pertarget`, it instantiates corresponding Aspect for matching independent target object. However, after using `perthis` or `pertarget` to specify Aspect instantiation mode, when registering these Aspects to container, cannot specify `singleton` scope for their bean definitions, otherwise exception will occur.
+
+> References
+>
+> 1. Book Name: Spring Unveiled Author: Wang Fuqiang
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

@@ -1,0 +1,407 @@
+---
+id: functional-register-engine
+title: Functional Registration Engine Design Document
+sidebar_label: Functional Registration Engine Design Document
+sidebar_position: 10
+description: This design implements an annotation-driven business-template registration engine, automatically binding business implementation classes and corresponding processing templates at startup through the @UseTemplate annotation, implementing the decoupling of business logic and processing flow. - ✅ Annotation-driven automatic registration mechanism - ✅ Generic type safety check
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+# Functional Registration Engine Design Document
+
+## 1. Overview
+
+### 1.1 Design Goals
+
+This design implements an annotation-driven business-template registration engine, automatically binding business implementation classes and corresponding processing templates at startup through the `@UseTemplate` annotation, implementing the decoupling of business logic and processing flow.
+
+### 1.2 Core Features
+
+- ✅ Annotation-driven automatic registration mechanism
+- ✅ Generic type safety check
+- ✅ Functional programming style
+- ✅ Spring Boot integration
+- ✅ Flexible templated processing flow
+
+------
+
+## 2. Core Component Design
+
+### 2.1 RegisterEnginV3 - Registration Engine
+
+**Responsibilities**:
+
+- Scan all Business implementation classes at startup
+- Parse `@UseTemplate` annotation, bind business and template
+- Perform generic type consistency check
+- Provide unified business execution entry
+
+**Key Code**:
+
+```java
+@Service
+@AllArgsConstructor
+public class RegisterEnginV3<T, S extends Business<T>> {
+
+    @PostConstruct
+    public void init() {
+        businessesMap.forEach((txcode, businessService) -> {
+            // 1. Parse @UseTemplate annotation
+            UseTemplate ann = businessService.getClass()
+                .getAnnotation(UseTemplate.class);
+
+            // 2. Get corresponding Template Bean
+            Template<T, S> templateToUse =
+                (Template<T, S>) applicationContext
+                    .getBean(ann.value());
+
+            // 3. Generic type check
+            checkConsistentGenericType(businessService, templateToUse);
+
+            // 4. Register to execution registry
+            registry.put(txcode,
+                param -> templateToUse.handler(txcode, param, businessService));
+        });
+    }
+
+    public void run(String businessType, T params) {
+        registry.get(businessType).accept(params);
+    }
+}
+```
+
+**Generic Parameter Description**:
+
+- `T`: Business processing parameter type (usually `BusinessContext<I, O>`)
+- `S`: Concrete Business implementation type
+
+------
+
+### 2.2 Template - Processing Template Interface
+
+**Design Concept**: Adopt functional interface design to define unified business processing flow.
+
+```java
+@FunctionalInterface
+public interface Template<T, S extends Business<T>> {
+    void handler(String txcode, T param, S businessService);
+}
+```
+
+**Implementation Example**:
+
+```java
+@Component
+public class TemplateImpl3<I, O> implements
+    Template<BusinessContext<I, O>, BusinessType3<I, O>> {
+
+    @Override
+    public void handler(String txcode,
+                       BusinessContext<I, O> param,
+                       BusinessType3<I, O> businessService) {
+        // Pre-processing
+        // ...
+
+        // Execute business logic
+        businessService.doBusiness2(param);
+
+        // Post-processing
+        // ...
+    }
+}
+```
+
+------
+
+### 2.3 Business - Business Interface Hierarchy
+
+**Interface Hierarchy Design**:
+
+```
+Business<T> (Marker Interface)
+    ↓
+BusinessType3<I, O> extends Business<BusinessContext<I, O>>
+    ↓
+Business3 implements BusinessType3<InputDto3, OutputDto3>
+```
+
+**Business Basic Interface**:
+
+```java
+public interface Business<T> {
+    // Marker interface, used for type constraint
+}
+```
+
+**Business Type Interface**:
+
+```java
+public interface BusinessType3<I, O>
+    extends Business<BusinessContext<I, O>> {
+
+    void doBusiness2(BusinessContext<I, O> businessContext);
+}
+```
+
+**Concrete Business Implementation**:
+
+```java
+@Service
+@UseTemplate(TemplateImpl3.class)  // 👈 Key Annotation
+public class Business3 implements
+    BusinessType3<InputDto3, OutputDto3> {
+
+    @Override
+    public void doBusiness2(BusinessContext<InputDto3, OutputDto3> ctx) {
+        OutputDto3 output = new OutputDto3();
+        output.setField2("result from Business3");
+        output.setField3("xxx");
+        ctx.setOutput(output);
+    }
+}
+```
+
+------
+
+### 2.4 @UseTemplate Annotation
+
+**Definition**:
+
+```java
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface UseTemplate {
+    Class<?> value();  // Specify used Template implementation class
+}
+```
+
+**Usage Scenarios**: Annotate on Business implementation class to specify the processing template used by this business.
+
+------
+
+## 3. Data Flow Design
+
+### 3.1 BusinessContext Context
+
+```java
+@Data
+public class BusinessContext<I, O> {
+    private I input;        // Input parameters
+    private O output;       // Output result
+    private OtherDto3 otherDto;  // Other context information
+}
+```
+
+### 3.2 Execution Flow
+
+```
+Client Call
+    ↓
+RegisterEnginV3.run(businessType, params)
+    ↓
+Get Consumer<T> from Registry
+    ↓
+Template.handler(txcode, param, businessService)
+    ↓
+BusinessService.doBusiness(param)
+    ↓
+Return Result (via BusinessContext)
+```
+
+------
+
+## 4. Type Safety Mechanism
+
+### 4.1 Generic Type Check
+
+```java
+private static <T, S extends Business<T>> void
+    checkConsistentGenericType(S businessService,
+                               Template<T, S> templateToUse) {
+
+    Class<?> templateGeneric = getGeneric(templateToUse, Template.class);
+    Class<?> businessGeneric = getGeneric(businessService, Business.class);
+
+    if (businessGeneric != null && templateGeneric != null &&
+        !templateGeneric.isAssignableFrom(businessGeneric)) {
+        throw new IllegalStateException("❌ Template type mismatch");
+    }
+}
+```
+
+### 4.2 Type Mismatch Example
+
+```java
+// ❌ Error Example
+@UseTemplate(TemplateImpl1.class)  // Expect BusinessContext<A, B>
+public class Business3 implements
+    BusinessType3<InputDto3, OutputDto3> {  // Actual BusinessContext<InputDto3, OutputDto3>
+    // IllegalStateException will be thrown at startup
+}
+```
+
+------
+
+## 5. Bean Naming Strategy
+
+### 5.1 UniquePackageBeanNameGenerator
+
+**Problem Background**: When there are businesses with the same name under multiple packages, the default Spring naming strategy will cause Bean name conflicts.
+
+**Solution**:
+
+```java
+public class UniquePackageBeanNameGenerator
+    extends AnnotationBeanNameGenerator {
+
+    @Override
+    public String generateBeanName(BeanDefinition definition,
+                                   BeanDefinitionRegistry registry) {
+        String beanClassName = definition.getBeanClassName();
+        String originalBeanName = super.generateBeanName(definition, registry);
+
+        if (beanClassName != null) {
+            try {
+                Class<?> clazz = Class.forName(beanClassName);
+                if (Business.class.isAssignableFrom(clazz)) {
+                    return "NEW" + originalBeanName;  // Add prefix
+                }
+            } catch (ClassNotFoundException e) {
+                return originalBeanName;
+            }
+        }
+        return originalBeanName;
+    }
+}
+```
+
+### 5.2 Configuration Method
+
+```java
+@SpringBootApplication
+@ComponentScan(nameGenerator = UniquePackageBeanNameGenerator.class)
+public class Application {
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+}
+```
+
+------
+
+## 6. Usage Example
+
+### 6.1 Define DTO
+
+```java
+@Data
+public class InputDto3 {
+    private String field1;
+}
+
+@Data
+public class OutputDto3 {
+    private String field2;
+    private String field3;
+}
+```
+
+### 6.2 Implement Business Logic
+
+```java
+@Service
+@UseTemplate(TemplateImpl3.class)
+public class Business3 implements
+    BusinessType3<InputDto3, OutputDto3> {
+
+    @Override
+    public void doBusiness2(BusinessContext<InputDto3, OutputDto3> ctx) {
+        InputDto3 input = ctx.getInput();
+
+        OutputDto3 output = new OutputDto3();
+        output.setField2("Processing Result: " + input.getField1());
+        output.setField3("Extra Info");
+
+        ctx.setOutput(output);
+    }
+}
+```
+
+### 6.3 Call Business
+
+```java
+@RestController
+@AllArgsConstructor
+public class BusinessController {
+
+    private final RegisterEnginV3<BusinessContext<?, ?>, ?> registerEngine;
+
+    @PostMapping("/execute/{businessType}")
+    public BusinessContext<?, ?> execute(
+            @PathVariable String businessType,
+            @RequestBody InputDto3 input) {
+
+        BusinessContext<InputDto3, OutputDto3> context =
+            new BusinessContext<>();
+        context.setInput(input);
+
+        registerEngine.run(businessType, context);
+
+        return context;
+    }
+}
+```
+
+------
+
+## 7. Advantages and Extensibility
+
+### 7.1 Design Advantages
+
+| Feature         | Description                           |
+| ------------ | ------------------------------ |
+| **Low Coupling**   | Business logic and processing flow are completely separated     |
+| **High Cohesion**   | Same type businesses share the same template       |
+| **Type Safety** | Double type checking at compile time + runtime    |
+| **Easy Extension**   | New business only needs to implement interface and add annotation |
+| **Maintainable**   | Unified registration and execution mechanism           |
+
+## 8. Exception Handling
+
+1. Define system internal exceptions and custom communication exceptions.
+2. `Controller` or `Service` unifies handling of custom exceptions and unknown exceptions.
+3. If there are scenarios that do not need a response, define a non-response exception.
+4. If there are multiple remote calls, handle them according to custom exceptions of multiple remote calls.
+
+---
+
+## 9. Summary
+
+This design implements flexible registration and execution of business logic through annotation-driven way. Main features:
+
+✅ **Declarative Configuration**: Bind relationships through `@UseTemplate` annotation
+
+✅ **Type Safety**: Generics + Reflection implement double checking at compile time and runtime
+
+✅ **High Decoupling**: Business logic and execution flow are completely separated
+
+✅ **Easy to Extend**: New business requires no modification to registration engine code
+
+Applicable Scenarios:
+
+- Unified processing framework for multiple business types
+- Systems requiring dynamic business extension
+- Scenarios with standardized business processes
+
+------
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

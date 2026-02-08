@@ -1,0 +1,240 @@
+---
+id: cnblogs-simple-memory-theme--beautification
+title: Cnblogs Simple Memory Theme Beautification
+sidebar_label: Cnblogs Simple Memory Theme Beautification
+sidebar_position: 1
+description: All content from marsggbo'github
+tags:
+- books
+- learning
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+---
+All content from [marsggbo'github](https://github.com/marsggbo/Cnblogs-Theme-SimpleMemory) , [Page Effect](https://www.cnblogs.com/whalefall541/)
+
+## Page Custom CSS Code
+
+Since the JS file is too long, click [Here](https://files.cnblogs.com/files/whalefall541/%E9%A1%B5%E9%9D%A2%E5%AE%9A%E5%88%B6CSS%E4%BB%A3%E7%A0%81.css) to get it.
+
+## Blog Sidebar Announcement
+
+
+```html
+<script type="text/javascript">
+    window.cnblogsConfig = {
+        GhVersions    : 'v1.3.2', // Version
+        blogUser      : "WhaleFall541", // Username
+        blogAvatar    : "https://images.cnblogs.com/cnblogs_com/whalefall541/1815978/t_200730122732u=251289958,1860898046&fm=26&gp=0.jpg?a=1596263261858", // User Avatar
+        blogStartDate : "2020-04-28", // Join Date
+
+        // Text displayed when tab loses focus
+        webpageTitleOnblur: '(oﾟvﾟ)ノ Hi',
+        webpageTitleOnblurTimeOut: 500,
+        // Text displayed when tab gains focus
+        webpageTitleFocus: '(*´∇｀*) Welcome Back！',
+        webpageTitleFocusTimeOut: 1000,
+        // Website Icon
+        webpageIcon: "https://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@master/img/webp/blog_logo.webp",
+
+        // Day/Night mode auto switch
+        switchDayNight: {
+            enable: true,
+            auto: {
+                enable: true
+            }
+        },
+
+        // Page loading
+        loading: {
+             rebound: {
+                 tension: 16,
+             },
+             spinner: {
+                 id: 'spinner',
+                 radius: 90,
+             }
+        },
+
+        // Whether to render home banner animation and config
+        homeTopAnimationRendered: true,
+        homeTopAnimation: {
+            color   : 'random',
+        },
+
+        // Whether to render post page banner animation and config
+        essayTopAnimationRendered: true,
+        essayTopAnimation: {
+            triW : 14,
+            triH : 20,
+        },
+
+        // Whether to render background animation and config
+        bgAnimationRendered: true,
+        backgroundAnimation: {
+            colorSaturation: "60%",
+            colorBrightness: "50%",
+        },
+
+        // Home banner image URL, recommended size >= 1920*1080, supports multiple, random one on refresh
+        homeTopImg: [
+            "https://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@master/img/webp/home_top_bg.webp",
+            "https://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@master/img/webp/home_top_bg.webp"
+        ],
+
+        // Slogan on home banner
+        homeBannerTextType: "one",
+
+        // Post page banner image URL, recommended size >= 1920*600, supports multiple, random one on refresh
+        essayTopImg: [
+            "https://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@master/img/webp/nothome_top_bg.webp",
+            "https://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@master/img/webp/nothome_top_bg.webp"
+        ],
+
+        // Post page suffix
+        essaySuffix: {
+            aboutHtml: "I am a good person",
+        },
+
+        // Limit code block height, enable line numbers
+        codeMaxHeight: true,
+        codeLineNumber: true,
+
+        // Code block font style
+        essayCode: {
+            fontFamily: "'Ubuntu Mono',monospace", // Font family
+               fontSize: "14px" // Font size
+           },
+
+        // Cnblogs code highlight style
+        essayCodeHighlightingType: "highlightjs",
+        essayCodeHighlighting: "monokai-sublime",
+
+        // Footer style
+        footerStyle: 1,
+
+        bottomBlogroll: [ // Blogroll, [[Name, Link]....]
+            ["Apply Spot", 'https://msg.cnblogs.com/send/WhaleFall541'],
+            ["Apply Spot", 'https://msg.cnblogs.com/send/WhaleFall541'],
+            ["Apply Spot", 'https://msg.cnblogs.com/send/WhaleFall541'],
+            ["Apply Spot", 'https://msg.cnblogs.com/send/WhaleFall541'],
+            ["Apply Spot", 'https://msg.cnblogs.com/send/WhaleFall541'],
+        ],
+
+        // Footer slogan
+        bottomText: {
+            icon: "❤️",   // Deprecated in v1.3.0
+            iconFont: {  // New in v1.3.0
+            icon:  "icon-xl", // iconfont icon name
+            color: "red",     // icon color
+            fontSize: "16px"  // icon size
+        },
+        left : "Young and promising",
+        right: "Another drink doesn't matter"
+        },
+
+        // Console output
+        consoleList: [
+            ['BNDong CNBlogs', 'https://www.cnblogs.com/whalefall541/'],
+            ['BNDong GitHub', 'https://github.com/whalefall541'],
+            ['BNDong Email', '905400899@qq.com'],
+        ],
+
+        // Close ads
+        advertising: false,
+        // Version mapping
+        //isVersionMapping: true,
+
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/gh/BNDong/Cnblogs-Theme-SimpleMemory@v1.3.2/src/script/simpleMemory.min.js"></script>
+```
+
+## Header HTML Code
+
+```html
+{/* Mouse click effect */}
+<script src="https://blog-static.cnblogs.com/files/e-cat/cursor-effects.js"></script>
+```
+
+## Footer HTML Code
+
+[Music External Link Website](http://music.xf1433.com/)
+[Site Statistics Add Tutorial](https://www.dbnuo.com/Cnblogs-Theme-SimpleMemory/docs/v1.1/#/Docs/Customization/statistical)
+
+```html
+{/* Add music component to blog bottom */}
+<div id="player"  class="aplayer"></div>
+<link href="https://files.cnblogs.com/files/shwee/APlayer.min_v1.10.1.css" rel="stylesheet">
+<script src="https://files.cnblogs.com/files/shwee/APlayer.min_v1.10.1.js"></script> 
+
+<script type="text/javascript">
+const ap = new APlayer({
+    container: document.getElementById('player'),
+    fixed: true,
+    autoplay: false, // Auto play
+    audio: [
+     {
+        name: 'Young',
+        artist: 'Meng Ran',
+        url: 'https://sharefs.yun.kugou.com/202007312156/bca63d525a16a0616f627034dd952225/G170/M07/16/11/SocBAF3H3aqAUYOEADmpdloW3bU827.mp3',
+        cover: 'http://singerimg.kugou.com/uploadpic/pass/softhead/100/20200316/20200316100918253.jpg',
+    },
+    {
+         name: 'Dust',
+        artist: 'Lin Xiaoke',
+        url: 'https://sharefs.yun.kugou.com/202007312152/ce719e234408f2a051036e82fa2d3c66/G234/M01/01/17/iocBAF8VC52AVMU_AEUrEl4PAeg694.mp3',
+        cover: 'http://singerimg.kugou.com/uploadpic/pass/softhead/100/20200717/20200717092613611085.jpg',
+    }, 
+    {
+        name: 'Flying Birds and Cicadas',
+        artist: 'Ren Ran',
+        url: 'https://sharefs.yun.kugou.com/202007312155/0a8845b6d04662ec100a2451d97e8feb/G229/M09/13/0F/xZQEAF79mTeAKaQYAEhIqW4SCKE706.mp3',
+        cover: 'http://singerimg.kugou.com/uploadpic/pass/softhead/100/20180511/20180511143205725.jpg',
+    },
+       {
+        name: 'Dancing With Your Ghost',
+        artist: 'Sasha Sloan',
+        url: 'https://sharefs.yun.kugou.com/202007312149/7211cbed6b9f9aff2c882cdcb559fa6a/G164/M08/10/05/5A0DAF0Tb5KAba2GADBLeoi7JDs405.mp3',
+        cover: 'http://y.gtimg.cn/music/photo_new/T002R300x300M000002G0MjC1C1DzQ.jpg',
+    },
+    {
+        name: 'Fireworks in the World',
+        artist: 'Tian Er Bei',
+        url: 'https://sharefs.yun.kugou.com/202007312155/75225268703973b37f5032773d57ca3e/G229/M06/11/05/xZQEAF7XTwaAGgahAEDY_d8fN9A054.mp3',
+        cover: 'http://singerimg.kugou.com/uploadpic/pass/softhead/100/20200414/20200414235715772797.jpg',
+    },
+    {
+        name: 'Exiled Immortal',
+        artist: 'Yi Ge Sai Ting, Ye Li',
+        url: 'https://sharefs.yun.kugou.com/202007312202/e6ce50923987a990b986d1b3af081d64/G201/M0A/03/05/qZQEAF47vMmAQQKJACuOCD-UTD4341.mp3',
+        cover: 'http://y.gtimg.cn/music/photo_new/T002R300x300M000004VNyEb4JwvZc.jpg',
+    }
+    ]
+});
+ap.init();
+</script>
+
+{/* Add site statistics */}
+<div id="cnzzProtocol"  style="display: none;">
+    <span class="id_cnzz_stat_icon" id='cnzz_stat_icon_your_id'></span>
+    <script src='https://v1.cnzz.com/z_stat.php?id=your_id&online=1&show=line' type='text/javascript'></script>
+</div>
+
+{/* Image magnification effect */}
+<script type="text/javascript" src="https://blog-static.cnblogs.com/files/jajian/img.enlarge.js"></script>
+<div id="outerdiv" style="text-align: center;position: fixed;z-index: 1000;top: 0;left: 0;
+    width: 100%;height: 100%;background-color: rgba(255,255,255,.9);">
+    <img id="bigimg" style="height: auto;width: 65%;border: 5px solid #7e8c8d; 
+        margin: auto;position: absolute;top: 0;bottom: 0;left: 0;right: 0;" src="" />
+</div>
+
+{/* Mouse adsorption effect */}
+<script id="c_n_script" src="https://blog-static.cnblogs.com/files/xiaokang01/js.js" color="240,230,140" opacity="1" count="75" zindex="-2">if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+} else {}</script>
+```
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

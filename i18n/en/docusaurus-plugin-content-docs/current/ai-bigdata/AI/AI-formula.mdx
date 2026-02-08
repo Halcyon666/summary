@@ -1,0 +1,116 @@
+---
+id: ai-formula
+title: AI Formula
+sidebar_label: AI Formula
+sidebar_position: 7
+description: AI Formula
+tags:
+- ai
+- machine-learning
+sources:
+- lays-in-ai
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+---
+# AI Formula
+
+## Basic Concepts
+
+1. Loss Function
+2. Gradient Descent Algorithm
+3. Activation Function in Deep Learning
+4. `MLP` (Multi-Layer `Perceptron`) Neural Network
+5. `CNN` Convolutional Neural Network
+6. Image (`RGB` and Grayscale)
+
+Data Processing
+
+Data Dimensionless
+
+https://github.com/fengdu78/Coursera-ML-AndrewNg-Notes
+
+- [ ]  Prompt optimization
+
+
+## Loss Function
+
+1. **Loss Function for Regression Tasks** (Used for predicting continuous values)
+
+$$
+
+MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
+
+$$
+
+1. **Loss Function for Classification Tasks** (Used for predicting discrete categories)
+2. **Loss Function for Object Detection/Segmentation Tasks**
+
+## Gradient Descent Algorithm
+
+![20250923224408](https://s2.loli.net/2025/09/23/XrHBGJgT4PtVpRn.png)
+
+## **Activation Function**
+
+![20250923224444](https://s2.loli.net/2025/09/23/v359tc2lEYnyF8k.png)
+
+$$
+Swish: f(x)=x⋅δ(x)=x⋅\frac{1}{1 + e^{-x}}
+$$
+
+## `MLP` Principle
+
+**Linear Transformation** 
+
+$z=Wx+b$
+
+Where:
+
+- $W$ is weight matrix,
+- $x$ is input vector,
+- $b$ is bias term.
+
+**Activation Function**
+
+$ReLU:f(z)=max(0,z)$
+
+$Sigmoid:f(z)=\frac{1}{1 + e^{-z}}$
+
+$Tanh:f(z)=\frac{e^z - e^{-z}}{e^z + e^{-z}}f(z)$
+
+SoftMax omitted, converts data to probability distribution
+
+**Backpropagation**
+$$
+W=W-α⋅\frac{∂L}{∂W}
+$$
+
+Where α is learning rate
+
+## `CNN` Principle
+
+**Includes four layers**
+
+- Convolutional Layer
+- Pooling Layer
+- Fully Connected Layer
+- Output Layer
+
+## Other Neural Networks
+
+- Recurrent Neural Network (RNN)
+- Long Short-Term Memory (LSTM)
+- Gated Recurrent Unit (GRU)
+- Autoencoder
+- Generative Adversarial Network (GAN)
+- Transformer Network
+- Graph Neural Network (GNN)
+- Reinforcement Learning (RL)
+- Attention Mechanism
+
+https://chatgpt.com/share/67a7ee4e-d198-8009-996d-cd7cb5e11c65
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

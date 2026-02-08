@@ -1,0 +1,158 @@
+---
+id: hbase
+title: HBASE
+sidebar_label: HBASE
+sidebar_position: 10
+description: HBase is based on Hadoop storage. HDFS is write-once read-many, does not allow modification; HBase provides complete CRUD capabilities. How is "Update" implemented?
+tags:
+- ai
+- machine-learning
+sources:
+- hadoop
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+---
+# HBASE
+
+## Overview
+
+### HBase is a set of distributed, scalable, non-relational database based on Hadoop provided by Apache - Does not support SQL
+
+## Features
+
+###  HBase is suitable for storing sparse data - HBase can store structured and semi-structured data
+    In HBase, if you need to delete a table, you must first disable this table.
+    When creating a table, if namespace is not specified, it defaults to `default`.
+    HBase is based on Hadoop storage, essentially based on HDFS. HDFS features write-once read-many, not allowing modification; HBase provides complete CRUD capabilities. How is "Update" implemented? 
+    - HBase's "Update" is not modifying previous data but appending to the end of file. When adding every piece of data, a timestamp is added. When reading data, only returning the latest data achieves the effect of update.
+    - Timestamp is called the version number of data - VERSION.
+    
+    If not specified, by default only the last version of data is returned; if multiple versions are needed, it must be specified when creating the table to retain versions.
+
+###  Row Key - Rowkey
+    a. Equivalent to Primary Key in Relational Database.
+    b. Row Key does not need to be specified when creating table, but dynamically specified when adding data.
+    c. Row Key is sorted lexicographically by default.
+
+###  Column Family - Column Family:
+    a. In HBase, we don't care about columns, we care about Column Families - When creating a table, need to specify column family but not columns. Columns can be dynamically added or deleted.
+    b. A column family can contain 0 to multiple columns.
+    c. A column family is equivalent to a table in Relational Database.
+    d. Every table contains at least 1 column family.
+
+`create 'person','basic','expand'` // person: Row Key, basic, expand: Column Families
+
+###  Namespace - namespace
+    a. Equivalent to Database in Relational Database.
+    b. If not specified, table is placed in default by default.
+
+`create 'hbasedemo:person','basic','expand'` // person table in hbasedemo namespace
+
+### Cell - Cell
+    a. Row Key + Column Family + Column + Timestamp/Version uniquely locks a cell.
+    b. Every cell contains a timestamp.
+
+### hbase.txt
+
+## Mechanisms
+
+###  1. Split table into parts from Row Key direction, each part is an HRegion. A table has at least 1 HRegion.
+    2. Each HRegion is assigned to a certain HRegionServer for management.
+    3. Because Row Keys are ordered, data ranges between HRegions do not cross, so different Row Keys can go to different HRegionServers for processing.
+    4. HRegion does not store data, data eventually lands on HDFS. HRegion manages data.
+    5. When HRegion size (size of data managed by HRegion) reaches a certain limit (default 10G), HRegion will split into two equal HRegions. One of the split HRegions will be transferred to another HRegionServer for management. Note: Data transfer does not occur during this process.
+    6. HRegionServer manages HRegion, HRegion manages data.
+    7. HRegion is the minimum unit for HBase distributed storage and load balancing, but not minimum unit for data storage.
+    8. Structure of HRegion:
+        a. Each HRegion contains 1 to multiple HStores, number of HStores is determined by number of Column Families.
+        b. Each HStore contains 1 memStore (Write Cache) and 0 to multiple StoreFiles/HFiles.
+        c. Data in HBase is eventually stored in HFiles, HFiles eventually land on HDFS.
+
+###
+###  1. When HBase starts, it registers an `/hbase` node on Zookeeper.
+    2. When Active HMaster starts, it registers a temporary child node `/hbase/master` under `/hbase` node of Zookeeper - Active HMaster maintains this temporary node via heartbeat. Meaning once HMaster is down, heartbeat is gone, this temporary node disappears, Zookeeper knows to find another one from Backup HMasters to switch to Active.
+    3. When Backup HMaster starts, it registers temporary child node under `/hbase/backup-masters` node of Zookeeper.
+    4. When HRegionServer starts, it also registers child node under `/hbase/rs` node of Zookeeper.
+
+### HMaster
+
+-   1. In HBase, number of HMasters is not limited, can start arbitrary number of HMasters, via command: `sh hbase-daemon.sh start master`.
+    2. Whoever starts first is Active HMaster.
+    3. Active HMaster monitors node `/hbase/backup-masters` on Zookeeper, monitors if number of child nodes under this node changes.
+    4. Active HMaster monitors `/hbase/backup-masters` every time it syncs messages.
+    5. In actual process, number of HMaster nodes generally does not exceed 3: 1 Active 2 Backup.
+    6. Role/Responsibilities of HMaster:
+        a. Manage HRegionServer.
+        b. Responsible for DDL (Table Structure Operations) of tables in HBase. DML (Data Operations) do not go through HMaster.
+
+### How to determine HRegion location for first read/write in HBase
+
+-   a. Client caches position of `.meta.` file after obtaining it.
+    b. After reading `.meta.`, client caches content of `.meta.` file.
+    c. If client crashes or HRegion transfer happens, cache becomes invalid, need to re-establish.
+
+### HRegionServer
+
+-   1. Role of HRegionServer is to manage HRegion. Official docs state: Each HRegionServer can manage 1000 HRegions, each HRegion can manage at most 10G data.
+    2. HRegionServer contains 1 WAL, 1 BlockCache and 0 to multiple HRegions.
+    3. WAL - Write Ahead Log -> HLog
+        a. WAL lands on HDFS.
+        b. When HRegionServer receives write request, it first records request to WAL. After successful recording, it updates data to memStore. Purpose is to prevent data loss.
+        c. After WAL reaches certain limit, a new WAL is generated. Meanwhile original WAL becomes oldWAL, which will be cleaned up regularly.
+        d. Before HBase 0.94, WAL only allowed serial write; From HBase 0.94, NIO channel mechanism was introduced, allowing parallel write of WAL.
+    4. BlockCache
+        a. BlockCache is essentially a read cache, maintained in memory.
+        b. BlockCache follows "Locality" principle when caching - Guess:
+            i. Temporal Locality: If a piece of data is read, probability of being read second time is higher than other data. HBase puts this data into read cache.
+            ii. Spatial Locality: If a piece of data is read, probability of adjacent data being read is higher than other data. So put adjacent data into cache too.
+        c. Default size of BlockCache is 128M.
+        d. BlockCache adopts LRU strategy.
+    
+    In actual process, if there are many scan operations, turn off BlockCache; if many get operations, consider using BlockCache.
+
+### Compaction Mechanism
+
+-   1. HBase provides 2 types of merging mechanisms:
+        a. minor compact: Merge several adjacent small HFiles of an HRegion into a large HFile. After merge, multiple HFiles still exist.
+        b. major compact: Merge all HFiles of an HRegion into one HFile. After merge, only 1 HFile exists.
+    2. Efficiency of minor compact is relatively higher, so HBase default is also minor compact.
+    
+    During HFile merge process, data marked for deletion and obsolete data (multiple versions of data can be kept) will be discarded.
+
+### Write Process
+
+-   1. When HBase receives write request (put/delete/deleteall), first determine which HRegion to write data to.
+    2. Find corresponding HRegionServer, record write request to WAL, then update data to memStore.
+    3. After data updated to memStore, it is sorted: Row Key lexicographical -> Column Family Name lexicographical -> Column Name lexicographical -> Timestamp reverse order.
+    4. memStore maintained in memory, size is 128M.
+    5. After memStore reaches certain condition, it flushes to generate a new StoreFile/HFile - Single HFile is ordered; If flushed multiple times, all HFiles are locally ordered among themselves.
+    6. memStore flush conditions:
+        a. Automatically flush when memStore is full.
+        b. Default when WAL reaches 1G, memStore also flushes, and generates a new WAL.
+        c. When sum of memory occupied by all memStores on an HRegionServer reaches 35% of physical memory, flush the largest memStore.
+    7. HFile eventually lands on HDFS.
+    8. Format of first version of HFile:
+        a. DataBlock: Stores data.
+            i. DataBlock is minimum storage unit in HBase.
+            ii. DataBlock default is 64KB. Small DataBlock better for query (get); Large DataBlock better for traversal (scan).
+            iii. Read cache spatial locality caches by DataBlock unit.
+            iv. Each DataBlock consists of a Magic and multiple KeyValues.
+                1) Magic: Random number, used for verification.
+                2) KeyValue: Actual data storage.
+        b. MetaBlock: Stores metadata. Only appears in `.meta.` file.
+        c. FileInfo: File information. Description of current HFile.
+        d. DataIndex: Records start byte of each DataBlock in file.
+        e. MetaIndex: Records start byte of each MetaBlock in file.
+        f. Trailer: At end of file, fixed 4 bytes. First 2 bytes record DataIndex position, last 2 bytes record MetaIndex position.
+    9. In second version of HFile, a Bloom Filter was added.
+
+### Read Process
+
+-   1. When HBase receives read request, first lock unique HRegion. HRegion is managed by an HRegionServer, so effectively locked unique HRegionServer.
+    2. First try to read data from BlockCache; if not found, try reading memStore; if not found in memStore, then verify reading HFile.
+    3. When reading HFile, first filter out HFiles not in range based on Row Key range; after range filtering, use Bloom Filter for secondary filtering.
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

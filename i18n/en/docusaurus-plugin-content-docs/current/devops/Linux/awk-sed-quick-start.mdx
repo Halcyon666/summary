@@ -1,0 +1,89 @@
+---
+id: awk-sed-quick-start
+title: AWK SED Simple Usage
+sidebar_label: AWK SED Simple Usage
+sidebar_position: 10
+description: shell tee awk.txt <<-'EOF' john wang male 30 02103213 ludc dasf fama
+  12 12311321 EOF awk '{print $1,$4}' awk.txt
+tags:
+- containerization
+- devops
+- docker
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- common-shell-command
+---
+# awk
+
+```shell
+# awk 
+tee awk.txt <<-'EOF'
+john wang male 30 02103213
+ludc dasf fama 12 12311321
+EOF
+
+awk '{print $1,$4}' awk.txt
+awk '{print NF}' awk.txt
+# Print last line, awk defaults to space as separator, NF internal variable represents number of elements after division by separator
+awk '{print $NF}' awk.txt
+cat awk.txt  | awk '{print substr($1,1)}'
+cat awk.txt  | awk   '{print length}'
+
+cat awk.txt | awk 'BEGIN{total=0}{total+=$4}END{print total}'
+cat awk.txt | awk 'BEGIN{total=0}{total+=$4}END{print total/NR}'
+```
+
+# sed
+
+```shell
+tee sed.txt <<-'EOF'  
+this is line 1, this is First line
+this is line 2, the Second line, Empty line followed
+
+this is line 4, this is Third line
+this is line 5, this is Fifth line
+EOF
+# Replace
+sed 's/this/That/g ; s/line/LINE/g' sed.txt
+# Delete first line 
+sed '1d' sed.txt
+# Save file after deletion
+sed '1d' sed.txt > save_file
+# If want to modify source file directly
+sed -i '1d' save_file
+
+# Delete specified range (lines 1-3)
+sed '1,3d' sed.txt
+
+# Delete last line
+sed '$d' sed.txt
+
+# Empty file
+sed '1,$d' sed.txt
+
+# Keep only 5th line
+sed '5!d' sed.txt
+
+# Delete all lines containing Empty
+sed '/Empty/d' sed.txt 
+
+# Delete empty lines
+sed '/^$/d' sed.txt
+
+# Replace first value of each line
+sed 's/line/LINE' sed.txt
+
+sed 's/line/LINE/2' sed.txt
+sed 's/line/LINE/g' sed.txt
+
+# Replace this at beginning with that
+sed 's/^this/that/'
+```
+
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

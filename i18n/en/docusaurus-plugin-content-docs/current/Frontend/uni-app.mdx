@@ -1,0 +1,151 @@
+---
+id: uni-app
+title: uni-app Development
+sidebar_label: uni-app Development
+sidebar_position: 10
+description: '> Using vue3 vite ts uni-app uni-ui - Reload after changing route page - 750rpx 1334rpx Full screen iPhone6 - view == div text==span'
+tags:
+- frontend
+- javascript
+- react
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+---
+## WeChat Mini Program Development
+
+> Using vue3 vite ts uni-app uni-ui
+
+### Tips
+
+- After changing the route page, you need to re-run it.
+
+- 750rpx * 1334rpx Full screen iPhone6
+- view == div text==span
+- #ifdef H5
+
+  ```ts
+  #ifdef H5
+  // Code block compiled only on H5 platform
+  console.log('This is running on H5 platform.');
+  #endif
+  
+  // This part of code will be compiled on all platforms
+  console.log('This is common code for all platforms.');
+  
+  ```
+
+  
+
+### uni-app Commands
+
+- Create Project
+  
+
+`npx degit dcloudio/uni-preset-vue#vite-ts uni-app-vue`
+
+- Install Dependencies
+
+
+`pnpm i`
+
+- Prune Dependencies
+- 
+`pnpm store prune`
+
+- Compile
+
+`pnpm dev:mp-weixin`
+
+- Run
+
+Run method: open Weixin Mini Program Devtools, import dist\dev\mp-weixin run.
+
+[VSCODE Plugin Related Information](https://blog.csdn.net/weixin_43993776/article/details/134260744)
+
+- These two are for checking ts 
+
+`pnpm i -D @types/wechat-miniprogram @uni-helper/uni-app-types`
+
+- Install Hints
+
+`pnpm i -D @uni-helper/uni-ui-types`
+
+### Troubleshooting
+
+#### `pnpm -i` Error Handling
+
+- Error: Expected "0.17.19" but got "0.16.17"
+- registry.npmmirror.com+esbuild@0.17.19\node_modules\esbuild
+
+`pnpm install esbuild@0.17.19`
+
+
+
+#### White Screen on Real Device Debugging
+
+[Related Information](https://blog.csdn.net/weixin_63853754/article/details/132316522)
+
+eslintrc.json，.prettierc.json
+
+- Add appid and settings to manifest.json
+
+  ```json
+   "mp-weixin" : {
+      "appid" : "xxxxxxxxxx",
+      "setting" : {
+          "urlCheck" : false,
+          "es6" : true,
+          "postcss" : true,
+          "minified" : true
+      },
+      "usingComponents" : true
+  },
+  ```
+
+  > <font color='red'>"es6"</font> : true, is very important, otherwise real device debugging will give you a white screen
+
+#### Cannot find name 'uni'.ts(2304)
+
+`pnpm add -D @types/uni-app`
+
+[Original Author](https://blog.csdn.net/qq_15006083/article/details/110196313)
+
+#### Solve pinia hasInjectionContext error
+
+[hasInjectContext error](https://blog.csdn.net/k1_maple/article/details/130954853)
+
+
+
+#### call with Alibaba OSS service
+
+When upload a Gzip png picture,
+
+and only set the ContentType header;
+
+`metadata.setContentType("image/png"); `
+
+and not set 
+
+`metadata.setContentEncoding("gzip");`
+
+anyway I had tried, the uni-app wechat miniprogram can't display the picture,
+
+I make sure there source data.
+
+#### wrong url, [Render Layer Network Layer Error] Failed to load local image resource 
+
+if url is `http:/` just one slash is wrong
+
+## Shortcuts
+
+- IntelliSense
+
+`ctl+i`
+
+-
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

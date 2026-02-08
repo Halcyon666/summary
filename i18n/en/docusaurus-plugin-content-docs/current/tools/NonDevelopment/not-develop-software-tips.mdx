@@ -1,0 +1,171 @@
+---
+id: not-develop-software-tips
+title: Common Software Tips
+sidebar_label: Common Software Tips
+sidebar_position: 10
+description: Tips for Chrome, PicGo, Windows SMB sharing, and system maintenance
+tags:
+- development
+- tools
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+---
+# Common Software Tips
+
+
+## Chrome Cannot Open Settings
+
+Set the exe program to run in compatibility mode.
+
+
+## Tool to View HEIC Images
+
+[copytrans](https://copytrans.studio/copytrans-heic-is-now-part-of-copytrans-studio/)
+
+
+
+## PicGo Image Upload Issue
+
+When using PicGo(app) or PicList, if you encounter error `"message": "getaddrinfo ENOTFOUND smms",` 
+
+![image-20240307234840371](https://s2.loli.net/2024/03/07/wNRUFiyEqLblzJv.png)
+
+
+
+Just switch to `PicGo-Core(command line)`, and modify `～/.picgo/config.json` file:
+
+```json
+{
+  "picBed": {
+    "uploader": "smms",
+    "current": "smms",
+	"smms": {
+      "token": "put your token here"
+    }
+  },
+  "picgoPlugins": {}
+}
+```
+
+## PicGo Plugin Usage
+
+### Use `PicGo-Core` installed in Typora
+
+1. Install PicGo extension in VS Code.
+2. Set PicGo Config Path in VS Code: `%USERPROFILE%\.picgo\config.json`.
+
+![](https://s2.loli.net/2025/09/20/s8rYEGoZlyJe3US.png)
+
+:::tip
+If you can't find it, you can look for it inside PicGo.
+![20260201182045](https://s2.loli.net/2026/02/01/RxIjLb5h6muAPNe.png)
+:::
+
+
+### Use `picgo` installed via npm
+
+```shell
+# View pnpm global install path
+pnpm root -g
+
+# Find picgo location
+pnpm list -g picgo
+```
+
+![20250920223240](https://s2.loli.net/2025/09/20/aW4mJGQHipP6o2e.png)
+
+1. Install PicGo extension in VS Code.
+2. Set PicGo Config Path in VS Code to `C:\Users\xxx\AppData\Local\pnpm\global\5\node_modules\picgo\config.json`.
+
+
+## U30Air SMB Sharing Issue
+
+Solution (Enable insecure guest logons), via Local Group Policy (Suitable for Win10 Pro/Enterprise).
+
+1. `Win + R` → Enter `gpedit.msc` → Enter.
+2. Path:
+    
+    ```
+    Computer Configuration → Administrative Templates → Network → Lanman Workstation
+    
+    ```
+    
+3. Find policy:
+    
+    **Enable insecure guest logons**
+    
+4. Double click → Select **Enabled** → OK.
+5. Run `gpupdate /force` to refresh policy.
+
+
+## Win10 File Copy or Delete Issue
+
+Issue: Time remaining: Calculating... <br/>
+Solution: Execute in CMD Administrator mode, then restart computer.
+```cmd
+sfc /scannow
+```
+
+Result after execution: Windows Resource Protection found corrupt files and successfully repaired them.<br/>
+For online repairs, details are included in the CBS log file located at windir\Logs\CBS\CBS.log.<br/>
+For example C:\Windows\Logs\CBS\CBS.log. For offline repairs, details are included in the log file provided by the /OFFLOGFILE flag.
+
+![20250927015301](https://s2.loli.net/2025/09/27/p5vbtsFy1wqANcz.png)
+
+If still ineffective, use WiseForce Deleter to delete the folder.
+
+## Win10 Disable Updates
+
+```cmd
+gpedit.msc
+```
+
+In the "Local Group Policy Editor" window's left panel, navigate to: "Computer Configuration" > "Administrative Templates" > "Windows Components" > "Windows Update".
+Change "Remove access to use all Windows Update features" to Enabled.
+Change "Configure Automatic Updates" to Disabled.
+
+:::info
+How to Enable Updates <br/>
+Change "Remove access to use all Windows Update features" to Disabled.<br/>
+Change "Configure Automatic Updates" to Enabled.
+:::
+
+## PodCast Cannot Play / Cannot Play This Episode on This Device
+
+
+```plain text
+# Podcast 2025-10-22 22:51:33
+DOMAIN-SUFFIX,bbci.co.uk,PROXY
+DOMAIN-SUFFIX,bbc.co.uk,PROXY
+DOMAIN-SUFFIX,bbc.com,PROXY
+DOMAIN-SUFFIX,cdn.himalaya.com,PROXY
+DOMAIN-SUFFIX,api.himalaya.com,PROXY
+DOMAIN-SUFFIX,sphinx.acast.com,PROXY
+DOMAIN-SUFFIX,akamaized.net,PROXY
+DOMAIN-SUFFIX,llnwd.net,PROXY
+DOMAIN-SUFFIX,bbcmedia.co.uk,PROXY
+DOMAIN-SUFFIX,podcasts.apple.com,PROXY
+DOMAIN-SUFFIX,amp-api.podcasts.apple.com,PROXY
+DOMAIN-SUFFIX,podcasts.apple.com,PROXY
+```
+
+Configuration File Repository [Shadowrocket-Rules](https://github.com/Halcyon666/shadowrocket-rules) <br/>
+Use URL `https://raw.githubusercontent.com/halcyon666/shadowrocket-rules/main/sr_top500_banlist_ad.conf`
+
+
+## Clash Configuration File Location
+
+Method 1
+
+![20251022234033](https://s2.loli.net/2025/10/22/9SP3B1udGHsKUjT.png)
+
+Path: `C:\Users\Username\AppData\Roaming\io.github.clash-verge-rev.clash-verge-rev\profiles`
+
+Method 2
+
+![20251022234402](https://s2.loli.net/2025/10/22/IHUrzsATD5ZGpFy.png)
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

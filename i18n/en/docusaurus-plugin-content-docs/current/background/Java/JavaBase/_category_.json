@@ -1,0 +1,8 @@
+{
+    "label": "🏗️ Java Base",
+    "position": 7,
+    "link": {
+        "type": "generated-index",
+        "description": "Core Java concepts including annotations, file I/O, lambda, netty, and troubleshooting."
+    }
+}

@@ -1,0 +1,119 @@
+---
+id: oracle
+title: Oracle Related Problems Handling
+sidebar_label: Oracle Related Problems Handling
+sidebar_position: 10
+description: 'Installation steps address ORA-01078: failure in processing system parameters'
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+### Installation Steps
+
+[Installation steps address](https://www.cnblogs.com/lightnear/archive/2012/10/07/2714247.html)
+
+### Error Handling 1
+
+```
+ORA-01078: failure in processing system parameters
+LRM-00109: could not open parameter file '/data/oracle/product/11.2.0/db_1/dbs/initorcl.ora
+```
+
+[Solution](https://blog.csdn.net/yanjian_0809/article/details/85060706)
+
+### Error Handling 2
+
+```
+ORA-00205: error in identifying control file, check alert log for more info
+```
+
+[Solution](https://dbatricksworld.com/ora-00205-error-in-identifying-control-file-check-alert-log-for-more-info/)
+
+Specific operation steps:
+
+* Use command dbca to create database jc, go to /usr/oracle/app execute following command: can get control_files path.
+  `find . -name control0*`
+* Execute following command in SQL> window, check if control_files path is consistent with found one
+
+```
+show parameter control_files
+alter system set control_files='/usr/oracle/app/oradata/jc/control01.ctl'  scope=spfile;
+alter system set control_files='/usr/oracle/app/flash_recovery_area/jc/control02.ctl'  scope=spfile;
+```
+
+### Oracle Database Configuration Files
+
+[.bash_profile](https://github.com/whalefall541/my-spring-cloud/blob/master/config4oracle/.bash_profile)
+[initjc.ora](https://github.com/whalefall541/my-spring-cloud/blob/master/config4oracle/initjc.ora)
+
+### Linux Version Oracle Auto-start
+
+[See blog](https://www.cnblogs.com/shujuyr/p/13089147.html)
+
+### Oracle Database Character Set Chinese Garbled Characters
+
+[See blog](https://blog.csdn.net/chengjj2001/article/details/50075815/)
+
+### Oracle Time Judgment
+
+Do not use trim(column)>someDate
+
+Directly column > someDate
+
+### Oracle Database Connection String
+
+1. `;` expression SID format
+2. `/` expression ServiceName format
+
+### Fix Oracle Password Expiration Problem
+
+```sql
+Select * FROM dba_profiles s Where s.profile='DEFAULT' AND resource_name='PASSWORD_LIFE_TIME'; 
+
+ALTER PROFILE DEFAULT LIMIT PASSWORD_LIFE_TIME UNLIMITED; 
+
+
+alter user jc identified by 123456;
+alter user syste identified by 123456;
+```
+
+
+
+## Mybatis Primary Key Auto-increment Handling
+
+**oracle**
+
+```java
+@Bean
+public IKeyGenerator keyGenerator() {
+    return new H2KeyGenerator();
+}
+
+@KeySequence(value="xxx_sequence)
+@TableId(type=IdType.INPUT)
+prive Long primaryKey;
+```
+
+**mysql**
+
+```java
+@TableId(type=IdType.AUTO)
+```
+
+```java
+// Write on Mapper
+@Insert(xxx)
+@Options(useGeneratedKeys=true, keyProperty="id")
+int insertOne(XxxPo po)
+```
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

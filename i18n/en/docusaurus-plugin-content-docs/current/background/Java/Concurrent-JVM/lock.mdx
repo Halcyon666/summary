@@ -1,0 +1,54 @@
+---
+id: lock
+title: Lock
+sidebar_label: Lock
+sidebar_position: 10
+description: '![](https://s2.loli.net/2023/07/15/T2tYREiaSpo3eyx.png) Locks are user-facing, defining the interface for users to interact with locks (e.g. allowing two threads to access in parallel), hiding implementation details;'
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+## Lock
+
+![](https://s2.loli.net/2023/07/15/T2tYREiaSpo3eyx.png)
+
+## Concept Difference between Lock and Synchronizer AQS
+
+Locks are user-facing, defining the interface for users to interact with locks (e.g., allowing two threads to access in parallel), hiding implementation details;
+
+Synchronizers are for lock implementers, simplifying lock implementation by shielding underlying operations like synchronization state management, thread queuing, waiting, and waking up. Locks and synchronizers isolate the concerns of users and implementers well.
+
+![](https://s2.loli.net/2023/07/15/VABC2cpNlRky3eG.png)
+
+![](https://s2.loli.net/2023/07/15/XMl6UmZ3GkwvAyO.png)
+
+![](https://s2.loli.net/2023/07/15/e3fV7UgrLNY46ZP.png)
+
+![](https://s2.loli.net/2023/07/15/do1wcpmjDu49I3s.png)
+
+Therefore, the synchronizer provides a CAS-based method to set the tail node: compareAndSetTail(Node expect, Node update). It requires passing the tail node that the current thread "thinks" is correct and the current node. Only after setting successfully does the current node formally establish an association with the previous tail node.
+
+![](https://s2.loli.net/2023/07/15/BXPAhpmak3iQdKe.png)
+
+The synchronization queue follows FIFO. The head node is the node that successfully obtained the synchronization state. When the head node's thread releases the synchronization state, it will wake up the successor node. Upon successfully obtaining the synchronization state, the successor node will set itself as the head node, as shown in the figure below.
+
+![](https://s2.loli.net/2023/07/15/cIp73PN1Ym8Cf2o.png)
+
+Setting the head node is done by the thread that successfully obtained the synchronization state. Since only one thread can successfully obtain the synchronization state, the method for setting the head node does not need to use CAS to guarantee execution. It only needs to set the head node to the successor node of the original head node and disconnect the next reference of the original head node.
+
+![](https://s2.loli.net/2023/07/15/kSXlBVHZn1AW6zi.png)
+
+> Reference Materials
+> 
+> 1. Book Name: "The Art of Java Concurrency Programming" Authors: Fang Tengfei, Wei Peng, Cheng Xiaoming
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

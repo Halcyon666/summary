@@ -1,0 +1,8 @@
+{
+    "label": "🍃 Spring Ecosystem",
+    "position": 9,
+    "link": {
+        "type": "generated-index",
+        "description": "Comprehensive Spring framework guide covering Core, AOP, IOC, and Boot."
+    }
+}

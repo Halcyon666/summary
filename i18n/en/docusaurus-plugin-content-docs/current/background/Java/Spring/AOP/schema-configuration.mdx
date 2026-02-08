@@ -1,0 +1,365 @@
+---
+id: schema-configuration
+title: Schema-based AOP Configuration
+sidebar_label: Schema-based AOP Configuration
+sidebar_position: 10
+description: Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) for code related to this article (from official source spring-test module)
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) under `org.springframework.mylearntest` package for code related to this article (from [official source](https://github.com/spring-projects/spring-framework.git "official source") spring-test module).
+
+## Schema-based AOP Configuration
+
+Schema-based AOP is a new AOP usage way added after Spring 2.0 release. Schema-based AOP can be viewed from following two angles.
+
+* Change in Configuration Way: After Spring framework upgraded from version 1.x to 2.x, advocated container configuration way shifted from DTD-based xml to Schema-based xml, further improving flexibility and extensibility of configuration way. At same time, new Schema configuration way provided unique namespace specifically for Spring's AOP function. Original DTD-based AOP configuration way in 1.x can be ported to Schema-based AOP with just a little conversion of configuration way, so from this point of view, Schema-based AOP is just a change in configuration way.
+
+* Compromise of @AspectJ style AOP: To use @AspectJ style AOP, it is required to use Java 5 or higher version JDK or JRE, because annotation is a feature introduced only after Java 5 release. If we have to use versions before Java 5, but still want to use POJO-based Aspect declaration way, we can use Schema-based Spring AOP. Using Schema-based AOP, we can still use POJO to declare Aspect and related Advice. But no annotation marking is needed, just configure directly through Schema configuration file, @AspectJ style Pointcut expressions can also be configured into Schema-based configuration files.
+
+### Overview of Schema-based AOP Configuration
+
+New Schema-based AOP configuration way provides independent configuration elements for concepts like Pointcut, Advisor and Aspect. All these configuration elements are contained in a unified configuration element, namely `<aop:config/>`. It has only one attribute, proxy-target-class, corresponding to proxyTargetClass attribute in ProxyConfig. Through this attribute, we can control whether to use interface-based proxy or class-based proxy. It can have three sub-elements internally, namely `<aop:pointcut>`, `<aop:advisor>`, `<aop:aspect>`, must be configured in order.
+
+![](https://s2.loli.net/2023/07/15/eRbMPO3Cwx1XEyL.png)
+
+For `<aop:config>`, underlying implementation is basically using automatic proxy mechanism in 1.x. Corresponding automatic proxy implementation class will get necessary weaving information according to Pointcut, Advisor and Aspect sub-elements inside element, then perform automatic proxy for beans registered in container. So, if willing not to use `<aop:config>`, but still use AutoProxyCreator implementation class way is also possible.
+
+### Migration to Schema-based AOP
+
+1. Pure Migration
+
+Spring AOP in 1.x version encapsulates cross-cutting concerns via Advisor concept. When corresponding Pointcut definitions and Advice definitions are registered to container (usually in DTD-based XML configuration files), by declaring corresponding Advisor implementations, these Pointcut and Advisor definitions are assembled together, and finally final weaving is performed by a certain AutoProxyCreator.
+
+After turning to 2.x version Schema-based configuration way, these concepts are actually the same, the only thing that needs to be changed is the specific configuration way. Now use `<aop:advisor>` to replace bean definition declarations of various concrete Advisor implementation classes, use `<aop:config>` to replace various AutoProxyCreators.
+
+![](https://s2.loli.net/2023/07/15/HgJbXV8t4Ple9qZ.png)
+
+Use `<aop:advisor>` in `<aop:config>` to configure corresponding Advisor, which is Aspect specific to Spring AOP.
+
+* id: Specify ID of current Advisor definition
+* pointcut-ref: Specify what Pointcut definition corresponds to this Advisor via this attribute, need to specify specific Pointcut object reference registered in container
+* advice-ref: Specify Advice object reference corresponding to current Advisor
+* order: Specify order number of current Advisor, because basically all Advisor implementations implement Ordered interface
+
+2. Digging Deeper into `<aop:advisor>`
+
+![](https://s2.loli.net/2023/07/15/ICXHBAMW3c7z61Y.png)
+
+### @AspectJ to "Schema-based AOP Migration"
+
+Schema-based Advice declaration and Pointcut declaration excluding Introduction
+
+<details>
+	<summary>SchemaBasedAspect</summary>
+
+```java
+package org.springframework.mylearntest.aop2.schemaapsect;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.springframework.util.StopWatch;
+
+/**
+ * @Author: WhaleFall541
+ * @Date: 2020/8/12 21:33
+ */
+public class SchemaBasedAspect {
+	public void method1() {}
+	public void method2() {}
+
+	private  final Log logger = LogFactory.getLog(SchemaBasedAspect.class);
+
+	public void doBefore(JoinPoint jp) {
+		if (logger.isInfoEnabled()) {
+			logger.info("before method {" + jp.getSignature().getName()+"} execution");
+		}
+	}
+
+	public void doAfterReturning(JoinPoint jp, Object retValue) {
+		if (logger.isInfoEnabled()) {
+			logger.info("before method {" + jp.getSignature().getName()+"} execution");
+			logger.info("with return value: " + retValue);
+		}
+	}
+
+	public void doAfterThrowing(RuntimeException e) {
+		logger.error(ExceptionUtils.getStackTrace(e));
+	}
+
+	public void doAfter() {
+		logger.warn("release system resources ,etc.");
+	}
+
+	// NOTE：First parameter must be ProceedingJoinPoint
+	public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
+		StopWatch watch = new StopWatch();
+		try {
+			watch.start();
+			return pjp.proceed();
+		} finally {
+			watch.stop();
+			if (logger.isInfoEnabled()) {
+				logger.info(watch);
+			}
+		}
+	}
+}
+```
+</details>
+
+<details>
+	<summary>schemaaspect.xml</summary>
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation=
+			   "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+
+              	  http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<aop:config>
+		<aop:aspect id="myAspect" ref="schemaBasedAspect" order="2">
+			<aop:pointcut id="privatePointcut" expression="execution(public void *.doSth())"/>
+			<aop:before pointcut-ref="privatePointcut" method="doBefore"/>
+			<aop:after-returning pointcut-ref="privatePointcut" method="doAfterReturning" returning="retValue"/>
+			<aop:after-throwing pointcut-ref="privatePointcut" method="doAfterThrowing" throwing="e"/>
+			<aop:after pointcut-ref="privatePointcut" method="doAfter"/>
+			<aop:around pointcut-ref="privatePointcut" method="doAround"/>
+
+			<!--			introduction
+			types-matching Indicates which target objects to weave Introduction logic into
+			implement-interface Specifies interface definition type of newly added Introduction behavior
+			default-impl Specifies default implementation class of interface definition of newly added Introduction behavior-->
+			<aop:declare-parents types-matching="org.springframework.mylearntest.aop1.weaver.baseoninterface.MockTask"
+								 implement-interface="org.springframework.mylearntest.aop1.weaver.proxyfactorybean.ICounter"
+								 default-impl="org.springframework.mylearntest.aop1.weaver.proxyfactorybean.CounterImpl"/>
+		</aop:aspect>
+	</aop:config>
+
+
+    <bean id="schemaBasedAspect" class="org.springframework.mylearntest.aop2.schemaapsect.SchemaBasedAspect"/>
+
+
+</beans>
+```
+</details>
+
+## AOP Use Cases
+
+1. Exception Handling
+
+* unchecked exception: java.lang.Error, java.lang.RuntimeException and their subclasses. Compiler will not check these types during compilation.
+* checked exception: java.lang.Exception and its subclasses, but excluding RuntimeException branch. Must handle these exceptions, and compiler will check these exception types during compilation.
+
+![](https://s2.loli.net/2023/07/15/bXHyAk8ZaFerdfB.png)
+
+When unchecked exceptions may be thrown in multiple places in system, we can add exception handling logic at top level of call respectively to handle them (log, notify corresponding personnel). We can implement an Aspect corresponding to Fault handling, let it handle all possible Fault situations in system uniformly. This dedicated Aspect, we call it Fault Barrier.
+
+2. Security Check
+
+Acegi framework was originally developed independently of Spring, now has been merged into Spring Portfolio, renamed as Spring Security.
+
+3. Caching
+
+To avoid added caching implementation logic affecting implementation of business logic, we can let caching implementation be independent of business object implementation, encapsulate caching requirements in system via AOP Aspect, and only weave it for Joinpoints in system when caching support is definitely needed.
+
+![](https://s2.loli.net/2023/07/15/dVmx8W5NDYSGL4g.png)
+
+Existing Caching product implementations include EhCache, JBossCache etc.; Spring Modules project provides integration for existing Caching products, so Caching support can be added to Joinpoints in system via external declaration way.
+
+[Related Cases](https://www.infoworld.com/article/2072722/extending-declarative-caching-services-for-spring.html)
+
+## Spring AOP Extension
+
+### Problem Phenomenon
+
+There is a class with self-nested method calls
+
+<details>
+	<summary>NestableInvocationBO</summary>
+
+```java
+public class NestableInvocationBO {
+    public void method1() {
+        method2();
+        System.out.println("method1 executed");
+    }
+
+    public void method2() {
+        System.out.println("method2 executed");
+    }
+}
+```
+</details>
+
+Define an AspectJ for performance check
+
+<details>
+	<summary>PerformanceTraceAspect1</summary>
+
+```java
+@Aspect
+public class PerformanceTraceAspect1 {
+    private final Log logger = LogFactory.getLog(PerformanceTraceAspect1.class);
+
+    @Pointcut("execution(public void *.method1())")
+    public void method1() {}
+
+    @Pointcut("execution(public void *.method2())")
+    public void method2() {}
+
+    @Pointcut("method1() || method2()")
+    public void compositePointcut() {}
+
+    @Around("compositePointcut()")
+    public Object performanceTrace(ProceedingJoinPoint pjp) throws Throwable {
+        StopWatch watch = new StopWatch();
+        try {
+            watch.start();
+            return pjp.proceed();
+        } finally {
+            watch.stop();
+            System.out.println("PT in method" + pjp.getSignature().getName() + "]>>>>>" + watch.toString());
+            if (logger.isInfoEnabled()) {
+                logger.info("PT in method" + pjp.getSignature().getName() + "]>>>>>" + watch.toString());
+            }
+        }
+    }
+}
+```
+</details>
+
+Our Around Advice definition will intercept Joinpoint specified by `compositePointcut()`, i.e., match execution of `method1` or `method2`.
+
+<details>
+	<summary>Test4NestableInvocationBO</summary>
+
+```java
+public class Test4NestableInvocationBO {
+    public static void main(String[] args) {
+        AspectJProxyFactory weaver = new AspectJProxyFactory(new NestableInvocationBO());
+        weaver.setProxyTargetClass(true);
+        weaver.addAspect(PerformanceTraceAspect1.class);
+        Object proxy = weaver.getProxy();
+        ((NestableInvocationBO)proxy).method2();
+        ((NestableInvocationBO)proxy).method1();
+    }
+}
+```
+</details>
+
+### Cause Analysis
+
+```log
+method2 executed
+PT in methodmethod2]>>>>>StopWatch '': running time = 9203600 ns; [] took 9203600 ns = 100%
+method2 executed
+method1 executed
+PT in methodmethod1]>>>>>StopWatch '': running time = 65800 ns; [] took 65800 ns = 100%
+```
+
+Output results show:
+
+* First call to method2, intercepted and executed successfully
+* Second call to method1, only method1 execution interception succeeded, while method2 inside method1 was not intercepted
+
+Method call sequence diagram
+![](https://s2.loli.net/2023/07/15/pqer2USxgj7CTnL.png)
+
+Diagram of method nested call inside same object
+![](https://s2.loli.net/2023/07/15/dXsEeAV9ofqGQH8.png)
+When method1 calls method2, it calls method2 on TargetObject, not method2 on ProxyObject. Cross-cutting logic to be active is only woven into method2 method on ProxyObject, so method2 called by method1 failed to be intercepted successfully.
+
+3. Solution
+
+When target object depends on itself, we can also try to expose proxy object of target object to it, as long as target object calls corresponding method on its own proxy object, problem of internal call method not being intercepted can be solved.
+
+Spring AOP provides `AopContext` to expose proxy object of current target object, we just need to use `AopContext.currentProxy()` in target object to get proxy object corresponding to current target object. And verify setting `weaver.setExposeProxy(true);` in test class is enough.
+
+<details>
+	<summary>NestableInvocationBO Optimized</summary>
+
+```java
+package org.springframework.mylearntest.aop2.aopextends;
+
+import org.springframework.aop.framework.AopContext;
+
+/**
+ * @Author: WhaleFall541
+ * @Date: 2020/8/14 0:03
+ * Example of target object with nested method calls inside same object
+ */
+public class NestableInvocationBO {
+    public void method1() {
+        // method2(); // Before optimization
+        ((NestableInvocationBO)AopContext.currentProxy()).method2();//After optimization
+        System.out.println("method1 executed");
+    }
+
+    public void method2() {
+        System.out.println("method2 executed");
+    }
+}
+```
+</details>
+
+<details>
+	<summary>Test4NestableInvocationBO Optimized</summary>
+
+```java
+package org.springframework.mylearntest.aop2.aopextends;
+
+import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
+
+/**
+ * @Author: WhaleFall541
+ * @Date: 2020/8/14 0:24
+ */
+public class Test4NestableInvocationBO {
+    public static void main(String[] args) {
+        AspectJProxyFactory weaver = new AspectJProxyFactory(new NestableInvocationBO());
+        weaver.setProxyTargetClass(true);
+        // To make AopContext.currentProxy() effective, need to set exposeProxy attribute to true
+        weaver.setExposeProxy(true);
+        weaver.addAspect(PerformanceTraceAspect1.class);
+        Object proxy = weaver.getProxy();
+        ((NestableInvocationBO)proxy).method2();
+        ((NestableInvocationBO)proxy).method1();
+    }
+
+}
+```
+</details>
+
+```log
+method2 executed
+PT in methodmethod2]>>>>>StopWatch '': running time = 9457200 ns; [] took 9457200 ns = 100%
+method2 executed
+PT in methodmethod2]>>>>>StopWatch '': running time = 19500 ns; [] took 19500 ns = 100%
+method1 executed
+PT in methodmethod1]>>>>>StopWatch '': running time = 121900 ns; [] took 121900 ns = 100%
+```
+
+
+> References
+>
+> 1. Book Name: Spring Unveiled Author: Wang Fuqiang
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

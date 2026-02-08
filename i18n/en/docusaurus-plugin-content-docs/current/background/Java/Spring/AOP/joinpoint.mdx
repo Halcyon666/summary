@@ -1,0 +1,248 @@
+---
+id: joinpoint
+title: Joinpoint
+sidebar_label: Joinpoint
+sidebar_position: 10
+description: Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) for code related to this article (from official source spring-test module)
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) under `org.springframework.mylearntest` package for code related to this article (from [official source](https://github.com/spring-projects/spring-framework.git "official source") spring-test module).
+
+## AOP Implementation Ways in JAVA
+
+Languages capable of implementing AOP are collectively called AOL (Aspect-Oriented Language). Besides AspectJ:
+
+* AspectC
+* AspectC++
+* Aspect.Net
+* AspectL(Lisp)
+* AspectPHP
+* ......
+
+
+AOP in JAVA
+
+1. Dynamic Proxy
+* During runtime, dynamically generate corresponding proxy objects for corresponding interfaces, encapsulate cross-cutting concern logic into InvocationHandler of dynamic proxy, then during system runtime, weave cross-cutting logic into corresponding proxy classes according to module positions where cross-cutting concern needs to be woven.
+2. Dynamic Bytecode Enhancement
+* Use Java tool libraries like ASM or CGLIB to dynamically construct class files of bytecode during program runtime.
+* Weave cross-cutting logic through dynamic bytecode enhancement technology during runtime, generate corresponding subclasses for these system module classes, and add cross-cutting logic to these subclasses, so that these dynamically generated subclasses are used during application execution, thereby achieving the purpose of weaving cross-cutting logic into the system.
+* If classes or instance methods in classes that need to be extended are declared as final, they cannot be extended by subclassing. When Spring AOP cannot use dynamic proxy mechanism to extend AOP functions, it will use dynamic bytecode enhancement technology of CGLIB library to implement AOP extension.
+3. Java Code Generation
+* EJB container provides weaving information based on deployment descriptor file, will generate corresponding java code for corresponding functional module classes according to information provided by descriptor, then compile java code to generate corresponding java classes through deployment tools or deployment interfaces. Afterward, functional module classes deployed to EJB container can work normally.
+4. Custom Class Loader
+* All class files of java programs must be loaded into Java Virtual Machine by corresponding Classloader before they can run. Default Classloader will read class bytecode file, then parse and load these class files into virtual machine for running according to class bytecode specification. If I can weave cross-cutting logic into class file during this class loading into virtual machine for running, wouldn't it complete the integration of AOP and OPP?
+* We can complete weaving of cross-cutting logic into system by custom class loader. Custom class loader reads weaving rules and necessary information prescribed by external files, can add cross-cutting logic to existing logic of system module classes during class file loading, then hand over modified class to java virtual machine for running. Through class loader, we can basically weave most classes and corresponding instances, function is naturally much more powerful than previous ways. However, the biggest problem with this way is use of class loader itself. Some application servers control the entire class loading system, so certain problems may occur in such scenarios.
+* Jboss AOP and AspectWerkz framework which has been merged into AspectJ project both use custom class loader way to implement.
+5. AOL Extension
+* AOL extension is the most powerful and most difficult to master way, AspectJ mentioned before belongs to this way. In this way, various concepts of AOP mostly have one-to-one corresponding entities in AOL. We can use extended AOL to implement any AOP concept entities and even OPP concept entities, such as Aspect and Class. All AOP concepts get the most perfect expression in AOL.
+* Using extended AOL, it is quite powerful in expression of AOP concepts, making all cross-cutting concern logic involved in AOP can live freely in its own "kingdom" before weaving. And features like "compiling to static class can improve system running performance", "java virtual machine can load file where woven AO component is located and run it like loading normal class". Using this way requires learning an extended AOL language.
+
+![](https://s2.loli.net/2023/07/15/lArHhiuGkVqd4Nm.png)
+
+## Joinpoint
+
+* Joinpoint
+* Pointcut Expression
+  
+  * Directly specify method name where Joinpoint is located
+  * Regular Expression: Supported by Jboss, Spring AOP, AspectWerkz etc.
+  * Use specific Pointcut expression language: After Spring 2.0, with help of AspectJ's Pointcut expression language interpreter, supports using AspectJ's Pointcut expression language to specify Pointcut.
+
+![](https://s2.loli.net/2023/07/15/ZeYxB1TENhjXPRt.png)
+
+### Static Proxy
+
+<details>
+	<summary>IRequestable</summary>
+
+
+```java
+package org.springframework.mylearntest.aop.staticproxy;
+
+public interface IRequestable {
+    void request();
+}
+```
+
+```java
+package org.springframework.mylearntest.aop.staticproxy;
+
+public class RequestableImpl implements IRequestable{
+    @Override
+    public void request() {
+        System.out.println(" request process in RequestableImpl");
+    }
+}
+```
+
+</details>
+
+<details>
+	<summary>ServiceControlRequestableProxy</summary>
+
+```java
+package org.springframework.mylearntest.aop.staticproxy;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class ServiceControlRequestableProxy implements IRequestable{
+    private static final Logger logger = LoggerFactory.getLogger(ServiceControlRequestableProxy.class);
+    private IRequestable requestable;
+
+    public ServiceControlRequestableProxy(IRequestable target) {
+        this.requestable = target;
+    }
+
+    @Override
+    public void request() {
+        System.out.println("request process in ServiceControlRequestableProxy");
+        requestable.request();
+    }
+
+    public static void main(String[] args) {
+        IRequestable target = new RequestableImpl();// Object to be proxied
+        IRequestable proxy = new ServiceControlRequestableProxy(target); // Pass object to be proxied into proxy via constructor
+        proxy.request();// Let proxy handle request
+    }
+}
+```
+</details>
+
+
+### Dynamic Proxy
+
+Dynamic proxy mechanism mainly consists of a class and an interface, namely `java.lang.reflect.Proxy` class and `java.lang.reflect.InvocationHadler` interface.
+
+<details>
+	<summary>RequestCtrlInvocationHandler</summary>
+
+```java
+package org.springframework.mylearntest.aop.dynamicproxy;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+
+public class RequestCtrlInvocationHandler implements InvocationHandler {
+    private Object target;
+
+    public RequestCtrlInvocationHandler(Object target) {
+        this.target = target;
+    }
+
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        System.out.println("reflect invoke before target method");
+        if ("request".equals(method.getName())) {
+            System.out.println("dynamic proxy target method");
+            return method.invoke(target, args);
+        }
+        return null;
+    }
+}
+```
+</details>
+
+<details>
+	<summary>Test4DynamicProxy</summary>
+
+```java
+package org.springframework.mylearntest.aop.dynamicproxy;
+
+import org.springframework.mylearntest.aop.staticproxy.IRequestable;
+import org.springframework.mylearntest.aop.staticproxy.RequestableImpl;
+
+import java.lang.reflect.Proxy;
+
+@SuppressWarnings("rawtypes")
+public class Test4DynamicProxy {
+    public static void main(String[] args) {
+        // arg1:ClassLoader arg2:Interface info arg3:InvocationHandler implementation class and pass in object to be proxied
+        IRequestable requestable = (IRequestable) Proxy.newProxyInstance(
+                Test4DynamicProxy.class.getClassLoader(),
+                new Class[]{IRequestable.class},
+                new RequestCtrlInvocationHandler(new RequestableImpl()));
+        requestable.request();
+    }
+}
+```
+</details>
+
+If you want to understand dynamic proxy deeply, please read "Java Reflection in Action".
+
+### CGLIB Bytecode Generation
+
+To use CGLIB extension subclass, first need to implement a `net.sf.cglib.proxy.Callback`, but more often, we will directly use `net.sf.cglib.proxy.MethodInterceptor` interface (`MethodInterceptor` extends `Callback` interface).
+
+<details>
+	<summary>Requestable</summary>
+
+```java
+package org.springframework.mylearntest.aop.CGLIBClassGenerate;
+
+public class Requestable {
+    public void request(){
+        System.out.println("req in requestable without implement any interface");
+    }
+}
+```
+</details>
+
+<details>
+	<summary>RequestCtrlCallback</summary>
+
+```java
+package org.springframework.mylearntest.aop.CGLIBClassGenerate;
+
+import org.springframework.cglib.proxy.MethodInterceptor;
+import org.springframework.cglib.proxy.MethodProxy;
+
+import java.lang.reflect.Method;
+
+public class RequestCtrlCallback implements MethodInterceptor {
+    @Override
+    public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
+        if (method.getName().equals("request")) {
+            System.out.println("proxy generated by cglib intercept method request");
+            return methodProxy.invokeSuper(o, objects);
+        }
+        return null;
+    }
+}
+```
+</details>
+
+<details>
+	<summary>Test4CGLIB</summary>
+
+```java
+package org.springframework.mylearntest.aop.CGLIBClassGenerate;
+
+import org.springframework.cglib.proxy.Enhancer;
+
+public class Test4CGLIB {
+    public static void main(String[] args) {
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(Requestable.class);
+        enhancer.setCallback(new RequestCtrlCallback());
+
+        Requestable proxy = (Requestable) enhancer.create();
+        proxy.request();
+    }
+}
+```
+</details>
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

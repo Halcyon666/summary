@@ -1,0 +1,65 @@
+---
+id: netty
+title: 'netty '
+sidebar_label: netty
+sidebar_position: 10
+description: '!20250922233019 !20250922233035'
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+# netty 
+
+## Source Code Analysis: Why set newCtx's prev and next first, then add it to the linked list?
+
+![20250922233019](https://s2.loli.net/2025/09/22/NmiBwZOqyFnj3KQ.png)
+
+![20250922233035](https://s2.loli.net/2025/09/22/bi6RxrGKVFOldJT.png)
+
+`io.netty.channel.DefaultChannelPipeline#addLast0`
+
+You're **modifying the linked list pointers** to include `newCtx` **before** fully initializing its `prev` and `next`. <br/>
+If anything (like another thread or debugging breakpoint) tries to traverse the list at this point — `newCtx` is in the chain, 
+but not fully initialized yet. That could lead to nulls or broken state during traversal.
+
+While **your order may work in some cases**, it is **unsafe and not recommended**.
+
+:::warning
+❗ The safe pattern is always:
+- ***Initialize the new node's pointers***
+- ***Then hook it into the list***
+:::
+
+## Netty Response Packet, Sending Location Issue
+
+Even if a is just a sequence number (Sequence ID / Trace ID), it plays a **"bridge" key role in asynchronous communication (such as Netty). If it is missing or empty, the most direct consequence is "request and response cannot be paired"**, thus leading to the "direction change" you see.
+Combined with your description (the packet that should have been sent to Client was sent to other place), the root cause is highly likely: response packet was misjudged as a new request.
+The following is detailed logical deduction:
+Core reason: Response lost "way home"
+In Netty asynchronous non-blocking model, after server receives request, it usually does not wait for business processing to complete in place, but forwards request to backend service (or other threads). In order to return result to same Client after backend processing is completed, system usually maintains a mapping table (Map).
+1. Normal Flow (a|b|)
+1. Request: Client sends 1001|Data.
+2. Mapping: Netty parses sequence number 1001, records mapping relationship: Map.put("1001", Client_Channel_A).
+3. Forward: Netty forwards request to backend.
+4. Response: Backend processing completed, brings back sequence number 1001|Result.
+5. Routing: Netty receives response, checks table Map.get("1001"), finds Client_Channel_A.
+6. Reply: Writes result back to Client through Client_Channel_A.
+
+
+
+## Java Property Type Impact on Netty
+
+Problem: When refactoring primitive types to wrapper types, if using Spring injection, note that default values will change, boolean default value is false, <br/>
+Wrapper class is null, may cause NullPointerException.<br/>
+Change boolean to Boolean value, some scenarios (netty does not respond to request) will have problems.<br/>
+Handling: Assign false to Boolean class
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

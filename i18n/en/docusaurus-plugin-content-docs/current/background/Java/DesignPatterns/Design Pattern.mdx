@@ -1,0 +1,359 @@
+---
+id: design-pattern
+title: Design Patterns
+sidebar_label: Design Patterns
+sidebar_position: 10
+description: <details> <summary>Global Exception Handling Class ExceptionHandlingController</summary> java
+  package com.whalefall.learncases.exception;
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+# Design Patterns
+
+## Exception Handling Methods
+
+<details>
+	<summary>Global Exception Handling Class ExceptionHandlingController</summary>
+```java
+package com.whalefall.learncases.exception;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
+
+/**
+ * @author WhaleFall
+ * @create 2022-05-28 10:41
+ * codes copy from => https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc
+ */
+@Slf4j
+@ControllerAdvice// Specify as global exception handling
+public class ExceptionHandlingController {
+
+    // Specify name of a specific view that will be used to display the error:
+    @ExceptionHandler(SQLException.class)
+    public String databaseError() {
+        // Nothing to do.  Returns the logical view name of an error page, passed
+        // to the view-resolver(s) in usual way.
+        // Note that the exception is NOT available to this view (it is not added
+        // to the model) but see "Extending ExceptionHandlerExceptionResolver"
+        // below.
+        return "databaseError";
+    }
+
+    // Total control - setup a model and return the view name yourself. Or
+    // consider subclassing ExceptionHandlerExceptionResolver (see below).
+    @ExceptionHandler(Exception.class)
+    public ModelAndView handleError(HttpServletRequest req, Exception ex) {
+        log.error("Request: " + req.getRequestURL() + " raised " + ex);
+
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("exception", ex);
+        mav.addObject("url", req.getRequestURL());
+        mav.setViewName("error");
+        return mav;
+    }
+
+}
+```
+</details>
+
+
+## Interface-Based Design
+
+<details>
+    <summary>Interface Class</summary>
+```java
+package com.whalefall.learncases.design;
+
+/**
+ * @author WhaleFall
+ * @create 2022-07-25 19:21
+ */
+public interface IService {
+    boolean doService();
+
+    boolean doServiceBefore();
+
+    boolean doServiceAfter();
+
+    void doLog();
+}
+
+```
+</details>
+
+<details>
+    <summary>Interface Implementation Class</summary>
+```java
+package com.whalefall.learncases.design;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+/**
+ * @author WhaleFall
+ * @create 2022-07-24 6:34
+ */
+@Slf4j
+@Component
+public class AService implements IService {
+    @Override
+    public boolean doService() {
+        log.info("do A service");
+        if (true)
+            throw new RuntimeException("Exception msg1");
+        return true;
+    }
+
+    @Override
+    public boolean doServiceBefore() {
+        return false;
+    }
+
+    @Override
+    public boolean doServiceAfter() {
+        return false;
+    }
+
+    @Override
+    public void doLog() {
+        if (true)
+            throw new RuntimeException("Exception msg2");
+        log.error("A1 do log");
+    }
+}
+```
+</details>
+
+Core Process Encapsulation<br/>
+1. Singleton Template Design Pattern
+
+<details>
+    <summary>Singleton Template Design Pattern</summary>
+```java
+package com.whalefall.learncases.design;
+
+import lombok.extern.slf4j.Slf4j;
+
+import javax.validation.constraints.NotNull;
+import java.util.function.Consumer;
+
+/**
+ * @author WhaleFall
+ * @create 2022-07-24 6:26
+ */
+@Slf4j
+public class SProcessService {
+    private SProcessService() {
+
+    }
+
+    private static class SProcessServiceHolder {
+        private static final SProcessService INSTANCE = new SProcessService();
+    }
+    
+    public static SProcessService getInstance() {
+        return SProcessServiceHolder.INSTANCE;
+    } 
+    
+    public boolean handle(IService service, Consumer<Exception> exceptionConsumer) {
+        serviceBefore(service);
+        service(service, exceptionConsumer);
+        serviceAfter(service);
+        log(service, exceptionConsumer);
+        return true;
+    }
+
+    private void serviceAfter(@NotNull IService service) {
+        service.doServiceAfter();
+    }
+
+    private void serviceBefore(@NotNull IService service) {
+        service.doServiceBefore();
+    }
+
+    private void service(@NotNull IService service, Consumer<Exception> exceptionConsumer) {
+        try {
+            service.doService();
+        } catch (Exception e1) {
+            exceptionConsumer.accept(e1);
+            throw e1;
+        }
+    }
+
+    private void log(@NotNull IService service, Consumer<Exception> exceptionConsumer) {
+        try {
+            service.doLog();
+        } catch (Exception e2) {
+            log.error("failed do log");
+            exceptionConsumer.accept(e2);
+        }
+    }
+}
+
+```
+</details>
+
+2. Inject into Container
+
+<details>
+    <summary>Inject into Container</summary>
+```java
+package com.whalefall.learncases.design;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import javax.validation.constraints.NotNull;
+import java.util.function.Consumer;
+
+/**
+ * @author WhaleFall
+ * @create 2022-07-24 6:26
+ */
+@Component
+@Slf4j
+public class ProcessService {
+    
+    public boolean handle(IService service, Consumer<Exception> exceptionConsumer) {
+        serviceBefore(service);
+        service(service, exceptionConsumer);
+        serviceAfter(service);
+        log(service, exceptionConsumer);
+        return true;
+    }
+
+    private void serviceAfter(@NotNull IService service) {
+        service.doServiceAfter();
+    }
+
+    private void serviceBefore(@NotNull IService service) {
+        service.doServiceBefore();
+    }
+
+    private void service(@NotNull IService service, Consumer<Exception> exceptionConsumer) {
+        try {
+            service.doService();
+        } catch (Exception e1) {
+            exceptionConsumer.accept(e1);
+            throw e1;
+        }
+    }
+
+    private void log(@NotNull IService service, Consumer<Exception> exceptionConsumer) {
+        try {
+            service.doLog();
+        } catch (Exception e2) {
+            log.error("failed do log");
+            exceptionConsumer.accept(e2);
+        }
+    }
+}
+
+```
+</details>
+
+
+<details>
+    <summary>Calling Class</summary>
+```java
+
+package com.whalefall.learncases.design;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * @author WhaleFall
+ * @create 2022-07-24 6:37
+ */
+@RestController
+@Slf4j
+public class ControllerA {
+
+    private IService service;
+
+    private ProcessService processService;
+
+    public ControllerA(IService service, ProcessService processService) {
+        this.service = service;
+        this.processService = processService;
+    }
+
+    @GetMapping("/testA")
+    public boolean getA(){
+       return processService.handle(service, e -> log.error(e.getMessage(), e));
+    }
+}
+```
+</details>
+
+[Complete Code](https://github.com/Halcyon666/learn-cases/tree/main/learncases/src/main/java/com/whalefall/learncases/design)
+
+## DDD
+
+Entity objects cannot be assigned directly, domain objects cannot be newed directly, factory methods and builder patterns should be used to implement.
+
+Application Layer Responsibilities:
+- Basic data validation
+- Data conversion
+- Security authentication
+- Permission check
+- Transaction control
+- Message sending
+
+Principles:
+1. If it is difficult to split, you can write the code to application service first.
+2. If you cannot confirm whether it is an entity or a value object, you can treat it as an entity first.
+3. Entity (has unique identifier, mutable state, has life cycle).
+4. Value Object (Address, Amount, Measurement, Date, Time, Color, Transaction Snapshot).
+5. Entities should not depend on Spring container.
+
+Domain Object Relationship Handling
+1. Composition, Aggregation Relationships: One contains another; each object is a whole.
+2. Association Relationships: Non-composition, aggregation association relationships.
+3. Generalization Relationships: Inheritance.
+
+Only business exceptions can be reported in SupportImpl.
+
+## Jar file FunctionalInterface can be extended by user implement class
+
+```java showLineNumbers title="FunctionalInterface.java"
+    @Resource
+    private Custom customImpl;
+
+    /**
+     * Define {@link FunctionalInterface} in Jar package<br/>
+     * Of course, the usage class in Jar implements ApplicationContextAware, then gets the injected object of the application, and then writes where the function is triggered<br/>
+     * User defines implementation class and injects it into container.<br/>
+     * @param str function input parameter
+     */
+    public void custom(String str) {
+        // highlight-next-line
+        // highlight-start
+        Consumer<Custom> consumer = custom -> custom.custom(str);
+        consumer.accept(customImpl);
+        // highlight-end
+    }
+```
+
+[Jar file FunctionalInterface can be extended by user implement class](https://github.com/Halcyon666/learn-cases/commit/d0cfaf64166eb7b84361238180577b4847702d84)
+
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

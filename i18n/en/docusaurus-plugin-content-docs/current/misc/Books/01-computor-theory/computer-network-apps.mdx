@@ -1,0 +1,195 @@
+---
+id: computer-network-apps
+title: Computer Network - Network Applications
+sidebar_label: Network Applications
+sidebar_position: 10
+description: "C/S Client/Server, P2P Peer-to-Peer applications. Scenario: File sharing. Characteristics: Highly scalable, difficult to manage. Hybrid structure: Napster file transfer P2P, file search C/S."
+tags:
+- books
+- learning
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+---
+# Computer Network - Network Applications
+
+## Access Network Application Types
+
+`C/S` Client/Server
+
+`P2P` Peer-to-Peer Application. Scenario: File sharing. Characteristics: Highly scalable, difficult to manage.
+
+Hybrid Structure: Napster uses P2P for file transfer, C/S for file searching.
+
+![20250920190143](https://s2.loli.net/2025/09/20/kLOUGnIibsJwNTz.png)
+
+Network Application Requirements for Transmission
+
+- Reliability
+- Delay
+- Bandwidth
+- Security
+
+![20250920190156](https://s2.loli.net/2025/09/20/sBvugpLGE31WoH7.png)
+
+---
+
+![20250920190215](https://s2.loli.net/2025/09/20/hWbg1crF9JHSopt.png)
+
+![20250920190229](https://s2.loli.net/2025/09/20/NTou3qg1dFBDJRz.png)
+
+Web: `Http 1.0` `Http1.1`
+
+Email: `SMTP MIME` `POP3` `IMAP` (`IMAP` is a stateful protocol)
+
+## Domain Name System `DNS`
+
+- Distributed database composed of multi-layer naming servers
+- Application layer protocol: completes name resolution
+- `DNS` Services
+    
+    Domain name translation
+    Host aliasing
+    Mail server aliasing
+    Load balancing
+    
+
+`Local DNS` (e.g., provided by ISP)
+
+`Root DNS`
+
+`TLD DNS` (Authoritative Name Server)
+
+Recursive Query (Only once)
+
+Iterative Query (Multiple times)
+
+Caching, Updating (`TTL` expiration update)
+
+## `DNS` Records (RR)
+
+`RR format: (name, value, ttl)`
+
+- Type=A
+Name: Host domain name
+Value: IP address
+- Type=NS
+Name: Domain (e.g., `edu.com`)
+Value: Host domain name of the authoritative name server for that domain
+- Type=`CNAME`
+Name: Alias of a real domain name
+Value: Real domain name
+- Type=`MX`
+Value is the mail server corresponding to Name
+
+Q: How to register a domain name?
+
+A: NS, A, NS (requires email) `RR`
+
+## `P2P` Applications
+
+### Overlay Network
+
+Flooding Query: Overlay Network
+
+![20250920190253](https://s2.loli.net/2025/09/20/Q8J7yGCxYPgVq6p.png)
+
+### Hierarchical Overlay Network
+
+![20250920190303](https://s2.loli.net/2025/09/20/PwECUQX7S3H4tG9.png)
+
+## Socket Programming
+
+![20250920190342](https://s2.loli.net/2025/09/20/MGSlOimpD63oYq7.png)
+
+Identify communication endpoint (External): `IP` `PORT`
+
+Handle/Process (Internal): Socket descriptor, **is** an integer index within the process
+
+```bash
+# Query which sockets connect to port 80
+netstat -ano | findstr ":80"
+# Query which program owns the PID 
+tasklist /FI "PID eq 6016"
+
+tasklist  | findstr 6016
+```
+
+Winsocket example
+
+`socketaddr_in`
+
+### socket
+
+![20250920190400](https://s2.loli.net/2025/09/20/u6Zi7JrHNFMSG2w.png)
+
+![20250920190426](https://s2.loli.net/2025/09/20/KDduNlPrUtnqvBW.png)
+
+### closesocket
+
+![20250920190436](https://s2.loli.net/2025/09/20/yUMvTgWebBQNrZf.png)
+
+### bind
+
+![20250920190509](https://s2.loli.net/2025/09/20/t9XrHSznf4uKVmT.png)
+
+![20250920190649](https://s2.loli.net/2025/09/20/U6Nwg2mXpQByMYT.png)
+
+![20250920190703](https://s2.loli.net/2025/09/20/e95x7iKtmSI1RDr.png)
+
+### listen(server)
+
+![20250920190720](https://s2.loli.net/2025/09/20/K3pv2RxNaeVJOQA.png)
+
+connect(client)
+
+![20250920190743](https://s2.loli.net/2025/09/20/Wjyra2wheMg64un.png)
+
+> If `TCP` calls connect successfully, communication is guaranteed. `UDP` is not necessarily.
+> 
+
+### accept(server)
+
+![20250920190805](https://s2.loli.net/2025/09/20/Wjyra2wheMg64un.png)
+
+### send sendto
+
+![20250920190820](https://s2.loli.net/2025/09/20/WMRTLZaVj5AJHkx.png)
+
+### recv recvfrom
+
+![20250920190831](https://s2.loli.net/2025/09/20/gojBGcUdFqyi71v.png)
+
+*setsockopt getsokopt*
+
+### Network Byte Order
+
+![20250920190916](https://s2.loli.net/2025/09/20/kai69Wezu8bFXBM.png)
+
+Inet_addr converts decimal IP address to 32-bit IP address.
+
+### Socket API (TCP) Call Basic Process
+
+![20250920190932](https://s2.loli.net/2025/09/20/NzewD7iuJLOB5WR.png)
+
+Server: Parse IP, Port, Protocol Number
+
+TCP Client:
+
+![20250920190945](https://s2.loli.net/2025/09/20/yJHQStjDLZM29WX.png)
+
+UDP Client:
+
+![20250920190959](https://s2.loli.net/2025/09/20/nFZYIfXvzh6oLBj.png)
+
+
+**All content comes from sources, course copyright reserved. Document is for learning use only.**
+
+**If there is any infringement, contact `whalefallcl@icloud.com`**
+
+**https://www.icourse163.org/learn/HIT-154005?tid=1474180488#/learn/announce**
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

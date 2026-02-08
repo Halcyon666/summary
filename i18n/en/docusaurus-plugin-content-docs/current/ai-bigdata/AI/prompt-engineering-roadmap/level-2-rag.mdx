@@ -1,0 +1,345 @@
+---
+id: level-2-rag
+title: Level 2 - RAG App Development & Heterogeneous System Architecture
+sidebar_label: Level 2 - RAG App Development
+sidebar_position: 3
+description: Master Retrieval-Augmented Generation (RAG), understand Java-Python heterogeneous system communication, establish evaluation system
+tags:
+- ai
+- rag
+- level-2
+sources:
+- overview
+- level-1-ai-native
+references:
+- level-3-agent
+last_update:
+  date: '2026-01-27'
+  author: halcyon666
+---
+
+# Phase 2: RAG App Development & Heterogeneous System Architecture (Level 2)
+
+**Cycle**: Weeks 3-5
+**Core Goal**: Master Retrieval-Augmented Generation (RAG), understand Java-Python heterogeneous system communication, establish evaluation system
+
+## Prerequisite Capabilities
+
+- ✅ Mastered Python basics and AI tool usage (Level 1)
+- ✅ Established AI-Native development habits
+- ✅ Deployed local Ollama and Vector Database
+
+## Why this phase is needed
+
+RAG is core capability of AI applications. Agent's intelligent decision depends on knowledge retrieval capability provided by RAG. Must first master "How to let AI acquire external knowledge" before entering "How to let AI decide autonomously".
+
+## ⭐ Core Capability 1: Dual-Track RAG Implementation
+
+### ⭐ Platform Stream: Dify Enterprise Practice (80% Scenarios)
+
+**Strategy: "Extend, Don't Deep Dive"**
+
+Treat Dify as "Black Box" or "Component", focus on how to **Extend** it:
+
+- **Custom Tooling**: Write Python API for Dify to call, letting Java system communicate with Dify
+- **Workflow Orchestration**: Master Dify's Workflow nodes, understand how to pass variables between nodes
+- **Why skip source code?** Dify is based on Flask/Next.js/PostgreSQL complex stack, unless fixing bug, time should be spent on **LangGraph** (Complex Logic) or **Milvus** (Data Side)
+
+**⭐ Practical Task**:
+1. Deploy Dify using Docker
+2. Connect Local Ollama
+3. ⭐ Build Enterprise Knowledge Base: Upload PDF, configure Embedding model, test hybrid search
+4. Publish Web Chatbot
+
+### ⭐ Core Practice: Dify Custom Tool
+
+Use your **Spring Boot** advantage to enhance Agent's hands and feet.
+
+#### Task Description
+Dify cannot directly access your company's real-time data (e.g. server status, database inventory), you need to write an API for it to call.
+
+#### Implementation Steps
+1.  **Backend Development (Spring Boot)**:
+    * Write an interface `GET /api/v1/system/status`, returning CPU/Memory/Business data in JSON format.
+    * Generate **OpenAPI (Swagger)** description document.
+2.  **Dify Integration**:
+    * In Dify "Tools" tab -> "Create Custom Tool".
+    * Import your OpenAPI Schema.
+3.  **Agent Orchestration**:
+    * Enable the tool in Prompt.
+    * Test question: "How is system load now?" -> Agent automatically calls Java interface -> Answer.
+
+
+### Code Stream: Handwritten RAG Link (20% Deep Customization)
+
+**Core Components**:
+- ⭐ **Milvus**: Deploy and understand HNSW index principle
+- ⭐ **Embedding**: Use `sentence-transformers` to load `bge-base-zh`
+
+**⭐ Advanced Chunking Strategy**:
+
+1. ⭐ **Parent-Child Indexing**
+   - Index small chunk (128 tokens, precise retrieval)
+   - Return parent chunk (512 tokens, retain context)
+   - Solve "Precise retrieval but insufficient context" problem
+
+2. **HyDE (Hypothetical Document Embeddings)**
+   - Let LLM generate "Hypothetical Answer" first
+   - Use hypothetical answer's Embedding to search documents
+   - Solve "Question and document semantics mismatch" problem
+
+**⭐ Practical Code Link**:
+```
+Read PDF → Advanced Chunking → Vectorization → Store in Milvus → Retrieval → Assemble Prompt → LLM Answer
+```
+
+### ⭐ Early Eval (Early Evaluation) - Crucial!
+
+**⭐ Core Concept**: Treat RAG evaluation as **Unit Test**
+
+**⭐ Golden Dataset Construction Method**:
+
+1. **Select Representative Questions** (10-20):
+   - Cover different difficulties: Simple fact query, complex reasoning, multi-hop questions
+   - Cover different topics: Ensure coverage of various fields of knowledge base
+   - Include edge cases: Questions with no answer in knowledge base
+
+2. **Write Standard Answers**:
+   - Annotate answer source (which paragraph of which document)
+   - Annotate key information points (for evaluating recall rate)
+
+3. **⭐ Automated Evaluation Script**:
+```python
+# Example: RAG Evaluation Script
+from ragas import evaluate
+from ragas.metrics import faithfulness, answer_relevancy
+
+# Golden Dataset
+golden_qa = [
+    {"question": "How to optimize RAG retrieval?", "answer": "Use Parent-Child indexing", "context": "..."},
+    # ... More QA pairs
+]
+
+# Run Evaluation
+results = evaluate(golden_qa, metrics=[faithfulness, answer_relevancy])
+print(f"Faithfulness: {results['faithfulness']:.2f}")
+print(f"Answer Relevancy: {results['answer_relevancy']:.2f}")
+
+# If score < 0.7, RAG link needs optimization
+assert results['faithfulness'] > 0.7, "RAG Faithfulness Insufficient"
+```
+
+**Integrate to CI/CD** (Implement Evaluation Shift Left):
+
+**Goal**: Treat RAG evaluation as Unit Test, automatically verify quality on every modification.
+
+**Implementation Steps**:
+1. **Create Evaluation Script**: Save above RAG evaluation code to `tests/test_rag_quality.py`
+2. ⭐ **Set Quality Threshold**: Define minimum acceptable score (Faithfulness > 0.7, Answer Relevancy > 0.7)
+3. **Integrate CI Pipeline**: Add evaluation step in GitHub Actions / GitLab CI
+
+**CI Config Example** (GitHub Actions):
+```yaml
+# .github/workflows/rag-quality.yml
+name: RAG Quality Check
+on: [push, pull_request]
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run RAG Evaluation
+        run: |
+          python tests/test_rag_quality.py
+          # If score below threshold, CI fails
+```
+
+**Use Ragas or TruLens**:
+- ⭐ **Ragas**: More suitable for RAG systems, provides metrics like Faithfulness, Answer Relevancy
+- **TruLens**: More suitable for complex Agents, provides complete Trace analysis
+
+**Effect Verification**: After modifying Prompt, CI automatically runs evaluation. If Faithfulness drops more than 5%, automatically block merge.
+
+## ⭐ Core Capability 2: Heterogeneous System Communication Protocol (Java ↔ Python)
+
+### Core Challenges
+
+1. **AI Inference slow (Python), Business Logic fast (Java)** → Need async decoupling
+2. ⭐ **Java needs deterministic JSON object, LLM output unstable** → Need structured output validation
+3. **Cross-language data consistency** → Need unified data contract
+
+### Architecture Design: Three-Layer Solution
+
+**⭐ 1. Structured Output Validation**
+
+Python Side:
+```python
+from pydantic import BaseModel
+from instructor import patch
+
+class UserInfo(BaseModel):
+    user_id: str
+    email: str
+    profile: dict
+
+# Force LLM output to conform to Pydantic model
+client = patch(OpenAI())
+response = client.chat.completions.create(
+    model="gpt-4",
+    response_model=UserInfo,
+    messages=[{"role": "user", "content": "Extract user info from: ..."}]
+)
+# response guaranteed to be UserInfo type
+```
+
+Java Side:
+```java
+// Use OpenAPI/Swagger to generate corresponding DTO
+@Data
+public class UserInfo {
+    private String userId;
+    private String email;
+    private Map<String, Object> profile;
+}
+```
+
+**⭐ 2. Async Communication Mode (Sidecar Pattern)**
+
+Architecture Diagram:
+```
+User Request → Java Backend (Business Logic) → Return "Processing"
+              ↓
+         Message Queue (RabbitMQ)
+              ↓
+    Python Service (AI Inference) → Processing Complete
+              ↓
+         Callback Java (Update Status)
+```
+
+Practical Scenario:
+- User uploads PDF, Java backend directly returns "Processing"
+- Notify Python service via MQ to perform chunking, vectorization
+- Callback Java to update status after completion
+
+**3. Data Contract Definition (OpenAPI/Swagger)**
+
+```yaml
+# shared-api-spec.yaml
+components:
+  schemas:
+    RAGRequest:
+      type: object
+      properties:
+        query:
+          type: string
+        top_k:
+          type: integer
+          default: 5
+    RAGResponse:
+      type: object
+      properties:
+        answer:
+          type: string
+        sources:
+          type: array
+          items:
+            type: string
+        confidence:
+          type: number
+```
+
+Java Side uses OpenAPI Generator to generate Feign Client:
+```java
+@FeignClient(name = "rag-service", url = "${rag.service.url}")
+public interface RAGServiceClient {
+    @PostMapping("/query")
+    RAGResponse query(@RequestBody RAGRequest request);
+}
+```
+
+### Hybrid Search Strategy
+
+Combine **Full Text Search (Elasticsearch/MySQL)** with **Vector Search (Milvus)**:
+
+```python
+# Hybrid Search Example
+def hybrid_search(query: str, top_k: int = 5):
+    # 1. Vector Search (Semantic Similarity)
+    vector_results = milvus_client.search(query_embedding, top_k=10)
+    
+    # 2. Full Text Search (Keyword Match)
+    keyword_results = elasticsearch.search(query, top_k=10)
+    
+    # 3. Fuse Results (Reciprocal Rank Fusion)
+    final_results = rrf_fusion(vector_results, keyword_results, top_k=top_k)
+    
+    return final_results
+```
+
+## Core Capability 3: Dual Database Architecture Design
+
+**Architecture**: MySQL (Business Data) + Vector DB (Semantic Data)
+
+**Data Sync Consistency Issue**:
+
+```java
+// Java Side: Sync to vector DB when creating user
+@Transactional
+public void createUser(User user) {
+    // 1. Save to MySQL
+    userRepository.save(user);
+    
+    // 2. Send event to MQ (Async sync to vector DB)
+    rabbitTemplate.convertAndSend("user.created", new UserCreatedEvent(user));
+}
+```
+
+```python
+# Python Side: Listen to MQ, sync to vector DB
+@mq_consumer("user.created")
+def sync_user_to_vector_db(event: UserCreatedEvent):
+    embedding = embed_model.encode(event.user.profile)
+    milvus_client.insert({
+        "user_id": event.user.id,
+        "embedding": embedding,
+        "metadata": event.user.to_dict()
+    })
+```
+
+## Phase Output Standards
+
+**Deliverables Must Complete** (As prerequisites for entering Level 3):
+
+**RAG Application Layer**:
+- [X] Configured Dify deployment and published at least 1 Knowledge Base app, able to answer domain questions
+- [X] Dify Custom Tool
+- [ ] ⭐ Handwritten complete RAG link code, containing: PDF Parsing → Chunking → Vectorization → Milvus Storage → Retrieval → LLM Generation
+- [ ] ⭐ Implement at least 1 advanced chunking strategy (Parent-Child or HyDE), and verify effect through contrast experiment
+
+**Evaluation System Layer**:
+- [ ] ⭐ Establish Golden Dataset (10-20 QA pairs), containing questions of different difficulties and topics
+- [ ] ⭐ Implement automated evaluation script, integrate Ragas or TruLens
+- [ ] **Quantitative Metrics**: Test using Golden Dataset, recall rate improved by at least 20% from baseline (e.g. from 0.60 to 0.72), Faithfulness > 0.7
+
+**Heterogeneous System Architecture Layer**:
+- [ ] ⭐ Design and implement Java-Python async communication architecture (Using RabbitMQ or Kafka)
+- [ ] Implement Hybrid Search strategy (Vector + Full Text), and verify effect improvement through A/B testing
+- [ ] Define unified OpenAPI data contract, Java side able to call Python service via Feign Client
+
+**Capability Verification**:
+- [ ] ⭐ Able to explain "Why Parent-Child Indexing is better than ordinary chunking" and give data support
+- [ ] Able to design a complete dual database architecture (MySQL + Milvus), and solve data sync consistency issue
+
+**Time Checkpoint**: If not completed after 3 weeks, suggest using Dify to complete basic RAG first, then gradually add advanced features
+
+## Roadmap Optimization Suggestions
+
+**Practical Project**: Build "Search Switcher" in Java, automatically decide based on question type:
+- Use Database Query (Structured Data, e.g. "Query user orders")
+- Use RAG Query (Unstructured Knowledge, e.g. "How to optimize system performance")
+
+---
+
+**Previous Phase**: [Level 1 - AI-Native Workflow & Infrastructure](./level-1-ai-native)
+
+**Next Phase**: [Level 3 - Agent Architecture & Observability](./level-3-agent)

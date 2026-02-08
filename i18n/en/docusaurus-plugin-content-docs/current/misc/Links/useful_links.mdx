@@ -1,0 +1,63 @@
+---
+id: useful-links
+title: Useful Website Collection
+sidebar_label: Useful Website Collection
+sidebar_position: 10
+description: '> this file notes all the useful website , once browser bookmarks dispatch, I can find back all the sites those I need.'
+tags:
+- books
+- learning
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+---
+> this file notes all the useful website , once browser bookmarks dispatch, I can find back all the sites those I need.
+
+## links
+
+[CircleCI Automated Deployment](https://zhuanlan.zhihu.com/p/370550987)
+
+[Aliyun Docker Quick Install](https://www.cnblogs.com/hongmaju/p/15598990.html)
+
+[Docker Compose Installation](https://www.cnblogs.com/lihw-study/p/16022277.html)
+
+[ssh: connect to host github.com port 22: Connection timed out](https://blog.csdn.net/hdm314/article/details/119947761)
+
+[CLion MinGW Environment Configuration](https://zhuanlan.zhihu.com/p/43680621)
+
+[18 Types of Locks in Java](https://mp.weixin.qq.com/s/QYJLQN2XsI88Gh0xOxS4MA)
+
+[Nacos Principle](https://mp.weixin.qq.com/s/4QgQ1h9VSJZ4c2tFDm6log)
+
+[Accelerate Spring Startup Speed](https://mp.weixin.qq.com/s/ZMIUXDc7yY64GDE70g3-kA)
+
+[Overall Technical Architecture of Dubbo Mesh](https://www.alibabacloud.com/blog/overall-technical-architecture-of-dubbo-mesh_600029)
+
+multiple deployment modes (SDK, Sidecar, and Agent)
+
+[Seata Distributed Transaction](https://mp.weixin.qq.com/s/cM8XUouYGnUVYwm1qgUqVQ)
+
+> In `Java`, if an abstract class or entity class not managed by a container is inherited by an entity class managed by a container, the abstract class will also be automatically managed by the container.
+
+[Docusaurus Setup (2) - Deploying to GitHub Pages](https://juejin.cn/post/7115631818736402440)
+
+[@ConditionalOnProperty](https://blog.csdn.net/winterking3/article/details/114822929)
+
+[Pip Cannot Install Package After Opening Proxy](https://blog.csdn.net/2301_78292787/article/details/147771426)
+
+## Deep Understanding of Apache Dubbo and Practical Combat
+
+- Chapter 3
+FailbackRegistry inherits from AbstractRegistry, overrides parent class methods such as register, subscribe, query, and notify, and adds a retry mechanism. In addition, it adds four unimplemented abstract template methods.
+
+Although each registry center has its own concrete factory class, where is it judged which factory class implementation should be called? No explicit judgment is seen in the code.<br/>
+The answer lies in the RegistryFactory interface, which has a Registry getRegistry(URL url) method, and this method has the @Adaptive({"protocol"}) annotation.
+
+Dubbo's good extensibility is inseparable from two aspects: one is that various design patterns are used appropriately for different scenarios in the entire framework, and the other is the loading mechanism introduced in this chapter.
+
+
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

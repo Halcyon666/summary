@@ -1,0 +1,729 @@
+---
+id: maxi-model-capacity
+title: Agent Design Complete Guide
+sidebar_label: Agent Design Complete Guide
+sidebar_position: 4
+description: Complete Guide to ReAct-based Agent Design
+tags:
+- ai
+- machine-learning
+sources:
+- lays-in-ai
+- level-3-agent
+references:
+- prompt
+- mcp
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+---
+# Complete Guide to ReAct-based Agent Design
+
+## 📋 Scheme Overview
+
+This document provides a complete **Agent Construction Scheme**, combining **LangGPT Structured Prompt** + **ReAct Reasoning Mode**, used for handling complex tasks requiring multi-step reasoning, tool calling, and knowledge integration.
+
+**Core Concept**: Let AI "Think first, then Act, then Observe, then Decide" like a human expert.
+
+---
+
+## 🎯 Applicable Scenarios
+
+✅ **Tasks requiring consultation of professional knowledge base + internet search**
+✅ **Complex queries requiring multi-step planning and dynamic decision-making**
+✅ **Teaching/Consulting scenarios requiring transparent reasoning process**
+✅ **Applications requiring tool orchestration (Retrieval, Search, Calculation, etc.)**
+
+**Typical Application Scenarios**:
+- 🎓 English Teaching Assistant (Grammar + Pronunciation Dual Diagnosis)
+- ⚖️ Legal Advisor (Statute Retrieval + Case Search)
+- 🏥 Medical Consultation (Medical Knowledge Base + Latest Research)
+- 🔧 Technical Support (Product Documentation + Community Solutions)
+
+---
+
+## Part 1: Structured Prompt Design
+
+### Design Principles
+
+Based on **LangGPT Standard Format**, adopting five-element structure:
+
+```
+Role (Role Positioning) → Goals (Goals) → Constraints (Constraints) → Skills (Skills/Tools) → Workflow (Workflow)
+```
+
+Core Points:
+1.  **Forced ReAct Loop**: [Thought] → [Action] → [Observation] → [Response]
+2.  **Tool Priority**: Knowledge Base First → Internet Search Supplement → Multi-source Integration
+3.  **Reasoning Transparency**: Show decision path to user
+4.  **Reject Hallucination**: Inform honestly when there is no basis
+
+---
+
+### Complete Prompt Template
+
+```markdown
+# Role
+You are an AI Language Teaching Expert (Senior Linguistic Agent) proficient in "American Pronunciation Training" and "English Grammar".
+You have access to "English Grammar in Use" and "American Accent Training" knowledge bases, and also possess internet search capability.
+
+# Goals
+1. **Precise Diagnosis**: Analyze grammar errors or pronunciation difficulties in user sentences
+2. **Authoritative Citation**: Prioritize providing textbook-level explanations based on knowledge base
+3. **Dynamic Supplement**: Use internet search tool when knowledge base cannot cover (such as latest slang)
+4. **Teaching Loop**: Not only give answer, but also provide targeted practice suggestions
+
+# Constraints
+1. **ReAct Thinking Principle**: Must execute [Thought] → [Action] → [Observation] reasoning loop before answering
+2. **Knowledge Priority**: Prioritize retrieving knowledge base, call search tool only when there are no results or relevance is low
+3. **Format Standard**: Final output must be clearly stated in points using Markdown
+4. **Reject Hallucination**: If neither knowledge base nor internet has reliable information, honestly answer "No authoritative basis found"
+5. **Reasoning Transparency**: Show your search path and decision basis to user
+
+# Skills (Available Tools)
+1. **Knowledge_Retrieval**: Consult "English Grammar in Use" and "American Accent Training"
+2. **Web_Search**: Use search engine to find latest language usage or supplementary example sentences
+
+# Workflow (ReAct Loop)
+
+## Phase 1: Thought - Analysis and Planning
+**Before executing any operation, must think first:**
+- What is user intent? (Grammar issue / Pronunciation issue / Vocabulary explanation)
+- Which category does this knowledge point belong to? (Classic Grammar / Pronunciation Rules / Neologisms & Slang)
+- Formulate action plan:
+  - Is it necessary to check knowledge base? (What are keywords?)
+  - Is it possible that knowledge base cannot cover? (Need to prepare search in advance)
+  - Need to combine multiple information sources?
+
+## Phase 2: Action - Execute Tool Call
+**Execute by priority:**
+1. **Step 1**: Call `Knowledge_Retrieval` to search core keywords
+2. **Step 2**: Observe retrieval results
+   - If relevance ≥ 0.7 and content is sufficient → Use directly
+   - If relevance < 0.6 or no result → Call `Web_Search` immediately
+3. **Step 3**: Integrate multi-source information (Knowledge Base + Search Results)
+
+## Phase 3: Observation - Result Evaluation
+**Judge results of each tool call:**
+- Is information sufficient? Need secondary retrieval?
+- Are information from different sources contradictory? How to choose?
+- Need to call other tools to supplement?
+
+## Phase 4: Response - Structured Output
+**Output final answer in following format:**
+
+### 🔍 Analysis Path
+Briefly describe your reasoning and search process (e.g.: "Consulted 'Grammar in Use' Unit 5, and verified latest usage through search...")
+
+### ✅ Core Answer
+- Give corrected correct sentence or pronunciation guidance
+- Mark key modification points with bold/highlight
+
+### 📖 Deep Analysis
+- Explain underlying grammar rules or pronunciation principles
+- Cite knowledge base source (e.g. "Unit 12: Present Perfect")
+- Contrast common wrong usages
+
+### 🗣️ Practice Suggestions
+- Provide 1-2 targeted practice sentences
+- Give shadowing or rewriting tasks
+
+### 📚 Extended Resources (Optional)
+- If high-quality materials are found in web search, provide links
+
+# Initialization
+I am ready. Please directly send sentence or question you want to analyze, I will start ReAct reasoning process to answer for you.
+```
+
+---
+
+### Reasoning Mode Settings
+
+In Dify Agent configuration, choose appropriate reasoning mode:
+
+| Mode | Applicable Scenario | Advantage | Disadvantage |
+|-----|---------|------|------|
+| **Function Calling** | When model natively supports | Fast speed, high accuracy, low Token consumption | Relies on model capability |
+| **ReAct** | General scenario | Reasoning process visible, easy to debug, high flexibility | High Token consumption |
+
+**Recommended Configuration**:
+- ✅ Prioritize **Function Calling** (GPT-4, Claude 3.5, DeepSeek-V3)
+- ✅ If model does not support, downgrade to **ReAct**
+- ✅ Enable "Show Thinking Process" during development phase for easy debugging
+
+---
+
+### Advanced Parameter Tuning
+
+```yaml
+# Model Parameters
+Temperature: 0.3          # Reduce randomness, improve accuracy
+Max Tokens: 2000          # Ensure complete analysis can be output
+Top P: 0.9               # Maintain output quality
+Presence Penalty: 0.1     # Reduce repetitive phrasing
+Frequency Penalty: 0.0    # Do not limit frequency of technical terms
+
+# Retrieval Parameters
+Top K: 3-5               # Return most relevant 3-5 fragments
+Score Threshold: 0.6     # Relevance threshold
+Rerank: true            # Enable reranking (if supported)
+
+# Search Parameters
+Max Results: 5           # Max 5 search results
+Timeout: 10s            # Search timeout
+Safe Search: moderate    # Moderate safe search level
+```
+
+---
+
+### Final Output Example
+
+**User Input**:
+```
+What's the difference between 'I live in Shanghai' and 'I am creating a Rizz app'?
+```
+
+#### 🔍 Analysis Path
+I consulted "English Grammar in Use" Unit 3 to confirm tense usage of `live`, and obtained latest definition of `Rizz` (Oxford Word of the Year 2023) through internet search.
+
+#### ✅ Core Answer
+
+1. **"I live in Shanghai"** ✅ Correct
+   - `live` is a stative verb, describing long-term residence status
+   - Should not use continuous tense ~~I am living~~ (unless emphasizing temporariness)
+
+2. **"I am creating a Rizz app"** ✅ Correct
+   - `create` is an action verb, can use continuous tense to indicate ongoing development work
+
+#### 📖 Deep Analysis
+
+**Grammar Rules** (Source: Unit 3):
+- **Stative Verbs**: live, know, like, understand
+  - Describe state rather than action, usually not used in continuous tense
+  - Exception: Can use continuous tense when live emphasizes "temporary residence"
+    - *"I'm living in a hotel this week."* ✅
+
+**Vocabulary Analysis** (Source: Web Search):
+- **Rizz** /rɪz/
+  - Etymology: Abbreviation of Charisma (Liaison: Cha-**ris**-ma → Rizz)
+  - Meaning: Charm or skill to attract opposite sex
+  - Example: *"He's got serious rizz!"*
+
+#### 🗣️ Practice Suggestions
+
+1. **Tense Contrast Practice**:
+   - I **live** in Beijing. (permanent)
+   - I **'m living** in a hotel. (temporary)
+   
+2. **Rizz Usage Practice**:
+   Describe your app in one sentence:
+   *"This app helps users improve their rizz through AI-powered conversation tips."*
+
+#### 📚 Extended Resources
+- [Oxford Word of the Year 2023: Rizz](https://languages.oup.com/word-of-the-year/2023/)
+
+---
+
+## Part 2: Dify Agent Configuration Guide
+
+### 1️⃣ Create Agent Application
+
+**Operation Path**:
+```
+Dify Home → Create App → Select "Agent" → Basic Orchestration Mode
+```
+
+**Notes**:
+- ❌ Do not use "Chat Assistant" or "Workflow" mode (they do not support dynamic reasoning)
+- ✅ Agent mode automatically plans tool call sequence, no manual wiring needed
+- ✅ Supports changing decision mid-way (e.g., automatically switch to search after retrieval failure)
+
+---
+
+### 2️⃣ Model Selection
+
+| Recommended Model | Platform | Reasoning Capability | Cost | Function Calling |
+|---------|------|---------|------|-----------------|
+| **DeepSeek-V3** | SiliconFlow | ⭐⭐⭐⭐⭐ | 💰 | ✅ |
+| **Qwen2.5-72B** | SiliconFlow | ⭐⭐⭐⭐ | 💰💰 | ✅ |
+| **GPT-4o** | OpenAI | ⭐⭐⭐⭐⭐ | 💰💰💰 | ✅ |
+| **Claude 3.5 Sonnet** | Anthropic | ⭐⭐⭐⭐⭐ | 💰💰💰 | ✅ |
+
+**Configuration Requirements**:
+- ✅ Must support **Function Calling**
+- ✅ Context window ≥ 32K (for processing long knowledge base retrieval results)
+- ✅ Strong reasoning capability (able to understand complex ReAct instructions)
+
+---
+
+### 3️⃣ Tool Configuration
+
+Add in **"Tools"** section of Agent orchestration page:
+
+#### 🔧 Tool 1: Knowledge Retrieval
+```yaml
+Type: Knowledge Retrieval
+Data Source: Select created "English Book" Knowledge Base
+Retrieval Mode: Semantic Search
+Top K: 3-5
+Score Threshold: 0.6
+Rerank: Enable (if supported)
+```
+
+**Knowledge Base Preparation Suggestions**:
+- Split "English Grammar in Use" and "American Accent Training" into chapters and upload
+- Add metadata to each document (e.g., Unit number, Topic tag)
+- Use high-quality Embedding model (e.g., text-embedding-3-large)
+
+#### 🔧 Tool 2: Web Search
+```yaml
+Type: Web Search
+Recommended Plugin: DuckDuckGo / Tavily / SerpAPI
+Max Results: 5
+Timeout: 10 seconds
+Language Preference: English
+Safe Search: Moderate
+```
+
+**Optional Tools**:
+- 🎵 **Speech Synthesis** (Azure TTS / ElevenLabs): Read corrected sentences
+- 📝 **Example Generation** (GPT-4 Mini): Generate scenario-based practice sentences
+- 🎨 **Chart Generation** (Python Code Interpreter): Visualize grammar structure
+
+---
+
+### 4️⃣ Agent Mode Configuration
+
+**Find "Agent Mode" in model configuration area**:
+
+```yaml
+# Recommended Configuration
+Agent Mode: Function Calling  # Prioritize choice
+Max Iterations: 10            # Max 10 reasoning rounds
+Tool Choice: auto            # Auto select tool
+Parallel Tool Calls: false   # Call sequentially (ensure clear logic)
+Show Reasoning: true         # Enable in development phase
+```
+
+**Downgrade Scheme** (If model does not support Function Calling):
+```yaml
+Agent Mode: ReAct
+Max Iterations: 8
+Scratchpad: enabled         # Enable scratchpad to record reasoning process
+```
+
+---
+
+## Part 3: Practical Case Analysis
+
+### Case 1: Classic Grammar + Neologism Mixed Query
+
+**Input**:
+```
+Is "I'm loving this Rizz app" correct?
+```
+
+**ReAct Reasoning Process**:
+
+```
+💭 Thought:
+- "loving" is stative verb → Check knowledge base rules
+- "Rizz" is buzzword → Need internet confirmation of meaning
+- Plan: Check grammar book first, then search vocabulary
+
+🔨 Action 1:
+Tool: Knowledge_Retrieval
+Query: "state verbs love continuous"
+Result: 
+  - Unit 4: "Love usually not used in continuous"
+  - Exception: Can be used in certain contexts (emphasize temporary feeling)
+  - Relevance: 0.92
+
+👁️ Observation 1:
+Knowledge base gave rules and exceptions, but need to judge whether "loving this app" belongs to exception
+
+🔨 Action 2:
+Tool: Web_Search
+Query: "I'm loving it grammar modern usage"
+Result:
+  - McDonald's slogan makes this usage accepted in spoken language
+  - Grammarians think acceptable in advertising/spoken language
+  
+👁️ Observation 2:
+In modern English, "I'm loving" is widely accepted in informal occasions
+```
+
+**Final Output**:
+
+#### 🔍 Analysis Path
+Retrieved rules about state verbs in "Grammar in Use" Unit 4, and searched actual usage in modern English.
+
+#### ✅ Core Answer
+**"I'm loving this Rizz app"** in spoken language/social media ✅ Acceptable
+In formal writing ⚠️ Suggest changing to "I love this Rizz app"
+
+#### 📖 Deep Analysis
+- **Traditional Grammar**: love is stative verb, in principle not used in continuous tense
+- **Modern Usage**: Success of McDonald's "I'm lovin' it" popularized this usage in spoken language
+- **Context Judgment**:
+  - Social Media/Advertising → Can use (emphasize immediate strong feeling)
+  - Academic Writing/Formal Document → Avoid use
+
+#### 🗣️ Practice Suggestions
+Contrast following sentences to feel tone difference:
+1. I **love** your app. (Objective fact)
+2. I'**m loving** your app! (Strong emotion at this moment)
+
+---
+
+### Case 2: Multi-round Reasoning + Tool Switch
+
+**Input**:
+```
+How do you pronounce "schedule"? Is it different in American English?
+```
+
+**ReAct Reasoning Process**:
+
+```
+💭 Thought:
+- Pronunciation issue → Prioritize checking "American Accent Training"
+- Involves American-British difference → May need supplementary search
+
+🔨 Action 1:
+Tool: Knowledge_Retrieval
+Query: "schedule pronunciation American"
+Result: 
+  - Chapter 7: "Schedule in American pronunciation is /ˈskedʒuːl/"
+  - Relevance: 0.88
+
+👁️ Observation 1:
+Knowledge base gave American pronunciation, but did not mention British pronunciation contrast
+
+🔨 Action 2:
+Tool: Web_Search
+Query: "schedule pronunciation British vs American"
+Result:
+  - British: /ˈʃedjuːl/
+  - American: /ˈskedʒuːl/
+  - History: Influence of spelling reform after American independence
+
+👁️ Observation 2:
+Obtained complete contrast information, can integrate output
+```
+
+**Final Output**:
+
+#### 🔍 Analysis Path
+Consulted "American Accent Training" Chapter 7, and searched historical reasons for American-British pronunciation difference.
+
+#### ✅ Core Answer
+**American English**: /ˈskedʒuːl/ (SKED-jool)  
+**British English**: /ˈʃedjuːl/ (SHED-yool)
+
+#### 📖 Deep Analysis
+- **American Pronunciation Points**:
+  - First syllable stress: **SKED**-jool
+  - "ch" pronounced as /k/ (like school)
+  
+- **Why different?**
+  - After American Independence in 18th century, Noah Webster promoted spelling reform
+  - American style tends to "pronounce as written" logic
+
+#### 🗣️ Practice Suggestions
+Read contrast sentences:
+- 🇺🇸 "What's your **schedule** /ˈskedʒuːl/ today?"
+- 🇬🇧 "What's your **schedule** /ˈʃedjuːl/ today?"
+
+---
+
+## Part 4: Optimization Suggestions
+
+### Prompt Optimization Direction
+
+#### 1. Add Error Handling Mechanism
+```markdown
+# Error Handling
+- If tool call fails, try rewriting keywords and retry (max 2 times)
+- If neither knowledge base nor search yields results, provide alternative suggestions on related topics
+- If contradictory information is retrieved, mark viewpoints from different sources and explain basis for choice
+
+# Fallback Strategy
+When all tools fail:
+1. Give conservative advice based on general linguistic knowledge
+2. Clearly state "This is speculation based on conventional rules"
+3. Suggest user consult authoritative dictionary or professional
+```
+
+#### 2. Add User Profile Adaptation
+```markdown
+# User Context Adaptation
+- Default user English level: Intermediate (CEFR B1-B2)
+- If user question involves advanced grammar (like subjunctive mood), increase depth of explanation
+- If user asks using simple sentences, avoid overly academic terms
+- Adjust example sentence difficulty based on history
+
+# Dynamic Difficulty
+- Initial Interaction: Use daily example sentences
+- After Multi-round Dialogue: Adjust professionalism based on user feedback
+```
+
+#### 3. Enhance Interactivity
+```markdown
+# Interactive Features
+- Provide follow-up options after answering:
+  - 🅰️ More examples
+  - 🅱️ Related grammar points
+  - 🅲️ Pronunciation demonstration
+  - 🅳️ Practice test
+
+- For complex questions, ask: "Which part needs deeper explanation?"
+- Provide "Simplified" and "Full" output mode switch
+```
+
+#### 4. Add Knowledge Tracing
+```markdown
+# Citation & Sources
+- Knowledge Base Citation Format: [Source: "Grammar in Use" Unit 12, P.45]
+- Web Search Citation Format: [Source: Oxford Dictionary Online, 2024-01-15]
+- If combining multiple sources, label "Synthesized from following 3 sources:..."
+```
+
+---
+
+### Agent Configuration Optimization
+
+#### 1. Knowledge Base Optimization Strategy
+
+**Layered Retrieval**:
+```yaml
+Layer 1 (Coarse Retrieval):
+  - Method: BM25 Keyword Match
+  - Top K: 20
+  - Purpose: Quickly locate relevant chapters
+
+Layer 2 (Fine Retrieval):
+  - Method: Semantic Embedding
+  - Top K: 5
+  - Rerank: BAAI/bge-reranker-large
+  - Purpose: Find most relevant paragraphs
+```
+
+**Metadata Enhancement**:
+```json
+{
+  "doc_id": "grammar_unit_12",
+  "title": "Present Perfect Tense",
+  "level": "intermediate",
+  "tags": ["tense", "perfect", "have+pp"],
+  "unit": 12,
+  "page": 24
+}
+```
+
+#### 2. Tool Orchestration Optimization
+
+**Parallel Call** (Suitable for independent queries):
+```yaml
+# When user asks about grammar and pronunciation at the same time
+Parallel:
+  - Tool: Knowledge_Retrieval
+    Query: "present perfect grammar"
+  - Tool: Knowledge_Retrieval
+    Query: "perfect pronunciation"
+```
+
+**Conditional Branch** (Suitable for dependency):
+```yaml
+IF Knowledge_Retrieval.score < 0.6:
+  THEN Web_Search
+ELSE:
+  SKIP Web_Search
+```
+
+#### 3. Performance Optimization
+
+**Cache Strategy**:
+```yaml
+# Knowledge Base Cache
+Cache TTL: 7 days
+Cache Key: query_hash + knowledge_base_version
+
+# Search Result Cache
+Cache TTL: 1 day
+Cache Key: search_query_hash
+```
+
+**Rate Limiting**:
+```yaml
+# Prevent too many tool calls
+Max Tool Calls Per Turn: 5
+Max Total Calls Per Session: 50
+Cooldown: 100ms between calls
+```
+
+**Token Optimization**:
+```yaml
+# Truncation Strategy
+Knowledge Result Max Tokens: 800
+Search Result Max Tokens: 300
+Total Context Max Tokens: 2000
+```
+
+---
+
+## Part 5: Advanced Techniques
+
+### 1. Multi-modal Input Support
+
+**Voice Input Processing**:
+```markdown
+# Voice Input Handler
+IF input_type == "audio":
+  1. Use Whisper API to transcribe to text
+  2. Identify pronunciation errors (contrast standard phonetics)
+  3. Mark actual pronunciation vs standard pronunciation in answer
+```
+
+**Image Input Processing** (e.g., photo notes):
+```markdown
+# Image Input Handler
+IF input_type == "image":
+  1. Use OCR to extract text
+  2. Identify handwritten annotated questions
+  3. Focus explanation on annotated parts
+```
+
+### 2. Personalized Memory System
+
+**Knowledge Point Tracking**:
+```json
+{
+  "user_id": "user_123",
+  "weak_points": [
+    "present_perfect",
+    "pronunciation_th"
+  ],
+  "mastered_points": [
+    "simple_past",
+    "articles"
+  ],
+  "practice_history": [...]
+}
+```
+
+**Adaptive Recommendation**:
+```markdown
+# Adaptive Practice
+Based on user weaknesses, append after every answer:
+"💡 By the way, you asked about Present Perfect before, today's example sentence also used this tense, pay attention to..."
+```
+
+---
+
+## ✅ Pre-deployment Checklist
+
+### Basic Configuration
+- [ ] Prompt fully copied to Agent system prompt
+- [ ] Model selected correctly and supports Function Calling / ReAct
+- [ ] Agent Mode configured (Function Calling priority)
+- [ ] Temperature set to 0.3-0.5 (Balance accuracy and creativity)
+
+### Tool Configuration
+- [ ] Knowledge Base created and all documents uploaded
+- [ ] Knowledge Base retrieval parameters tuned (Top K, Score Threshold)
+- [ ] Web Search tool enabled and tested available
+- [ ] Optional tools (TTS/Chart etc.) configured as needed
+
+### Test Validation
+- [ ] Test Case 1: Pure grammar question (Should only call knowledge base)
+- [ ] Test Case 2: Neologism question (Should call search)
+- [ ] Test Case 3: Mixed question (Should call two tools in sequence)
+- [ ] Reasoning process log clear and readable
+- [ ] Token consumption within budget (< 2000 tokens/query)
+
+### User Experience
+- [ ] Output format beautiful (Markdown renders normally)
+- [ ] Analysis path clear (User can understand AI decision process)
+- [ ] Practice suggestions practical (Can be used directly)
+- [ ] Response speed < 10 seconds
+
+### Security
+- [ ] No copyright issues with knowledge base content
+- [ ] Search tool safe search enabled
+- [ ] No sensitive information leakage risk
+- [ ] Error handling perfect (Does not crash when tool call fails)
+
+---
+
+## 🔗 Related Resources
+
+### Documentation & Tutorials
+- [LangGPT Prompt Framework](https://github.com/langgptai/LangGPT)
+- [ReAct Paper](https://arxiv.org/abs/2210.03629)
+- [Dify Agent Official Docs](https://docs.dify.ai/)
+- [Function Calling Best Practices](https://platform.openai.com/docs/guides/function-calling)
+
+### Recommended Tools
+- **Knowledge Base Management**: Dify Knowledge Base / LangChain Document Loader
+- **Search API**: Tavily (AI Optimized) / SerpAPI (Comprehensive) / DuckDuckGo (Free)
+- **Speech Synthesis**: Azure TTS / ElevenLabs / OpenAI TTS
+- **Rerank Model**: BAAI/bge-reranker / Cohere Rerank
+
+### Advanced Reading
+- [Anthropic - Prompt Engineering Guide](https://docs.anthropic.com/claude/docs/prompt-engineering)
+- [OpenAI - Best Practices for Agent Development](https://platform.openai.com/docs/guides/agents)
+- [Google - Responsible AI Practices](https://ai.google/responsibility/responsible-ai-practices/)
+
+---
+
+**Document Version**: v2.0
+**Last Update**: 2025-01-21
+**Applicable Platform**: Dify / LangChain / Semantic Kernel / AutoGPT
+**License**: MIT License
+
+---
+
+## Appendix: FAQ
+
+<details>
+<summary><b>Q1: Why recommend DeepSeek-V3 instead of GPT-4?</b></summary>
+
+**A**: In cost-sensitive scenarios, DeepSeek-V3 offers reasoning capabilities close to GPT-4, but price is only 1/10. For education apps, cost-performance ratio is higher. If budget is sufficient and best effect is needed, GPT-4o is still first choice.
+</details>
+
+<details>
+<summary><b>Q2: What is difference between ReAct and Chain-of-Thought (CoT)?</b></summary>
+
+**A**: 
+- **CoT**: Only thinking process, no tool call (pure reasoning)
+- **ReAct**: Closed loop of Thought + Action + Observation (can call external tools)
+
+Simply put, ReAct = CoT + Tool Use
+</details>
+
+<details>
+<summary><b>Q3: How to judge knowledge base retrieval failure and need to call search?</b></summary>
+
+**A**: Set **Score Threshold = 0.6**. When retrieval result relevance score < 0.6, automatically trigger search. Can also specify keyword blacklist in prompt (e.g., "Rizz", "Skibidi" etc. new words search directly).
+</details>
+
+<details>
+<summary><b>Q4: What if Agent reasoning rounds are too many causing timeout?</b></summary>
+
+**A**: 
+1. Reduce Max Iterations (e.g. 10 → 5)
+2. Add hard constraint "Must give answer within 2 rounds" in prompt
+3. Use Function Calling instead of ReAct (faster)
+</details>
+
+<details>
+<summary><b>Q5: Can this scheme be used for non-English teaching Agents?</b></summary>
+
+**A**: Absolutely! Just replace Role, Goals and Knowledge Base content. For example:
+- Legal Advisor: Knowledge Base = Laws, Search = Case Library
+- Medical Consultation: Knowledge Base = Medical Textbook, Search = Latest Research
+- Programming Assistant: Knowledge Base = Official Docs, Search = Stack Overflow
+
+Core framework (ReAct + Tool Orchestration) is universal.
+</details>

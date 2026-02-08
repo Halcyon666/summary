@@ -1,0 +1,33 @@
+---
+id: regex
+title: Regex Cheatsheet
+sidebar_label: Regex Cheatsheet
+sidebar_position: 10
+description: Comprehensive regular expression patterns collection for common text processing tasks
+tags:
+- development
+- tools
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+---
+# Regex Cheatsheet
+
+## Remove Duplicate Lines
+
+```shell title="Find what"
+^(.*)(\r?\n\1)+
+```
+```shell title="Replace with"
+$1
+```
+
+## Match Time
+
+```shell title="Find what"
+\d{1,2}:\d{2}(?::\d{2})?
+``` 
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

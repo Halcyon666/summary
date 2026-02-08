@@ -1,0 +1,8 @@
+{
+    "label": "🌱 IOC Container",
+    "position": 1,
+    "link": {
+        "type": "generated-index",
+        "description": "Inversion of Control (IoC) and Dependency Injection (DI) principles and usage."
+    }
+}

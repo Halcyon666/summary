@@ -1,0 +1,379 @@
+---
+id: ioc-basics
+title: IoC Injection Methods 1
+sidebar_label: IoC Injection Methods 1
+sidebar_position: 10
+description: Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) for code related to this article (from official source spring-test module)
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) under `org.springframework.mylearntest` package for code related to this article (from [official source](https://github.com/spring-projects/spring-framework.git "official source") spring-test module).
+
+## Constructor Injection
+
+```
+public FXNewsProvider(IFXNewsListener newsListner,IFXNewsPersister newsPersister) {
+    this.newsListener = newsListner;
+    this.newPersistener = newsPersister;
+}
+```
+
+* Advantages: After object construction is complete, it is in ready state and can be used immediately.
+* Disadvantages: When there are many dependent objects, the constructor parameter list will be long. And when constructing objects via reflection, handling parameters of the same type can be difficult, and maintenance and use are also troublesome. Also in Java, constructors cannot be inherited and cannot set default values. For non-essential dependency handling, multiple constructors may need to be introduced, and changes in parameter quantity may cause maintenance inconvenience.
+
+## Setter Method Injection
+
+<details>
+	<summary>FXNewsProvider</summary>
+
+```java
+public class FXNewsProvider {
+    private IFXNewsListener newsListener;
+    private IFXNewsPersister newPersistener;
+
+    public IFXNewsListener getNewsListener() {
+    	return newsListener;
+    }
+    public void setNewsListener(IFXNewsListener newsListener) {
+    	this.newsListener = newsListener;
+    }
+
+    public IFXNewsPersister getNewPersistener() {
+    	return newPersistener;
+    }
+    public void setNewPersistener(IFXNewsPersister newPersistener) {
+    	this.newPersistener = newPersistener;
+    }
+}
+```
+</details>
+
+
+* Advantages: Because methods can be named, setter method injection is better than constructor injection in descriptiveness. In addition, setter methods can be inherited, allowing default values to be set, and have good IDE support.
+* Disadvantages: Of course, the object cannot enter ready state immediately after construction is completed.
+
+## Interface Injection
+
+In order for IoC Service Provider to inject the dependent IFXNewsListener for FXNewsProvider, it first needs to implement IFXNewsListenerCallable interface, which declares an injectNewsListner method (method name arbitrary), the parameter of this method is the type of the dependent object. In this way, InjectionServiceContainer object, i.e., the corresponding IoCService Provider can inject the dependent object into the injected object FXNewsProvider through this interface method.
+![](https://s2.loli.net/2023/07/15/SNQgVDHi5ruUso3.png)
+
+* Disadvantages: Interface injection is currently not advocated, basically in "retired state". Because it forces the injected object to implement unnecessary interfaces, which is intrusive. While constructor injection and setter method injection do not require this.
+
+## IoC Service Provider
+
+**What are the responsibilities of IoC Service Provider?**
+
+* Business object construction management: In IoC scenarios, business objects do not need to care about how dependent objects are constructed and obtained, but this part of work always needs someone to do. So, IoC Service Provider needs to strip the object construction logic from the client to avoid this part of logic polluting the implementation of business objects.
+  Dependency binding between business objects:
+* Business object dependency management: IoC Service Provider combines all business objects constructed and managed before, and identifiable dependency relationships between various business objects, binds the objects dependent by these objects, thereby ensuring that each business object can be in ready state when used.
+
+How to record dependency relationships between objects?
+
+* It can record the correspondence between injected objects and their dependent objects through the most basic text files;
+* It can also record correspondence information through XML file format with strong descriptiveness;
+* It can also register this correspondence information by writing code;
+
+Relationship between Spring IoC Container and IoC Service Provider
+
+Spring's IoC container is an IoC Service Provider, but this is only part of the reason why it is crowned with the name of IoC. What we cannot ignore is "container". Spring's IoC container is a lightweight container providing IoC support. In addition to basic IoC support, as a lightweight container, it also provides support other than IoC. For example, on top of Spring's IoC container, Spring also provides corresponding AOP framework support, enterprise-level service integration and other services.
+
+![Relationship between IoC Container and Provider](https://s2.loli.net/2023/07/15/WX5mDwzVoFylCJZ.png "Relationship between IoC Container and Provider")
+
+**Spring provides BeanFactory and ApplicationContext**
+
+* BeanFactory: Basic type IoC container, providing complete IoC service support. If not specified otherwise, default adoption of lazy initialization strategy (lazy-load). Only when client object needs to access a managed object in the container, it initializes and performs dependency injection operation on that managed object. So, relatively speaking, container startup is faster in early stage, and required resources are limited. For scenarios with limited resources and not very strict functional requirements, BeanFactory is a more suitable choice for IoC container.
+
+* ApplicationContext: ApplicationContext is built on the basis of BeanFactory, is a relatively advanced container implementation. In addition to having all support of BeanFactory, ApplicationContext also provides other advanced features, such as event publishing, internationalization information support, etc., which will be detailed later. Objects managed by ApplicationContext, after this type of container starts, are initialized and bound completely by default. So, compared to BeanFactory, ApplicationContext requires more system resources. At the same time, because all initialization is completed at startup, container startup time will also be longer than BeanFactory. In scenarios where system resources are sufficient and more functions are required, ApplicationContext type container is a more suitable choice.
+  
+* As the basic IoC container provided by Spring, BeanFactory can complete all responsibilities as IoC Service Provider, including business object registration and dependency relationship binding between objects.
+
+
+## BeanFactory Object Registration and Dependency Binding Methods
+
+<details>
+	<summary>Overall Dependency Design</summary>
+
+```java
+// 1-Design FXNewsProvider class for general news processing
+public class FXNewsProvider{
+//...
+}
+// 2-Design IFXNewsListener interface to abstract different news acquisition methods of various news agencies, and give corresponding implementation classes
+public interface IFXNewsListener{
+//...
+}
+// and
+public class DowJonesNewsListener implements IFXNewsListener {
+//...
+}
+// 3-Design IFXNewsPersister interface to abstract different data access methods, and implement corresponding implementation classes
+public interface IFXNewsPersister {
+//...
+} 
+// and
+public class DowJonesNewsPersister implements IFXNewsPersister { 
+//...
+}
+```
+</details>
+
+### Direct Coding Method
+
+<details>
+	<summary>1. Implement FX news related class registration and binding using BeanFactory via direct coding</summary>
+
+```java
+package org.springframework.mylearntest.beanf;
+
+import org.springframework.beans.MutablePropertyValues;
+import org.springframework.beans.PropertyValue;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.support.RootBeanDefinition;
+import org.springframework.mylearntest.before.FXNewsProvider;
+
+public class BeanFactoryFX {
+    public static void main(String[] args) {
+        DefaultListableBeanFactory beanRegistry = new DefaultListableBeanFactory();
+        BeanFactory container = bindViaCode(beanRegistry);
+        FXNewsProvider newsProvider = (FXNewsProvider)container.getBean("djNewsProvider");
+        newsProvider.getAndPersistNews();
+    }
+
+    // Because passed DefaultListableBeanFactory simultaneously implements BeanFactory and BeanDefinitionRegistry interfaces,
+    // so doing so forced type conversion will not cause problems. But need to note that pure BeanDefinitionRegistry cannot be forcibly converted to BeanFactory type!
+    public static BeanFactory bindViaCode(BeanDefinitionRegistry registry) {
+        AbstractBeanDefinition newsProvider = new RootBeanDefinition(FXNewsProvider.class, 0, true);
+        AbstractBeanDefinition newsListener = new RootBeanDefinition(DowJonesNewsListener.class,0, true);
+        AbstractBeanDefinition newsPersister = new RootBeanDefinition(DowJonesNewsPersister.class, 0,true);
+        // 1. Register bean definition to container
+        registry.registerBeanDefinition("djNewsProvider", newsProvider);
+        registry.registerBeanDefinition("djListener", newsListener);
+        registry.registerBeanDefinition("djPersister", newsPersister);
+        // 2.0 Specify dependency relationship
+        // 2.1 Can be via constructor injection
+        /*ConstructorArgumentValues argValues = new ConstructorArgumentValues();
+        argValues.addIndexedArgumentValue(0, newsListener);
+        argValues.addIndexedArgumentValue(1, newsPersister);
+        newsProvider.setConstructorArgumentValues(argValues);*/
+        // 2.2 Or via setter method injection
+        // Bind newsListener newPersistener to newsProvider
+        MutablePropertyValues propertyValues = new MutablePropertyValues();
+        propertyValues.addPropertyValue(new PropertyValue("newsListener",newsListener));
+        propertyValues.addPropertyValue(new PropertyValue("newPersistener",newsPersister));
+        newsProvider.setPropertyValues(propertyValues);
+        // 3.0 Binding completed 
+        return (BeanFactory)registry;
+    }
+}
+```
+
+</details>
+
+<details>
+	<summary>2. Design IFXNewsListener interface to abstract different news acquisition methods of various news agencies, and give corresponding implementation classes</summary>
+
+```java
+package org.springframework.mylearntest.before;
+
+public interface IFXNewsListener {
+    String[] getAvailableNewsIds();
+
+    FXNewsBean getNewsByPK(String newsId);
+
+    void postProcessIfNecessary(String newsId);
+}
+```
+
+
+
+```java
+package org.springframework.mylearntest.beanf;
+
+import org.springframework.mylearntest.before.FXNewsBean;
+import org.springframework.mylearntest.before.IFXNewsListener;
+
+public class DowJonesNewsListener implements IFXNewsListener {
+    @Override
+    public String[] getAvailableNewsIds() {
+        return new String[0];
+    }
+
+    @Override
+    public FXNewsBean getNewsByPK(String newsId) {
+        return null;
+    }
+
+    @Override
+    public void postProcessIfNecessary(String newsId) {
+
+    }
+}
+```
+
+</details>
+
+
+<details>
+	<summary>3. Design IFXNewsPersister interface to abstract different data access methods, and implement corresponding implementation classes</summary>
+
+```java
+package org.springframework.mylearntest.before;
+
+public interface IFXNewsPersister {
+    void persistNews(FXNewsBean newsBean);
+}
+```
+
+```java
+package org.springframework.mylearntest.beanf;
+
+import org.springframework.mylearntest.before.FXNewsBean;
+import org.springframework.mylearntest.before.IFXNewsPersister;
+
+public class DowJonesNewsPersister implements IFXNewsPersister {
+    @Override
+    public void persistNews(FXNewsBean newsBean) {
+
+    }
+}
+```
+</details>
+
+
+<details>
+	<summary>4. Design news provider class depending on news listener and persister classes</summary>
+
+```java
+package org.springframework.mylearntest.before;
+
+import org.apache.commons.lang3.ArrayUtils;
+
+
+public class FXNewsProvider {
+    private IFXNewsListener newsListener;
+    private IFXNewsPersister newPersistener;
+    public FXNewsProvider(IFXNewsListener newsListner,IFXNewsPersister newsPersister) {
+        this.newsListener = newsListner;
+        this.newPersistener = newsPersister;
+    }
+
+    public IFXNewsListener getNewsListener() {
+        return newsListener;
+    }
+
+    public void setNewsListener(IFXNewsListener newsListener) {
+        this.newsListener = newsListener;
+    }
+
+    public IFXNewsPersister getNewPersistener() {
+        return newPersistener;
+    }
+
+    public void setNewPersistener(IFXNewsPersister newPersistener) {
+        this.newPersistener = newPersistener;
+    }
+
+    public FXNewsProvider() {
+    }
+
+    public void getAndPersistNews() {
+        String[] newsIds = newsListener.getAvailableNewsIds();
+        if (ArrayUtils.isEmpty(newsIds)) {
+            return;
+        }
+        for (String newsId : newsIds) {
+            FXNewsBean newsBean = newsListener.getNewsByPK(newsId);
+            newPersistener.persistNews(newsBean);
+            newsListener.postProcessIfNecessary(newsId);
+        }
+    }
+}
+```
+</details>
+
+<details>
+	<summary>5. Set up news class</summary>
+
+```java
+package org.springframework.mylearntest.before;
+
+public class FXNewsBean {
+}
+```
+
+</details>
+
+
+### External Configuration File Method
+
+Usually, according to different external configuration file formats, corresponding BeanDefinitionReader implementation classes are given, BeanDefinitionReader's corresponding implementation classes are responsible for reading corresponding configuration file content and mapping to BeanDefinition, then register mapped BeanDefinition to a BeanDefinitionRegistry, after that, BeanDefinitionRegistry completes Bean registration and loading. Most work, including parsing file format, assembling BeanDefinition etc., are done by BeanDefinitionReader's corresponding implementation classes, BeanDefinitionRegistry is just responsible for keeping them.
+
+**properties configuration file method**
+
+<details>
+	<summary>binding-config.properties</summary>
+
+```properties
+djNewsProvider.(class)=org.springframework.mylearntest.ioc.directcode.FXNewsProvider
+djNewsProvider.$0(ref)=djListener
+djNewsProvider.$1(ref)=djPersister
+# djNewsProvider.newsListener(ref)=djListener
+# djNewsProvider.newPersistener(ref)=djPersister
+djListener.(class)=org.springframework.mylearntest.ioc.propconfig.DjNewsListener
+djPersister.(class)=org.springframework.mylearntest.ioc.propconfig.DjNewsPersister
+```
+</details>
+
+<details>
+	<summary>PropConfigTest</summary>
+
+```java
+package org.springframework.mylearntest.directcode;
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.support.PropertiesBeanDefinitionReader;
+
+public class PropConfigTest {
+    public static void main(String[] args) {
+        // todo Caused by: java.lang.IllegalStateException: No bean class specified on bean definition
+        DefaultListableBeanFactory beanRegistry = new DefaultListableBeanFactory();
+        BeanFactory container = bindViaPropertiesFile(beanRegistry);
+        FXNewsProvider newsProvider =
+                (FXNewsProvider)container.getBean("djNewsProvider");
+        newsProvider.getAndPersistNews();
+    }
+
+    public static BeanFactory bindViaPropertiesFile(BeanDefinitionRegistry registry) {
+        PropertiesBeanDefinitionReader reader =
+                new PropertiesBeanDefinitionReader(registry);
+        reader.loadBeanDefinitions("classpath:binding-config.properties");
+        return (BeanFactory)registry;
+    }
+}
+```
+
+</details>
+
+> @deprecated as of 5.3, in favor of Spring's common bean definition formats
+
+
+> References
+> 
+> 1. Book Name: Spring Unveiled Author: Wang Fuqiang
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

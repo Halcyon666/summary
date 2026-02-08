@@ -1,0 +1,399 @@
+---
+id: ioc-advanced
+title: IoC Injection Methods 2
+sidebar_label: IoC Injection Methods 2
+sidebar_position: 10
+description: Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) for code related to this article (from official source spring-test module)
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) under `org.springframework.mylearntest` package for code related to this article (from [official source](https://github.com/spring-projects/spring-framework.git "official source") spring-test module).
+
+
+## Difference between Automatic Binding and Manual Binding
+
+Automatic binding and manual explicit binding have their own pros and cons. The advantages of automatic binding are as follows.
+
+* To some extent, it can effectively reduce the workload of manually typing configuration information.
+* In some cases, even if new dependencies are added to the current object, as long as the corresponding dependent objects exist in the container, there is no need to change any configuration information.
+
+The disadvantages of automatic binding are as follows.
+
+* Automatic binding is not as clear as explicit dependencies. We can have a clear understanding of the entire system based on explicit dependencies, but with automatic binding, we may need to switch back and forth between class definitions and configuration files, or even between various configuration files to get the corresponding information.
+* In some cases, automatic binding cannot meet system needs, or even cause system behavior anomalies or unpredictability. Automatic binding based on type (byType) matching, if another bean definition of the same type is added to the system, the entire system will crash; automatic binding based on name (byName) matching, if the bean definition type of the same name in the original system is replaced, it will cause problems, and these may happen inadvertently.
+* Using automatic binding, we may not be able to get good support from certain tools, such as Spring IDE. Unlike BeanFactory, ApplicationContext will instantiate all "singleton bean definitions" immediately when the container starts.
+
+## Will lazy loading configuration definitely take effect?
+
+Just specifying lazy-init="true" for a lazy-init-bean does not mean that the container will definitely delay initializing the instance of that bean. If a non-lazy-initialized bean definition depends on a lazy-init-bean, then undoubtedly, according to the order of dependency resolution, the container will still instantiate the lazy-init-bean first, and then instantiate the latter. The following code demonstrates this situation where mutual implication leads to lazy initialization failure:
+
+<details>
+	<summary>Lazy loading configuration failure case</summary>
+
+```xml
+<!--Non-lazy loaded bean depends on a lazy loaded bean. Since non-lazy loaded bean needs to be initialized, the dependent lazy loaded bean must be instantiated-->
+<beans>
+    <bean id="lazy-init-bean" class="..." lazy-init="true"/> 
+    <bean id="not-lazy-init-bean" class="...">
+        <property name="propName">
+            <ref bean="lazy-init-bean"/> 
+        </property>
+    </bean>
+</beans>
+```
+</details>
+
+## Usage of abstract attribute
+
+If you do not want the container to instantiate certain objects during initialization, you can set its abstract attribute to true to avoid the container instantiating it. This is especially true for the ApplicationContext container, because by default, ApplicationContext will instantiate all beans it manages when the container starts, except for beans marked as abstract.
+
+## scope
+
+* scope is used to declare the limited scenario or survival time of the object in the container, that is, the container generates and assembles these objects before the object enters its corresponding scope, and after the object is no longer in the limit of these scopes, the container usually destroys these objects.
+* Spring container initially provided two bean scope types: singleton and prototype, but after releasing 2.0, introduced another three scope types, namely request, session and global session types. However, these three types have limitations and can only be used in Web applications. That is to say, it is only reasonable to use these three scopes in an ApplicationContext that supports Web applications.
+* global session only makes sense when applied in portlet-based Web applications, it maps to portlet's global scope session. If this scope is used in ordinary servlet-based Web applications, the container will treat it as ordinary session type scope.
+
+## Replacement Technique
+
+#### Method Injection
+
+Spring container proposed a method called Method Injection, which can help us solve the above problems. What we have to do is very simple, just let the getNewsBean method declaration conform to the specified format, and notify the container in the configuration file, when this method is called, return the object instance of the specified type each time.
+
+<details>
+	<summary>Configuration Item XML</summary>
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="newsBean" class="org.springframework.mylearntest.directcode.FXNewsBean" scope="prototype">
+    </bean>
+    <bean id="mockPersister" class="org.springframework.mylearntest.mthdinject.MockNewsPersister">
+        <property name="newsBean">
+            <ref bean="newsBean"/>
+        </property>
+    </bean>
+</beans>
+```
+</details>
+
+<details>
+	<summary>MockNewsPersister</summary>
+
+```java
+package org.springframework.mylearntest.mthdinject;
+    
+import org.springframework.mylearntest.directcode.FXNewsBean;
+import org.springframework.mylearntest.directcode.IFXNewsPersister;
+
+public class MockNewsPersister implements IFXNewsPersister {
+    private FXNewsBean newsBean;
+    public void persistNews(FXNewsBean bean) {
+        persistNews();
+    }
+    public void persistNews() {
+        System.out.println("persist bean:"+getNewsBean());
+    }
+    public FXNewsBean getNewsBean() {
+        return newsBean;
+    }
+
+    public void setNewsBean(FXNewsBean newsBean) {
+        this.newsBean = newsBean;
+    }
+
+}
+```
+</details>
+
+<details>
+	<summary>Test Class</summary>
+
+```java
+package org.springframework.mylearntest.mthdinject;
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test4MockNewsPersister {
+    public static void main(String[] args) {
+        BeanFactory container = new ClassPathXmlApplicationContext("mthdinject.xml");
+        MockNewsPersister persister = (MockNewsPersister)container.getBean("mockPersister");
+        persister.persistNews();
+        persister.persistNews();
+        // persist bean:org.springframework.mylearntest.directcode.FXNewsBean@5be6e01c
+        // persist bean:org.springframework.mylearntest.directcode.FXNewsBean@5be6e01c
+    }
+}
+```
+</details>
+
+<details>
+	<summary>Method Injection Configuration</summary>
+
+```xml
+<beans>
+    <bean id="newsBean" class="..domain.FXNewsBean" singleton="prototype">
+    </bean>
+    <bean id="mockPersister" class="..impl.MockNewsPersister">
+    <!--Specify the method name to initiate injection via the name attribute of <lookup-method>, and the bean attribute specifies the object to inject.
+    When getNewsBean method is called, the container can return a new instance of FXNewsBean type each time.-->
+        <lookup-method name="getNewsBean" bean="newsBean"/>
+    </bean>
+</beans>
+```
+</details>
+
+#### By Implementing BeanFactoryAware
+
+As long as when implementing getNewsBean() method, guarantee to call BeanFactory's `getBean("newsBean")` each time, we can also get a new FXNewsBean object instance each time.
+
+<details>
+	<summary>MockNewsPersister1</summary>
+
+```java
+package org.springframework.mylearntest.beanfactorywareinject;
+
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.mylearntest.directcode.FXNewsBean;
+import org.springframework.mylearntest.directcode.IFXNewsPersister;
+
+public class MockNewsPersister1 implements IFXNewsPersister, BeanFactoryAware {
+    private BeanFactory beanFactory;
+
+    public void setBeanFactory(BeanFactory bf) throws BeansException {
+        this.beanFactory = bf;
+    }
+
+    public void persistNews(FXNewsBean bean) {
+        persistNews();
+    }
+
+    public void persistNews() {
+        System.out.println("persist bean:" + getNewsBean());
+    }
+
+    public FXNewsBean getNewsBean() {
+        return (FXNewsBean) beanFactory.getBean("newsBean");
+    }
+}
+```
+</details>
+
+<details>
+	<summary>XML Configuration</summary>
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="newsBean" class="org.springframework.mylearntest.directcode.FXNewsBean" scope="prototype">
+    </bean>
+    <bean id="mockPersister1" class="org.springframework.mylearntest.beanfactorywareinject.MockNewsPersister1">
+    </bean>
+
+</beans>
+```
+</details>
+
+<details>
+	<summary>Test4MockNewsPersister1 Test Class</summary>
+
+```java
+package org.springframework.mylearntest.beanfactorywareinject;
+
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.mylearntest.mthdinject.MockNewsPersister;
+
+public class Test4MockNewsPersister1 {
+    public static void main(String[] args) {
+        BeanFactory container = new ClassPathXmlApplicationContext("beanfactoryawareinject.xml");
+        MockNewsPersister1 persister = (MockNewsPersister1)container.getBean("mockPersister1");
+        persister.persistNews();
+        persister.persistNews();
+    }
+}
+```
+</details>
+
+#### By ObjectFactory
+
+ObjectFactoryCreatingFactoryBean is a FactoryBean implementation provided by Spring, which returns an ObjectFactory instance. This ObjectFactory instance returned by ObjectFactoryCreatingFactoryBean can return container-managed related objects for us. In fact, ObjectFactoryCreatingFactoryBean implements BeanFactoryAware interface, returning ObjectFactory instance is just an implementation specific to interacting with Spring container. The benefit of using it is to isolate client object's direct reference to BeanFactory.
+
+<details>
+	<summary>MockNewsPersister2</summary>
+
+```java
+package org.springframework.mylearntest.objectfactoryinj;
+
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.mylearntest.directcode.FXNewsBean;
+import org.springframework.mylearntest.directcode.IFXNewsPersister;
+
+@SuppressWarnings({"rawtypes" })
+public class MockNewsPersister2 implements IFXNewsPersister {
+    private ObjectFactory newsBeanFactory;
+    public void persistNews(FXNewsBean bean) {
+        persistNews();
+    }
+    public void persistNews() {
+        System.out.println("persist bean:"+getNewsBean());
+    }
+    public FXNewsBean getNewsBean() {
+        return (FXNewsBean) newsBeanFactory.getObject();
+    }
+    public void setNewsBeanFactory(ObjectFactory newsBeanFactory) {
+        this.newsBeanFactory = newsBeanFactory;
+    }
+}
+```
+</details>
+
+<details>
+	<summary>XML Configuration</summary>
+
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="newsBean" class="org.springframework.mylearntest.directcode.FXNewsBean" scope="prototype">
+    </bean>
+    <bean id="newsBeanFactory" class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
+        <property name="targetBeanName">
+            <idref bean="newsBean"/>
+        </property>
+    </bean>
+
+    <bean id="mockPersister2" class="org.springframework.mylearntest.objectfactoryinj.MockNewsPersister2">
+        <property name="newsBeanFactory">
+            <ref bean="newsBeanFactory"/>
+        </property>
+    </bean>
+</beans>
+```
+</details>
+
+<details>
+	<summary>Test Class</summary>
+
+```java
+package org.springframework.mylearntest.objectfactoryinj;
+
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test4MockNewsPersister2 {
+    public static void main(String[] args) {
+        BeanFactory container = new ClassPathXmlApplicationContext("objectfactoryinj.xml");
+        MockNewsPersister2 persister = (MockNewsPersister2)container.getBean("mockPersister2");
+        persister.persistNews();
+        persister.persistNews();
+    }
+}
+```
+</details>
+
+#### Method Replacement
+
+Use FXNewsProviderMethodReplacer to replace getAndPersistNews() method in FXNewsProvider
+
+<details>
+	<summary>FXNewsProviderMethodReplacer</summary>
+
+```java
+package org.springframework.mylearntest.methodreplacer;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.support.MethodReplacer;
+
+import java.lang.reflect.Method;
+
+public class FXNewsProviderMethodReplacer implements MethodReplacer {
+
+    private static final transient Log logger =
+            LogFactory.getLog(FXNewsProviderMethodReplacer.class);
+
+    public Object reimplement(Object target, Method method, Object[] args)
+            throws Throwable {
+        logger.info("before executing method["+method.getName()+
+                "] on Object["+target.getClass().getName()+"].");
+        System.out.println("sorry,We will do nothing this time.");
+        logger.info("end of executing method["+method.getName()+
+                "] on Object["+target.getClass().getName()+"].");
+        return null;
+    }
+}
+```
+</details>
+
+<details>
+	<summary>XML</summary>
+
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="FXNewsProvider" class="org.springframework.mylearntest.ioc.propconfig.FXNewsProvider">
+		<constructor-arg index="0" ref="djNewsListener"/>
+		<constructor-arg index="1" ref="djNewsPersister"/>
+		<replaced-method name="getAndPersistNews" replacer="providerReplacer">
+		</replaced-method>
+	</bean>
+
+	<bean id="djNewsListener" class="org.springframework.mylearntest.ioc.propconfig.DjNewsListener"/>
+	<bean id="djNewsPersister" class="org.springframework.mylearntest.ioc.propconfig.DjNewsPersister"/>
+	<bean id="providerReplacer"
+		  class="org.springframework.mylearntest.ioc.methodreplacer.FXNewsProviderMethodReplacer"/>
+</beans>
+```
+</details>
+
+<details>
+	<summary>Test Class</summary>
+
+```java
+package org.springframework.mylearntest.methodreplacer;
+
+
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.mylearntest.propconfig.FXNewsProvider;
+
+public class Test4FXNewsProviderMethodReplacer {
+    public static void main(String[] args) {
+        BeanFactory container = new ClassPathXmlApplicationContext("methodreplacer.xml");
+        FXNewsProvider fxNewsProvider = (FXNewsProvider)container.getBean("FXNewsProvider");
+        fxNewsProvider.getAndPersistNews();
+    }
+}
+```
+</details>
+
+> References
+> 
+> 1. Book Name: Spring Unveiled Author: Wang Fuqiang
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

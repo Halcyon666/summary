@@ -1,0 +1,403 @@
+---
+id: java-case-interview-one
+title: Java Interview Questions 1
+sidebar_label: Java Interview Questions 1
+sidebar_position: 10
+description: 'Difference between Object-Oriented and Procedure-Oriented: - Procedure-oriented focuses more on each step and its order, object-oriented focuses more on which objects and what capabilities they have - Procedure-oriented is more direct, while object-oriented is easier to reuse, extend and maintain
+  Three Main Characteristics: Encapsulation: Hide internal details, only provide external interfaces'
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+## What is Object-Oriented?
+
+Difference between Object-Oriented and Procedure-Oriented:
+- Procedure-oriented focuses more on each step and its order, object-oriented focuses more on which objects and what capabilities they have
+- Procedure-oriented is more direct, while object-oriented is easier to reuse, extend and maintain
+
+**Three Main Characteristics**:
+
+Encapsulation: Hide internal details, only provide external interfaces
+
+> javabean properties can only be assigned through set methods, cannot use `ClassInstance.filed` to assign directly.
+
+Inheritance: Common methods and properties of subclasses are reflected in the parent class, subclasses only need to make specific extensions.
+
+Polymorphism: Inheritance, method overriding, parent class reference points to subclass
+
+## JVM Virtual Machine Stack
+
+![](https://s2.loli.net/2023/07/15/uYim8oFXnK3RHtN.png)
+
+Java Stack
+[Oracle frame interpretation](https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-2.html#jvms-2.6.1)
+
+Every time a method is called, a new stack frame is created. When the method call is completed, whether it throws an exception or returns normally, the stack frame will be destroyed.
+Stack frames are allocated by the thread that created the stack frame in the Java virtual machine stack. Each stack frame has its own local variables, operand stack, dynamic link (return method value or thrown exception).
+
+Local Variables: Each stack frame has a local variable table (an array), which can store types boolean, byte,
+char, short, int, float, reference, or returnAddress. In 32-bit JVM, long and double types occupy two consecutive variable positions.
+The variable table in each stack starts from position 0, position 0 is the caller of the current method (this), and any local variable starts from position 1 of the variable table.
+
+Operand Stacks: The JVM provides instructions to load constants or values from local method lists or properties to the operand stack. Other Java JVMs
+can operate (calculate) on values in the operand stack, and then pop the stack to return the result to the operand stack. The operand stack is also used for passing method parameters and
+receiving method return values. The operand stack has its own depth at any time. Long and double types occupy two unit depths, and values of other types occupy one operand unit.
+
+Dynamic Linking: Each stack frame references a runtime constant pool that supports dynamic linking to methods in the current method area. Referenced bytecode methods will be called,
+and variables will be accessed through symbolic references. Dynamic linking translates these symbolic links into specific method references, loads classes that do not yet have symbolic references, and translates variable memory addresses to associate with runtime memory addresses.
+
+How to Determine if an Object Become Garbage?
+Reference Counting: When a place uses +1 to count value, -1 when invalid, 0 means object can no longer be referenced.
+Disadvantage: Circular references, some objects cannot be recycled.
+
+## final Keyword
+
+1. Modifying Member Variables
+If final modifies a class variable, the initial value can only be specified in the static initialization block or when declaring the class variable.
+If final modifies a member variable, it can be initialized in a non-static block, declared, or initialized in the constructor.
+2. Modifying Local Variables
+Must be assigned and assigned only once, variable address cannot be assigned again.
+3. Why Inner Classes Can Only Access External Variables with final?
+Reason 1: If the inner class method execution is completed, but the inner class object still exists and references an invalid member variable.
+Reason 2: Local variable modification, and variable value in the inner class changes internally, then problems will also occur.
+So only access external variables with final.
+
+## hashCode and equals Methods
+
+General objects, if sorted or put into HashMap collection, need to override hashCode and equals methods, and ensure that the logic implemented by the two methods is consistent.
+
+## Generics extends super
+
+extends specifies upper limit `A<? extends T>`
+
+super specifies lower limit `A<? super T>`
+
+## == and equals
+
+== Checks values for basic data types, checks addresses for reference types
+
+equals method, depends on specific object implementation. Object's equals compares addresses, while String class compares content (compares content only when address values are different)
+
+## StringBuilder StringBuffer String Differences
+
+String is modified by final, immutable, every operation produces a new object.
+
+StringBuffer and StringBuilder operate on the original object. StringBuffer methods are locked by synchronized, efficiency is reduced. StringBuilder starts from JDK 5, generally recommended to use StringBuilder.
+
+## Overloading and Overriding
+
+Overloading: Occurs in the same class, method names must be the same, parameter types are different, numbers are different, order is different, method return values and access modifiers can be different.
+
+Overriding: Occurs in parent and child classes, method name, (same name, two small, one big) parameter list must be the same. Return value type is smaller than parent class, thrown exception is smaller than parent class, access modifier is larger than parent class;
+If the attached access modifier is private, the subclass cannot override the method. Static methods cannot be overridden, only hidden.
+
+## Difference between Interface and Abstract Class
+
+Single inheritance multiple implementation
+Abstract class can have concrete methods, interface cannot have
+Interfaces are all static class attributes public static final.
+
+Abstract classes can centrally implement common methods, so when writing subclasses, only specific methods need to be extended, improving code reusability.
+Interface defines behavior, does not care how subclasses implement.
+
+Abstract class can only inherit one class, need to write out all commonalities of all subclasses, difficulty is higher.
+While interfaces are much weaker in function, they are just descriptions of an action, reducing difficulty in design.
+
+
+## Difference between List and Set
+
+**List**: Ordered and repeatable, allows multiple null element objects, can traverse elements using iterator, can also traverse using subscript.
+**Set**: Unordered, non-repeatable, allows at most one null element object, can only use iterator to traverse when taking elements.
+
+## HashCode and equals
+
+The role of hashcode is to obtain the hash code, which can be used to confirm the index position of the object in the hash table. HashCode() is defined in Object of JDK,
+any class in Java contains HashCode() function. Hash table stores key-value pairs, can quickly retrieve corresponding values based on keys. Comparing two objects
+whether they are the same object, when HashCode is the same, equals method will also be called.
+
+Note: hashCode is a unique value generated by the object on the heap. If hashCode() is not overridden, two objects of that class will never be equal.
+
+## ArrayList and LinkedList
+
+**ArrayList** Dynamic array, continuous memory storage, fast query, low deletion efficiency, but appending elements at the tail is also extremely efficient if the initial capacity is sufficient.
+
+**LinkedList** Linked list, can be stored dispersed in memory. Suitable for data insertion and deletion operations, not suitable for query.
+Using for loop traversal, or indexOf returning index are extremely inefficient, generally use iterator traversal.
+
+## HashMap and Hashtable
+
+HashMap is thread-unsafe, HashTable is thread-safe (methods are locked by synchronized)
+
+HashMap allows one null key and multiple null values, while Hashtable does not allow.
+
+**Underlying Data Structure** Array + Linked List
+
+From JDK8, when linked list height is 8 and array length exceeds 64, linked list will turn into red-black tree, elements exist as inner class Node nodes. When array length is less than 6, red-black tree turns into linked list.
+
+- Calculate hash value of key, secondary hash then modulo array length, corresponding to array subscript
+
+- If no Hash conflict, create Node and store into array
+
+- If Hash conflict occurs, first compare equals, if same replace that element; if different, judge linked list height and insert into linked list.
+
+- Key is null value, exists at position with subscript 0.
+
+## ConcurrentHashMap jdk7 and jdk8 Differences
+
+**jdk7**
+
+Data structure: ReentrantLock + segment + hashEntry, a Segment contains a HashEntry array, each HashEntry is a linked list structure
+
+Element lookup: Secondary Hash, first Hash locates Segment position, second Hash locates linked list head where element is located
+
+Lock: Segment lock, Segment inherits ReentrantLock, locks the operated Segment, other Segments are not affected,
+Concurrency is the number of Segments, can be specified through constructor, array expansion will not affect other Segments.
+
+get method does not need locking, volatile ensures writes are all in main memory.
+
+**jdk8**
+
+Data structure synchronized + CAS + Red-Black Tree. Node's val and next are both modified by volatile, ensuring visibility to other threads
+
+Lookup, replacement, assignment all use CAS
+
+Lock: Locks the head node of the linked list, does not affect reading and writing of other elements, lock granularity is finer, efficiency is higher. During expansion, blocks all read and write operations, concurrent expansion.
+
+Read operation lock-free:
+
+Node's val and next are both modified by volatile, ensuring visibility to other threads.
+
+Array uses volatile modification to ensure visibility to other threads during expansion.
+
+## How to Implement an IOC Container
+
+1. Configuration file configuration, annotation configuration package scan path
+2. Recursive package scan to get .class files, put full path names of all classes marked by specific annotation (@component) into a set collection
+3. Traverse set collection, get classes with specified annotations on the class, and hand them over to IOC container, define a safe Map to store these objects
+4. Traverse this IOC container, get instance of each class, judge whether there are dependency injection objects inside that have not been injected yet, then perform dependency injection.
+
+## Parent Delegation Model
+
+Three types of class loaders
+**BootStrapClassLoader** Default loads jar packages and class files under %JAVA_HOME%/lib
+**ExtClassLoader** Responsible for loading jar packages and class files under %JAVA_HOME%/lib/ext
+**AppClassLoader** Is the parent class of custom class loader (parent attribute points to), responsible for loading class files under classpath
+
+Delegate upward, check cache
+Lookup downward, check loading path, if class exists under that path then load, otherwise lookup downward
+
+**Security**: Parent delegation ensures that classes are only loaded once, preventing user-written core java classes from being loaded.
+The same class loaded by different loaders is two different classes.
+
+## Exception Hierarchy in Java
+
+![](https://s2.loli.net/2023/07/15/vkW5E2aPQqblVCe.png)
+
+**Error** Exception is that the program cannot handle and will cause the program to stop; Exception will not cause the program to stop
+**RuntimeException** Occurs during program execution, will cause the current thread of the program to fail execution.
+**CheckedException** Occurs during program compilation, will cause the program compilation to fail.
+**Unchecked Exception** Includes Error and RuntimeException, occurs at runtime.
+
+## How GC Determines Objects Can Be Recycled
+
+Reference Counting: Each object has a reference count attribute, adding a reference counts +1, releasing a reference counts -1, can be recycled when count is 0.
+
+Reachability Analysis: Search downwards starting from a series of objects called `GC ROOTS` (path is reference chain),
+When an object is not connected to any GC reference chain, these objects are unreachable.
+GC ROOTS objects include:
+1. Objects referenced in virtual machine stack
+2. Objects referenced by static attributes or constants in method area
+3. Objects referenced by native methods
+
+Unreachable objects in reachability algorithm do not die immediately, objects have one chance to save themselves.
+
+Objects declared dead by the system undergo at least two marking processes. First time passing reachability analysis found no connection with GC ROOTS reference chain,
+Second time is judging whether to execute finalize() method in the Finalizer queue automatically created by the virtual machine.
+
+When object becomes unreachable, GC will judge whether this object overrides *finalize* method, if not overridden then directly recycle it, otherwise
+If object has not executed finalize method, put it into F-Queue queue, executed by low priority thread to execute finalize method of objects in this queue.
+After execution of method is complete, GC will judge again whether this object is reachable, if unreachable, then recycle, otherwise, object resurrection.
+
+finalize() method execution cost is high, each object can only trigger once. Generally used to release resources.
+
+
+## Thread States
+
+Create, Ready, Running, Blocked, Dead
+
+Blocked:
+ - wait blocked  woken up by notify(Object method) or notifyAll
+ - synchronize blocked
+ - other blocked: sleep(Thread method) or join or IO request occurred, JVM will set the thread to blocked state.
+
+## Difference between sleep wait join yield
+
+1. sleep is Thread static native method; wait is Object class native method
+2. sleep does not release lock; wait releases lock and joins waiting queue
+3. sleep does not need to be woken up; wait needs to be woken up
+4. sleep method does not depend on synchronized keyword; but wait needs to depend
+5. sleep yields CPU execution time and forces context switch; while wait is not necessarily, after being notified still has chance to compete for lock
+
+yield After execution, thread enters ready state, immediately releases CPU execution right, but still retains CPU execution right.
+
+join After execution, thread enters blocked state, in A thread B.join then execute A after executing B.
+
+## Reason for ThreadLocal and Usage Scenarios
+
+Each Thread object contains a ThreadLocalMap type member variable threadLocals variable
+`ThreadLocalMap` consists of an Entry object, Entry object inherits from `WeakReference<ThreadLocal<?>>`
+An Entry consists of ThreadLocal object and Object; When no object strongly references ThreadLocal object, the key will be collected by
+garbage collector.
+
+*ThreadLocal Inner Class -> ThreadLocalMap Inner Class -> Entry*
+***set method***
+```java
+	// ThreadLocal Method
+	public void set(T value) {
+		// Get current thread object
+        Thread t = Thread.currentThread();
+		// Get ThreadLocalMap inner class object of t thread ThreadLocal object
+        ThreadLocalMap map = getMap(t);
+        if (map != null)
+			// Use ThreadLocal object as key, input parameter as value
+            map.set(this, value);
+        else
+            createMap(t, value);
+    }
+	
+	// ThreadLocalMap Method
+	private void set(ThreadLocal<?> key, Object value) {
+	
+        Entry[] tab = table;
+        int len = tab.length;
+        int i = key.threadLocalHashCode & (len-1);
+		
+		// Start from calculated i position, compare references one by one, if same replace value
+		// If e reference is null, replace corresponding value, and delete unreferenced value
+        for (Entry e = tab[i];
+             e != null;
+             e = tab[i = nextIndex(i, len)]) {
+            ThreadLocal<?> k = e.get();
+
+            if (k == key) {
+                e.value = value;
+                return;
+            }
+
+            if (k == null) {
+                replaceStaleEntry(key, value, i);
+                return;
+            }
+        }
+
+        tab[i] = new Entry(key, value);
+        int sz = ++size;
+        if (!cleanSomeSlots(i, sz) && sz >= threshold)
+            rehash();
+    }
+	
+```
+
+***get method***
+```java
+	// ThreadLocal Method
+	public T get() {
+        Thread t = Thread.currentThread();
+        ThreadLocalMap map = getMap(t);
+        if (map != null) {
+			// Get Entry inner class
+            ThreadLocalMap.Entry e = map.getEntry(this);
+            if (e != null) {
+                @SuppressWarnings("unchecked")
+                T result = (T)e.value;
+                return result;
+            }
+        }
+		// If current thread ThreadLocalMap attribute value is null
+		// Then get initial value, and create ThreadLocalMap
+        return setInitialValue();
+    }
+	
+	// ThreadLocalMap Method
+	private Entry getEntry(ThreadLocal<?> key) {
+		// Use key's Hashcode & Entry array length
+		// Get possible position of key in array
+        int i = key.threadLocalHashCode & (table.length - 1);
+        Entry e = table[i];
+        if (e != null && e.get() == key)
+            return e;
+        else
+			// If not hit, get from method below
+            return getEntryAfterMiss(key, i, e);
+    }
+	
+	// ThreadLocalMap Method
+	private Entry getEntryAfterMiss(ThreadLocal<?> key, int i, Entry e) {
+        Entry[] tab = table;
+        int len = tab.length;
+
+        while (e != null) {
+            ThreadLocal<?> k = e.get();
+			// when e reference and thread calling get() method are same thread, return that Entry
+            if (k == key) 
+                return e;
+			// If e reference is null, trigger deletion of unreferenced Entry objects,
+			// Including other Entry objects not referenced previously
+            if (k == null)
+                expungeStaleEntry(i);
+            else
+				// ((i + 1 < len) ? i + 1 : 0)
+				// Definitely will have an i hit, i may not start from 0, so set to 0 when exceeding array length above
+                i = nextIndex(i, len);
+            e = tab[i];
+        }
+        return null;
+    }
+```
+
+**Usage Scenarios** 
+1. Can be used when some attributes need to be passed in many layers of methods to avoid passing parameters all the time
+2. Data safety line between threads, each thread holds a ThreadLocalMap object
+3. Used to store transaction information during transaction operations
+4. Database connection, Session management
+
+Four reference types, see article below is enough
+[Reference Blog *Source*](https://www.cnblogs.com/liyutian/p/9690974.html)
+
+## How to Avoid ThreadLocal Memory Leak
+
+Entry key in ThreadLocalMap is set to null, after being recycled by GC,
+If thread still holds reference to value in Entry, it causes memory leak.
+
+Key can be manually set to null or use weak reference; value can call set method to set value to null
+Or remove method to set Entry to null (will still call expungeStaleEntry())
+
+If get, set calls expungeStaleEntry() on ThreadLocalMap, value and Entry will be set to null
+![](https://s2.loli.net/2023/07/15/XlydYtFsAv71gNh.png)
+
+
+**Usage Principles** 
+
+1. After using ThreadLocal, clear value in time
+2. Define ThreadLocal variable as private static variable, so there is always a strong reference to ThreadLocal, convenient for use and clearing operations
+
+One thread only has one `ThreadLocalMap`, why maintain an `Entry[]` in `ThreadLocalMap`
+Because one Thread can have multiple `ThreadLocal`, Entry position in array is determined by `key.threadLocalHashCode & (table.length - 1)`
+`ThreadLocal` hash value and array length (when array length exceeds threshold, and expired Entries are not cleared, data in array will be transferred to another larger array)
+
+## Reference Materials
+1. Bilibili Video [Address](https://www.bilibili.com/video/BV1Eb4y1R7zd?)
+2. JDK 8 ThreadLocal Partial Source Code
+3. Oracle Official Website [Address](https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-2.html#jvms-2.6.1)
+
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

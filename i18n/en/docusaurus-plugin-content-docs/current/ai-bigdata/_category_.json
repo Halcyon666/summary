@@ -1,0 +1,8 @@
+{
+    "label": "🤖 AI & Big Data",
+    "position": 5,
+    "link": {
+        "type": "generated-index",
+        "description": "Big data technologies (Hadoop, Flink, HBase) and AI/ML concepts."
+    }
+}

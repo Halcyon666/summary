@@ -1,0 +1,564 @@
+---
+id: cpu-memory-domain
+title: Processor Memory Model
+sidebar_label: Processor Memory Model
+sidebar_position: 10
+description: Relax the order of write-read operations in the program, thus producing the Total Store Ordering memory model (abbreviated as TSO). On the basis of the above, continue to relax the order of write-write operations in the program, thus producing the Partial Store Order memory model (abbreviated as PSO).
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+## Memory Model Division
+
+Relax the order of write-read operations in the program, thus producing the Total Store Ordering memory model (abbreviated as TSO).
+
+On the basis of the above, continue to relax the order of write-write operations in the program, thus producing the Partial Store Order memory model (abbreviated as PSO).
+
+On the basis of the previous two, continue to relax the order of read-write and read-read operations in the program, thus producing the Relaxed Memory Order memory model (abbreviated as RMO) and PowerPC memory model.
+
+Here the processor's relaxation of read/write operations is premised on the absence of data dependency between the two operations.
+
+![](https://s2.loli.net/2023/07/15/BbOCiDTXS21np3V.png)
+
+From Table 3-12, it can be seen that all processor memory models allow write-read reordering. The reason has been explained in Chapter 1: they all use write buffers. Write buffers may cause write-read operations to be reordered. At the same time, we can see that these processor memory models all allow reading the current processor's write earlier, also because of write buffers. Since the write buffer is only visible to the current processor, this feature allows the current processor to see the write temporarily saved in its own write buffer earlier than other processors. The various processor memory models in Table 3-12 manage from top to bottom, the model changes from strong to weak. The more performance-seeking the processor, the weaker the memory model design will be. Because these processors want the memory model to bind them as little as possible, so that they can do as much optimization as possible to improve performance.
+
+Since common processor memory models are weaker than JMM, the Java compiler inserts memory barriers at appropriate positions in the execution instruction sequence when generating bytecode to limit processor reordering. At the same time, since the strength of various processor memory models is different, in order to present a consistent memory model to programmers on different processor platforms, the number and types of memory barriers that JMM needs to insert in different processors are also different.
+
+JMM shields the differences between different processor memory models, presenting a consistent memory model for Java programmers on different processor platforms.
+
+![](https://s2.loli.net/2023/07/15/RPKLUMdQwvV3ieY.png)
+
+## Relationship Between Various Memory Models
+
+JMM is a language-level memory model, processor memory model is a hardware-level memory model, and sequential consistency memory model is a theoretical reference model. Below is a diagram comparing the strength of the language memory model, processor memory model and sequential consistency memory model, as shown in Figure 3-49.
+
+From the figure, it can be seen: 4 common processor memory models are weaker than 3 common language memory models, processor memory model and language memory model are both weaker than sequential consistency memory model. Like the processor memory model, the more the language pursues execution performance, the weaker the memory model design will be.
+
+## JMM Memory Visibility Guarantee
+
+* Single-threaded program. Single-threaded programs will not have memory visibility problems. The compiler, runtime, and processor will jointly ensure that the execution result of the single-threaded program is the same as the execution result of the program in the sequential consistency model.
+
+* Correctly synchronized multi-threaded program. The execution of correctly synchronized multi-threaded programs will have sequential consistency (the execution result of the program is the same as the execution result of the program in the sequential consistency memory model). This is the focus of JMM, JMM provides memory visibility guarantees for programmers by limiting compiler and processor reordering.
+
+* Unsynchronized/incorrectly synchronized multi-threaded program. JMM provides minimum safety guarantees for them: the value read by the thread during execution is either the value written by a previous thread or the default value (0, null, false).
+
+![](https://s2.loli.net/2023/07/15/7cTXfWNstg9hA6C.png)
+
+Minimum safety guarantee guarantees combined with non-atomic write of 64-bit data does not conflict. They are two different concepts, and the time points they "occur" are also different.
+
+Minimum safety "occurs" before the object is used by any thread. Non-atomic write of 64-bit data "occurs" during the process of the object being used by multiple threads (writing shared variables).
+
+Non-atomic write of 64-bit data "occurs" during the process of the object being used by multiple threads (writing shared variables). When a problem occurs (processor B sees an invalid value "half-written" by processor A), although processor B reads a half-written invalid value here, this value is still written by processor A, it's just that processor A hasn't finished writing it yet.
+
+Minimum safety guarantees that the value read by the thread is either the value written by a previous thread or the default value (0, null, false). But minimum safety does not guarantee that the value read by the thread must be the value after a thread has finished writing. Minimum safety guarantees that the value read by the thread will not pop out of nowhere, but does not guarantee that the value read by the thread must be correct.
+
+![](https://s2.loli.net/2023/07/15/l8oCFIcHQtBDN47.png)
+
+## JSR-133 Fixes to Old Memory Model
+
+Enhance volatile memory semantics. The old memory model allowed reordering of volatile variables with ordinary variables. JSR-133 strictly limits reordering of volatile variables with ordinary variables, making volatile write-read and lock release-acquisition have the same memory semantics.
+
+Enhance final memory semantics. In the old memory model, reading the value of the same final variable multiple times might be different. For this reason, JSR-133 added two reordering rules for final. Under the condition that the final reference does not escape from the constructor, final has initialization safety.
+
+## Java Thread State
+
+Thread State
+
+![](https://s2.loli.net/2023/07/15/Pyv3NbYOizDL21g.png)
+
+Changes between thread states
+
+![](https://s2.loli.net/2023/07/15/uNYIETvLB5rq1P9.png)
+
+## Daemon Thread
+
+Daemon threads are used to complete supporting work, but the finally block in the Daemon thread will not necessarily be executed when the Java virtual machine exits.
+
+![](https://s2.loli.net/2023/07/15/QCDdGTYXrzcLBfa.png)
+The main thread (non-Daemon thread) terminates after the main method execution completes after starting the thread DaemonRunner, and at this time there are no non-Daemon threads in the Java virtual machine, the virtual machine needs to exit. All Daemon threads in the Java virtual machine need to terminate immediately, so DaemonRunner terminates immediately, but the finally block in DaemonRunner is not executed.
+
+## How Threads are Initialized
+
+![](https://s2.loli.net/2023/07/15/NgVPf4UdE8ucqKY.png)
+
+A newly constructed thread object is space-allocated by its parent thread, and the child thread inherits whether the parent is a Daemon, priority, and contextClassLoader for loading resources, as well as inheritable ThreadLocal. At the same time, a unique ID is assigned to identify this child thread. At this point, a runnable thread object is initialized and waiting to run in heap memory.
+
+The meaning of the thread start() method is: the current thread (i.e., parent thread) synchronously informs the Java virtual machine that as long as the thread scheduler is idle, the thread calling the start() method should be started immediately.
+
+## Thread Interruption and Interruption Exception
+
+Interruption is like another thread saying hello to that thread, other threads perform interruption operations on it by calling that thread's interrupt() method.
+
+The thread responds by checking whether it has been interrupted. The thread judges whether it has been interrupted through the method isInterrupted(), or it can call the static method Thread.interrupted() to reset the interrupt flag bit of the current thread. If the thread is already in the terminated state, even if the thread has been interrupted, calling the isInterrupted() of the thread object will still return false.
+
+It can be seen from the Java API that many methods declared to throw InterruptedException (such as Thread.sleep(long millis) method), before these methods throw InterruptedException, the Java virtual machine will first clear the interrupt flag bit of the thread, and then throw InterruptedException. At this time, calling the isInterrupted() method will return false.
+
+<details>
+	<summary>Interrupted</summary>
+
+```java
+public class Interrupted {
+    public static void main(String[] args) throws Exception {
+        // sleepThread constantly tries to sleep
+        Thread sleepThread = new Thread(new SleepRunner(), "SleepThread");
+        sleepThread.setDaemon(true);
+        // busyThread constantly runs
+        Thread busyThread = new Thread(new BusyRunner(), "BusyThread");
+        busyThread.setDaemon(true);
+        sleepThread.start();
+        busyThread.start();
+        // Sleep for 5 seconds, let sleepThread and busyThread run fully
+        TimeUnit.SECONDS.sleep(5);
+        sleepThread.interrupt();
+        busyThread.interrupt();
+        System.out.println("SleepThread interrupted is " + sleepThread.isInterrupted());
+        System.out.println("BusyThread interrupted is " + busyThread.isInterrupted());
+        // Prevent sleepThread and busyThread from exiting immediately
+        SleepUtils.second(2);
+    }
+    static class SleepRunner implements Runnable {
+        @Override
+        public void run() {
+            while (true) {
+                SleepUtils.second(10);
+            }
+        }
+    }
+    static class BusyRunner implements Runnable {
+        @Override
+        public void run() {
+            while (true) {
+            }
+        }
+    }
+}
+```
+</details>
+
+The SleepThread throwing InterruptedException has its interrupt flag bit cleared, while the BusyThread that has been busy operating has not had its interrupt flag bit cleared.
+
+## synchronized Implementation Details
+
+![](https://s2.loli.net/2023/07/15/cKot7CBiW8MDv3L.png)
+
+![](https://s2.loli.net/2023/07/15/5IfkCJVwRAp2d8v.png)
+
+Ideally, it is to acquire the monitor of an object, and this acquisition process is exclusive, that is, only one thread can acquire the monitor of the object protected by synchronized at the same time.
+
+![](https://s2.loli.net/2023/07/15/CYZgR8Ed4NOUxKD.png)
+
+A thread's access to Object (Object protected by synchronized) must first obtain Object's monitor. If the acquisition fails, the thread enters the synchronization queue, and the thread state becomes BLOCKED. When the precursor of accessing Object (the thread that obtained the lock) releases the lock, the release operation wakes up the thread blocked in the synchronization queue, making it try to acquire the monitor again.
+
+## Wait/Notify
+
+![](https://s2.loli.net/2023/07/15/CuAtVir4sUe7WvO.png)
+
+Wait/Notify mechanism refers to a thread A calling object O's wait() method to enter waiting state, while another thread B calls object O's notify() or notifyAll() method, thread A returns from object O's wait() method after receiving notification, and then executes subsequent operations. The above two threads complete interaction through object O, and the relationship between wait() and notify/notifyAll() on the object is like a switch signal, used to complete the interaction work between the waiting party and the notifying party.
+
+<details>
+	<summary>WaitNotify</summary>
+
+```java
+public class WaitNotify {
+    static boolean flag = true;
+    static Object lock = new Object();
+
+    public static void main(String[] args) throws Exception {
+        Thread waitThread = new Thread(new Wait(), "WaitThread");
+        waitThread.start();
+        TimeUnit.SECONDS.sleep(1);
+        Thread notifyThread = new Thread(new Notify(), "NotifyThread");
+        notifyThread.start();
+    }
+
+    static class Wait implements Runnable {
+        public void run() {
+            // Lock, owning lock's Monitor
+            synchronized (lock) {
+                // When condition is not met, continue to wait, simultaneously release lock's lock
+                while (flag) {
+                    try {
+                        System.out.println(Thread.currentThread()+ " flagistrue.wait
+                        @ " + new SimpleDateFormat("HH:mm:ss").format(new Date()));
+                        lock.wait();
+            } catch (InterruptedException e) {
+            }
+     }
+     // When condition is met, complete work
+     System.out.println(Thread.currentThread() + " flag is false. running
+     @ " + new SimpleDateFormat("HH:mm:ss").format(new Date()));
+              }
+          }
+      }
+      static class Notify implements Runnable {
+          public void run() {
+              // Lock, owning lock's Monitor
+              synchronized (lock) {
+                  // Acquire lock's lock, then notify, notify will not release lock's lock,
+                  // WaitThread can only return from wait method after current thread releases lock
+                  System.out.println(Thread.currentThread() + " hold lock. notify @ " +
+                  new SimpleDateFormat("HH:mm:ss").format(new Date()));
+                  lock.notifyAll();
+                  flag = false;
+                  SleepUtils.second(5);
+              }
+              // Lock again
+              synchronized (lock) {
+                  System.out.println(Thread.currentThread() + " hold lock again. sleep
+                  @ " + new SimpleDateFormat("HH:mm:ss").format(new Date()));
+                  SleepUtils.second(5);
+              }
+          }
+      }
+}
+```
+</details>
+
+<details>
+	<summary>SleepUtils</summary>
+
+```java
+public class SleepUtils {
+    public static final void second(long seconds) {
+        try {
+            TimeUnit.SECONDS.sleep(seconds);
+        } catch (InterruptedException e){
+
+        }
+    }
+}
+```
+</details>
+
+Details to note when calling wait(), notify() and notifyAll()
+
+1. Need to lock the calling object first when using wait(), notify() and notifyAll().
+2. After calling wait() method, thread state changes from RUNNING to WAITING, and places current thread into object's wait queue.
+3. After notify() or notifyAll() method is called, waiting thread still will not return from wait(), waiting thread only has chance to return from wait() after the thread calling notify() or notifyAll() releases the lock.
+4. notify() method moves one waiting thread in wait queue from wait queue to synchronization queue, while notifyAll() method moves all threads in wait queue to synchronization queue, moved thread state changes from WAITING to BLOCKED.
+5. Prerequisite for returning from wait() method is obtaining calling object's lock.
+
+![](https://s2.loli.net/2023/07/15/RvmUCgVK1QwnIzs.png)
+
+WaitThread first acquires object's lock, then calls object's wait() method, thereby giving up lock and entering object's wait queue WaitQueue, entering waiting state. Since WaitThread released object's lock, NotifyThread subsequently acquired object's lock, and called object's notify() method, moving WaitThread from WaitQueue to SynchronizedQueue, at this time WaitThread's state becomes blocked state. After NotifyThread releases lock, WaitThread acquires lock again and returns from wait() method to continue execution.
+
+## ThreadLocal Variable Usage
+
+![](https://s2.loli.net/2023/07/15/CABlOfMQNw9J71x.png)
+
+Connection Pool Case: As connection count increases, total connection count increases, and proportion of acquired connections also increases simultaneously
+
+<details>
+	<summary>ConnectionPool</summary>
+
+```java
+/**
+ * Process of obtaining, using and releasing connections from connection pool,
+ * while client obtaining connection process is set to wait timeout mode,
+ * that is if unable to obtain available connection within 1000 milliseconds,
+ * will return a null to client. Set connection pool size to 10,
+ * then simulate scenario of unable to obtain connection by adjusting client thread count.
+ */
+public class ConnectionPool {
+    private LinkedList<Connection> pool = new LinkedList<Connection>();
+
+    public ConnectionPool(int initialSize) {
+        if (initialSize > 0) {
+            for (int i = 0; i < initialSize; i++) {
+                pool.addLast(ConnectionDriver.createConnection());
+            }
+        }
+    }
+
+    public void releaseConnection(Connection connection) {
+        if (connection != null) {
+            synchronized (pool) {
+                // Need to notify after releasing connection, so other consumers can perceive a connection returned to pool
+                pool.addLast(connection);
+                pool.notifyAll();
+            }
+        }
+    }
+
+    // If unable to obtain connection within mills, will return null
+    public Connection fetchConnection(long mills) throws InterruptedException {
+        synchronized (pool) {
+            // Completely timeout
+            if (mills <= 0) {
+                while (pool.isEmpty()) {
+                    pool.wait();
+                }
+                return pool.removeFirst();
+            } else {
+                long future = System.currentTimeMillis() + mills;
+                long remaining = mills;
+                while (pool.isEmpty() && remaining > 0) {
+                    pool.wait(remaining);
+                    remaining = future - System.currentTimeMillis();
+                }
+                Connection result = null;
+                if (!pool.isEmpty()) {
+                    result = pool.removeFirst();
+                }
+                return result;
+            }
+        }
+    }
+}
+```
+</details>
+
+<details>
+	<summary>ConnectionDriver</summary>
+
+```java
+/**
+ * We constructed a Connection through dynamic proxy, this Connection's proxy implementation only
+ * sleeps for 100 milliseconds when commit() method is called
+ */
+public class ConnectionDriver {
+    static class ConnectionHandler implements InvocationHandler {
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            if (method.getName().equals("commit")) {
+                TimeUnit.MILLISECONDS.sleep(100);
+            }
+            return null;
+        }
+    }
+
+    // Create a Connection proxy, sleep 100 milliseconds on commit
+    public static final Connection createConnection() {
+        return (Connection) Proxy.newProxyInstance(ConnectionDriver.class.getClassLoader(),
+                new Class<?>[] { Connection.class }, new ConnectionHandler());
+    }
+}
+```
+</details>
+
+<details>
+	<summary>ConnectionPoolTest</summary>
+
+```java
+/**
+ * Used CountDownLatch to ensure ConnectionRunnerThread can start execution simultaneously,
+ * and only make main thread return from waiting state after all end.
+ * Currently set scenario is 10 threads running simultaneously to obtain connections from connection pool (10 connections),
+ * observe situation of not obtained connections by adjusting thread count
+ */
+public class ConnectionPoolTest {
+    static ConnectionPool pool    = new ConnectionPool(10);
+    // Ensure all ConnectionRunner can start simultaneously
+    static CountDownLatch start    = new CountDownLatch(1);
+    // main thread will wait for all ConnectionRunner to end before continuing execution
+    static CountDownLatch end;
+
+    public static void main(String[] args) throws Exception {
+        // Thread count, can modify thread count to observe
+        int threadCount = 10;
+        end = new CountDownLatch(threadCount);
+        int count = 20;
+        AtomicInteger got = new AtomicInteger();
+        AtomicInteger notGot = new AtomicInteger();
+        for (int i = 0; i < threadCount; i++) {
+            Thread thread = new Thread(new ConnetionRunner(count, got, notGot),
+                    "ConnectionRunnerThread");
+            thread.start();
+        }
+        start.countDown();
+        end.await();
+        System.out.println("total invoke: " + (threadCount * count));
+        System.out.println("got connection: " + got);
+        System.out.println("not got connection " + notGot);
+    }
+
+    static class ConnetionRunner implements Runnable {
+        int        count;
+        AtomicInteger    got;
+        AtomicInteger    notGot;
+
+        public ConnetionRunner(int count, AtomicInteger got, AtomicInteger notGot) {
+            this.count = count;
+            this.got = got;
+            this.notGot = notGot;
+        }
+
+        public void run() {
+            try {
+                start.await();
+            } catch (Exception ex) {
+            }
+            while (count > 0) {
+                try {
+                    // Obtain connection from thread pool, if unable to obtain within 1000ms, will return null
+                    // Respectively count quantity of obtained connections got and not obtained notGot
+                    Connection connection = pool.fetchConnection(1000);
+                    if (connection != null) {
+                        try {
+                            connection.createStatement();
+                            connection.commit();
+                        } finally {
+                            pool.releaseConnection(connection);
+                            got.incrementAndGet();
+                        }
+                    } else {
+                        notGot.incrementAndGet();
+                    }
+                } catch (Exception ex) {
+                } finally {
+                    count--;
+                }
+            }
+            end.countDown();
+        }
+    }
+}
+```
+</details>
+
+Thread Pool
+![](https://s2.loli.net/2023/07/15/Srd8muksLVXopij.png)
+
+<details>
+	<summary>DefaultTheadPool</summary>
+
+```java
+public class DefaultThreadPool<Job extends Runnable> implements ThreadPool<Job> {
+    // Thread pool max limit number
+    private static final intMAX_WORKER_NUMBERS = 10;
+    // Thread pool default quantity
+    private static final int    DEFAULT_WORKER_NUMBERS = 5;
+    // Thread pool min quantity
+    private static final int    MIN_WORKER_NUMBERS= 1;
+    // This is a job list, will insert jobs into it
+    private final LinkedList<Job>    jobs = new LinkedList<Job>();
+    // Worker list
+    private final List<Worker>    workers    = Collections.synchronizedList(new
+    ArrayList<Worker>());
+    // Worker thread quantity
+    private int  workerNum = DEFAULT_WORKER_NUMBERS;
+    // Thread number generation
+    private AtomicLong    threadNum    = new AtomicLong();
+
+    public DefaultThreadPool() {
+    initializeWokers(DEFAULT_WORKER_NUMBERS);
+    }
+
+    public DefaultThreadPool(int num) {
+        workerNum = num > MAX_WORKER_NUMBERS ? MAX_WORKER_NUMBERS : num < MIN_WORKER_
+        NUMBERS ? MIN_WORKER_NUMBERS : num;
+        initializeWokers(workerNum);
+    }
+
+    public void execute(Job job) {
+        if (job != null) {
+            // Add a job, then notify
+            synchronized (jobs) {
+                jobs.addLast(job);
+                jobs.notify();
+            }
+        }
+    }
+
+    public void shutdown() {
+        for (Worker worker : workers) {
+            worker.shutdown();
+        }
+    }
+
+    public void addWorkers(int num) {
+        synchronized (jobs) {
+            // Limit newly added Worker quantity cannot exceed max value
+            if (num + this.workerNum > MAX_WORKER_NUMBERS) {
+                num = MAX_WORKER_NUMBERS - this.workerNum;
+            }
+            initializeWokers(num);
+            this.workerNum += num;
+        }
+    }
+
+    public void removeWorker(int num) {
+        synchronized (jobs) {
+            if (num >= this.workerNum) {
+                throw new IllegalArgumentException("beyond workNum");
+            }
+            // Stop Worker according to given quantity
+            int count = 0;
+            while (count < num) {
+                Worker worker = workers.get(count)
+                if (workers.remove(worker)) {
+                worker.shutdown();
+                      count++;
+                }
+            }
+            this.workerNum -= count;
+        }
+    }
+
+    public int getJobSize() {
+        return jobs.size();
+    }
+    // Initialize thread workers
+    private void initializeWokers(int num) {
+        for (int i = 0; i < num; i++) {
+            Worker worker = new Worker();
+            workers.add(worker);
+            Thread thread = new Thread(worker, "ThreadPool-Worker-" + threadNum.
+            incrementAndGet());
+            thread.start();
+        }
+    }
+
+    // Worker, responsible for consuming tasks
+    class Worker implements Runnable {
+        // Whether working
+        private volatile boolean running= true;
+        public void run() {
+            while (running) {
+                Job job = null;
+                synchronized (jobs) {
+                    // If worker list is empty, then wait
+                    while (jobs.isEmpty()) {
+                        try {
+                            jobs.wait();
+                        } catch (InterruptedException ex) {
+                            // Perceive external interrupt operation on WorkerThread, return
+                            Thread.currentThread().interrupt();
+                            return;
+                        }
+                     }
+                     // Take out a Job
+                     job = jobs.removeFirst();
+                }
+                if (job != null) {
+                    try {
+                        job.run();
+                    } catch (Exception ex) {
+                        // Ignore Exception during Job execution
+                    }
+                }
+             }
+          }
+
+          public void shutdown() {
+              running = false;
+          }
+    }
+}
+```
+</details>
+
+> Reference Materials
+> 
+> 1. Book Name: "The Art of Java Concurrency Programming" Authors: Fang Tengfei, Wei Peng, Cheng Xiaoming
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

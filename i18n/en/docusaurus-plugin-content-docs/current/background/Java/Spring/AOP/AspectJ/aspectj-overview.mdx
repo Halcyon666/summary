@@ -1,0 +1,67 @@
+---
+id: aspectj-overview
+title: Overview of AspectJ style AOP
+sidebar_label: Overview of AspectJ style AOP
+sidebar_position: 10
+description: Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) for code related to this article (from official source spring-test module)
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+Please refer to [spring-framework](https://github.com/Halcyon666/spring-framework-modified/tree/main/spring-test) under `org.springframework.mylearntest` package for code related to this article (from [official source](https://github.com/spring-projects/spring-framework.git "official source") spring-test module).
+
+
+No need to implement corresponding interfaces like in 1.0, the only thing to do is to add an `@Aspect` annotation on this Aspect class. This way we can determine which classes in ClassPath are Aspect definitions we are looking for. Define Pointcut via `@Pointcut`, specify which methods define corresponding Advice logic via annotations like `Around`.
+
+<details>
+	<summary>PerformanceTraceAspect</summary>
+
+```java
+package org.springframework.mylearntest.aop2.aspectj;
+
+import org.apache.commons.lang3.time.StopWatch;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+
+/**
+ * @Author: whalefall
+ * @Date: 2020/7/28 22:46
+ * After Spring 2.0 no need to implement interfaces to define pointcut
+ */
+@Aspect
+public class PerformanceTraceAspect {
+	private final Log logger = LogFactory.getLog(PerformanceTraceAspect.class);
+
+	@Pointcut("execution(public  void *.method1()) || execution(public  void *.method2())")
+	public void pointcutName() {}
+
+	@Around("pointcutName()")
+	public Object performanceTrace(ProceedingJoinPoint joinPoint) throws Throwable {
+		StopWatch sw = new StopWatch();
+		try {
+			sw.start();
+			return joinPoint.proceed();
+		} finally {
+				System.out.println("pt in method["
+						+ joinPoint.getSignature().getName()
+				+ "]>>>>>>" + sw.toString());
+		}
+	}
+}
+```
+</details>
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

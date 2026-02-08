@@ -1,0 +1,170 @@
+---
+id: java-problems
+title: Java Problems Summary
+sidebar_label: Java Problems Summary
+sidebar_position: 10
+description: Go to Maven Repository to find the corresponding dependency and download it. Go to the download directory and execute the following command, replacing -DgroupId, -DartifactId, -Dversion, -Dfile
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+# Java Problems Summary
+
+## Maven Related Problems
+
+### Solving Maven Remote Repository Jar Download Failures
+
+*Go to [Maven Repository](https://mvnrepository.com/) to find the corresponding dependency and download it.*
+
+*Go to the download directory and execute the following command, replacing -DgroupId, -DartifactId, -Dversion, -Dfile*
+
+```shell
+mvn install:install-file -DgroupId=io.confluent -DartifactId=kafka-schema-registry-client -Dversion=4.1.0 -Dpackaging=jar  -Dfile=kafka-schema-registry-client-4.1.0.jar
+```
+
+### mvnw clean occurs Some Enforcer rules have failed
+
+```log
+Failed to execute goal org.apache.maven.plugins:maven-enforcer-plugin:1.4.1:enforce
+(enforce-versions) on project SIMI: Some Enforcer rules have failed. Look above for
+specific messages explaining why the rule failed. -> [Help 1]
+```
+
+[not solved! stackoverflow  website](https://stackoverflow.com/questions/45337558/failed-to-execute-goal-org-apache-maven-pluginsmaven-enforcer-plugin?newreg=4546ba2b3da24e02908324ea31452cb8)
+
+To skip enforcer (not always working)
+```bash
+mvn clean install -Denforcer.skip=true
+```
+
+To continue the build if error
+```bash
+mvn clean install -Denforcer.fail=false
+```
+
+```bash
+./mvnw clean install -DskipDistribution=true  -Denforcer.skip=true
+```
+
+---
+
+## MyBatis Related Problems
+
+### UncategorizedSQLException when SQL query null value is mapped to int type
+
+Change BO property from int to Integer type
+
+```
+org.springframework.jdbc.UncategorizedSQLException: SqlMapClient operation; 
+uncategorized SQLException for SQL []; SQL state [null]; error code [0];
+```
+
+### Mysql tinyint is toxic
+
+mysql do not use field type tinyint, possibly your update of 1 will become 49
+
+[See blog](https://www.huaweicloud.com/articles/11968406.html)
+
+### MybatisPlus Invalid bound statement (not found) exception
+
+[See article](https://baomidou.com/pages/f84a74/#%E5%87%BA%E7%8E%B0-invalid-bound-statement-not-found-%E5%BC%82%E5%B8%B8)
+
+---
+
+## IDEA Usage Related Problems
+
+### idea terminal Chinese garbled characters
+
+[Reference article](https://blog.csdn.net/xgw1010/article/details/108583796)
+
+```bash
+# solve idea terminal Chinese garbled
+export LANG="zh_CN.UTF-8"
+export LC_ALL="zh_CN.UTF-8"
+```
+
+---
+
+## Other Problems
+
+### Dynamic Data Source Problems
+
+If the operation used has a transaction, you need to set the data source before the Dao layer. In Dao or Mybatis-plus, service with dao will switch data source invalidly.
+
+
+## jackson serialization problems
+
+### LocalDateTime not supported by default
+```java
+Java 8 date/time type java.time.LocalDateTime not supported by default:
+add Module "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" to enable
+handling (through reference chain: java.util.ArrayList[0]->xxx.xxx.xxx.xxx.XxxxPo["updatetime"])
+```
+
+First troubleshoot where it is reported
+
+1. If Spring Boot can be extended: directly extend `ObjectMapper`
+```java
+@Configuration
+public class JacksonConfig implements WebMvcConfigurer {
+    @Override
+    public void extendMessageConverters(final List<HttpMessageConverter<?>> converters) {
+        MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        objectMapper.registerModule(new JavaTimeModule());
+        messageConverter.setObjectMapper(objectMapper);
+        converters.add(0, messageConverter);
+    }
+}
+```
+
+2. If cannot extend, consider skipping `Bean` serialization step, such as using method to convert Bean to Map
+3. If really no way, use `Fastjson` or `Gjson` instead
+
+### Second field uppercase problem
+
+1. Use `@JsonProperty`
+
+`@JsonProperty` is used to explicitly tell Jackson:
+
+"This field (or method, constructor parameter) is to be used as a JSON property, and the property name is XXX."
+
+2. Use `@JsonAutoDetect`
+
+```java
+@JsonAutoDetect(
+fieldVisibility = JsonAutoDetect.Visibility.ANY,
+getterVisibility = JsonAutoDetect.Visibility.NONE,
+setterVisibility = JsonAutoDetect.Visibility.NONE)
+```
+
+Members used in serialization and deserialization
+| **Usage Location** | **Influence Direction** | **Common Usage** |
+| ------------------ | ----------------------- | ---------------- |
+| Field | Serialization + Deserialization | Force include private fields |
+| getter | Serialization | Change output field name |
+| setter | Deserialization | Change input field name |
+| Constructor Parameter | Deserialization | Map JSON parameter name to constructor parameter |
+| record Parameter | Serialization + Deserialization | Control JSON property name |
+
+## Database Connection Pool Configuration Problems
+
+When using Druid connection pool, config parameter `validationInterval` must be less than `timeBetweenEvictionRunMillis`, ensuring database connection is always available.
+
+## API Interface Standards
+- Query data volume
+- Input parameter check
+- Response message large integer, floating point fields use string type
+- Input parameter type not primitive type
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

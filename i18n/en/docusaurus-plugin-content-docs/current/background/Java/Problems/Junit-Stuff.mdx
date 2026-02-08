@@ -1,0 +1,405 @@
+---
+id: junit-stuff
+title: jUnit Stuff
+sidebar_label: jUnit Stuff
+sidebar_position: 10
+description: "This article organizes two common testing methods: 1. Pure Unit Testing (Mockito + JUnit) 2. Spring Boot Testing (@SpringBootTest excluding auto-configuration) Features: - Does not depend on Spring container"
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+# jUnit Stuff
+
+## Mockito Unit Test vs Spring Boot Test
+
+This article organizes two common testing methods:
+
+1. **Pure Unit Testing (Mockito + JUnit)**
+2. **Spring Boot Testing (@SpringBootTest excluding auto-configuration)**
+
+
+
+### Mockito JUnit
+
+Features:
+
+- Does not depend on Spring container
+- Uses `@ExtendWith(MockitoExtension.class)`
+- Suitable for Service layer logic testing
+
+<details>
+<summary>Example Code</summary>
+
+```java title="CodeEntityServiceImplTest"
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(MockitoExtension.class)
+class CodeEntityServiceImplTest {
+
+    @InjectMocks
+    private CodeEntityServiceImpl codeEntityService;
+
+    @Mock
+    private CodeEntityMapper codeEntityMapper;
+
+    @Test
+    void testGetByIdMine_success() {
+        CodeEntityPO po = new CodeEntityPO();
+        po.setUsername("Candy");
+        po.setCode("abc");
+
+        Mockito.when(codeEntityMapper.selectById("abc")).thenReturn(po);
+
+        CodeEntityPO result = codeEntityService.getByIdMine("abc");
+
+        assertEquals("Candy", result.getUsername());
+        assertEquals("abc", result.getCode());
+    }
+
+    @Test
+    void testGetByIdMine_nullShouldThrow() {
+        Mockito.when(codeEntityMapper.selectById("abc")).thenReturn(null);
+
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
+            codeEntityService.getByIdMine1("abc");
+        });
+
+        assertEquals("Object must not be null", ex.getMessage());
+    }
+}
+```
+</details>
+
+✅ Pros:
+
+- Fast execution
+- Does not depend on database or Spring container
+- Logic testing is clear
+
+
+### Spring Boot test
+
+Features:
+
+- Depends on Spring Boot context, but excludes database etc. auto-configuration
+- Uses `@MockBean` to replace Mapper or Service
+- Suitable for Service/Controller logic testing
+
+
+<details>
+<summary>Example Code</summary>
+
+```java title="CodeEntityServiceImplBootTest"
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.beans.factory.annotation.Autowired;
+
+@SpringBootTest(
+    classes = YourMainApplication.class,
+    properties = {
+        "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration"
+    }
+)
+class CodeEntityServiceImplBootTest {
+
+    @Autowired
+    private CodeEntityServiceImpl codeEntityService;
+
+    @MockBean
+    private CodeEntityMapper codeEntityMapper;
+
+    @Test
+    void testGetByIdMine_success() {
+        CodeEntityPO po = new CodeEntityPO();
+        po.setUsername("Candy");
+        po.setCode("abc");
+
+        Mockito.when(codeEntityMapper.selectById("abc")).thenReturn(po);
+
+        CodeEntityPO result = codeEntityService.getByIdMine("abc");
+
+        assertEquals("Candy", result.getUsername());
+        assertEquals("abc", result.getCode());
+    }
+}
+```
+</details>
+
+
+Can also use `yml` file to exclude auto-configuration:
+
+```yml title="application-test.yml"
+spring:
+ autoconfigure:
+   exclude:
+     - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+```
+```java title="CodeEntityServiceImplBootTest"
+@SpringBootTest(classes = App.class)
+@ActiveProfiles("test")
+```
+
+✅ Pros:
+
+- Spring context available, dependency injection normal
+- Can test Service with transactions or AOP
+- Avoid database connection errors
+
+[Complete Code Record](https://github.com/Halcyon666/mybatis-plus/commit/d092b62282b1666aaaad46c46077114752a37115)
+
+### Static Method Mock
+
+<details>
+<summary>Static Method Mock</summary>
+```java title="StaticMockTest"
+import com.whalefall541.staticmock.ExternalLib;
+import com.whalefall541.staticmock.MyService;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+
+import java.util.function.Supplier;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mockStatic;
+
+class StaticMockTest {
+    @Test
+    void testStaticMockWithSupplier() {
+        // 1. Create the static mock within a try-with-resources block
+        try (MockedStatic<ExternalLib> mockedLib = mockStatic(ExternalLib.class)) {
+            // 2. Define behavior: When compute() is called with ANY Supplier, return "Mocked"
+            mockedLib.when(() -> ExternalLib.compute(any(Supplier.class)))
+                    .thenReturn("Mocked Result");
+            // 3. Execute the service method
+            MyService service = new MyService();
+            String result = service.getProcessedData();
+            // 4. Verify the result is what we mocked
+            assertEquals("Mocked Result", result);
+            // Optional: Verify the static method was called exactly once
+            mockedLib.verify(() -> ExternalLib.compute(any(Supplier.class)));
+        }
+    }
+
+    @Test
+    void testGetProcessedData1_FailureInsideSupplier() {
+        try (MockedStatic<ExternalLib> mockedLib = mockStatic(ExternalLib.class)) {
+            mockedLib.when(() -> ExternalLib.compute(any()))
+                    .thenCallRealMethod();
+            MyService service = new MyService();
+            Exception exception = assertThrows(IllegalArgumentException.class, service::getProcessedData1);
+            assertEquals("This will fail", exception.getMessage());
+        }
+    }
+}
+```
+</details>
+
+## Assert log content
+
+1. [System out redirection](https://github.com/Halcyon666/learn-cases/blob/2e543cf044a8e67a0ae1cbde5fe3ab8aa5b1637e/learncases/src/test/java/com/whalefall/override/TestClassTest.java#L48)
+
+2. LogCaptor (Concurrent execution scenario has problems)
+
+```java title="MyServiceTest "
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+// highlight-next-line
+@ExtendWith(OutputCaptureExtension.class)
+// If CapturedOutput is used by several methods, just opening next line comment
+// @SpringBootTest
+class MyServiceTest {
+    
+    @Test
+    void shouldLogMessage(CapturedOutput output) {
+		// highlight-next-line
+        MyService service = new MyService();
+        service.doSomething();
+        assertThat(output.getOut()).contains("Expected log message");
+    }
+}
+```
+
+## Mock annotation
+
+1. using spring boot test
+
+getting the real annotation from classes
+
+2. using a tempt inner class
+
+```java
+@UseTemplate(DemoTemplate.class)
+static class DemoBusiness implements Business<String> {
+    @Override
+    public void process(String input) {
+        // no-op
+    }
+}
+
+static class DemoTemplate implements Template<String, DemoBusiness> {
+    @Override
+    public void handler(String txcode, String param, DemoBusiness businessService) {
+        // mock behavior
+    }
+}
+@Test
+void testInit_withUseTemplateAnnotation() {
+    ApplicationContext ctx = mock(ApplicationContext.class);
+    DemoTemplate demoTemplate = new DemoTemplate();
+    when(ctx.getBean(DemoTemplate.class)).thenReturn(demoTemplate);
+
+    Map<String, DemoBusiness> map = Map.of("job1", new DemoBusiness());
+
+    RegisterEnginV3<String, DemoBusiness> engin =
+        new RegisterEnginV3<>(map, Map.of(), new HashMap<>(), ctx);
+
+    engin.init(); // ✅ Will read @UseTemplate(DemoTemplate.class)
+}
+```
+
+3. new a annotion instance to use.
+
+## Influence between unit test methods in the same class
+
+very call count is originally once, previous test method will affect subsequent methods, need to add this on unit test class.
+
+```java
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+```
+
+## Depends on `@PostConstruct`
+
+You can create it, pass parameter by new construction, then call the init method .
+
+```java
+@Service
+@AllArgsConstructor
+public class RegisterEnginV3<T, S extends Business<T>> {
+
+    @PostConstruct
+    public void init() {
+        businessesMap.forEach((txcode, businessService) -> {
+            // 1. Resolve @UseTemplate annotation
+            UseTemplate ann = businessService.getClass()
+                .getAnnotation(UseTemplate.class);
+
+            // 2. Get corresponding Template Bean
+            Template<T, S> templateToUse =
+                (Template<T, S>) applicationContext
+                    .getBean(ann.value());
+
+            // 3. Generic type check
+            checkConsistentGenericType(businessService, templateToUse);
+
+            // 4. Register to execution registry
+            registry.put(txcode,
+                param -> templateToUse.handler(txcode, param, businessService));
+        });
+    }
+
+    public void run(String businessType, T params) {
+        registry.get(businessType).accept(params);
+    }
+}
+```
+
+## @MockBean Failure Problem
+
+debug found that a property inside a @Resource object was already written with @MockBean in unit test but still injected real object
+
+**✅ Solution 1: Use instead**
+
+**@Autowired**
+
+Most direct, officially recommended way.
+
+@MockBean is designed specifically for @Autowired mechanism.
+
+## Mocked method changes argument properties
+
+Very good question 👏
+
+Your scenario is very typical:
+
+✅ Problem Scenario
+
+An object mocked by @MockBean (such as service or client),
+
+It has a void method, which modifies the object you passed in (e.g. setting fields).
+
+In unit test, you want to mock this behavior, letting the object's properties be set.
+
+```java
+@Service
+public class OrderService {
+    @Autowired
+    private PaymentClient paymentClient;
+
+    public void process(OrderContext ctx) {
+        paymentClient.fillPaymentInfo(ctx);  // void method, internally sets ctx fields
+    }
+}
+
+public class PaymentClient {
+    public void fillPaymentInfo(OrderContext ctx) {
+        ctx.setPayStatus("SUCCESS");
+        ctx.setPayAmount(100);
+    }
+}
+```
+
+doAnswer() allows you to define custom behavior when calling void methods.
+
+```java
+@SpringBootTest
+class OrderServiceTest {
+
+    @Autowired
+    private OrderService orderService;
+
+    @MockBean
+    private PaymentClient paymentClient;
+
+    @Test
+    void testProcess() {
+        // 1️⃣ Mock PaymentClient behavior for fillPaymentInfo
+        doAnswer(invocation -> {
+            OrderContext ctx = invocation.getArgument(0);
+            ctx.setPayStatus("MOCK_SUCCESS");
+            ctx.setPayAmount(999);
+            return null; // Because target method is void
+        }).when(paymentClient).fillPaymentInfo(any(OrderContext.class));
+
+        // 2️⃣ Call actual business
+        OrderContext context = new OrderContext();
+        orderService.process(context);
+
+        // 3️⃣ Assert mock effect
+        assertEquals("MOCK_SUCCESS", context.getPayStatus());
+        assertEquals(999, context.getPayAmount());
+    }
+}
+```
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />

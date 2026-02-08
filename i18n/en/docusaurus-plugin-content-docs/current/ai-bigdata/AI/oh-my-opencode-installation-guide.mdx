@@ -1,0 +1,799 @@
+---
+id: oh-my-opencode
+title: Oh My OpenCode
+sidebar_label: Oh My OpenCode
+sidebar_position: 2
+description: Oh My OpenCode Installation & Configuration Guide
+tags:
+- ai
+- open-code
+- development-tool
+- tutorial
+sources:
+- level-1-ai-native
+- wsl-opencode
+references:
+- mcp
+last_update:
+  date: '2026-01-26'
+  author: halcyon666
+---
+
+# Oh My OpenCode Installation & Configuration Guide
+
+> Turn your OpenCode into the strongest AI coding assistant
+
+## 📖 Introduction
+
+**Oh My OpenCode** is a powerful OpenCode plugin that provides OpenCode with:
+
+- 🤖 **Multi-Agent Orchestration System** - Professional agents like Sisyphus, Oracle, Librarian, etc.
+- ⚡ **Parallel Background Tasks** - Execute multiple tasks simultaneously to improve efficiency
+- 🔧 **Complete LSP Support** - Code refactoring, symbol renaming, diagnostic information
+- 📚 **Built-in MCP Service** - Web search, document search, GitHub code search
+- 🎯 **Smart Task Management** - TODO enforcement, comment checking, continuous loop
+- 🌟 **Claude Code Compatibility** - Complete hook system, command, skill support
+
+:::tip Core Concept
+If OpenCode is Debian/Arch, then Oh My OpenCode is Ubuntu/Manjaro - Out of the box, powerful functionality.
+:::
+
+---
+
+## 🎯 Applicable Scenarios
+
+### You should use Oh My OpenCode if you:
+
+- ✅ Want the strongest AI coding assistant
+- ✅ Need multiple AI models working together
+- ✅ Want AI to automatically complete complex tasks
+- ✅ Want to execute multiple tasks in parallel
+- ✅ Need deep codebase exploration and refactoring
+- ✅ Pursue highly customizable development experience
+
+### Not suitable scenarios:
+
+- ❌ Only need simple code completion
+- ❌ Don't want to configure anything
+- ❌ Do not have any AI model subscription or API access
+
+---
+
+## 📋 Prerequisites
+
+### Required:
+
+1. **Node.js** - v18 or higher
+2. **npm** - v8 or higher
+3. **Modern Terminal Emulator**:
+   - [WezTerm](https://wezterm.org) (Cross-platform, Recommended)
+   - [Alacritty](https://alacritty.org) (Cross-platform)
+   - [Ghostty](https://ghostty.org) (Linux/macOS)
+   - [Kitty](https://sw.kovidgoyal.net/kitty/) (Linux/macOS)
+   - Windows Terminal (Windows)
+
+### Recommended:
+
+4. **AI Model Access** (At least one):
+   - Claude Pro/Max Subscription
+   - OpenAI/ChatGPT Plus Subscription
+   - Google Gemini Subscription
+   - GitHub Copilot Subscription
+   - Custom API Provider (e.g. DuoJie, OpenRouter, etc.)
+
+:::warning Important
+**Sisyphus main agent is strongly recommended to use Claude Opus 4.5 model**. Using other models may result in significantly degraded experience.
+:::
+
+---
+
+## 🚀 Quick Installation
+
+### Step 1: Install OpenCode
+
+```bash
+# Using npm (Recommended)
+npm install -g opencode-ai
+
+# Or using Homebrew (macOS/Linux)
+brew install anomalyco/tap/opencode
+
+# Or using install script
+curl -fsSL https://opencode.ai/install | bash
+```
+
+Verify installation:
+
+```bash
+opencode --version
+# Should show version number, e.g.: 1.1.36
+```
+
+### Step 2: Install Oh My OpenCode
+
+```bash
+npm install -g oh-my-opencode
+```
+
+### Step 3: Run Installer
+
+#### Method A: Interactive Installation (Recommended)
+
+```bash
+npx oh-my-opencode install
+```
+
+The installer will ask about your subscription status:
+- Claude Pro/Max Subscription?
+- OpenAI/ChatGPT Plus Subscription?
+- Gemini Subscription?
+- GitHub Copilot Subscription?
+- Etc...
+
+#### Method B: Non-interactive Installation
+
+If you already know the configuration to use:
+
+```bash
+# Example: Have Claude Max (20x) + OpenAI + Gemini
+npx oh-my-opencode install --no-tui --claude=max20 --openai=yes --gemini=yes --copilot=no
+
+# Example: Only Claude Pro
+npx oh-my-opencode install --no-tui --claude=yes --openai=no --gemini=no --copilot=no
+
+# Example: Only GitHub Copilot
+npx oh-my-opencode install --no-tui --claude=no --openai=no --gemini=no --copilot=yes
+```
+
+### Step 4: Configure Authentication
+
+Configure corresponding provider based on your subscription:
+
+#### Anthropic (Claude)
+
+```bash
+opencode auth login
+# Select Provider: Anthropic
+# Select Login method: Claude Pro/Max
+# Complete OAuth flow in browser
+```
+
+#### OpenAI (ChatGPT)
+
+```bash
+opencode auth login
+# Select Provider: OpenAI
+# Enter your API Key
+```
+
+#### Google Gemini
+
+Need to install `opencode-antigravity-auth` plugin first:
+
+```bash
+# Edit ~/.config/opencode/opencode.json
+# Add plugin:
+{
+  "plugin": [
+    "oh-my-opencode",
+    "opencode-antigravity-auth@latest"
+  ]
+}
+```
+
+Then authenticate:
+
+```bash
+opencode auth login
+# Select Provider: Google
+# Select Login method: OAuth with Google (Antigravity)
+# Complete login in browser
+```
+
+#### GitHub Copilot
+
+```bash
+opencode auth login
+# Select Provider: GitHub
+# Complete OAuth authentication
+```
+
+---
+
+## 🔧 Custom Configuration
+
+### Using Custom API Provider
+
+If you use custom API provider (e.g. DuoJie, OpenRouter, etc.), you need to configure manually.
+
+#### Step 1: Configure Provider
+
+Edit `~/.config/opencode/opencode.json`:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["oh-my-opencode"],
+  "provider": {
+    "your-provider-name": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "Your Provider Name",
+      "options": {
+        "baseURL": "https://api.your-provider.com/v1"
+      },
+      "models": {
+        "claude-opus-4-5-max": {
+          "limit": { "context": 200000, "output": 8192 },
+          "modalities": { "input": ["text", "image"], "output": ["text"] }
+        },
+        "gpt-5.2": {
+          "limit": { "context": 400000, "output": 8192 },
+          "modalities": { "input": ["text", "image"], "output": ["text"] }
+        },
+        "claude-sonnet-4-5": {
+          "limit": { "context": 200000, "output": 8192 },
+          "modalities": { "input": ["text", "image"], "output": ["text"] }
+        },
+        "claude-haiku-4-5": {
+          "limit": { "context": 200000, "output": 8192 },
+          "modalities": { "input": ["text", "image"], "output": ["text"] }
+        },
+        "gemini-3-pro-preview": {
+          "limit": { "context": 1000000, "output": 8192 },
+          "modalities": { "input": ["text", "image"], "output": ["text"] }
+        },
+        "gemini-3-pro-image-preview": {
+          "limit": { "context": 1000000, "output": 8192 },
+          "modalities": { "input": ["text", "image"], "output": ["text", "image"] }
+        }
+      }
+    }
+  }
+}
+```
+
+#### Step 2: Configure Agent Model
+
+Create or edit `~/.config/opencode/oh-my-opencode.json`:
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/schema.json",
+  "agents": {
+    "sisyphus": {
+      "model": "your-provider-name/claude-opus-4-5-max",
+      "temperature": 0.7,
+      "comment": "Main Orchestration Agent - Use Claude Opus 4.5 Max (Strongest model)"
+    },
+    "prometheus": {
+      "model": "your-provider-name/claude-opus-4-5-max",
+      "temperature": 0.6,
+      "comment": "Planner Agent - Use Opus Max for deep planning"
+    },
+    "oracle": {
+      "model": "your-provider-name/gpt-5.2",
+      "temperature": 0.5,
+      "comment": "Architecture/Debug Expert - Use GPT-5.2 High IQ model"
+    },
+    "librarian": {
+      "model": "your-provider-name/claude-sonnet-4-5",
+      "temperature": 0.3,
+      "comment": "Doc/Code Search - Use Claude Sonnet 4.5 (Balanced performance)"
+    },
+    "explore": {
+      "model": "your-provider-name/claude-haiku-4-5",
+      "temperature": 0.2,
+      "comment": "Fast Codebase Explore - Use Claude Haiku (Fastest response)"
+    },
+    "frontend-engineer": {
+      "model": "your-provider-name/gemini-3-pro-preview",
+      "temperature": 0.6,
+      "comment": "Frontend Development - Use Gemini 3 Pro (Frontend expertise)"
+    },
+    "multimodal-looker": {
+      "model": "your-provider-name/gemini-3-pro-image-preview",
+      "temperature": 0.5,
+      "comment": "Multimodal Analysis - Use Gemini 3 Pro Image (Image processing)"
+    }
+  },
+  "disabled_hooks": [],
+  "background_tasks": {
+    "max_concurrent_per_provider": 3,
+    "max_concurrent_per_model": 2,
+    "comment": "Allow executing multiple background tasks in parallel"
+  },
+  "comment": "Configuration using custom provider"
+}
+```
+
+---
+
+## 🎯 Agent System Usage
+
+Oh My OpenCode provides a powerful multi-agent system, each agent has specific responsibilities:
+
+### Core Agents
+
+| Agent | Recommended Model | Temperature | Responsibility | Usage Scenario |
+|------|----------|------|------|----------|
+| **Sisyphus** | Claude Opus 4.5 Max | 0.7 | Main Orchestrator | Complex task coordination, overall architectural decision |
+| **Prometheus** | Claude Opus 4.5 Max | 0.6 | Planner | Task planning, interview-style requirement analysis |
+| **Oracle** | GPT-5.2 | 0.5 | Architecture/Debug Expert | Architecture design, complex bug debugging |
+| **Librarian** | Claude Sonnet 4.5 | 0.3 | Doc/Code Search | Search docs, find code examples |
+| **Explore** | Claude Haiku 4.5 | 0.2 | Fast Explore | Codebase scanning, file finding |
+| **Frontend Engineer** | Gemini 3 Pro | 0.6 | Frontend Dev | UI/UX implementation, frontend optimization |
+| **Multimodal Looker** | Gemini 3 Pro Image | 0.5 | Image Analysis | Design draft analysis, screenshot understanding |
+
+### Temperature Setting Description
+
+- **0.2-0.3**: Deterministic tasks (Search, Explore, Data Processing)
+- **0.5-0.6**: Balanced tasks (Debug, Frontend Dev, Code Review)
+- **0.7**: Creative tasks (Architecture Design, Main Orchestration, Problem Solving)
+
+### Agent Calling Method
+
+#### 1. Auto Call (Recommended)
+
+Use `ultrawork` or `ulw` keyword, Sisyphus will automatically decide which agents to call:
+
+```
+ulw refactor authentication module of this project using best practices
+```
+
+#### 2. Manual Call
+
+Directly @ mention specific agent:
+
+```
+@oracle analyze issues in this architecture design
+@librarian search best practices for React Server Components
+@explore find all files using useEffect
+@frontend-engineer optimize performance of this component
+```
+
+#### 3. Planning Mode
+
+Press **Tab** key to enter Prometheus planning mode:
+
+1. Prometheus will understand your requirements through interview
+2. Generate detailed work plan
+3. Press Tab key to switch back to Build mode
+4. Input "Start Execution" to start task
+
+---
+
+## 💡 User Guide
+
+### Basic Usage Flow
+
+#### 1. Start OpenCode
+
+```bash
+cd /path/to/your/project
+opencode
+```
+
+#### 2. Initialize Project (First time use)
+
+```
+/init
+```
+
+This creates `AGENTS.md` file to help OpenCode understand your project structure.
+
+:::tip Hint
+You should commit `AGENTS.md` to Git repository so team members can benefit.
+:::
+
+#### 3. Start Working
+
+Choose any of the following methods:
+
+**Method A: Lazy Mode (ultrawork)**
+
+```
+ulw ensure user registration, including form validation and error handling
+```
+
+**Method B: Planning Mode (Prometheus)**
+
+```
+1. Press Tab key to enter Plan mode
+2. Describe requirement: "I want to add user registration function"
+3. Answer Prometheus's questions
+4. Review generated plan
+5. Press Tab key to switch back to Build mode
+6. Input: "Start execution"
+```
+
+**Method C: Direct Conversation**
+
+```
+Help me refactor login logic in @src/auth/login.ts
+```
+
+### Advanced Functions
+
+#### 1. File Reference
+
+Use `@` symbol to reference file (supports fuzzy search):
+
+```
+@components/Header what is the problem with this component?
+@auth/login.ts refactor error handling of this file
+```
+
+#### 2. Image Input
+
+Directly drag and drop image to terminal:
+
+```
+Implement interface referring to this design [Drag image to terminal]
+```
+
+#### 3. Undo/Redo
+
+```
+/undo  # Undo last change
+/redo  # Redo undone change
+```
+
+Can run `/undo` multiple times to undo multiple changes.
+
+#### 4. Share Session
+
+```
+/share  # Generate share link, copy to clipboard
+```
+
+#### 5. Background Tasks
+
+Sisyphus automatically executes multiple tasks in parallel:
+
+```
+ulw complete following tasks simultaneously:
+1. Refactor user auth module
+2. Optimize database query performance
+3. Update API documentation
+4. Fix all ESLint warnings
+```
+
+**Concurrency Settings:**
+- Max 3 concurrent tasks per provider
+- Max 2 concurrent tasks per model
+
+---
+
+## 🌟 Core Features
+
+### 1. Multi-Agent Orchestration
+
+- **Sisyphus**: Main orchestration agent, coordinates all tasks
+- **Prometheus**: Planner, creates detailed plan through interview
+- **Oracle**: Architecture and debug expert
+- **Librarian**: Documentation and code search expert
+- **Explore**: Fast codebase exploration
+- **Frontend Engineer**: Frontend development expert
+- **Multimodal Looker**: Image and multimodal analysis
+
+### 2. Background Task System
+
+- Parallel execution of multiple tasks
+- Automatic load balancing
+- Intelligent task assignment
+- Configurable concurrency limit
+
+### 3. LSP Tool Integration
+
+- Code refactoring
+- Symbol renaming
+- Diagnostic information
+- AST aware search
+- Auto import fix
+
+### 4. Built-in MCP Service
+
+- **websearch (Exa)**: Web search
+- **context7**: Official documentation search
+- **grep_app**: GitHub code search
+
+### 5. Productivity Tools
+
+- **Ralph Loop**: Continuous execution loop until task complete
+- **Todo Enforcer**: Enforce TODO completion
+- **Comment Checker**: Prevent excessive comments
+- **Think Mode**: Deep thinking mode
+
+### 6. Hook System
+
+- **PreToolUse**: Hook before tool use
+- **PostToolUse**: Hook after tool use
+- **UserPromptSubmit**: Hook when prompt submitted
+- **Stop**: Hook triggered when stopping
+- 25+ Built-in hooks, fully configurable
+
+### 7. Claude Code Compatibility
+
+- Complete command system
+- Agent system
+- Skill system
+- MCP server
+- Hook system
+
+---
+
+## ⚙️ Configuration Options
+
+### Configuration File Location
+
+- **User Level Config**: `~/.config/opencode/oh-my-opencode.json` (Global effective)
+- **Project Level Config**: `.opencode/oh-my-opencode.json` (Only current project)
+
+Project level config overrides user level config.
+
+### Configuration Examples
+
+#### Basic Configuration
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/schema.json",
+  "agents": {
+    "sisyphus": {
+      "model": "anthropic/claude-opus-4-5",
+      "temperature": 0.7
+    }
+  }
+}
+```
+
+#### Complete Configuration
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/schema.json",
+  "agents": {
+    "sisyphus": {
+      "model": "anthropic/claude-opus-4-5",
+      "temperature": 0.7,
+      "systemPrompt": "You are a professional software engineer...",
+      "permissions": {
+        "read": true,
+        "write": true,
+        "execute": true
+      }
+    },
+    "oracle": {
+      "model": "openai/gpt-5.2",
+      "temperature": 0.5
+    }
+  },
+  "disabled_hooks": [],
+  "background_tasks": {
+    "max_concurrent_per_provider": 3,
+    "max_concurrent_per_model": 2
+  },
+  "experimental": {
+    "aggressive_truncation": false,
+    "auto_resume": true
+  }
+}
+```
+
+### Common Configuration Options
+
+#### Disable Specific Hooks
+
+```json
+{
+  "disabled_hooks": [
+    "comment-checker",
+    "todo-enforcer"
+  ]
+}
+```
+
+#### Adjust Concurrency Limit
+
+```json
+{
+  "background_tasks": {
+    "max_concurrent_per_provider": 5,
+    "max_concurrent_per_model": 3
+  }
+}
+```
+
+#### Custom Agent Prompt
+
+```json
+{
+  "agents": {
+    "sisyphus": {
+      "model": "anthropic/claude-opus-4-5",
+      "systemPrompt": "You are a professional full-stack engineer, proficient in React, Node.js and TypeScript..."
+    }
+  }
+}
+```
+
+---
+
+## 🔍 Troubleshooting
+
+### Issue 1: OpenCode command not found
+
+**Symptom**: `command not found` when running `opencode`
+
+**Solution**:
+
+```bash
+# Check if installed
+npm list -g opencode-ai
+
+# Reinstall
+npm install -g opencode-ai --force
+
+# Check PATH environment variable
+echo $PATH
+```
+
+### Issue 2: Plugin not loaded
+
+**Symptom**: Oh My OpenCode functions unavailable
+
+**Solution**:
+
+```bash
+# Check plugin config
+cat ~/.config/opencode/opencode.json
+
+# Ensure includes:
+# "plugin": ["oh-my-opencode"]
+
+# If missing, add manually
+```
+
+### Issue 3: Agent call failed
+
+**Symptom**: Agent unresponsive or error
+
+**Possible Causes**:
+- API Key not configured or expired
+- Model name error
+- Network connection issue
+- Provider quota exhausted
+
+**Solution**:
+
+```bash
+# Check config
+cat ~/.config/opencode/opencode.json
+cat ~/.config/opencode/oh-my-opencode.json
+
+# Re-authenticate
+opencode auth login
+
+# Test network connection
+curl -I https://api.anthropic.com
+```
+
+### Issue 4: Config file format error
+
+**Symptom**: OpenCode fails to start or reports error
+
+**Solution**:
+
+1. Use JSON validator to check syntax
+2. Ensure all quotes, commas, brackets match
+3. Remove trailing commas (JSON does not allow trailing commas)
+4. Use JSONC format (supports comments)
+
+### Issue 5: Installer crashes on Windows
+
+**Symptom**: Crashes when running `npx oh-my-opencode install`
+
+**Solution**:
+
+This is a known issue with Bun runtime. Use manual configuration method:
+
+1. Global install plugin: `npm install -g oh-my-opencode`
+2. Manually edit config file (refer to config example above)
+3. Skip installer, use directly
+
+---
+
+## 📚 Further Learning
+
+### Official Documentation
+
+- **Oh My OpenCode GitHub**: https://github.com/code-yeongyu/oh-my-opencode
+- **OpenCode Website**: https://opencode.ai/docs
+- **Features Docs**: https://github.com/code-yeongyu/oh-my-opencode/blob/master/docs/features.md
+- **Configuration Docs**: https://github.com/code-yeongyu/oh-my-opencode/blob/master/docs/configurations.md
+- **Overview Guide**: https://github.com/code-yeongyu/oh-my-opencode/blob/master/docs/guide/overview.md
+
+### Community Resources
+
+- **Discord Community**: https://discord.gg/PUwSMR9XNk
+- **GitHub Issues**: https://github.com/code-yeongyu/oh-my-opencode/issues
+- **Twitter/X**: [@justsisyphus](https://x.com/justsisyphus)
+
+### Related Projects
+
+- **OpenCode**: https://github.com/sst/opencode
+- **AmpCode**: https://ampcode.com
+- **Claude Code**: https://code.claude.com
+
+---
+
+## 🎯 Best Practices
+
+### 1. Project Initialization
+
+Each new project should run `/init` to create `AGENTS.md`:
+
+```bash
+cd your-project
+opencode
+# In OpenCode:
+/init
+```
+
+### 2. Use ultrawork Mode
+
+For complex tasks, always use `ulw` keyword:
+
+```
+ulw refactor entire auth system, using JWT and refresh token
+```
+
+### 3. Utilize Planning Mode
+
+For uncertain tasks, use Prometheus planning mode:
+
+```
+1. Press Tab to enter Plan mode
+2. Describe requirement
+3. Answer questions
+4. Review plan
+5. Execute
+```
+
+### 4. Use Agents Reasonably
+
+- **Simple Query**: Direct conversation
+- **Architecture Issue**: `@oracle`
+- **Doc Search**: `@librarian`
+- **Code Explore**: `@explore`
+- **Frontend Task**: `@frontend-engineer`
+
+### 5. Config Management
+
+- User Level Config: General settings
+- Project Level Config: Project specific settings
+- Commit `AGENTS.md` to Git
+- Do not commit API Keys
+
+### 6. Performance Optimization
+
+- Use faster models for exploration tasks
+- Adjust concurrency limit to balance speed and cost
+- Disable unneeded hooks
+- Use project level config to override specific settings
+
+---
+
+## 🎊 Quick Reference
+
+### Common Commands
+
+| Command | Function |
+|------|------|
+| `/init` | Initialize project |
+| `/undo` | Undo change |
+| `/redo` | Redo change |
+| `/share` | Share session |
+| `/help` | View help |
+| `/connect` | Connect provider |
+| `/exit` | Exit OpenCode |

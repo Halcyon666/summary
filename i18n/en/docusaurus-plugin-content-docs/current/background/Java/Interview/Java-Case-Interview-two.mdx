@@ -1,0 +1,446 @@
+---
+id: java-case-interview-two
+title: Java Interview Questions 2
+sidebar_label: Java Interview Questions 2
+sidebar_position: 10
+description: "See blog 1. Reduce resource consumption 2. Improve response speed 3. Improve thread manageability corePoolSize: Core thread count, Number of threads created for normal work"
+tags:
+- algorithm
+- computer-science
+- data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources:
+- spring-core
+---
+## Concurrency Related Knowledge Points
+
+[See blog](https://www.cnblogs.com/whalefall541/p/13419926.html)
+
+## Why Use Thread Pool? What Are the Parameters of Thread Pool?
+
+1. Reduce resource consumption
+2. Improve response speed
+3. Improve thread manageability
+
+**corePoolSize**: Core thread count. Number of threads created for normal work.
+**maximumPoolSize**: Maximum thread count. Maximum allowed threads to be created.
+**keepAliveTime, unit**: Survival time. Survival time for threads outside of core threads.
+
+**workQueue**: Work queue. Used to store tasks waiting to be executed.
+**ThreadFactory**: Thread factory. Used to generate threads to execute tasks (can use default with same priority and non-daemon threads, or custom).
+**handler**: Rejection policy. When thread pool is closed or unable to execute new threads (maximum threads and queue are full).
+
+**Thread Pool Execution Flow**:
+
+1. Determine if core threads are all occupied
+2. Determine if task queue is full
+3. Determine if maximum thread count is reached
+4. Rejection policy
+
+## What is the Role of Blocking Queue in Thread Pool? Why Add to Work Queue First Instead of Creating Max Threads?
+
+**Role**
+
+1. General queues cannot hold tasks when task count exceeds buffer length. Blocking queue can hold tasks that want to continue to enqueue through blocking.
+2. When there are no tasks, it can block threads obtaining tasks, making threads enter wait state, releasing CPU resources.
+3. Blocking queue comes with blocking and waking up functions.
+
+**Reason**
+
+1. When creating a new thread, global lock needs to be obtained. At this time others have to block, affecting overall efficiency.
+
+## Thread Reuse
+
+Each time thread pool executes a task, it does not call Thread.start() method, but lets the thread execute a loop task.
+In this loop task, it constantly checks if there are tasks to be executed. If so, it calls invoke run() of the task.
+
+## Difference between BeanFactory and ApplicationContext
+
+- ApplicationContext is a sub-interface of BeanFactory;
+- ApplicationContext extends BeanFactory:
+  1. Inherits MessageSource, supports internationalization messages
+  2. Inherits ResourcePatternResolver, unified resource file access method
+  3. Inherits ApplicationEventPublisher, provides registering bean events in listeners
+  4. Loads multiple configuration files simultaneously; loads multiple contexts, making each context focus on a specific layer. For example, web layer.
+
+- BeanFactory uses lazy loading mode
+- ApplicationContext creates all non-lazy loading singleton beans at container startup
+- BeanFactory can only be created programmatically, while ApplicationContext can also be created declaratively, such as using ContextLoader
+- BeanFactory and ApplicationContext both support use of BeanPostProcessor, BeanFactoryPostProcessor,
+  but BeanFactory needs manual registration, while ApplicationContext is automatic registration
+
+
+## SpringBean Lifecycle
+
+1. Instantiation
+2. Set properties autowire injection
+3. Set properties related to implementing Aware interfaces
+4. Call BeanPostProcessor's postProcessBeforeInitialization method
+   (Including BeanPostProcessor's before or after initialization methods and InitializingBean's afterPropertiesSet method)
+5. Call init method specified by bean in container
+6. Call BeanPostProcessor's postProcessAfterInitialization method
+7. Use bean
+8. Call DisposableBean's destroy() method
+
+![](https://s2.loli.net/2023/07/15/WPZYtgrOGF5L1fX.png)
+
+[Reference **Yue Ran Shuang Hua** Blog](https://www.cnblogs.com/shoshana-kong/p/10692887.html)
+
+
+## Supported Bean Scopes in Spring
+
+**singleton**: Default. Only one Bean instance per container. Singleton mode is maintained by BeanFactory itself.
+**prototype**: Provides an instance for every bean request. A new object is created every time injected.
+**request**: Bean is defined to create a singleton object in each HTTP request.
+**session**: Ensures one bean instance in each session.
+**application**: Bean is defined to be a reusable singleton object in ServletContext lifecycle.
+**websocket**: Bean is defined to be a reusable singleton object in websocket lifecycle.
+
+*global-session*: Global function
+
+## Transaction Propagation Mechanism
+
+**REQUIRED**: Default transaction propagation type. If there is a transaction, join; if not, create a new transaction.
+**SUPPORTS**: If there is a transaction, join; if not, execute in non-transactional way.
+**MANDATORY**: Current transaction exists, join transaction; no, throw exception.
+**REQUIRES_NEW**: If exists, suspend that transaction; if not, create a transaction.
+**NOT_SUPPORTED**: If exists, suspend that transaction; if not, execute in non-transactional way.
+**NEVER**: Do not use transaction. If transaction exists, throw exception.
+**NESTED**: If exists, execute in nested transaction; otherwise start a transaction.
+
+***Note***
+
+- REQUIRES_NEW starts a transaction, and the newly started transaction is unrelated to the transaction.
+- NESTED starts a nested transaction. Parent transaction rollback, child transaction must rollback; conversely,
+  Child transaction rollback, parent transaction does not necessarily rollback, can catch exception.
+- REQUIRED requires caller and callee to use the same transaction.
+
+## Basic Characteristics and Isolation Levels of Transactions
+
+**Basic Characteristics of Transactions ACID**
+
+atomicity: Operations in a transaction either all fail or all succeed.
+consistency: In a system, overall resources maintain final consistency.
+isolation: Isolation refers to transaction not being readable by other transactions before submission.
+durability: After transaction submission, modifications made will be permanently saved to database.
+
+**Isolation Levels**
+
+Read Uncommitted: Read uncommitted data. Dirty read.
+Read Committed: Read committed data. Non-repeatable read (lock in share mode shared lock to avoid). Oracle default level.
+Repeatable Read: Read results are same every time. Once a transaction starts reading, it recognizes this value, regardless of whether other transactions change this data.
+But if it is range query, results found may change, which causes phantom read (add gap lock to avoid). InnoDB default level.
+Serializable: Serial. Generally not used. Will lock every row of data read, affecting concurrency.
+
+
+## When Does Spring Transaction Fail?
+
+1. Self-invocation occurs. Solution: Do not self-invoke, use injected object to call.
+2. Method modified by `@Transactional` is not public modifier. If you want to implement transaction on non-public,
+   can use AspectJ proxy mode.
+3. Database does not support transaction.
+4. Class to start transaction method is not managed by container.
+5. Exception is swallowed, transaction will not rollback.
+
+## Difference between Spring Boot, Spring MVC and Spring
+
+Spring is an IOC container used to manage Beans, using dependency injection and inversion of control, can easily integrate various frameworks;
+Provides AOP features to strip functions like logs and transactions from business code for centralized management.
+
+Spring MVC is a solution of Spring for Web frameworks. Provided front-end controller Servlet to receive requests,
+Then defined a set of routing strategies (url->handler) and adapted execution handle, generating handle result using view resolution count
+View displayed to front end.
+
+Spring Boot is a rapid development tool provided by Spring, allowing programmers to quickly use Spring + Spring MVC. Simplified configuration
+(Agreed on default configuration), integrated a series of solutions (Starter mechanism), Redis, MongoDB, elasticsearch.
+
+
+## Spring MVC Workflow
+
+
+![Process Diagram](https://s2.loli.net/2023/07/15/aBpOvjSPdmCIoKg.png)
+
+1. User request sent to front-end controller DispatcherServlet
+2. DispatcherServlet calls processor mapper RequestMapping
+3. Processor mapper finds specific processor, and related interceptors combined into a HandlerExecutionChain
+4. DispatcherServlet gets processor adapter, and calls processor adapter's handle() method
+   And returns ModelAndView to DispatcherServlet
+5. DispatcherServlet passes ModelAndView to view resolver ViewResolver for resolution
+6. Execute interceptor for some processing
+7. DispatcherServlet returns processedRequest, response, mappedHandler, mv, dispatchException
+
+**Methods in DispatcherServlet**
+
+```java
+	protected void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		HttpServletRequest processedRequest = request;
+		HandlerExecutionChain mappedHandler = null;
+		boolean multipartRequestParsed = false;
+
+		WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);
+
+		try {
+			ModelAndView mv = null;
+			Exception dispatchException = null;
+
+			try {
+				processedRequest = checkMultipart(request);
+				multipartRequestParsed = (processedRequest != request);
+
+				// Determine handler for the current request.
+				mappedHandler = getHandler(processedRequest);
+				if (mappedHandler == null) {
+					noHandlerFound(processedRequest, response);
+					return;
+				}
+
+				// Determine handler adapter for the current request.
+				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
+
+				// Process last-modified header, if supported by the handler.
+				String method = request.getMethod();
+				boolean isGet = "GET".equals(method);
+				if (isGet || "HEAD".equals(method)) {
+					long lastModified = ha.getLastModified(request, mappedHandler.getHandler());
+					if (new ServletWebRequest(request, response).checkNotModified(lastModified) && isGet) {
+						return;
+					}
+				}
+
+				if (!mappedHandler.applyPreHandle(processedRequest, response)) {
+					return;
+				}
+
+				// Actually invoke the handler.
+				mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
+
+				if (asyncManager.isConcurrentHandlingStarted()) {
+					return;
+				}
+
+				applyDefaultViewName(processedRequest, mv);
+				mappedHandler.applyPostHandle(processedRequest, response, mv);
+			}
+			catch (Exception ex) {
+				dispatchException = ex;
+			}
+			catch (Throwable err) {
+				// As of 4.3, we're processing Errors thrown from handler methods as well,
+				// making them available for @ExceptionHandler methods and other scenarios.
+				dispatchException = new NestedServletException("Handler dispatch failed", err);
+			}
+			processDispatchResult(processedRequest, response, mappedHandler, mv, dispatchException);
+		}
+		catch (Exception ex) {
+			triggerAfterCompletion(processedRequest, response, mappedHandler, ex);
+		}
+		catch (Throwable err) {
+			triggerAfterCompletion(processedRequest, response, mappedHandler,
+					new NestedServletException("Handler processing failed", err));
+		}
+		finally {
+			if (asyncManager.isConcurrentHandlingStarted()) {
+				// Instead of postHandle and afterCompletion
+				if (mappedHandler != null) {
+					mappedHandler.applyAfterConcurrentHandlingStarted(processedRequest, response);
+				}
+			}
+			else {
+				// Clean up any resources used by a multipart request.
+				if (multipartRequestParsed) {
+					cleanupMultipart(processedRequest);
+				}
+			}
+		}
+	}
+```
+
+
+## Spring Boot Auto-Configuration Principle
+
+`@Import` Process file package path
+`SPI` SpringFactoriesLoader.loaderFactoryNames() method loads classes configured under META-INF/spring.factories
+, *PS: Add corresponding classes in jar package in this file, can inject classes in jar package into container*
+`@Configuration` Specify this class as configuration class
+`@Bean` Specify class to be configured in configuration class, and load into container, such as redis, kafka configuration class
+
+![](https://s2.loli.net/2023/07/15/FoObHTBYnszMEqh.png)
+
+## Difference between MySQL Clustered Index and Non-Clustered Index
+
+*Clustered Index* Puts data and index together, and arranges in a certain order
+*Non-Clustered Index* Leaf nodes do not store data, store address value of data
+
+![](https://s2.loli.net/2023/07/15/5SieDPEQWFKpTt1.jpg)
+
+---
+
+![](https://s2.loli.net/2023/07/15/WB1YbpMG9LmUgaD.jpg)
+
+Index Data Structure `B+ Tree` `Hash Index`
+
+*MySql Select Index type*
+
+- const: Hit once by index, matches one row of data
+- system: Only one row of data in table, equivalent to system table
+- eq_ref: Unique index scan, for each index key, only one record in table matches it
+- ref: Non-unique index scan, returns all matching a certain value
+- range: Only retrieve rows in given range, use an index to select rows. Generally used for between `<` `>`
+- index: Only traverse index tree
+- all: Full table scan
+
+## MySQL Database Locks
+
+- Shared Lock: Read Lock
+- Exclusive Lock: Write Lock
+
+- Table Lock: Large locking granularity, poor concurrency
+- Row Lock: Small locking granularity, good concurrency, deadlocks may occur
+- Record Lock:
+  - Only locks one row in table, precise condition hit, and hit condition field is unique index. Can avoid repeatability, dirty read problems
+- Page Lock: Deadlocks may occur
+- Gap Lock: Locks a certain interval of table records, left open right closed
+- Next-Key Lock: Locks a certain interval of table records, left closed right closed
+
+- Intention Shared Lock: Before a transaction views to add shared lock to entire table, first obtain intention shared lock of this table
+- Intention Exclusive Lock: Before a transaction views to add exclusive lock to entire table, first obtain intention exclusive lock of this table
+
+*InnoDB Default Row Lock*
+*MyISAM Default Table Lock*
+
+## MVCC (Multi-Version Concurrency Control)
+
+**Multi-Version Concurrency Control** When reading data, save data in a way similar to snapshot, so read lock and write lock do not conflict, different transaction sessions will see data of their own specific version;
+
+MVCC only works under Read Committed and Repeatable Read isolation levels. Other two isolation levels differ from MVCC because Read Uncommitted always reads latest data, not data conforming to current transaction version; while Serializable locks all read rows.
+
+Clustered index has *trx_id* and *roll_pointer* hidden columns
+**trx_id** Similar to hash code in git version control
+**roll_pointer** Every time clustered index record is modified, old version is written into undo log. roll_pointer stores position pointing to previous version in clustered index. Previous version information can be obtained through it. (insert has no undo log, because)
+
+*Difference in Generating ReadView in RC RR Isolation Levels*
+
+- Start transaction create ReadView maintain uncommitted transactions, and put them into an array from small to large by transaction id;
+- If transaction id in data row is smaller than all in array, it means transaction corresponding to row data has been submitted
+- If transaction id in data row is larger than all in array, it means transaction corresponding to row data is uncommitted; get roll_pointer to get previous version data to compare again.
+
+- RC generates an independent ReadView every query. RR reuses first generated ReadView every time.
+
+## MyISAM and InnoDB
+
+**MyISAM**
+
+Does not support transactions
+Supports table-level locks
+Stores total number of rows in table
+Uses non-clustered index, data field of index file stores pointer pointing to data file. Auxiliary index and main index are consistent, but auxiliary index does not guarantee uniqueness
+Three files: Index file, Table structure file, Data file
+
+**InnoDB**
+
+Supports ACID transactions, supports four isolation levels of transactions
+Supports row-level locks and foreign key constraints
+Does not store total number of rows in table
+Primary key uses clustered index (data field of index stores data file itself), data field of auxiliary index stores value of primary key;
+Best to use auto-increment primary key, prevent excessive adjustment of B+ tree structure file when inserting data
+
+## Difference between Two Redis Persistence Methods
+
+**RDB Redis Database**
+
+Writes snapshot of dataset in memory to disk within specified time interval. Actual operation process is to fork a child process, first write dataset to temporary file, after successful writing, replace previous file, store with binary compression.
+
+*Advantages*
+
+1. Entire Redis database contains only one dump.rdb file, good disaster recovery, convenient for backup
+2. Maximize performance, fork child process to complete write operation, let main process continue to process commands, use separate child process for persistence, main process will not perform any IO operations, ensuring high performance of Redis
+3. When dataset is large, startup efficiency is higher than AOF
+
+*Disadvantages*
+
+1. Low data security, RDB persists at intervals, if Redis fails during persistence period, data loss will occur.
+2. Since RDB assists in completing persistence work by forking child processes, if dataset is large, it may cause entire service to stop service for hundreds of milliseconds, or even 1 second
+
+**AOF Append Only File**
+
+*Advantages*
+
+1. Three synchronization strategies: Sync every second, sync every modification, no sync
+2. Write file by append mode, even if server crashes midway, it will not destroy existing content, can solve data consistency problem through redis-check-aof tool
+3. AOF mechanism rewrite mode. Regularly rewrite AOF files to achieve purpose of compression
+
+*Disadvantages*
+
+1. AOF file is relatively large
+2. When dataset is large, startup efficiency is low
+3. Running efficiency is not as high as RDB
+
+## Process Thread
+
+**Process**
+Static concept, Allocation of resources
+***Process is the basic unit of system resource allocation***
+
+**Thread**
+Dynamic concept, Shared resources
+Main thread, First started is Main thread
+***Thread is the basic unit of task execution***
+
+## Why Redis Single Thread Is So Efficient
+
+Redis developed file event handler based on Reactor model, this file event handler is single-threaded,
+It uses IO multiplexing mechanism to listen to multiple Sockets simultaneously, select corresponding event handler to handle this event according to event type on Socket.
+
+File Event Handler Structure: Multiple Sockets, IO Multiplexer, File Event Dispatcher, Event Handler
+
+When concurrent, IO multiplexing monitoring program puts Socket into a queue, takes out a Socket from queue to event dispatcher each time
+, Event dispatcher hands Socket to corresponding event handler; Only after processing one Socket event, IO multiplexing program will give next
+Socket in queue to event dispatcher.
+[Can refer to this article for more details](https://zhuanlan.zhihu.com/p/360335981)
+
+- Redis based on memory operation
+- Core is based on non-blocking IO multiplexing mechanism
+- Single thread avoids performance problems caused by frequent context switching of multiple threads (each operation event is short)
+
+## Cache Avalanche, Cache Penetration, Cache Breakdown
+
+**Cache Avalanche** Large amount of cache fails at the same time, subsequent request volume is too large causing database to crash
+
+- Randomly set expiration time of cache data
+- Add mark to each hot cache data, if invalid, automatically update
+- Cache preheating, initialize hot data to cache when application starts
+
+**Cache Penetration** No data in both cache data and database, causing large number of requests to reach database, causing excessive database load.
+
+- Interface layer adds verification, such as user authentication, or access frequency limit
+- Data not obtained from cache and database, can set short-time key-null value cache
+- Use Bloom filter, data that definitely does not exist will definitely be intercepted by Bloom filter
+
+**Cache Breakdown** No data in cache, data in database. When cache fails, all request pressure goes to database.
+
+- Set hot data to never expire, dynamically correct cache after modification
+- Add mutex lock
+
+## SQL Optimization
+
+1. Try not to use !=, not in, like '%xxx'
+2. Try to use in instead of or, when value is continuous, use between instead of in
+3. If using subquery, subquery will execute first, so in subquery write query of small table
+4. Joint index where condition must follow leftmost principle
+5. SQL statement best all uppercase to improve execution efficiency, execution engine will convert all lowercase to uppercase
+6. Table written at the end in FROM clause (basic table driving table) will be processed first, in case of multiple tables in FROM clause, you must choose table with fewest records as basic table.
+7. in subquery write small table exist main query should be small table (small table drives big table)
+
+
+
+>> Reference Materials
+
+1. Bilibili Video [Address](https://www.bilibili.com/video/BV1Eb4y1R7zd?)
+2. JDK 8 Source Code
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />
