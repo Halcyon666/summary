@@ -21,7 +21,7 @@ export default function GiscusComment() {
         category="Announcements"
         categoryId="DIC_kwDOJ7hui84C2Cc0"
         mapping="pathname"
-        strict="0"
+        strict="1"
         reactionsEnabled="1"
         emitMetadata="0"
         inputPosition="bottom"
