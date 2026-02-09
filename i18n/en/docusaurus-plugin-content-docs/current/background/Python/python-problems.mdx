@@ -1,0 +1,71 @@
+---
+id: python-problems
+title: Python Usage Issues
+sidebar_label: Python Usage Issues
+sidebar_position: 10
+description: >-
+  Guide to configuring Python pip sources, virtual environments, and Jupyter
+  notebooks in VSCode
+tags:
+  - algorithm
+  - computer-science
+  - data-structures
+last_update:
+  date: '2026-01-25'
+  author: halcyon666
+sources: null
+references:
+  - python-replacement-script
+---
+# Python 使用问题
+
+## pip 源设置 
+
+在 `C:\Users\xxx\pip`下创建 `pip.ini`文件，内容如下
+
+
+```ini
+[global]
+index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+extra-index-url =
+    https://mirrors.aliyun.com/pypi/simple/
+    https://mirror.baidu.com/pypi/simple
+```
+
+> [原文地址](https://zhuanlan.zhihu.com/p/623325525?utm_id=0&wd=&eqid=f10d0e060019cf940000000665767cd2)
+
+## 如何使用python虚拟环境
+
+```shell
+创建虚拟环境
+
+python -m venv .venv
+
+激活虚拟环境
+
+.\.venv\Scripts\Activate.ps1
+```
+
+## 在VScode中使用jupyter
+
+```shell
+# 升级pip
+python -m pip install --upgrade pip
+# 安装jupyter 
+python -m pip install ipykernel jupyter
+# 安装常用包
+pip install -r requirements.txt
+```
+
+## 卸载python报错
+![20250925105034](https://s2.loli.net/2025/09/25/gAXWovnKtqYBVwR.png)
+
+解决方案 以管理员身份运行安装包进行卸载。<br/>
+(详情请参考)[https://blog.csdn.net/weixin_44628096/article/details/149024298]
+
+
+
+
+import TailProtocal from "@site/src/components/TailProtocal";
+
+<TailProtocal />
