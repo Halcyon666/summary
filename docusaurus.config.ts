@@ -84,10 +84,6 @@ const config: Config = {
     [
       "classic",
       {
-        gtag: {
-          trackingID: "G-62NRN6R4XB",
-          anonymizeIP: true,
-        },
         sitemap: {
           // @ts-ignore
           changefreq: "weekly",
