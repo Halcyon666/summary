@@ -10,17 +10,17 @@
         <language>en</language>
         <copyright>Copyright © 2026 Halcyon666</copyright>
         <item>
-            <title><![CDATA[欢迎来到博客]]></title>
+            <title><![CDATA[Welcome to the Blog]]></title>
             <link>https://halcyon666.top/en/blog/2025/02/07/welcome</link>
             <guid>https://halcyon666.top/en/blog/2025/02/07/welcome</guid>
             <pubDate>Fri, 07 Feb 2025 00:00:00 GMT</pubDate>
-            <description><![CDATA[欢迎来到我的技术博客！]]></description>
-            <content:encoded><![CDATA[<p>欢迎来到我的技术博客！</p>
-<p>这里将分享我在软件开发、DevOps、前端技术等方面的学习笔记和经验总结。</p>
+            <description><![CDATA[Welcome to my technical blog!]]></description>
+            <content:encoded><![CDATA[<p>Welcome to my technical blog!</p>
+<p>Here I will share my learning notes and experience summaries in software development, DevOps, frontend technologies, and more.</p>
 <!-- -->
-<p>希望这些内容对你有所帮助！</p>]]></content:encoded>
-            <category>博客</category>
-            <category>介绍</category>
+<p>I hope you find this content helpful!</p>]]></content:encoded>
+            <category>blog</category>
+            <category>introduction</category>
         </item>
     </channel>
 </rss>

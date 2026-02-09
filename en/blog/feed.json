@@ -6,18 +6,18 @@
     "items": [
         {
             "id": "https://halcyon666.top/en/blog/2025/02/07/welcome",
-            "content_html": "<p>欢迎来到我的技术博客！</p>\n<p>这里将分享我在软件开发、DevOps、前端技术等方面的学习笔记和经验总结。</p>\n<!-- -->\n<p>希望这些内容对你有所帮助！</p>",
+            "content_html": "<p>Welcome to my technical blog!</p>\n<p>Here I will share my learning notes and experience summaries in software development, DevOps, frontend technologies, and more.</p>\n<!-- -->\n<p>I hope you find this content helpful!</p>",
             "url": "https://halcyon666.top/en/blog/2025/02/07/welcome",
-            "title": "欢迎来到博客",
-            "summary": "欢迎来到我的技术博客！",
+            "title": "Welcome to the Blog",
+            "summary": "Welcome to my technical blog!",
             "date_modified": "2025-02-07T00:00:00.000Z",
             "author": {
                 "name": "halcyon666",
                 "url": "https://github.com/Halcyon666"
             },
             "tags": [
-                "博客",
-                "介绍"
+                "blog",
+                "introduction"
             ]
         }
     ]
