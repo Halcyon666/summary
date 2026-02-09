@@ -1,0 +1,20 @@
+# Cloudflare Pages/_headers
+# Optimize caching for assets to reduce 503 errors from GitHub Pages origin
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+/img/*
+  Cache-Control: public, max-age=2592000
+
+/docusaurus-graph.json
+  Cache-Control: public, max-age=3600
+
+/graph-data.json
+  Cache-Control: public, max-age=3600
