@@ -1,10 +1,10 @@
 {
   "title": {
-    "message": "博客",
+    "message": "Blog",
     "description": "The title for the blog used in SEO"
   },
   "description": {
-    "message": "技术博客与分享",
+    "message": "Technical blog and sharing",
     "description": "The description for the blog used in SEO"
   },
   "sidebar.title": {
