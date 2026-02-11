@@ -107,12 +107,12 @@ const config: Config = {
         },
         blog: {
           showReadingTime: true,
-          blogTitle: '博客',
-          blogDescription: '技术博客与分享',
+          blogTitle: "博客",
+          blogDescription: "技术博客与分享",
           postsPerPage: 10,
-          blogSidebarCount: 'ALL',
+          blogSidebarCount: "ALL",
           feedOptions: {
-            type: 'all',
+            type: "all",
             copyright: `Copyright © ${new Date().getFullYear()} Halcyon666`,
           },
           editUrl: ({ blogPath }) => {
@@ -183,8 +183,8 @@ const config: Config = {
           position: "left",
           label: "docs",
         },
-        { to: '/blog', label: 'blog', position: 'left' },
-        { to: '/graph', label: 'graph', position: 'left' },
+        { to: "/blog", label: "blog", position: "left" },
+        { to: "/graph", label: "graph", position: "left" },
         {
           href: "https://t.me/+3EVR-TOB7GQwOWQ1",
           label: "Telegram",
@@ -215,7 +215,7 @@ const config: Config = {
       indexName: "halcyon666.top",
 
       // Optional: see doc section below
-      contextualSearch: true,  // 自动根据当前 locale 过滤搜索结果
+      contextualSearch: true, // 自动根据当前 locale 过滤搜索结果
 
       // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
       // externalUrlRegex: 'external\\.com|domain\\.com',
@@ -232,7 +232,53 @@ const config: Config = {
       //... other Algolia params11
     },
 
-    footer: null,
+    footer: {
+      style: "dark",
+      /*      links: [
+        {
+          title: 'Docs',
+          items: [
+            {
+              label: 'Tutorial',
+              to: '/docs/intro',
+            },
+          ],
+        },
+        {
+          title: 'Community',
+          items: [
+            {
+              label: 'Stack Overflow',
+              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+            },
+            {
+              label: 'Discord',
+              href: 'https://discordapp.com/invite/docusaurus',
+            },
+            {
+              label: 'Twitter',
+              href: 'https://twitter.com/docusaurus',
+            },
+          ],
+        },
+        {
+          title: 'More',
+          items: [
+            {
+              label: 'Blog',
+              to: '/blog',
+            },
+            {
+              label: 'GitHub',
+              href: 'https://github.com/facebook/docusaurus',
+            },
+          ],
+        },
+      ], */
+      copyright: `Copyright © ${new Date().getFullYear()} Halcyon666 Built with Docusaurus ${getInstalledVersion(
+        "@docusaurus/core",
+      )}`,
+    },
     prism: {
       theme: prismThemes.vsLight,
       darkTheme: prismThemes.vsDark,
@@ -249,10 +295,7 @@ const config: Config = {
       playgroundPosition: "bottom",
     },
   } satisfies Preset.ThemeConfig,
-  plugins: [
-    "@docusaurus/theme-live-codeblock",
-    "docusaurus-plugin-image-zoom",
-  ],
+  plugins: ["@docusaurus/theme-live-codeblock", "docusaurus-plugin-image-zoom"],
 };
 
 export default config;
