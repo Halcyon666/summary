@@ -186,6 +186,11 @@ const config: Config = {
         { to: '/blog', label: 'blog', position: 'left' },
         { to: '/graph', label: 'graph', position: 'left' },
         {
+          href: "https://t.me/+3EVR-TOB7GQwOWQ1",
+          label: "Telegram",
+          position: "right",
+        },
+        {
           href: "https://github.com/Halcyon666/",
           label: "GitHub",
           position: "right",
@@ -229,47 +234,6 @@ const config: Config = {
 
     footer: {
       style: "dark",
-      links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Knowledge Base',
-              to: '/',
-            },
-            {
-              label: 'AI & Big Data',
-              to: '/ai-bigdata/AI/prompt',
-            },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
-            {
-              label: '📢 Telegram AI News',
-              href: 'https://t.me/+3EVR-TOB7GQwOWQ1',
-            },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/Halcyon666',
-            },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
-            {
-              label: 'Blog',
-              to: '/blog',
-            },
-            {
-              label: 'Knowledge Graph',
-              to: '/graph',
-            },
-          ],
-        },
-      ],
       copyright: `Copyright © ${new Date().getFullYear()} Halcyon666 Built with Docusaurus ${getInstalledVersion(
         "@docusaurus/core"
       )}`,
