@@ -1711,12 +1711,17 @@
     {
       "id": "owesome-ai-skills",
       "path": "/ai-bigdata/AI/owesome-ai-skills",
-      "name": "owesome-ai-skills",
-      "description": "",
-      "allTags": [],
-      "group": "other",
-      "val": 1,
-      "sources": [],
+      "name": "Owesome AI Skills",
+      "description": "Owesome AI Skills",
+      "allTags": [
+        "ai",
+        "agent"
+      ],
+      "group": "ai",
+      "val": 2,
+      "sources": [
+        "summary"
+      ],
       "references": []
     },
     {
@@ -1879,7 +1884,7 @@
         "interview"
       ],
       "group": "ai",
-      "val": 12,
+      "val": 13,
       "sources": [
         "overview",
         "level-1-ai-native",
@@ -2841,6 +2846,10 @@
     {
       "source": "summary",
       "target": "prompt"
+    },
+    {
+      "source": "summary",
+      "target": "owesome-ai-skills"
     },
     {
       "source": "level-1-ai-native",
