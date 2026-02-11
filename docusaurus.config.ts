@@ -229,47 +229,21 @@ const config: Config = {
 
     footer: {
       style: "dark",
-      /*      links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Tutorial',
-              to: '/docs/intro',
-            },
-          ],
-        },
+      links: [
         {
           title: 'Community',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
-            },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
-            {
-              label: 'Blog',
-              to: '/blog',
+              label: 'Telegram AI News',
+              href: 'https://t.me/+3EVR-TOB7GQwOWQ1',
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/Halcyon666',
             },
           ],
         },
-      ], */
+      ],
       copyright: `Copyright © ${new Date().getFullYear()} Halcyon666 Built with Docusaurus ${getInstalledVersion(
         "@docusaurus/core"
       )}`,
