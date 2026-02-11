@@ -2006,6 +2006,22 @@
       "references": []
     },
     {
+      "id": "owesome-ai-skills",
+      "path": "/ai-bigdata/AI/owesome-ai-skills",
+      "name": "Owesome AI Skills",
+      "description": "Owesome AI Skills",
+      "allTags": [
+        "ai",
+        "agent"
+      ],
+      "group": "ai",
+      "val": 2,
+      "sources": [
+        "summary"
+      ],
+      "references": []
+    },
+    {
       "id": "oh-my-opencode",
       "path": "/ai-bigdata/AI/oh-my-opencode-installation-guide",
       "name": "Oh My OpenCode",
@@ -2165,7 +2181,7 @@
         "interview"
       ],
       "group": "ai",
-      "val": 12,
+      "val": 13,
       "sources": [
         "overview",
         "level-1-ai-native",
@@ -2894,6 +2910,10 @@
     {
       "source": "summary",
       "target": "prompt"
+    },
+    {
+      "source": "summary",
+      "target": "owesome-ai-skills"
     },
     {
       "source": "level-1-ai-native",

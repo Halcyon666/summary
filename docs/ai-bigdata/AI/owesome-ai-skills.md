@@ -1,3 +1,19 @@
+---
+id: owesome-ai-skills
+title: Owesome AI Skills
+sidebar_label: Owesome AI Skills
+sidebar_position: 10
+description: Owesome AI Skills
+tags:
+- ai
+- agent
+sources:
+- summary
+references: []
+last_update:
+  date: '2026-02-12'
+  author: halcyon666
+---
 # Owesome AI Skills
 AI 智能体的 Unix 哲学：用可组合的微技能重塑数字工作流
 
