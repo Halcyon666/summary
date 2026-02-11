@@ -232,12 +232,7 @@ const config: Config = {
       //... other Algolia params11
     },
 
-    footer: {
-      style: "dark",
-      copyright: `Copyright © ${new Date().getFullYear()} Halcyon666 Built with Docusaurus ${getInstalledVersion(
-        "@docusaurus/core"
-      )}`,
-    },
+    footer: null,
     prism: {
       theme: prismThemes.vsLight,
       darkTheme: prismThemes.vsDark,
