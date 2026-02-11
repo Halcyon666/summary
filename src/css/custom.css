@@ -106,3 +106,40 @@
   border: none;
   display: block; /* Removes bottom space */
 }
+
+/* Footer Styling */
+.footer--dark {
+  background: linear-gradient(180deg, #2b3137 0%, #1b1f23 100%);
+}
+
+.footer__title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+  color: var(--ifm-color-primary-lightest);
+}
+
+.footer__link-item {
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+.footer__link-item:hover {
+  color: var(--ifm-color-primary-lightest) !important;
+  transform: translateX(3px);
+}
+
+.footer__links {
+  justify-content: center;
+  gap: 4rem;
+}
+
+.footer__copyright {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
