@@ -15,7 +15,7 @@ sources:
 references:
 - mcp
 last_update:
-  date: '2026-01-26'
+  date: '2026-02-27'
   author: halcyon666
 ---
 
@@ -168,27 +168,34 @@ opencode auth login
 
 #### Google Gemini
 
-需要先安装 `opencode-antigravity-auth` 插件：
+:::danger ⚠️ opencode-antigravity-auth 已不推荐使用
+`opencode-antigravity-auth` 插件通过伪装第三方 OAuth 客户端（冒用 Google Antigravity IDE 的身份）来获取 Gemini 模型的访问权限，**这违反了 Google 的服务条款**。
+
+Google 已在 2026 年初开始大规模封禁使用此类第三方工具的账户：
+- 🚨 **新注册的 Google 账户**被封禁概率极高
+- 🚨 **新购买 Pro/Ultra 订阅的账户**频繁被标记和封禁
+- 🚨 用户会收到 "Gemini has been disabled in this account for violation of Terms of Service" 的通知，且没有明确的申诉流程
+
+该插件的 [GitHub 仓库](https://github.com/NoeFabris/opencode-antigravity-auth) 自身也已加上了风险警告（CAUTION）。
+
+**请使用以下替代方案之一来配置 Gemini 访问。**
+:::
+
+**方案 A：使用 Gemini API 密钥（推荐）**
+
+1. 访问 [Google AI Studio](https://aistudio.google.com/apikey) 生成 API 密钥
+2. 在 OpenCode 中配置：
 
 ```bash
-# 编辑 ~/.config/opencode/opencode.json
-# 添加插件：
-{
-  "plugin": [
-    "oh-my-opencode",
-    "opencode-antigravity-auth@latest"
-  ]
-}
+# 设置环境变量
+export GOOGLE_API_KEY="your-api-key-here"
+
+# 或在 opencode.json 中配置 provider（参考下方「自定义配置」部分）
 ```
 
-然后认证：
+**方案 B：使用自定义 API 提供商**
 
-```bash
-opencode auth login
-# 选择 Provider: Google
-# 选择 Login method: OAuth with Google (Antigravity)
-# 在浏览器中完成登录
-```
+如果你使用第三方 API 中转（如 OpenRouter 等），可以直接在 `opencode.json` 中配置 Gemini 模型，详见下方「🔧 自定义配置」部分。
 
 #### GitHub Copilot
 

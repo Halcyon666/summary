@@ -15,7 +15,7 @@ sources:
 references:
 - mcp
 last_update:
-  date: '2026-01-26'
+  date: '2026-02-27'
   author: halcyon666
 ---
 
@@ -168,27 +168,34 @@ opencode auth login
 
 #### Google Gemini
 
-Need to install `opencode-antigravity-auth` plugin first:
+:::danger ⚠️ opencode-antigravity-auth is No Longer Recommended
+The `opencode-antigravity-auth` plugin works by impersonating a third-party OAuth client (spoofing Google Antigravity IDE's identity) to gain access to Gemini models, **which violates Google's Terms of Service**.
+
+Google has been actively banning accounts using such third-party tools since early 2026:
+- 🚨 **Newly registered Google accounts** have a very high chance of being banned
+- 🚨 **Accounts with new Pro/Ultra subscriptions** are frequently flagged and banned
+- 🚨 Users receive "Gemini has been disabled in this account for violation of Terms of Service" notifications with no clear appeal process
+
+The plugin's own [GitHub repository](https://github.com/NoeFabris/opencode-antigravity-auth) has added a CAUTION warning about this risk.
+
+**Please use one of the following alternatives to configure Gemini access.**
+:::
+
+**Option A: Use Gemini API Key (Recommended)**
+
+1. Visit [Google AI Studio](https://aistudio.google.com/apikey) to generate an API key
+2. Configure in OpenCode:
 
 ```bash
-# Edit ~/.config/opencode/opencode.json
-# Add plugin:
-{
-  "plugin": [
-    "oh-my-opencode",
-    "opencode-antigravity-auth@latest"
-  ]
-}
+# Set environment variable
+export GOOGLE_API_KEY="your-api-key-here"
+
+# Or configure provider in opencode.json (refer to "Custom Configuration" section below)
 ```
 
-Then authenticate:
+**Option B: Use Custom API Provider**
 
-```bash
-opencode auth login
-# Select Provider: Google
-# Select Login method: OAuth with Google (Antigravity)
-# Complete login in browser
-```
+If you use a third-party API proxy (e.g. OpenRouter, etc.), you can directly configure Gemini models in `opencode.json`. See the "🔧 Custom Configuration" section below for details.
 
 #### GitHub Copilot
 
