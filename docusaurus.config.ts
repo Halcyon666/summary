@@ -275,7 +275,7 @@ const config: Config = {
           ],
         },
       ], */
-      copyright: `Copyright © ${new Date().getFullYear()} Halcyon666 Built with Docusaurus ${getInstalledVersion(
+      copyright: `Copyright © 2024~${new Date().getFullYear()} Halcyon666 Built with Docusaurus ${getInstalledVersion(
         "@docusaurus/core",
       )}`,
     },
