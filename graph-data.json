@@ -1725,6 +1725,24 @@
       "references": []
     },
     {
+      "id": "opencode-plugins",
+      "path": "/ai-bigdata/AI/opencode-plugins",
+      "name": "OpenCode plugins",
+      "description": "OpenCode 核心插件详解：多模型调度、上下文压缩、联网搜索与极速代码编辑",
+      "allTags": [
+        "opencode",
+        "plugins",
+        "ai",
+        "productivity"
+      ],
+      "group": "opencode",
+      "val": 1,
+      "sources": [
+        "opencode-configuration"
+      ],
+      "references": []
+    },
+    {
       "id": "oh-my-opencode",
       "path": "/ai-bigdata/AI/oh-my-opencode-installation-guide",
       "name": "Oh My OpenCode",
