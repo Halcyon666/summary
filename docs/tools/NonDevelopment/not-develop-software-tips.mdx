@@ -48,64 +48,157 @@ last_update:
 }
 ```
 
-## PicGo插件使用
+## VS Code 图片上传插件
 
-### 使用typora中安装的`PicGo-Core`
+### SEE Image Uploader
 
-1. 在vscode中安装PicGo插件
-2. 在vscode中设置PicGo的Picgo: Config Path `%USERPROFILE%\.picgo\config.json`
+推荐使用 SEE Image Uploader 插件直接上传图片到 S.EE 图床。
 
-![](https://s2.loli.net/2025/09/20/s8rYEGoZlyJe3US.png)
+**安装方式**：
 
-:::tip
-如果找不到可以去picgo里面找
-![20260201182045](https://s2.loli.net/2026/02/01/RxIjLb5h6muAPNe.png)
-:::
+1. 在 VS Code 扩展市场搜索 `SEE Image Uploader`
+2. 或访问 [Marketplace 页面](https://marketplace.visualstudio.com/items?itemName=CandyJack.see-image-uploader) 安装
+
+**配置步骤**：
+
+1. 获取 S.EE API Token：访问 [https://s.ee/](https://s.ee/) 注册并获取 token
+2. 在 VS Code 设置中搜索 `seeUploader.token`，填入你的 token
+
+**使用方法**：
+
+- `Ctrl+Alt+U`：上传剪贴板图片（仅 Windows）
+- `Ctrl+Alt+P`：选择本地图片文件上传（跨平台）
+
+上传成功后会自动插入 Markdown 格式的图片链接到当前编辑器，或复制到剪贴板。
+
+**发布到 Marketplace**：
+
+如果你想发布自己的 VS Code 插件到官方市场：
+
+1. 创建 Azure DevOps 账号并生成 Personal Access Token (PAT)
+   - 访问 [Azure DevOps](https://dev.azure.com/)
+   - 创建 PAT，作用域选择 `Marketplace (Manage)`，组织选择 `All accessible organizations`
+
+2. 在 [Marketplace 管理页面](https://marketplace.visualstudio.com/manage) 创建 publisher
+
+3. 使用 `vsce` 命令行工具发布：
+   ```bash
+   npm install -g @vscode/vsce
+   vsce login <publisher-id>
+   vsce publish
+   ```
+
+或手动上传 `.vsix` 文件到管理页面。
 
 
-### 使用npm安装的`picgo`
+## Typora 图片上传失败 (PicGo / S.EE)
 
-```shell
-# 查看 pnpm 全局安装路径
-pnpm root -g
+### 症状
 
-# 查找 picgo 位置
-pnpm list -g picgo
+Typora 图片上传失败，错误类似：
+
+- `fail to parse result image path from`
+- `StatusCodeError: 308`
+
+### 原因
+
+- Typora 仍在使用其捆绑的旧版 `picgo-cli`
+- 旧版上传器调用旧的 `sm.ms` 端点
+- 当前服务使用 `S.EE` API
+- 上传器需要返回完整 HTTP 图片 URL 的直接 API 调用
+
+### 解决方案
+
+此问题需要使用自定义上传脚本。
+
+**脚本位置**：
+- 上传脚本：[typora-see-upload.ps1](https://github.com/Halcyon666/fix-windows-envs/blob/main/scripts/typora-see-upload.ps1)
+- 设置脚本：[set-typora-custom-uploader.ps1](https://github.com/Halcyon666/fix-windows-envs/blob/main/scripts/set-typora-custom-uploader.ps1)
+
+**步骤**：
+
+1. 下载上述两个脚本到本地
+2. 运行设置脚本自动配置 Typora：
+
+```powershell
+PowerShell -NoProfile -ExecutionPolicy Bypass -File .\set-typora-custom-uploader.ps1
 ```
 
-![20250920223240](https://s2.loli.net/2025/09/20/aW4mJGQHipP6o2e.png)
+3. 将 `typora-see-upload.ps1` 复制到：`D:\Program Files\Typora\upload_img_script\typora-see-upload.ps1`
 
-1. 在vscode中安装PicGo插件
-2. 在vscode中设置PicGo的Picgo: Config Path为 `C:\Users\xxx\AppData\Local\pnpm\global\5\node_modules\picgo\config.json`
+或手动配置：
+
+1. 在 Typora 设置中，将图片上传服务改为 **Custom**
+2. 设置自定义命令为：
+
+```text
+PowerShell -NoProfile -ExecutionPolicy Bypass -File "D:\Program Files\Typora\upload_img_script\typora-see-upload.ps1"
+```
+
+上传脚本功能：
+- 从 `%USERPROFILE%\.picgo\config.json` 读取当前 token
+- 上传文件到 `https://s.ee/api/v1/file/upload`
+- 打印返回的直接 URL 以便 Typora 插入 Markdown
+
+4. 完全退出 Typora 并重新打开
+
+### 回滚
+
+- 从 `%APPDATA%\Typora\profile.data.bak-typora-custom-uploader` 恢复 `profile.data`
+- 如有需要从匹配备份恢复 `%USERPROFILE%\.picgo\config.json`
 
 
-##  U30Air SMB共享问题
+## U30Air SMB共享问题
 
-- 启用 SMB 1.0 支持 (最常见原因)
-很多早期的设备（如 U30 Air 这种路由器挂载）使用的是过时的 SMB 1.0 协议，而 Windows 11 默认是关闭它的。
+### 症状
 
-按下 Win + R，输入 optionalfeatures 并回车。
+- `\\192.168.0.1\U30 Air` 在 Windows 11 上访问失败
+- 资源管理器显示 `Network Error (1208)`
+- 同一共享在 Windows 10 上可以正常访问
 
-在弹出的列表中找到 “SMB 1.0/CIFS 文件共享支持”。
+### 原因
 
-展开它，勾选 “SMB 1.0/CIFS 客户端”（服务器端通常不需要勾选）。
+Windows 11 Pro 24H2 及更高版本默认要求 SMB 签名。
+匿名或来宾 SMB 访问在需要 SMB 签名时不生效。
+ZTE `U30 Air` 共享设备类似于来宾 SMB 设备，因此 Windows 11 会阻止访问，而 Windows 10 仍然允许。
 
-点击确定并重启电脑。
+### 解决方案
 
-- 解决办法（启用来宾 SMB 登录）,通过本地组策略（适合 Win10 专业版/企业版）
+以管理员身份运行 PowerShell：
+
+```powershell
+Set-SmbClientConfiguration -RequireSecuritySignature $false -Force
+Set-SmbClientConfiguration -EnableInsecureGuestLogons $true -Force
+Get-SmbClientConfiguration | Format-List RequireSecuritySignature,EnableInsecureGuestLogons
+net use * /delete /y
+```
+
+预期结果：
+
+- `RequireSecuritySignature : False`
+- `EnableInsecureGuestLogons : True`
+
+如果本地组策略覆盖了设置，还需检查：
+
+- `计算机配置 -> Windows 设置 -> 安全设置 -> 本地策略 -> 安全选项 -> Microsoft 网络客户端: 始终进行数字签名` = `已禁用`
+- `计算机配置 -> 管理模板 -> 网络 -> Lanman 工作站 -> 启用不安全的来宾登录` = `已启用`
+
+### 回滚
+
+```powershell
+Set-SmbClientConfiguration -RequireSecuritySignature $true -Force
+Set-SmbClientConfiguration -EnableInsecureGuestLogons $false -Force
+```
+
+### 备选方案（通过本地组策略）
 
 1. `Win + R` → 输入 `gpedit.msc` → 回车。
 2. 路径：
-    
-    ```
-    计算机配置 → 管理模板 → 网络 → Lanman 工作站
-    
-    ```
-    
+   ```
+   计算机配置 → 管理模板 → 网络 → Lanman 工作站
+   ```
 3. 找到策略：
-    
-    **启用不安全的来宾登录 (Enable insecure guest logons)**
-    
+   **启用不安全的来宾登录 (Enable insecure guest logons)**
 4. 双击 → 选择 **已启用** → 确定。
 5. 运行 `gpupdate /force` 刷新策略。
 
