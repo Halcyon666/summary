@@ -1,0 +1,51 @@
+---
+id: see-image-uploader
+title: SEE Image Uploader
+sidebar_label: SEE Image Uploader
+sidebar_position: 10
+description: '在 VS Code 和 Typora 中把图片上传到 S.EE 的简洁使用说明。'
+tags:
+- tools
+- vscode
+- typora
+last_update:
+  date: '2026-03-17'
+  author: halcyon666
+---
+
+# SEE Image Uploader
+
+用于把图片上传到 `https://s.ee/`，支持在 VS Code 和 Typora 中使用。
+
+## 使用前准备
+
+先在 S.EE 获取 token，然后至少配置一种方式：
+
+```json
+"seeUploader.token": "your-token-here"
+```
+
+也可以使用环境变量：`SEE_UPLOADER_TOKEN`。
+
+## 在 VS Code 中使用
+
+- 在 VS Code Settings 中配置 `seeUploader.token`
+- Windows：`Ctrl+Alt+U` 上传剪贴板图片
+- 全平台：`Ctrl+Alt+P` 选择本地图片上传
+- 上传后会自动插入 Markdown 图片链接；如果没有激活编辑器，则复制到剪贴板
+
+## 在 Typora 中使用
+
+Typora -> Preferences -> Image -> Upload Service -> `Custom Command`
+
+- Windows：`"E:\all-project\vscode-see-uploader\typora\typora-see-upload.cmd"`
+- macOS：`/bin/sh "/path/to/vscode-see-uploader/typora/typora-see-upload.sh"`
+
+脚本会优先读取 `SEE_UPLOADER_TOKEN` / `SEE_TOKEN`，否则回退读取 VS Code 里的 `seeUploader.token`。
+
+## 说明
+
+- Windows 下 VS Code 支持剪贴板上传
+- macOS/Linux 下 VS Code 使用文件选择上传
+- Typora 通过自定义命令调用同一套上传逻辑
+
