@@ -15,7 +15,7 @@ references:
 - oh-my-opencode
 - vibe-coding
 last_update:
-  date: '2026-02-05'
+  date: '2026-03-22'
   author: halcyon666
 ---
 
@@ -86,15 +86,56 @@ source ~/.bashrc
 ### Verify
 
 ```shell
-which opencode   # Should be /usr/local/bin/opencode
+source ~/.bashrc
+which opencode   # Should be ~/.opencode/bin/opencode or /usr/local/bin/opencode
 opencode --version
 ```
+
+:::tip Actual Installation Location
+When installed using the official script, opencode is installed at `~/.opencode/bin/opencode`, and PATH is automatically added to `~/.bashrc`.
+:::
 
 ## 5. OpenCode Server
 
 - Docs: [windows-wsl](https://opencode.ai/docs/windows-wsl/)
-- Start Command: `opencode serve --hostname 0.0.0.0 --port 4096`
+- Start Command: `opencode serve --port 4096 --hostname 0.0.0.0`
+
+:::warning Note
+Arguments must be passed separately: `--port` and `--hostname` are independent parameters, cannot be combined.
+:::
+
 - Usage: Provide Desktop / Web Client remote access
+- Access Address: `http://0.0.0.0:4096` (accessible from other devices on the same network)
+
+## 5.1 oh-my-opencode Installation & Configuration
+
+### Install oh-my-opencode
+
+```shell
+# Global installation (requires root)
+sudo npm install -g oh-my-opencode
+```
+
+### Copy Configuration (if you already have config)
+
+Copy configuration from Windows to WSL:
+
+```shell
+# Copy opencode configuration
+cp /mnt/c/Users/YOUR_WINDOWS_USERNAME/.config/opencode/opencode.json ~/.config/opencode/
+cp /mnt/c/Users/YOUR_WINDOWS_USERNAME/.config/opencode/oh-my-opencode.json ~/.config/opencode/
+
+# Copy plugins (if any)
+cp -r /mnt/c/Users/YOUR_WINDOWS_USERNAME/.config/opencode/plugins ~/.config/opencode/
+
+# Set permissions
+chown -R ollama:ollama ~/.config/opencode
+```
+
+:::warning Notes
+- Absolute paths in Windows config files (like `E:\project\`) need to be manually changed to WSL paths (like `/mnt/e/project/`)
+- Windows batch file paths in MCP configuration need to be changed to WSL shell script paths
+:::
 
 ## 6. OpenCode Usage Mode Comparison
 
@@ -203,29 +244,32 @@ tmux kill-session -t dev
 
 ### Set Container Scrolling
 
-Write to tmux config file
-
-Edit:
-
-```
-~/.tmux.conf
-```
-
-Add a line:
+Write to tmux configuration file:
 
 ```shell
-echo 'set -g mouse on' | tee -a ~/.tmux.conf
-echo 'bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "clip.exe"' | tee -a ~/.tmux.conf
+# Method 1: Direct append
+echo 'set -g mouse on' >> ~/.tmux.conf
+echo 'bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "clip.exe"' >> ~/.tmux.conf
+
+# Method 2: Using tee (requires root)
+sudo tee -a ~/.tmux.conf << 'EOF'
+set -g mouse on
+bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "clip.exe"
+EOF
 ```
-
-
 
 ### Use with OpenCode
 
 ```shell
-# Create dev session and start opencode server in it
-tmux new -s dev -d 'opencode serve --hostname 0.0.0.0 --port 4096'
+# Method 1: Start server in tmux (recommended)
+tmux new -s opencode -d 'opencode serve --port 4096 --hostname 0.0.0.0'
+
+# Check server status
+tmux capture-pane -t opencode -p
 
 # Attach to view
-tmux attach -t dev
+tmux attach -t opencode
+
+# Detach session
+Ctrl+b d
 ```

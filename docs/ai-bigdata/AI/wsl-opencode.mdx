@@ -15,7 +15,7 @@ references:
 - oh-my-opencode
 - vibe-coding
 last_update:
-  date: '2026-02-05'
+  date: '2026-03-22'
   author: halcyon666
 ---
 
@@ -86,15 +86,56 @@ source ~/.bashrc
 ### 验证
 
 ```shell
-which opencode   # 应为 /usr/local/bin/opencode
+source ~/.bashrc
+which opencode   # 应为 ~/.opencode/bin/opencode 或 /usr/local/bin/opencode
 opencode --version
 ```
+
+:::tip 实际安装位置
+使用官方安装脚本安装时，opencode 默认安装在 `~/.opencode/bin/opencode`，且已自动添加到 `~/.bashrc` 的 PATH 中。
+:::
 
 ## 5. OpenCode Server
 
 - 文档: [windows-wsl](https://opencode.ai/docs/windows-wsl/)
-- 启动命令: `opencode serve --hostname 0.0.0.0 --port 4096`
+- 启动命令: `opencode serve --port 4096 --hostname 0.0.0.0`
+
+:::warning 注意
+参数必须分开传递：`--port` 和 `--hostname` 是独立的参数，不能合并。
+:::
+
 - 用途: 提供 Desktop / Web Client 远程接入
+- 访问地址: `http://0.0.0.0:4096`（在同一网络中可从其他设备访问）
+
+## 5.1 oh-my-opencode 安装配置
+
+### 安装 oh-my-opencode
+
+```shell
+# 全局安装（需要 root）
+sudo npm install -g oh-my-opencode
+```
+
+### 配置复制（如已有配置）
+
+从 Windows 复制配置到 WSL：
+
+```shell
+# 复制 opencode 配置
+cp /mnt/c/Users/YOUR_WINDOWS_USERNAME/.config/opencode/opencode.json ~/.config/opencode/
+cp /mnt/c/Users/YOUR_WINDOWS_USERNAME/.config/opencode/oh-my-opencode.json ~/.config/opencode/
+
+# 复制插件（如有）
+cp -r /mnt/c/Users/YOUR_WINDOWS_USERNAME/.config/opencode/plugins ~/.config/opencode/
+
+# 设置权限
+chown -R ollama:ollama ~/.config/opencode
+```
+
+:::warning 注意事项
+- Windows 配置文件中的绝对路径（如 `E:\project\`）需要手动改为 WSL 路径（如 `/mnt/e/project/`）
+- MCP 配置中的 Windows 批处理文件路径需要改为 WSL 的 shell 脚本路径
+:::
 
 ## 6. OpenCode 使用模式对比
 
@@ -203,30 +244,33 @@ tmux kill-session -t dev
 
 ### 设置容器滚动
 
-写入 tmux 配置文件
-
-编辑：
-
-```
-~/.tmux.conf
-```
-
-加入一行：
+写入 tmux 配置文件：
 
 ```shell
-echo 'set -g mouse on' | tee -a ~/.tmux.conf
-echo 'bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "clip.exe"' | tee -a ~/.tmux.conf
+# 方法一：直接追加配置
+echo 'set -g mouse on' >> ~/.tmux.conf
+echo 'bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "clip.exe"' >> ~/.tmux.conf
+
+# 方法二：使用 tee（需要 root 权限）
+sudo tee -a ~/.tmux.conf << 'EOF'
+set -g mouse on
+bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "clip.exe"
+EOF
 ```
-
-
 
 ### 配合 OpenCode 使用
 
 ```shell
-# 创建 dev 会话并在其中启动 opencode server
-tmux new -s dev -d 'opencode serve --hostname 0.0.0.0 --port 4096'
+# 方法一：在 tmux 中启动 server（推荐）
+tmux new -s opencode -d 'opencode serve --port 4096 --hostname 0.0.0.0'
+
+# 查看 server 状态
+tmux capture-pane -t opencode -p
 
 # 附加查看
-tmux attach -t dev
+tmux attach -t opencode
+
+# 分离会话
+Ctrl+b d
 ```
 
