@@ -1,0 +1,180 @@
+---
+id: sharpai-local-vs-cloud-llm-benchmark
+title: "SharpAI: Are Local Small Models Approaching the Usable Zone of Cloud Models?"
+sidebar_label: "SharpAI Local vs Cloud LLM Benchmark"
+sidebar_position: 17
+description: "In-depth analysis of SharpAI HomeSec-Bench: Qwen3.5-9B achieves 93.8% accuracy on MacBook Pro M5, only 4.1 points behind GPT-5.4. Is local AI inference entering the practical zone?"
+tags:
+  - AI
+  - LLM
+  - benchmark
+  - local-inference
+  - Qwen
+  - Apple Silicon
+last_update:
+  date: '2026-03-21'
+  author: halcyon666
+---
+
+## Background {#背景介绍}
+
+SharpAI is a team focused on local-first AI, with their product Aegis-AI being a localized AI home security system running on consumer hardware. They released **HomeSec-Bench**, a benchmark to evaluate LLM performance in real home security scenarios.
+
+The core question of this benchmark: **Can a 9B parameter local model achieve results close to cloud-tier models in a specific vertical domain (home security)?**
+
+## HomeSec-Bench Overview {#homesec-bench-基准测试概述}
+
+### Test Design {#测试设计}
+
+- **Test Count**: 96 LLM tests + 35 VLM tests
+- **Test Suites**: 15 dimensions
+- **Test Images**: All AI-generated (no real user footage)
+- **Model Compatibility**: Any OpenAI-compatible endpoint
+
+### Test Dimensions {#测试维度}
+
+| # | Suite Name | Tests | Evaluates |
+|----|------------|-------|-----------|
+| 1 | Context Preprocessing | 6 | Conversation deduplication, system message preservation |
+| 2 | Topic Classification | 4 | Routing queries to correct domain |
+| 3 | Knowledge Distillation | 5 | Extracting durable facts from conversations |
+| 4 | Event Deduplication | 8 | Identifying same person across cameras |
+| 5 | Tool Use | 16 | Selecting correct tools with correct parameters |
+| 6 | Chat & JSON Compliance | 11 | Persona, JSON output, multilingual |
+| 7 | Security Classification | 12 | Normal → Monitor → Suspicious → Critical |
+| 8 | Narrative Synthesis | 4 | Generating daily reports from event logs |
+| 9 | Prompt Injection Resistance | 4 | Role confusion, prompt extraction, escalation |
+| 10 | Multi-Turn Reasoning | 4 | Reference resolution, temporal carry-over |
+| 11 | Error Recovery | 4 | Handling impossible queries, API errors |
+| 12 | Privacy & Compliance | 3 | PII redaction, illegal surveillance rejection |
+| 13 | Alert Routing | 5 | Channel routing, quiet hours parsing |
+| 14 | Knowledge Injection | 5 | Using injected knowledge for personalized responses |
+| 15 | VLM-to-Alert Triage | 5 | End-to-end: VLM output → urgency → alert dispatch |
+
+## Benchmark Results {#基准测试结果}
+
+### Full Leaderboard {#完整排行榜}
+
+| Rank | Model | Type | Passed | Failed | Pass Rate | Total Time |
+|------|-------|------|--------|--------|-----------|------------|
+| 🥇 1 | GPT-5.4 | ☁️ Cloud | 94 | 2 | **97.9%** | 2m 22s |
+| 🥈 2 | GPT-5.4-mini | ☁️ Cloud | 92 | 4 | 95.8% | 1m 17s |
+| 🥉 3 | Qwen3.5-9B (Q4_K_M) | 🏠 Local | 90 | 6 | **93.8%** | 5m 23s |
+| 3 | Qwen3.5-27B (Q4_K_M) | 🏠 Local | 90 | 6 | 93.8% | 15m 8s |
+| 5 | Qwen3.5-122B-MoE (IQ1_M) | 🏠 Local | 89 | 7 | 92.7% | 8m 26s |
+| 5 | GPT-5.4-nano | ☁️ Cloud | 89 | 7 | 92.7% | 1m 34s |
+| 7 | Qwen3.5-35B-MoE (Q4_K_L) | 🏠 Local | 88 | 8 | 91.7% | 3m 30s |
+| 8 | GPT-5-mini (2025) | ☁️ Cloud | 60 | 36 | 62.5%* | 7m 38s |
+
+> \* GPT-5-mini had many failures due to API rejecting non-default temperature values. This is an API limitation, not model capability.
+
+### Performance Comparison {#性能对比}
+
+#### Time to First Token (TTFT)
+
+| Model | Type | TTFT (avg) | TTFT (p95) |
+|-------|------|------------|-------------|
+| **Qwen3.5-35B-MoE** | 🏠 Local | **435ms** | 673ms |
+| GPT-5.4-nano | ☁️ Cloud | 508ms | 990ms |
+| GPT-5.4-mini | ☁️ Cloud | 553ms | 805ms |
+| GPT-5.4 | ☁️ Cloud | 601ms | 1052ms |
+| Qwen3.5-9B | 🏠 Local | 765ms | 1437ms |
+| Qwen3.5-122B-MoE | 🏠 Local | 1627ms | 2331ms |
+| Qwen3.5-27B | 🏠 Local | 2156ms | 3642ms |
+
+#### Decode Speed (tokens/second)
+
+| Model | Type | Decode Speed |
+|-------|------|-------------|
+| GPT-5.4-mini | ☁️ Cloud | 234.5 tok/s |
+| GPT-5.4-nano | ☁️ Cloud | 136.4 tok/s |
+| GPT-5.4 | ☁️ Cloud | 73.4 tok/s |
+| Qwen3.5-35B-MoE | 🏠 Local | 41.9 tok/s |
+| Qwen3.5-9B | 🏠 Local | 25 tok/s |
+| Qwen3.5-122B-MoE | 🏠 Local | 18 tok/s |
+| Qwen3.5-27B | 🏠 Local | 10 tok/s |
+
+#### Memory Usage
+
+| Model | GPU Memory |
+|-------|-----------|
+| Qwen3.5-35B-MoE | 27.2 GB |
+| Qwen3.5-9B | 13.8 GB |
+| Qwen3.5-122B-MoE | 40.8 GB |
+| Qwen3.5-27B | 24.9 GB |
+
+## Key Findings Analysis {#关键发现分析}
+
+### 1. Official Claims {#官方宣称的亮点}
+
+SharpAI's official highlights:
+
+- **Qwen3.5-9B achieves 93.8% pass rate on MacBook Pro M5**
+- Gap with GPT-5.4 is only **4.1 percentage points**
+- Actually **beats GPT-5.4-nano by 1 percentage point**
+- Zero API costs, complete data privacy
+- Requires only **13.8 GB unified memory**
+
+### 2. Observable Facts {#可观察的事实}
+
+- **Test Environment**: MacBook Pro M5 (M5 Pro chip, 18 cores, 64GB unified memory), macOS 15.3
+- **Local Inference Engine**: llama.cpp (llama-server)
+- **Test Suite**: HomeSec-Bench v1, created by SharpAI
+- **Test Data**: All AI-generated (35 images)
+- **Cloud Comparison**: OpenAI API only (no Claude, Gemini, etc.)
+
+### 3. Areas Requiring Judgment {#需要保留判断的部分}
+
+| Factor | Note |
+|--------|------|
+| **Self-Built Benchmark** | HomeSec-Bench designed by SharpAI, test set may be biased toward their product use cases |
+| **Domain Specificity** | Home security is a vertical domain; results may differ in other scenarios (e.g., coding assistance, creative writing) |
+| **Synthetic Test Data** | All images are AI-generated, lacking complexity of real home environments |
+| **Quantization Impact** | Different quantization methods used (Q4_K_M, IQ1_M); impact on accuracy not analyzed separately |
+| **Limited Comparison** | Only OpenAI cloud models compared; Claude, Gemini, and other competitors not included |
+| **Hardware Limitation** | Apple Silicon only; performance on NVIDIA GPUs may differ |
+
+## My Assessment {#我的判断}
+
+### Local Small Models' Progress is Real
+
+Qwen3.5 series models' performance in vertical domain tasks is indeed impressive. A 9B model achieving 93.8% accuracy under resource constraints shows:
+
+1. **Mature Quantization**: Q4_K_M quantization significantly reduces memory requirements while maintaining performance
+2. **Efficient MoE Architecture**: Qwen3.5-35B-MoE's TTFT even beats all OpenAI cloud models
+3. **Vertical Domain Friendly**: Gap with cloud models can be acceptable in specific domains
+
+### But Maintain Rational Perspective
+
+1. **Benchmark Credibility**: Self-built benchmarks inevitably have optimization space; third-party benchmarks (like MMLU, HellaSwag) may show different conclusions
+2. **Generalization Gap**: Cloud models still have advantages in generalization, especially on unseen tasks
+3. **Ecosystem Completeness**: Cloud models typically come with better tooling and services; local models require additional maintenance
+
+### Use Case Recommendations {#适用场景建议}
+
+| Scenario | Recommendation |
+|----------|----------------|
+| **Privacy-sensitive** | ✅ Local model |
+| **Cost-sensitive** | ✅ Local model |
+| **Need latest model capabilities** | ⚠️ Cloud model |
+| **Need strong generalization** | ⚠️ Cloud model |
+| **Specific vertical domain** | ✅ Local model viable |
+
+## Conclusion {#结论}
+
+SharpAI's HomeSec-Bench shows that: **In specific vertical domains (like home security), local 9B models are indeed approaching the usable zone of cloud-tier models**. Qwen3.5-9B, with 93.8% pass rate, only 13.8GB memory footprint, and zero API costs, provides new possibilities for local AI applications.
+
+However, this conclusion should be understood in context:
+
+- Benchmark created by the product team, potential bias exists
+- Test scenario is highly vertical (home security), generalization ability questionable
+- Cloud models still have advantages in general tasks and latest capabilities
+
+**Local small models are approaching the usable zone of cloud models—at least in specific domains.**
+
+## Original Sources {#原文链接}
+
+- [SharpAI HomeSec-Bench Official Page](https://www.sharpai.org/benchmark/)
+- [HomeSec-Bench GitHub Repository](https://github.com/SharpAI/DeepCamera/tree/master/skills/analysis/home-security-benchmark)
+- [Aegis-AI Product Homepage](https://aegis.sharpai.org)
+- [DeepCamera Skill Platform](https://github.com/SharpAI/DeepCamera)

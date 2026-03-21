@@ -16,6 +16,21 @@
       "references": []
     },
     {
+      "id": "see-image-uploader",
+      "path": "/tools/NonDevelopment/see-image-uploader",
+      "name": "SEE Image Uploader",
+      "description": "在 VS Code 和 Typora 中把图片上传到 S.EE 的简洁使用说明。",
+      "allTags": [
+        "tools",
+        "vscode",
+        "typora"
+      ],
+      "group": "tools",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
       "id": "regex",
       "path": "/tools/NonDevelopment/regex",
       "name": "正则大全",
@@ -1989,6 +2004,24 @@
       ]
     },
     {
+      "id": "sharpai-local-vs-cloud-llm-benchmark",
+      "path": "/ai-bigdata/AI/sharpai-local-vs-cloud-llm-benchmark",
+      "name": "SharpAI：本地小模型正在逼近云端模型的可用区吗？",
+      "description": "深度分析 SharpAI HomeSec-Bench 基准测试：Qwen3.5-9B 在 MacBook Pro M5 上达到 93.8% 准确率，与 GPT-5.4 仅差 4.1 个百分点。本地 AI 推理是否已进入实用区间？",
+      "allTags": [
+        "AI",
+        "LLM",
+        "benchmark",
+        "本地推理",
+        "Qwen",
+        "Apple Silicon"
+      ],
+      "group": "AI",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
       "id": "prompt",
       "path": "/ai-bigdata/AI/prompt",
       "name": "Prompt",
@@ -2018,6 +2051,24 @@
       "val": 2,
       "sources": [
         "summary"
+      ],
+      "references": []
+    },
+    {
+      "id": "opencode-plugins",
+      "path": "/ai-bigdata/AI/opencode-plugins",
+      "name": "OpenCode plugins",
+      "description": "OpenCode 核心插件详解：多模型调度、上下文压缩、联网搜索与极速代码编辑",
+      "allTags": [
+        "opencode",
+        "plugins",
+        "ai",
+        "productivity"
+      ],
+      "group": "opencode",
+      "val": 1,
+      "sources": [
+        "opencode-configuration"
       ],
       "references": []
     },
@@ -2136,6 +2187,24 @@
       "references": [
         "future-vibecoding"
       ]
+    },
+    {
+      "id": "canary-ai-qa",
+      "path": "/ai-bigdata/AI/canary-ai-qa",
+      "name": "Canary：AI QA 测试代理深度分析",
+      "description": "深入分析 Canary 这类 AI QA 测试代理的产品定位、技术路径、差异化、局限性与未来价值。",
+      "allTags": [
+        "canary",
+        "ai",
+        "qa",
+        "testing",
+        "agent",
+        "vibe-coding"
+      ],
+      "group": "canary",
+      "val": 1,
+      "sources": [],
+      "references": []
     },
     {
       "id": "ai-problems",
