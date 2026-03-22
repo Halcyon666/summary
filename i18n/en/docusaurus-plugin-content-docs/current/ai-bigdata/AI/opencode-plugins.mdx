@@ -13,25 +13,50 @@ sources:
   - opencode-configuration
 references: []
 last_update:
-  date: '2025-02-27'
+  date: '2026-03-22'
   author: halcyon666
 ---
 
 # OpenCode Plugin Ecosystem
 
-OpenCode achieves powerful extensibility through its plugin system. This guide covers three core plugins that solve multi-model orchestration, context management, web search, and code editing efficiency challenges.
+OpenCode achieves powerful extensibility through its plugin system. This guide covers six core plugins that solve multi-model orchestration, context management, web search, code editing, knowledge learning, and authentication challenges.
 
 ## Core Plugins Overview
 
 | Plugin | Purpose | Source | Key Features |
 |---|---|---|---|
+| `oh-my-opencode` | Multi-model orchestration, sub-agent execution, autonomous workflows | npm | Professional agent orchestration |
 | `@tarquinen/opencode-dcp` | Auto-compress redundant context, save tokens | npm | Intelligent context compression |
 | `opencode-websearch-cited` | Web search with Google Search API | npm | Real-time information retrieval |
 | `morph-fast-apply` | Ultra-fast code editing (10,500+ tokens/s, 98% accuracy) | GitHub | High-speed code application |
+| `smart-codebase` | AI learns from sessions and code, generates SKILL files | npm | Continuous knowledge accumulation |
+| `opencode-openai-codex-auth` | OpenAI OAuth authentication | npm | Secure authentication |
 
 ---
 
-## 1. @tarquinen/opencode-dcp
+## 1. oh-my-opencode
+
+**Detailed installation and configuration guide**: [oh-my-opencode Installation Guide](./oh-my-opencode-installation-guide)
+
+### Core Capabilities
+
+- **Multi-Agent Architecture**: Built-in agents like Explore, Oracle, Librarian, Sisyphus for specialized tasks
+- **Category Routing**: Automatically selects optimal model based on task type
+- **Ultrawork Mode**: `/ulw` keyword triggers autonomous work
+- **Prometheus Planning**: Automatic decomposition, planning, and execution for complex projects
+- **Skills System**: Built-in skills like `playwright`, `frontend-ui-ux`, `git-master`
+
+### Installation
+
+```bash
+npm install oh-my-opencode@latest
+# or
+bun add oh-my-opencode
+```
+
+---
+
+## 2. @tarquinen/opencode-dcp
 
 ### Overview
 
@@ -88,7 +113,7 @@ DCP typically requires no additional configuration and auto-enables after instal
 
 ---
 
-## 2. opencode-websearch-cited
+## 3. opencode-websearch-cited
 
 ### Overview
 
@@ -177,7 +202,7 @@ sequenceDiagram
 
 ---
 
-## 3. morph-fast-apply
+## 4. morph-fast-apply
 
 ### Overview
 
@@ -310,43 +335,153 @@ Morph Fast Apply:
 
 ---
 
+## 5. smart-codebase
+
+### Overview
+
+**Smart-Codebase** is a knowledge accumulation plugin that enables OpenCode to learn from every session and codebase, automatically generating SKILL files. New sessions automatically load project context without repetitive explanations.
+
+### Core Capabilities
+
+- **Auto Learning**: Extracts knowledge from sessions, automatically writes SKILL files
+- **sc-init**: Scans source code, generates project skill files
+- **sc-update**: Analyzes current session, updates skill library
+- **Structured Storage**: SKILL.md + reference/*.md layered organization
+- **Cross-Session Persistence**: Knowledge saved in files, auto-loaded in next session
+
+### Installation
+
+```bash
+cd ~/.config/opencode
+npm install smart-codebase@latest
+
+# or using bun (recommended)
+bun add smart-codebase
+```
+
+### Usage
+
+```bash
+# Run slash commands in OpenCode
+/sc-init      # Initialize project skills
+/sc-update    # Extract knowledge from current session
+```
+
+### File Structure
+
+```
+~/.config/opencode/skills/
+└── <project-name>/
+    ├── SKILL.md           # Main skill file (auto-discovered)
+    └── reference/
+        ├── architecture.md  # Architecture documentation
+        ├── patterns.md      # Pattern documentation
+        └── gotchas.md       # Pitfall guide
+```
+
+### Workflow
+
+```mermaid
+graph TB
+    A[Working Session] --> B{Need Init?}
+    B -->|Yes| C[/sc-init]
+    B -->|No| D[Continue Working]
+    D --> E[/sc-update]
+    C --> F[AI Scans Source Code]
+    E --> G[AI Analyzes Session]
+    F --> H[Generate SKILL Files]
+    G --> I[Update SKILL Files]
+    H --> J[New Session Starts]
+    I --> J
+    J --> K[Auto-Load Skills]
+```
+
+### Best Practices
+
+1. **First Project**: Run `/sc-init` to establish baseline
+2. **Milestone Moments**: Run `/sc-update` to save important decisions
+3. **Knowledge Layering**: Summary in SKILL.md, details in reference/
+4. **Manual Review**: Regularly review generated skill files
+
+---
+
+## 6. opencode-openai-codex-auth
+
+### Overview
+
+**OpenAI Codex Auth** provides OpenAI OAuth authentication support for OpenCode's GPT model calls.
+
+### Installation
+
+```bash
+cd ~/.config/opencode
+npm install opencode-openai-codex-auth
+```
+
+### Configuration
+
+After installation, run:
+
+```bash
+opencode providers
+```
+
+Select OpenAI provider and complete OAuth authentication flow.
+
+---
+
 ## Plugin Synergy
 
-These three plugins work together seamlessly to form powerful workflows:
+These six plugins work together seamlessly to form powerful workflows:
 
 ### Typical Workflow Example
 
 ```mermaid
 graph LR
-    A[User Question] --> B{Need Web?}
-    B -->|Yes| C[websearch-cited]
-    B -->|No| D[Direct Processing]
-    C --> E[Get Latest Info]
-    E --> F[DCP Compress Context]
-    D --> F
-    F --> G{Need Code Edit?}
-    G -->|Yes| H[morph-fast-apply]
-    G -->|No| I[Return Result]
-    H --> I
+    A[User Question] --> B{Ultrawork?}
+    B -->|Yes| C[oh-my-opencode]
+    B -->|No| D{Need Web?}
+    C --> E[Explore + Research + Execute]
+    D -->|Yes| F[websearch-cited]
+    D -->|No| G[Direct Processing]
+    F --> H[DCP Compress Context]
+    E --> H
+    G --> H
+    H --> I{Need Code Edit?}
+    I -->|Yes| J[morph-fast-apply]
+    I -->|No| K{Need Learning?}
+    J --> L[Return Result]
+    K -->|Yes| M[smart-codebase]
+    K -->|No| L
+    M --> L
 ```
 
-### Real-World Case: Tech Stack Upgrade
+### Real-World Case: Complex Project Refactoring
 
 ```
-User: Help me upgrade project from Vue 2 to Vue 3, referencing latest best practices
+User: Refactor my e-commerce backend, referencing latest microservice best practices
 
-Step 1: [websearch-cited search]
-→ Get Vue 3 migration guide and best practices
+Step 1: [oh-my-opencode Planning]
+→ Prometheus analyzes project structure
+→ Generate refactoring plan
 
-Step 2: [DCP compression]
-→ Compress search results, retain key migration steps
+Step 2: [websearch-cited Search]
+→ Get microservice architecture best practices
+→ Get relevant technical documentation
 
-Step 3: [morph-fast-apply execution]
-→ Batch update component syntax
-→ Convert to Composition API
-→ Update dependency configs
+Step 3: [DCP Compression]
+→ Compress search results
+→ Retain key migration steps
 
-Result: Complete tech stack upgrade in < 2 minutes
+Step 4: [morph-fast-apply Execution]
+→ Batch update code
+→ Preserve functionality
+
+Step 5: [smart-codebase Learning]
+→ /sc-update saves decisions
+→ Next session auto-loads
+
+Result: Complete tech stack refactoring in < 10 minutes
 ```
 
 ---
@@ -357,12 +492,16 @@ Result: Complete tech stack upgrade in < 2 minutes
 
 | Use Case | Recommended Plugin | Reason |
 |---|---|---|
+| Multi-model orchestration/sub-agents | oh-my-opencode | Professional agent orchestration |
 | Long conversation optimization | DCP | Auto-manages context, reduces costs |
 | Need latest information | websearch-cited | Real-time web search |
 | Large-scale code changes | morph-fast-apply | Fast with high accuracy |
+| Knowledge accumulation/learning | smart-codebase | Auto-learn from sessions |
 | Technical research | websearch-cited | Authoritative sources |
 | Code refactoring | morph-fast-apply | Strong batch processing |
 | Token cost control | DCP | Intelligent redundancy compression |
+| OpenAI authentication | openai-codex-auth | OAuth secure auth |
+| Autonomous work | oh-my-opencode | Ultrawork mode |
 
 ### Cost-Benefit Analysis
 
@@ -400,7 +539,8 @@ cd ~/.config/opencode || exit
 # Install npm plugins
 echo "📦 Installing npm plugins..."
 npm install @tarquinen/opencode-dcp@latest \
-            opencode-websearch-cited@latest
+            opencode-websearch-cited@latest \
+            smart-codebase@latest
 
 # Install morph-fast-apply
 echo "📦 Installing morph-fast-apply..."
@@ -409,27 +549,36 @@ git clone https://github.com/JRedeker/opencode-morph-fast-apply plugins/morph-fa
 cd plugins/morph-fast-apply
 npm install
 
+# oh-my-opencode detailed config in ./oh-my-opencode-installation-guide
+npm install oh-my-opencode@latest
+
+# Symlink smart-codebase to plugins (if needed)
+ln -sf ../node_modules/smart-codebase plugins/smart-codebase
+
 echo "✅ All plugins installed!"
 echo "⚠️  Please configure these environment variables:"
-echo "   - MORPH_API_KEY (required)"
-echo "   - GOOGLE_SEARCH_API_KEY (optional)"
-echo "   - GOOGLE_SEARCH_ENGINE_ID (optional)"
+echo "   - MORPH_API_KEY (required for morph-fast-apply)"
+echo "   - GOOGLE_SEARCH_API_KEY (optional for websearch)"
+echo "   - GOOGLE_SEARCH_ENGINE_ID (optional for websearch)"
 ```
 
 ### Verify Installation
 
 ```bash
 # Check plugin loading status
-opencode debug config | grep -A 5 "plugins"
+opencode debug config | grep -A 10 "plugins"
 
 # Test DCP
-opencode run "Long conversation test" --verbose
+opencode run "Long conversation test"
 
 # Test websearch-cited
-opencode run "Search latest AI news" --model=google/gemini-2.5-flash
+opencode run "Search latest AI news"
 
 # Test morph-fast-apply
-opencode run "Create a simple React component" --model=duojie/claude-sonnet-4-5
+opencode run "Create a simple React component"
+
+# Initialize smart-codebase (first time)
+opencode run "/sc-init"
 ```
 
 ---
@@ -451,12 +600,21 @@ opencode run "Create a simple React component" --model=duojie/claude-sonnet-4-5
 ### Q4: Which models do these plugins support?
 
 **A:** 
-- DCP and websearch-cited: Support all OpenCode-compatible models
+- DCP, websearch-cited, smart-codebase: Support all OpenCode-compatible models
 - morph-fast-apply: Uses dedicated Morph API, independent of main model
+- oh-my-opencode: Selects different models based on configuration (GPT, Claude, Gemini, etc.)
 
 ### Q5: Can I install only some plugins?
 
-**A:** Yes. These three plugins are completely independent and can be selectively installed based on needs.
+**A:** Yes. These six plugins are completely independent and can be selectively installed based on needs.
+
+### Q6: What's the difference between smart-codebase and oh-my-opencode's knowledge systems?
+
+**A:** 
+- **smart-codebase**: Extracts knowledge from current session, automatically generates SKILL files. Suitable for project-level knowledge accumulation.
+- **oh-my-opencode**: Built-in skills system with preset skills like `playwright`, `frontend-ui-ux`. Suitable for cross-project reuse.
+
+The two can be used together: oh-my-opencode provides base skills, smart-codebase supplements project-specific knowledge.
 
 ---
 
@@ -511,11 +669,14 @@ opencode run "Create a simple React component" --model=duojie/claude-sonnet-4-5
 
 ## Summary
 
-These three core plugins represent the powerful extensibility of the OpenCode ecosystem:
+These six core plugins represent the powerful extensibility of the OpenCode ecosystem:
 
+- **oh-my-opencode**: Multi-model orchestration, sub-agent execution, Ultrawork autonomous work
 - **@tarquinen/opencode-dcp**: Makes long conversations more economical and efficient
 - **opencode-websearch-cited**: Connects to real-time internet knowledge
 - **morph-fast-apply**: Elevates code editing speed to new heights
+- **smart-codebase**: Enables AI to continuously learn from sessions
+- **opencode-openai-codex-auth**: Secure OAuth authentication
 
 By properly combining these plugins, you can build extremely efficient AI-assisted development workflows, dramatically reducing time and cost investment while maintaining high-quality output.
 
@@ -524,7 +685,7 @@ By properly combining these plugins, you can build extremely efficient AI-assist
 ## Related Resources
 
 - [OpenCode Official Documentation](https://opencode.dev)
+- [oh-my-opencode Detailed Guide](./oh-my-opencode-installation-guide)
 - [Morph LLM Dashboard](https://morphllm.com/dashboard)
 - [Google Custom Search API](https://developers.google.com/custom-search)
-- [oh-my-opencode Installation Guide](./oh-my-opencode-installation-guide)
 - [OpenCode Skills Ecosystem](./owesome-ai-skills)
