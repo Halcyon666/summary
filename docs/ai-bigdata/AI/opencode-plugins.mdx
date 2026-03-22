@@ -383,17 +383,17 @@ bun add smart-codebase
 
 ```mermaid
 graph TB
-    A[工作会话] --> B{需要初始化?}
-    B -->|是| C[/sc-init]
-    B -->|否| D[继续工作]
+    A[Working Session] --> B{Need Init?}
+    B -->|Yes| C[/sc-init]
+    B -->|No| D[Continue]
     D --> E[/sc-update]
-    C --> F[AI 扫描源代码]
-    E --> G[AI 分析会话]
-    F --> H[生成 SKILL 文件]
-    G --> I[更新 SKILL 文件]
-    H --> J[新会话开始]
+    C --> F[AI Scan Code]
+    E --> G[AI Analyze Session]
+    F --> H[Generate SKILL]
+    G --> I[Update SKILL]
+    H --> J[New Session]
     I --> J
-    J --> K[自动加载技能]
+    J --> K[Auto-Load]
 ```
 
 ### 最佳实践
