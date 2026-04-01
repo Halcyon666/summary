@@ -112,11 +112,27 @@
         "tools"
       ],
       "group": "development",
-      "val": 3,
+      "val": 4,
       "sources": [
         "develop-software-tips"
       ],
       "references": []
+    },
+    {
+      "id": "git-branch-manage",
+      "path": "/tools/Development/git-branch-manage",
+      "name": "Git分支管理规范",
+      "description": "Git分支管理规范",
+      "allTags": [
+        "development",
+        "tools"
+      ],
+      "group": "development",
+      "val": 2,
+      "sources": [],
+      "references": [
+        "git-commands"
+      ]
     },
     {
       "id": "develop-software-tips",
@@ -2382,6 +2398,10 @@
     },
     {
       "source": "develop-software-tips",
+      "target": "git-commands"
+    },
+    {
+      "source": "git-branch-manage",
       "target": "git-commands"
     },
     {
