@@ -1,0 +1,166 @@
+---
+id: git-branch-manage
+title: Git分支管理规范
+sidebar_label: Git分支管理规范
+sidebar_position: 2
+description: Git分支管理规范
+tags:
+- development
+- tools
+last_update:
+  date: '2026-04-01'
+  author: halcyon666
+sources:
+
+references:
+- git-commands
+---
+
+# 多环境多分支管理规范
+
+## 背景
+
+在多环境、多版本并行开发的场景下，容易出现分支职责不清、修复传播混乱、环境分支反向污染版本分支等问题。本规范约定统一的分支管理方式。
+
+适用分支模型：
+
+| 分支类型 | 分支名 | 说明 |
+|---------|--------|------|
+| 环境分支 | `a` / `b` / `c` | 分别对应开发、测试、验收环境 |
+| 版本分支 | `202603` / `202604` 等 | 按月划分的版本主线 |
+| 功能分支 | `feature/*` / `bugfix/*` | 具体功能或修复 |
+
+---
+
+## 核心规则
+
+1. **版本分支是唯一代码源头**。所有功能和修复先进版本分支，再进环境分支。
+2. **环境分支只做部署验证**，不做版本沉淀，不作为下个版本的来源。
+3. **整版推进用 merge，单点修复用 cherry-pick**。
+4. **下个版本从上个版本分支切出**，不从环境分支切。
+
+---
+
+## merge 与 cherry-pick 的使用场景
+
+**用 merge（整条线推进）：**
+
+- `feature/*` → `202604`（功能合入版本）
+- `202604` → `a` → `b` → `c`（版本进入环境链）
+
+**用 cherry-pick（单点修复传播）：**
+
+- `202603` 的 fix 同步到 `202604`
+- 环境分支上先修的 bug 补回版本分支
+
+---
+
+## 标准操作流程
+
+### 功能开发
+
+```bash
+# 从版本分支创建功能分支
+git checkout 202604
+git pull
+git checkout -b feature/order
+
+# 开发完成后，先拉取最新版本分支到 feature 分支，在 feature 侧解决冲突
+git checkout feature/order
+git merge 202604
+# 解决冲突、测试通过后，再合回版本分支
+git checkout 202604
+git merge --no-ff feature/order
+```
+
+### 版本进入环境链
+
+```bash
+# 202604 -> a -> b -> c
+git checkout a && git pull && git merge 202604
+git checkout b && git pull && git merge a
+git checkout c && git pull && git merge b
+```
+
+### 跨版本修复传播
+
+当 `202603` 修了 bug，`202604` 也需要时：
+
+```bash
+# 1. 在当前版本修复
+git checkout 202603 && git pull
+git checkout -b hotfix/202603-critical-fix
+# ... 修复 ...
+git add . && git commit -m "fix: 修复严重问题"
+git checkout 202603 && git merge --no-ff hotfix/202603-critical-fix
+
+# 2. 当前版本走环境链部署修复
+git checkout a && git pull && git merge 202603
+git checkout b && git pull && git merge a
+git checkout c && git pull && git merge b
+
+# 3. cherry-pick 到新版本
+git checkout 202604 && git pull
+git cherry-pick <fix-commit-id>
+```
+
+### 环境分支上紧急修复
+
+如果必须先在环境分支上修，修完后**必须补回版本分支**。
+
+例如 `c` 当前部署的是 `202604`，验收时发现 bug：
+
+```bash
+# 在 c（当前跑 202604）上紧急修复
+git checkout c
+git checkout -b bugfix/c-login-timeout
+git add . && git commit -m "fix: 修复登录超时"
+git checkout c && git merge --no-ff bugfix/c-login-timeout
+
+# 补回版本分支
+git checkout 202604
+git cherry-pick <fix-commit-id>
+```
+
+### 创建下个版本
+
+```bash
+# 正确：从版本分支切出
+git checkout 202603
+git checkout -b 202604
+
+# 错误：不要从环境分支切出（会带入环境特有内容）
+# git checkout c && git checkout -b 202604  ← 禁止
+```
+
+---
+
+## 单版本场景的特殊处理
+
+但一旦有多版本并行，就必须走版本分支传播，不能走环境分支回流。
+
+```bash
+// 禁止反向传播分支
+git checkout b && git merge c
+git checkout a && git merge b
+```
+
+---
+
+## 禁止事项
+
+- **禁止环境分支整体 merge 回版本分支**（`a` → `202604`），需要单个 fix 就用 cherry-pick。
+- **禁止环境分支与版本分支双向反复 merge**，这会导致职责边界消失。
+- **禁止从环境分支生成新版本**。
+
+---
+
+## 速查表
+
+| 场景 | 方式 | 示例 |
+|------|------|------|
+| 功能合入版本 | merge | `feature/*` → `202604` |
+| 版本进入环境 | merge | `202604` → `a` → `b` → `c` |
+| 老版本 fix 同步到新版本 | merge（部分同步用 cherry-pick） | `202604` merge `202603` |
+| 环境先修，补回版本 | cherry-pick | `c` fix → `202604` |
+| 创建下个版本 | 从版本分支切出 | `202603` → `202604` |

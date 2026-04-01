@@ -1,0 +1,166 @@
+---
+id: git-branch-manage
+title: Git Branch Management
+sidebar_label: Git Branch Management
+sidebar_position: 2
+description: Git Branch Management
+tags:
+- development
+- tools
+last_update:
+  date: '2026-04-01'
+  author: halcyon666
+sources:
+
+references:
+- git-commands
+---
+
+# Multi-Environment Branch Management
+
+## Background
+
+When developing with multiple environments and parallel versions, common issues include unclear branch responsibilities, chaotic fix propagation, and environment branches polluting version branches. This document defines a unified branching strategy.
+
+Branch model:
+
+| Branch Type | Branch Name | Description |
+|-------------|-------------|-------------|
+| Environment | `a` / `b` / `c` | Dev, Test, Acceptance environments |
+| Version | `202603` / `202604` etc. | Monthly version mainlines |
+| Feature | `feature/*` / `bugfix/*` | Individual features or fixes |
+
+---
+
+## Core Rules
+
+1. **Version branches are the single source of truth.** All features and fixes go into the version branch first, then into environment branches.
+2. **Environment branches are for deployment and verification only** — not for accumulating version content or creating new versions.
+3. **Use merge for full-line promotion, cherry-pick for individual fixes.**
+4. **Create new versions from the previous version branch**, never from environment branches.
+
+---
+
+## When to Use merge vs. cherry-pick
+
+**Use merge (full-line promotion):**
+
+- `feature/*` → `202604` (feature into version)
+- `202604` → `a` → `b` → `c` (version into environment chain)
+
+**Use cherry-pick (individual fix propagation):**
+
+- A fix from `202603` needs to go to `202604`
+- A hotfix made on an environment branch needs to be backported to the version branch
+
+---
+
+## Standard Workflows
+
+### Feature Development
+
+```bash
+# Create a feature branch from the version branch
+git checkout 202604
+git pull
+git checkout -b feature/order
+
+# Before merging back, pull latest version branch into feature branch to resolve conflicts there
+git checkout feature/order
+git merge 202604
+# After resolving conflicts and passing tests, merge back into version branch
+git checkout 202604
+git merge --no-ff feature/order
+```
+
+### Promoting a Version to Environments
+
+```bash
+# 202604 -> a -> b -> c
+git checkout a && git pull && git merge 202604
+git checkout b && git pull && git merge a
+git checkout c && git pull && git merge b
+```
+
+### Cross-Version Fix Propagation
+
+When `202603` has a bug fix that `202604` also needs:
+
+```bash
+# 1. Fix on the current version
+git checkout 202603 && git pull
+git checkout -b hotfix/202603-critical-fix
+# ... fix ...
+git add . && git commit -m "fix: critical issue"
+git checkout 202603 && git merge --no-ff hotfix/202603-critical-fix
+
+# 2. Deploy the fix through the environment chain
+git checkout a && git pull && git merge 202603
+git checkout b && git pull && git merge a
+git checkout c && git pull && git merge b
+
+# 3. Cherry-pick into the new version
+git checkout 202604 && git pull
+git cherry-pick <fix-commit-id>
+```
+
+### Hotfix on Environment Branches
+
+If a fix must be applied directly on an environment branch, it **must be backported to the version branch** afterward.
+
+For example, `c` is currently running `202604` and a bug is found during acceptance testing:
+
+```bash
+# Hotfix on c (currently running 202604)
+git checkout c
+git checkout -b bugfix/c-login-timeout
+git add . && git commit -m "fix: login timeout"
+git checkout c && git merge --no-ff bugfix/c-login-timeout
+
+# Backport to version branch
+git checkout 202604
+git cherry-pick <fix-commit-id>
+```
+
+### Creating the Next Version
+
+```bash
+# Correct: branch off from the version branch
+git checkout 202603
+git checkout -b 202604
+
+# Wrong: never branch off from an environment branch (carries environment-specific content)
+# git checkout c && git checkout -b 202604  ← forbidden
+```
+
+---
+
+## Single-Version Scenario
+
+When multiple versions run in parallel, fixes must propagate through version branches — not through reverse environment branch merges.
+
+```bash
+// Reverse environment branch propagation is forbidden
+git checkout b && git merge c
+git checkout a && git merge b
+```
+
+---
+
+## Prohibited Practices
+
+- **Do not merge environment branches back into version branches** (`a` → `202604`). Use cherry-pick for individual fixes instead.
+- **Do not create bidirectional merge loops** between environment and version branches — this erases responsibility boundaries.
+- **Do not create new versions from environment branches.**
+
+---
+
+## Quick Reference
+
+| Scenario | Method | Example |
+|----------|--------|---------|
+| Feature into version | merge | `feature/*` → `202604` |
+| Version into environments | merge | `202604` → `a` → `b` → `c` |
+| Sync old version fixes to new version | merge (cherry-pick for partial sync) | `202604` merge `202603` |
+| Hotfix on env, backport to version | cherry-pick | `c` fix → `202604` |
+| Create next version | Branch from version | `202603` → `202604` |
