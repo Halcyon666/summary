@@ -1,5 +1,9 @@
 # Website
 
+![Cloudflare Pages](https://img.shields.io/badge/Cloudflare%20Pages-Hosted-F38020?style=flat-square&logo=cloudflare&logoColor=white)
+[![Deploy Summary](https://github.com/Halcyon666/summary/actions/workflows/deploy.yml/badge.svg?style=flat-square)](https://github.com/Halcyon666/summary/actions/workflows/deploy.yml)
+[![Baidu SEO Push](https://github.com/Halcyon666/summary/actions/workflows/baidu-push.yml/badge.svg?style=flat-square)](https://github.com/Halcyon666/summary/actions/workflows/baidu-push.yml)
+
 This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
 
 ## Installation
