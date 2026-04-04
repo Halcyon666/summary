@@ -2033,24 +2033,6 @@
       ]
     },
     {
-      "id": "sharpai-local-vs-cloud-llm-benchmark",
-      "path": "/ai-bigdata/AI/sharpai-local-vs-cloud-llm-benchmark",
-      "name": "SharpAI：本地小模型正在逼近云端模型的可用区吗？",
-      "description": "深度分析 SharpAI HomeSec-Bench 基准测试：Qwen3.5-9B 在 MacBook Pro M5 上达到 93.8% 准确率，与 GPT-5.4 仅差 4.1 个百分点。本地 AI 推理是否已进入实用区间？",
-      "allTags": [
-        "AI",
-        "LLM",
-        "benchmark",
-        "本地推理",
-        "Qwen",
-        "Apple Silicon"
-      ],
-      "group": "AI",
-      "val": 1,
-      "sources": [],
-      "references": []
-    },
-    {
       "id": "prompt",
       "path": "/ai-bigdata/AI/prompt",
       "name": "Prompt",
