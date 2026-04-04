@@ -186,11 +186,6 @@ const config: Config = {
         { to: "/blog", label: "blog", position: "left" },
         { to: "/graph", label: "graph", position: "left" },
         {
-          href: "https://t.me/+3EVR-TOB7GQwOWQ1",
-          label: "Telegram",
-          position: "right",
-        },
-        {
           href: "https://github.com/Halcyon666/",
           label: "GitHub",
           position: "right",

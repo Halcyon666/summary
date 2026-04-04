@@ -27,7 +27,7 @@ function HomepageHeader() {
               padding: "0.8rem 1.5rem",
             }}
           >
-            Explore Blogs
+            <Translate id="homepage.exploreBlogs">Explore Blogs</Translate>
           </Link>
           <Link
             className="button button--secondary button--lg"
@@ -37,7 +37,7 @@ function HomepageHeader() {
               padding: "0.8rem 1.5rem",
             }}
           >
-            About Me
+            <Translate id="homepage.aboutMe">About Me</Translate>
           </Link>
 
         </div>
