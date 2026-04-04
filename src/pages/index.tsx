@@ -48,6 +48,7 @@ function HomepageHeader() {
 
 const KNOWLEDGE_MAP = [
   {
+    id: 'devops',
     title: '运维与架构',
     description: '深入 Docker、Kubernetes、CI/CD 及云原生基础设施建设。',
     link: '/devops',
@@ -55,6 +56,7 @@ const KNOWLEDGE_MAP = [
     gradient: 'linear-gradient(135deg, #00c6ff 0%, #0072ff 100%)',
   },
   {
+    id: 'backend',
     title: '后端开发',
     description: '探索 Java 核心、Spring Boot微服务架构及企业级设计模式。',
     link: '/background',
@@ -62,6 +64,7 @@ const KNOWLEDGE_MAP = [
     gradient: 'linear-gradient(135deg, #f12711 0%, #f5af19 100%)',
   },
   {
+    id: 'frontend',
     title: '前端沉淀',
     description: '掌握 React、现代 TS 栈开发及前沿 Web 交互技术。',
     link: '/Frontend',
@@ -69,6 +72,7 @@ const KNOWLEDGE_MAP = [
     gradient: 'linear-gradient(135deg, #b06ab3 0%, #4568dc 100%)',
   },
   {
+    id: 'ai',
     title: 'AI 与大数据',
     description: '关注大语言模型探索、Prompt 工程及大数据处理体系。',
     link: '/ai-bigdata',
@@ -76,6 +80,7 @@ const KNOWLEDGE_MAP = [
     gradient: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
   },
   {
+    id: 'tools',
     title: '效能工具箱',
     description: '沉淀 Git 规范、终端进阶、自动化脚本与最高效的开发利器。',
     link: '/tools',
@@ -102,8 +107,12 @@ export default function Home(): JSX.Element {
               style={{ background: item.gradient }}
             >
               <span className={styles.cardIcon}>{item.icon}</span>
-              <h3 className={styles.cardTitle}>{item.title}</h3>
-              <p className={styles.cardDesc}>{item.description}</p>
+              <h3 className={styles.cardTitle}>
+                <Translate id={`homepage.cards.${item.id}.title`}>{item.title}</Translate>
+              </h3>
+              <p className={styles.cardDesc}>
+                <Translate id={`homepage.cards.${item.id}.desc`}>{item.description}</Translate>
+              </p>
             </Link>
           ))}
         </div>

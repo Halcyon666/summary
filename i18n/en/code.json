@@ -649,5 +649,35 @@
   },
   "homepage.functionalRegisterEngineDesc": {
     "message": "Explore the design of a functional register engine."
+  },
+  "homepage.cards.devops.title": {
+    "message": "DevOps & Architecture"
+  },
+  "homepage.cards.devops.desc": {
+    "message": "Dive deep into Docker, Kubernetes, CI/CD, and cloud-native infrastructure."
+  },
+  "homepage.cards.backend.title": {
+    "message": "Backend Development"
+  },
+  "homepage.cards.backend.desc": {
+    "message": "Explore Java core, Spring Boot microservices, and enterprise design patterns."
+  },
+  "homepage.cards.frontend.title": {
+    "message": "Frontend Insights"
+  },
+  "homepage.cards.frontend.desc": {
+    "message": "Master React, modern TS stack, and cutting-edge Web interactive technologies."
+  },
+  "homepage.cards.ai.title": {
+    "message": "AI & Big Data"
+  },
+  "homepage.cards.ai.desc": {
+    "message": "Focus on LLM exploration, Prompt engineering, and big data processing ecosystems."
+  },
+  "homepage.cards.tools.title": {
+    "message": "Efficiency Toolbox"
+  },
+  "homepage.cards.tools.desc": {
+    "message": "Accumulate Git standards, terminal advanced usage, automation scripts, and highly efficient dev tools."
   }
 }

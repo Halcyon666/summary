@@ -649,5 +649,35 @@
   },
   "homepage.functionalRegisterEngineDesc": {
     "message": "探索函数式注册引擎的设计。"
+  },
+  "homepage.cards.devops.title": {
+    "message": "运维与架构"
+  },
+  "homepage.cards.devops.desc": {
+    "message": "深入 Docker、Kubernetes、CI/CD 及云原生基础设施建设。"
+  },
+  "homepage.cards.backend.title": {
+    "message": "后端开发"
+  },
+  "homepage.cards.backend.desc": {
+    "message": "探索 Java 核心、Spring Boot微服务架构及企业级设计模式。"
+  },
+  "homepage.cards.frontend.title": {
+    "message": "前端沉淀"
+  },
+  "homepage.cards.frontend.desc": {
+    "message": "掌握 React、现代 TS 栈开发及前沿 Web 交互技术。"
+  },
+  "homepage.cards.ai.title": {
+    "message": "AI 与大数据"
+  },
+  "homepage.cards.ai.desc": {
+    "message": "关注大语言模型探索、Prompt 工程及大数据处理体系。"
+  },
+  "homepage.cards.tools.title": {
+    "message": "效能工具箱"
+  },
+  "homepage.cards.tools.desc": {
+    "message": "沉淀 Git 规范、终端进阶、自动化脚本与最高效的开发利器。"
   }
 }
