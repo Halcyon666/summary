@@ -3,6 +3,7 @@
     "position": 1,
     "link": {
         "type": "generated-index",
+        "slug": "/background",
         "description": "Core technical knowledge including Java, databases, middleware, and algorithms."
     }
 }

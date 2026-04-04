@@ -3,6 +3,7 @@
     "position": 5,
     "link": {
         "type": "generated-index",
+        "slug": "/ai-bigdata",
         "description": "Big data technologies (Hadoop, Flink, HBase) and AI/ML concepts."
     }
 }

@@ -46,6 +46,44 @@ function HomepageHeader() {
   );
 }
 
+const KNOWLEDGE_MAP = [
+  {
+    title: '运维与架构',
+    description: '深入 Docker、Kubernetes、CI/CD 及云原生基础设施建设。',
+    link: '/devops',
+    icon: '☁️',
+    gradient: 'linear-gradient(135deg, #00c6ff 0%, #0072ff 100%)',
+  },
+  {
+    title: '后端开发',
+    description: '探索 Java 核心、Spring Boot微服务架构及企业级设计模式。',
+    link: '/background',
+    icon: '☕',
+    gradient: 'linear-gradient(135deg, #f12711 0%, #f5af19 100%)',
+  },
+  {
+    title: '前端沉淀',
+    description: '掌握 React、现代 TS 栈开发及前沿 Web 交互技术。',
+    link: '/Frontend',
+    icon: '⚛️',
+    gradient: 'linear-gradient(135deg, #b06ab3 0%, #4568dc 100%)',
+  },
+  {
+    title: 'AI 与大数据',
+    description: '关注大语言模型探索、Prompt 工程及大数据处理体系。',
+    link: '/ai-bigdata',
+    icon: '🤖',
+    gradient: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
+  },
+  {
+    title: '效能工具箱',
+    description: '沉淀 Git 规范、终端进阶、自动化脚本与最高效的开发利器。',
+    link: '/tools',
+    icon: '🛠️',
+    gradient: 'linear-gradient(135deg, #373B44 0%, #4286f4 100%)',
+  },
+];
+
 export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
   return (
@@ -54,46 +92,21 @@ export default function Home(): JSX.Element {
       description="Explore blogs, tutorials, and more by halcyon666"
     >
       <HomepageHeader />
-      <main className={styles.main}>
-        <section className={styles.featureSection}>
-          <h2 style={{ marginBottom: "20px", textAlign: "center" }}>
-            Featured Blogs
-          </h2>
-          <p style={{ marginBottom: "20px", textAlign: "center" }}>
-            Check out some of the most popular articles!
-          </p>
-          <div
-            className={styles.featureGrid}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-              gap: "20px",
-              padding: "0 2rem",
-            }}
-          >
+      <main className={styles.knowledgeSection}>
+        <div className={styles.knowledgeGrid}>
+          {KNOWLEDGE_MAP.map((item, idx) => (
             <Link
-              to="/frontend/react/basic-react"
-              className={styles.featureCard}
+              key={idx}
+              to={item.link}
+              className={styles.knowledgeCard}
+              style={{ background: item.gradient }}
             >
-              <h3><Translate id="homepage.reactTutorial">React 教程</Translate></h3>
-              <p><Translate id="homepage.reactTutorialDesc">学习 React 基础并构建出色的应用。</Translate></p>
+              <span className={styles.cardIcon}>{item.icon}</span>
+              <h3 className={styles.cardTitle}>{item.title}</h3>
+              <p className={styles.cardDesc}>{item.description}</p>
             </Link>
-            <Link
-              to="/devops/docker/Docker-Command-and-Dockerfile"
-              className={styles.featureCard}
-            >
-              <h3><Translate id="homepage.dockerGuide">Docker 指南</Translate></h3>
-              <p><Translate id="homepage.dockerGuideDesc">掌握 Docker 容器化技术。</Translate></p>
-            </Link>
-            <Link
-              to="/background/Java/design-pattern/functional-register-engine"
-              className={styles.featureCard}
-            >
-              <h3><Translate id="homepage.functionalRegisterEngine">Java 函数式注册引擎</Translate></h3>
-              <p><Translate id="homepage.functionalRegisterEngineDesc">探索函数式注册引擎的设计。</Translate></p>
-            </Link>
-          </div>
-        </section>
+          ))}
+        </div>
       </main>
     </Layout>
   );

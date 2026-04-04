@@ -3,6 +3,7 @@
     "position": 3,
     "link": {
         "type": "generated-index",
+        "slug": "/devops",
         "description": "Linux, Docker, Kubernetes, and deployment infrastructure."
     }
 }

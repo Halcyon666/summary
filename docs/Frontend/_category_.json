@@ -3,6 +3,7 @@
     "position": 2,
     "link": {
         "type": "generated-index",
+        "slug": "/Frontend",
         "description": "Modern frontend technologies including React, Vue, CSS, and development tools."
     }
 }
