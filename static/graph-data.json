@@ -29,6 +29,22 @@
       "references": []
     },
     {
+      "id": "win11-release-update",
+      "path": "/tools/NonDevelopment/win11-release-update",
+      "name": "W11更新 跳过TPM",
+      "description": "[](https://www.microsoft.com/zh-cn/software-download/windows11) 打开解压后的 sources文件夹，删除appraiserres.dll文件",
+      "allTags": [
+        "books",
+        "learning"
+      ],
+      "group": "books",
+      "val": 3,
+      "sources": [
+        "command-usage"
+      ],
+      "references": []
+    },
+    {
       "id": "see-image-uploader",
       "path": "/tools/NonDevelopment/see-image-uploader",
       "name": "SEE Image Uploader",
@@ -39,20 +55,6 @@
         "typora"
       ],
       "group": "tools",
-      "val": 1,
-      "sources": [],
-      "references": []
-    },
-    {
-      "id": "regex",
-      "path": "/tools/NonDevelopment/regex",
-      "name": "正则大全",
-      "description": "Comprehensive regular expression patterns collection for common text processing tasks",
-      "allTags": [
-        "development",
-        "tools"
-      ],
-      "group": "development",
       "val": 1,
       "sources": [],
       "references": []
@@ -86,10 +88,10 @@
       "references": []
     },
     {
-      "id": "adoc",
-      "path": "/tools/NonDevelopment/adoc",
-      "name": "adoc",
-      "description": "adoc [source,java] ---- include::TxData.java[lines=6..7;22..36] ---- ",
+      "id": "regex",
+      "path": "/tools/Development/regex",
+      "name": "正则大全",
+      "description": "Comprehensive regular expression patterns collection for common text processing tasks",
       "allTags": [
         "development",
         "tools"
@@ -148,6 +150,22 @@
       ]
     },
     {
+      "id": "environment recovery",
+      "path": "/tools/Development/environment-recovery",
+      "name": "environment recovery",
+      "description": "一些环境的快速恢复方法",
+      "allTags": [
+        "books",
+        "learning"
+      ],
+      "group": "books",
+      "val": 2,
+      "sources": [
+        "command-usage"
+      ],
+      "references": []
+    },
+    {
       "id": "develop-software-tips",
       "path": "/tools/Development/develop-software-tips",
       "name": "常用开发软件",
@@ -165,40 +183,8 @@
       ]
     },
     {
-      "id": "win11-release-update",
-      "path": "/misc/Others/win11-release-update",
-      "name": "W11更新 跳过TPM",
-      "description": "[](https://www.microsoft.com/zh-cn/software-download/windows11) 打开解压后的 sources文件夹，删除appraiserres.dll文件",
-      "allTags": [
-        "books",
-        "learning"
-      ],
-      "group": "books",
-      "val": 3,
-      "sources": [
-        "command-usage"
-      ],
-      "references": []
-    },
-    {
-      "id": "environment recovery",
-      "path": "/misc/Others/environment-recovery",
-      "name": "environment recovery",
-      "description": "一些环境的快速恢复方法",
-      "allTags": [
-        "books",
-        "learning"
-      ],
-      "group": "books",
-      "val": 2,
-      "sources": [
-        "command-usage"
-      ],
-      "references": []
-    },
-    {
       "id": "command-usage",
-      "path": "/misc/Others/command-usage",
+      "path": "/tools/Development/command-usage",
       "name": "Bash or PS Command Usage",
       "description": "powershell tree /f  powershell netstat -ano | findstr :8080  powershell taskkill /PID 1234 /F",
       "allTags": [
@@ -214,6 +200,20 @@
         "environment",
         "win11-release-update"
       ]
+    },
+    {
+      "id": "adoc",
+      "path": "/tools/Development/adoc",
+      "name": "adoc",
+      "description": "adoc [source,java] ---- include::TxData.java[lines=6..7;22..36] ---- ",
+      "allTags": [
+        "development",
+        "tools"
+      ],
+      "group": "development",
+      "val": 1,
+      "sources": [],
+      "references": []
     },
     {
       "id": "cnblogs-theme-silence-configure-plain-style-theme",
@@ -2406,6 +2406,10 @@
   ],
   "filteredLinks": [
     {
+      "source": "command-usage",
+      "target": "win11-release-update"
+    },
+    {
       "source": "develop-software-tips",
       "target": "gradle-maven-configuration"
     },
@@ -2418,20 +2422,16 @@
       "target": "git-commands"
     },
     {
+      "source": "command-usage",
+      "target": "environment recovery"
+    },
+    {
       "source": "develop-software-tips",
       "target": "git-commands"
     },
     {
       "source": "develop-software-tips",
       "target": "gradle-maven-configuration"
-    },
-    {
-      "source": "command-usage",
-      "target": "win11-release-update"
-    },
-    {
-      "source": "command-usage",
-      "target": "environment recovery"
     },
     {
       "source": "command-usage",
