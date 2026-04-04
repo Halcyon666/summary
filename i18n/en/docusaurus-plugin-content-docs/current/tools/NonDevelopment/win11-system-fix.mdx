@@ -1,0 +1,179 @@
+---
+id: win11-system-fix
+title: Win11 System Repair
+sidebar_label: Win11 System Repair
+sidebar_position: 10
+description: Win11 System Repair
+tags:
+- tools
+last_update:
+  date: '2026-04-04'
+  author: halcyon666
+---
+
+# Windows Boot Error `0xc0000098 / winload.efi` Fix
+
+- `\Windows\System32\winload.efi`
+- `Error code: 0xc0000098`
+
+![](https://files.seeusercontent.com/2026/04/04/a7Bg/see-clipboard-1775270030899.png)
+
+Blue screen on boot showing `winload.efi / 0xc0000098`, or boots straight into BIOS, or `Windows Boot Manager` is missing from the boot list.
+
+Root cause: Windows EFI boot entry is lost or BCD boot configuration is corrupted.
+
+---
+
+## 1. Check BIOS Boot Entries
+
+Enter BIOS and check if `Windows Boot Manager` exists in the boot list.
+
+- If present → Set it as the first boot option, save and restart
+- If missing → Continue with the repair steps below
+
+:::tip
+MSI motherboards: press `F11` for boot menu, `DEL` for BIOS setup.
+:::
+
+---
+
+## 2. Preparation
+
+Prepare a **Windows 11 installation USB drive** (not a BIOS flash drive — it must boot into the Windows installer).
+
+---
+
+## 3. Enter Recovery Environment
+
+1. Insert the USB drive, press `F11` on boot, select the `UEFI` USB boot entry
+2. On the install screen, **do NOT click "Install now"**
+3. Click **Repair your computer** (bottom left) → **Troubleshoot** → **Advanced options** → **Startup Repair**
+
+If Startup Repair fails (e.g. "could not repair" / `SrtTrail.txt` / automatic repair failed), use manual repair:
+
+**Troubleshoot** → **Advanced options** → **Command Prompt**
+
+---
+
+## 4. Manual Repair Steps
+
+### Step 1: List Partitions
+
+```cmd
+diskpart
+list vol
+```
+
+Identify two partitions:
+- **EFI partition**: `FAT32`, size `100MB ~ 300MB`
+- **Windows system partition**: `NTFS`, large capacity
+
+![](https://files.seeusercontent.com/2026/04/04/Bg0c/see-clipboard-1775270610149.png)
+
+### Step 2: Assign a Drive Letter to the EFI Partition
+
+Assuming the EFI partition is `Volume 2`:
+
+```cmd
+select vol 2
+assign letter=S
+exit
+```
+
+Replace `2` with your actual EFI partition number. `S` is a temporary drive letter.
+
+![](https://files.seeusercontent.com/2026/04/04/ocN9/see-clipboard-1775271129622.png)
+
+### Step 3: Verify EFI Partition Contents
+
+```cmd
+S:
+dir
+```
+
+You should see an `EFI` directory:
+
+![](https://files.seeusercontent.com/2026/04/04/mIf0/see-clipboard-1775270967856.png)
+
+### Step 4: Identify the System Drive Letter
+
+Drive letters may change in the recovery environment. Try each one:
+
+```cmd
+dir C:\Windows
+dir D:\Windows
+dir E:\Windows
+```
+
+Whichever shows the Windows directory contents is the system drive.
+
+### Step 5: Rebuild EFI Boot Files
+
+Assuming the system drive is `C:` and EFI partition is `S:`:
+
+```cmd
+bcdboot C:\Windows /s S: /f UEFI
+```
+
+Success message: `Boot files successfully created.`
+
+---
+
+## 5. Common Errors
+
+### `bcdboot` shows DiskPart help text
+
+You haven't exited `diskpart` yet. Run `exit` first to return to the regular command prompt.
+
+### Error: `Failure when initializing library system volume`
+
+Wrong system drive or EFI drive letter wasn't assigned. Re-verify both, then run `bcdboot` again.
+
+### `dir S:\` seems to show `X:` drive
+
+Use two separate commands (`S:` then `dir`) instead of `dir S:\`.
+
+---
+
+## 6. After Repair
+
+1. Reboot into BIOS, confirm `Windows Boot Manager (your SSD)` appears
+2. Set it as the first boot option (`Boot Option #1 = Windows Boot Manager`)
+3. `F10` to save and exit
+4. Remove the USB drive, restart
+
+---
+
+## 7. Quick Reference
+
+### Automatic Repair
+
+```text
+USB boot → Repair your computer → Troubleshoot → Advanced options → Startup Repair
+```
+
+### Manual Repair
+
+```cmd
+diskpart
+list vol
+select vol <EFI partition number>
+assign letter=S
+exit
+
+S:
+dir
+
+dir C:\Windows
+dir D:\Windows
+
+bcdboot <system drive>:\Windows /s S: /f UEFI
+```
+
+### BIOS Setup
+
+```text
+Boot mode = UEFI
+Boot Option #1 = Windows Boot Manager
+F10 save and exit, remove USB, restart
+```

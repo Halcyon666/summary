@@ -1,0 +1,179 @@
+---
+id: win11-system-fix
+title: win11系统修复
+sidebar_label: win11系统修复
+sidebar_position: 10
+description: win11系统修复
+tags:
+- tools
+last_update:
+  date: '2026-04-04'
+  author: halcyon666
+---
+
+# Windows 启动报错 `0xc0000098 / winload.efi` 修复
+
+- `\Windows\System32\winload.efi`
+- `Error code: 0xc0000098`
+
+![](https://files.seeusercontent.com/2026/04/04/a7Bg/see-clipboard-1775270030899.png)
+
+开机蓝屏提示 `winload.efi / 0xc0000098`，或开机直接进 BIOS，或主板里看不到 `Windows Boot Manager`。
+
+问题本质：Windows EFI 启动项丢失或 BCD 启动配置损坏。
+
+---
+
+## 一、检查 BIOS 启动项
+
+先进 BIOS 确认启动项列表中有没有 `Windows Boot Manager`。
+
+- 如果有 → 直接把它设为第一启动项，保存重启
+- 如果没有 → 继续下面的修复流程
+
+:::tip
+微星主板开机按 `F11` 进启动菜单，按 `DEL` 进 BIOS 设置。
+:::
+
+---
+
+## 二、准备
+
+准备一个 **Windows 11 安装 U 盘**（不是 BIOS 刷机 U 盘，必须能进 Windows 安装界面）。
+
+---
+
+## 三、进入修复环境
+
+1. 插入 U 盘，开机按 `F11`，选择 `UEFI` 模式的 U 盘启动
+2. 进入安装界面后，**不要点"立即安装"**
+3. 点左下角 **修复计算机** → **疑难解答** → **高级选项** → **启动修复**
+
+如果启动修复失败（提示无法修复 / `SrtTrail.txt` / 自动修复失败等），走手动修复：
+
+**疑难解答** → **高级选项** → **命令提示符**
+
+---
+
+## 四、手动修复步骤
+
+### 第 1 步：查看分区
+
+```cmd
+diskpart
+list vol
+```
+
+找到两个分区：
+- **EFI 分区**：`FAT32`，大小 `100MB ~ 300MB`
+- **Windows 系统分区**：`NTFS`，容量较大
+
+![](https://files.seeusercontent.com/2026/04/04/Bg0c/see-clipboard-1775270610149.png)
+
+### 第 2 步：给 EFI 分区分配盘符
+
+假设 EFI 分区是 `卷 2`：
+
+```cmd
+select vol 2
+assign letter=S
+exit
+```
+
+`2` 替换成实际 EFI 分区编号，`S` 是临时盘符。
+
+![](https://files.seeusercontent.com/2026/04/04/ocN9/see-clipboard-1775271129622.png)
+
+### 第 3 步：确认 EFI 分区内容
+
+```cmd
+S:
+dir
+```
+
+正常应看到 `EFI` 目录：
+
+![](https://files.seeusercontent.com/2026/04/04/mIf0/see-clipboard-1775270967856.png)
+
+### 第 4 步：确认系统盘盘符
+
+修复环境里盘符可能变化，逐个试：
+
+```cmd
+dir C:\Windows
+dir D:\Windows
+dir E:\Windows
+```
+
+哪个能看到 Windows 目录内容，哪个就是系统盘。
+
+### 第 5 步：重建 EFI 启动文件
+
+假设系统盘是 `C:`，EFI 分区是 `S:`：
+
+```cmd
+bcdboot C:\Windows /s S: /f UEFI
+```
+
+成功提示：`Boot files successfully created.`
+
+---
+
+## 五、常见错误
+
+### `bcdboot` 执行后出现 DiskPart 帮助信息
+
+还没退出 `diskpart`，先执行 `exit` 退出到普通命令行。
+
+### 报错 `初始化库系统卷失败`
+
+系统盘选错了或 EFI 盘符没分配成功，重新确认后再执行 `bcdboot`。
+
+### `dir S:\` 显示看起来像 `X:` 盘
+
+用 `S:` 然后 `dir` 两步操作，不要直接 `dir S:\`。
+
+---
+
+## 六、修复完成后
+
+1. 重启进 BIOS，确认出现 `Windows Boot Manager (你的 SSD)`
+2. 设为第一启动项（`Boot Option #1 = Windows Boot Manager`）
+3. `F10` 保存退出
+4. 拔掉 U 盘，重启
+
+---
+
+## 七、快速参考
+
+### 自动修复
+
+```text
+U 盘启动 → 修复计算机 → 疑难解答 → 高级选项 → 启动修复
+```
+
+### 手动修复
+
+```cmd
+diskpart
+list vol
+select vol EFI分区编号
+assign letter=S
+exit
+
+S:
+dir
+
+dir C:\Windows
+dir D:\Windows
+
+bcdboot 系统盘:\Windows /s S: /f UEFI
+```
+
+### BIOS 设置
+
+```text
+Boot mode = UEFI
+Boot Option #1 = Windows Boot Manager
+F10 保存退出，拔 U 盘，重启
+```

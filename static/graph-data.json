@@ -16,6 +16,19 @@
       "references": []
     },
     {
+      "id": "win11-system-fix",
+      "path": "/tools/NonDevelopment/win11-system-fix",
+      "name": "win11系统修复",
+      "description": "win11系统修复",
+      "allTags": [
+        "tools"
+      ],
+      "group": "tools",
+      "val": 1,
+      "sources": [],
+      "references": []
+    },
+    {
       "id": "see-image-uploader",
       "path": "/tools/NonDevelopment/see-image-uploader",
       "name": "SEE Image Uploader",
