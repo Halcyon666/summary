@@ -1,9 +1,9 @@
 ---
 id: overview
-title: AI Prompt Engineering Roadmap - 概述
+title: AI 应用开发路线图 - 概述
 sidebar_label: 概述
 sidebar_position: 1
-description: 系统化的 AI Prompt 工程与全栈开发能力成长路径概述
+description: 面向开发者的 AI 应用开发能力成长路径，覆盖 RAG、Agent、工程化落地
 tags:
 - ai
 - prompt-engineering
@@ -17,34 +17,38 @@ references:
 - summary
 - lays-in-ai
 last_update:
-  date: '2026-01-25'
+  date: '2026-04-09'
   author: halcyon666
 ---
 
-# AI Prompt 工程与全栈开发路线图
+# AI 应用开发路线图
 
 ## 文档定位与使用说明
 
-**本文档适用对象**: 具备至少一门编程语言基础 (Python/Java/JavaScript),希望系统性掌握 AI 能力的开发者
+**适用对象**: 有编程基础 (Python/Java/JavaScript)，希望系统性掌握 AI 应用开发能力的开发者
 
-**核心目标**: 以**生成高质量 Prompt** 为核心,帮助开发者从工具使用逐步成长为能够设计企业级 AI 系统的全栈工程师
+**核心目标**: 从工具使用到架构设计，逐步成长为能够交付企业级 AI 系统的工程师
 
-**学习路径**: Level 1 (工具驱动) → Level 2 (RAG 应用) → Level 3 (Agent 架构) → Level 4 (生产部署),每个阶段 2-3 周,总计 9-12 周
+**学习路径**: Level 1 (工具与基础设施) → Level 2 (RAG) → Level 3 (Agent) → Level 4 (生产部署)，每阶段 2-3 周，总计 9-12 周
+
+:::tip Java 开发者说明
+如果你的主技术栈是 Java / Spring Boot，可以优先关注 **Spring AI** 和 **LangChain4j** 生态。本文档示例以 Python 为主，但核心概念（RAG、Tool Calling、结构化输出、Agent 编排）是语言无关的，Java 侧均有对应方案。
+:::
 
 ## 核心理念
 
 ### 设计原则
 
-1. ⭐ **架构模式优先于工具学习**: 理解 Sidecar Pattern、异步解耦、结构化输出等架构模式
-2. **扩展而非深读**: 将 Dify 等平台视为黑盒,专注于扩展和集成
+1. ⭐ **架构模式优先于工具学习**: 理解异步解耦、结构化输出等架构模式，而非只学 API 调用
+2. **扩展而非深读**: 将 Dify 等平台视为黑盒，专注于扩展和集成
 3. ⭐ **评估左移**: 从早期就建立 Golden Dataset 和自动化评估
-4. **可观测性**: 建立完整的 Agent 行为追踪和质量监控体系
-5. ⭐ **双轨并进**: 既掌握快速交付工具 (Dify),又具备深度定制能力 (LangGraph)
+4. **可观测性**: 建立 Agent 行为追踪和质量监控体系
+5. ⭐ **双轨并进**: 既掌握快速交付工具 (Dify)，又具备深度定制能力 (LangGraph / Spring AI)
 
 ### 技术路线双轨制
 
-- ⭐ **生产力轨道 (80% 场景)**: Dify, Ollama, MCP —— 快速解决通用需求
-- **硬实力轨道 (20% 核心难题)**: PyTorch, LangGraph, VectorDB —— 攻克复杂问题
+- **生产力轨道 (80% 场景)**: Dify, Ollama, MCP —— 快速交付通用需求
+- **硬实力轨道 (20% 核心难题)**: LangGraph / LangChain4j, VectorDB —— 攻克复杂问题
 
 ## 能力演进路径
 
@@ -70,14 +74,4 @@ graph LR
 | [Level 4: 全栈落地](./level-4-production) | 第 9-12 周 | 完成前后端全栈交付,掌握模型微调和生产部署 | 高级 |
 | [Prompt 质量评估与总结](./summary) | - | Prompt 质量标准、技能组合、面试突击清单 | 参考 |
 
-## 关键成功因素
-
-1. ⭐ **架构模式优先于工具学习**: 理解 Sidecar Pattern、异步解耦、结构化输出等架构模式
-2. **扩展而非深读**: 将 Dify 等平台视为黑盒,专注于扩展和集成
-3. ⭐ **评估左移**: 从 Level 2 开始就建立 Golden Dataset 和自动化评估
-4. **可观测性**: 建立完整的 Agent 行为追踪和质量监控体系
-5. ⭐ **双轨并进**: 既掌握快速交付工具 (Dify),又具备深度定制能力 (LangGraph)
-
-> 你的 **Java/React 经验** 决定了你能把系统搭建得多**稳** (复杂架构能力),而你对 **AI 工具的驱动能力** 决定了你能跑得多**快** (开发效率)。
->
-> **这两个加上去,才是真正的 Full Stack AI Engineer。**
+> 工程能力决定系统搭得多稳，AI 驱动能力决定迭代跑得多快。两者结合才是完整的 AI 工程能力。
