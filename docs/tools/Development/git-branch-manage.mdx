@@ -8,7 +8,7 @@ tags:
 - development
 - tools
 last_update:
-  date: '2026-04-01'
+  date: '2026-04-22'
   author: halcyon666
 sources:
 
@@ -72,6 +72,11 @@ git merge 202604
 git checkout 202604
 git merge --no-ff feature/order
 ```
+
+- 小改动、短周期的 feature 分支，可直接发起 PR。
+- 若 PR 无冲突，且 Code Review 与 CI 均通过，则直接在主分支合并该 feature 分支，无需先在 feature 分支同步主线。
+- 若 PR 存在冲突，或虽无冲突但主线近期变更频繁、涉及公共热点模块，则应先在 feature 分支同步主线，解决冲突并验证通过后，再合并回主分支。
+
 
 ### 版本进入环境链
 
