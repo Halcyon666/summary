@@ -9,14 +9,14 @@ tags:
 - case-study
 - frontend
 last_update:
-  date: '2026-01-25'
+  date: '2026-04-23'
   author: halcyon666
 sources:
 - spring-core
 ---
 # Java 并发编程
 
-## Executor 并发执行任务
+## Executor 并行执行任务（带返回值）
 
 Using Executor and CompletableFuture to concurrent execute the Many Queries. Below is commit changes.
 
@@ -153,6 +153,152 @@ public class JobFailFastAsyncExecutor implements AutoCloseable {
 
 [详细代码提交记录](https://github.com/Halcyon666/mybatis-plus/tree/purebranch/src/main/java/com/whalefall541/cases/concurrentqry)
 
+## 并行任务执行器（不带返回值）
+```java
+package com.whalefall541.cases.concurrenttskvoid;
+
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
+/**
+ * 并行任务执行器
+ *
+ * <p>用于同时执行两个 Runnable 任务，支持超时控制。
+ * 实现 AutoCloseable，支持 try-with-resources 自动释放线程池。
+ *
+ * <p>使用示例:
+ * <pre>{@code
+ * try (ParallelTaskExecutor executor = new ParallelTaskExecutor()) {
+ *     executor.execute(task1, task2, 28, TimeUnit.SECONDS);
+ * }
+ * }</pre>
+ *
+ */
+public class ParallelTaskExecutor implements AutoCloseable {
+
+    private final ExecutorService executor;
+    private final boolean owned;
+
+    /**
+     * 使用默认线程池（2线程）创建执行器
+     *
+     * <p>线程池将由本类管理，close() 时会自动关闭
+     */
+    public ParallelTaskExecutor() {
+        this.executor = Executors.newFixedThreadPool(2, new NamedThreadFactory("parallel-task"));
+        this.owned = true;
+    }
+
+    /**
+     * 使用外部线程池创建执行器
+     *
+     * @param executor 外部 ExecutorService，本类不会关闭它
+     */
+    public ParallelTaskExecutor(ExecutorService executor) {
+        this.executor = executor;
+        this.owned = false;
+    }
+
+    /**
+     * 并行执行两个任务，默认超时 28 秒
+     *
+     * @param step1 任务1
+     * @param step2 任务2
+     * @throws ParallelExecutionException 任一任务超时、失败或中断
+     */
+    public void execute(Runnable step1, Runnable step2) {
+        execute(step1, step2, 28, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 并行执行两个任务，支持自定义超时
+     *
+     * @param step1   任务1
+     * @param step2   任务2
+     * @param timeout 超时时间
+     * @param unit    时间单位
+     * @throws ParallelExecutionException 任一任务超时、失败或中断
+     */
+    public void execute(Runnable step1, Runnable step2, long timeout, TimeUnit unit) {
+        CompletableFuture<Void> f1 = CompletableFuture.runAsync(step1, executor);
+        CompletableFuture<Void> f2 = CompletableFuture.runAsync(step2, executor);
+        try {
+            CompletableFuture.allOf(f1, f2).get(timeout, unit);
+        } catch (TimeoutException e) {
+            throw new ParallelExecutionException("parallel task timeout", e);
+        } catch (ExecutionException e) {
+            throw new ParallelExecutionException("parallel task failed", unwrap(e));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new ParallelExecutionException("parallel task interrupted", e);
+        } finally {
+            f1.cancel(true);
+            f2.cancel(true);
+        }
+    }
+
+    private Throwable unwrap(Throwable ex) {
+        while ((ex instanceof ExecutionException || ex instanceof CompletionException)
+                && ex.getCause() != null) {
+            ex = ex.getCause();
+        }
+        return ex;
+    }
+
+    @Override
+    public void close() {
+        if (owned) {
+            shutdown();
+        }
+    }
+
+    private void shutdown() {
+        executor.shutdown();
+        try {
+            if (!executor.awaitTermination(30, TimeUnit.SECONDS)) {
+                executor.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executor.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    /**
+     * 并行任务执行异常
+     *
+     * <p>包装 TimeoutException、ExecutionException、InterruptedException
+     */
+    public static class ParallelExecutionException extends RuntimeException {
+        public ParallelExecutionException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+
+    /**
+     * 命名线程工厂
+     *
+     * <p>创建的线程格式为: {prefix}-{序号}
+     */
+    public static class NamedThreadFactory implements ThreadFactory {
+        private final String prefix;
+        private final AtomicInteger counter = new AtomicInteger(1);
+
+        public NamedThreadFactory(String prefix) {
+            this.prefix = prefix;
+        }
+
+        @Override
+        public Thread newThread(Runnable r) {
+            Thread t = new Thread(r, prefix + "-" + counter.getAndIncrement());
+            t.setDaemon(false);
+            return t;
+        }
+    }
+}
+```
+
+[详细代码提交记录](https://github.com/Halcyon666/mybatis-plus/commit/6d73a87af86bd64620364dbe67aad2b6a969f1ab)
 
 import TailProtocal from "@site/src/components/TailProtocal";
 

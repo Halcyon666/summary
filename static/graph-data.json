@@ -1496,6 +1496,22 @@
       "references": []
     },
     {
+      "id": "java-concurrent-cases",
+      "path": "/background/Java/Concurrent-JVM/java-concurrent-cases",
+      "name": "Java 并发编程",
+      "description": "Using Executor and CompletableFuture to concurrent execute the Many Queries. Below is commit changes.",
+      "allTags": [
+        "case-study",
+        "frontend"
+      ],
+      "group": "case-study",
+      "val": 2,
+      "sources": [
+        "spring-core"
+      ],
+      "references": []
+    },
+    {
       "id": "java-virtual-machine",
       "path": "/background/Java/Concurrent-JVM/JAVA Virtual Machine",
       "name": "JAVA虚拟机",
@@ -1506,22 +1522,6 @@
         "data-structures"
       ],
       "group": "algorithm",
-      "val": 2,
-      "sources": [
-        "spring-core"
-      ],
-      "references": []
-    },
-    {
-      "id": "java-concurrent-cases",
-      "path": "/background/Java/Concurrent-JVM/Java Concurrent Cases",
-      "name": "Java 并发编程",
-      "description": "Using Executor and CompletableFuture to concurrent execute the Many Queries. Below is commit changes.",
-      "allTags": [
-        "case-study",
-        "frontend"
-      ],
-      "group": "case-study",
       "val": 2,
       "sources": [
         "spring-core"
@@ -2277,8 +2277,8 @@
     {
       "id": "overview",
       "path": "/ai-bigdata/AI/prompt-engineering-roadmap/overview",
-      "name": "AI Prompt Engineering Roadmap - 概述",
-      "description": "系统化的 AI Prompt 工程与全栈开发能力成长路径概述",
+      "name": "AI 应用开发路线图 - 概述",
+      "description": "面向开发者的 AI 应用开发能力成长路径，覆盖 RAG、Agent、工程化落地",
       "allTags": [
         "ai",
         "prompt-engineering",
@@ -2749,11 +2749,11 @@
     },
     {
       "source": "spring-core",
-      "target": "java-virtual-machine"
+      "target": "java-concurrent-cases"
     },
     {
       "source": "spring-core",
-      "target": "java-concurrent-cases"
+      "target": "java-virtual-machine"
     },
     {
       "source": "spring-core",
