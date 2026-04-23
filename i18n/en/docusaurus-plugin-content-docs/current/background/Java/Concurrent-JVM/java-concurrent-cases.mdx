@@ -9,14 +9,14 @@ tags:
 - case-study
 - frontend
 last_update:
-  date: '2026-01-25'
+  date: '2026-04-23'
   author: halcyon666
 sources:
 - spring-core
 ---
 # Java Concurrent Programming
 
-## Executor Concurrent Task Execution
+## Executor Concurrent Task Execution (with Return Value)
 
 Using Executor and CompletableFuture to concurrent execute the Many Queries. Below is commit changes.
 
@@ -153,6 +153,156 @@ public class JobFailFastAsyncExecutor implements AutoCloseable {
 
 [Detailed code commit record](https://github.com/Halcyon666/mybatis-plus/tree/purebranch/src/main/java/com/whalefall541/cases/concurrentqry)
 
+## Parallel Task Executor (without Return Value)
+
+<details> 
+  <summary>Java Parallel Task Executor (without Return Value)</summary>
+```java setLineNumbers
+package com.whalefall541.cases.concurrenttskvoid;
+
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
+/**
+ * Parallel Task Executor
+ *
+ * <p>Executes two Runnable tasks simultaneously with timeout control.
+ * Implements AutoCloseable for try-with-resources automatic thread pool release.
+ *
+ * <p>Usage example:
+ * <pre>{@code
+ * try (ParallelTaskExecutor executor = new ParallelTaskExecutor()) {
+ *     executor.execute(task1, task2, 28, TimeUnit.SECONDS);
+ * }
+ * }</pre>
+ *
+ */
+public class ParallelTaskExecutor implements AutoCloseable {
+
+    private final ExecutorService executor;
+    private final boolean owned;
+
+    /**
+     * Create executor with default thread pool (2 threads)
+     *
+     * <p>Thread pool will be managed by this class and automatically closed on close()
+     */
+    public ParallelTaskExecutor() {
+        this.executor = Executors.newFixedThreadPool(2, new NamedThreadFactory("parallel-task"));
+        this.owned = true;
+    }
+
+    /**
+     * Create executor with external thread pool
+     *
+     * @param executor External ExecutorService, this class will not close it
+     */
+    public ParallelTaskExecutor(ExecutorService executor) {
+        this.executor = executor;
+        this.owned = false;
+    }
+
+    /**
+     * Execute two tasks in parallel with default 28 second timeout
+     *
+     * @param step1 Task 1
+     * @param step2 Task 2
+     * @throws ParallelExecutionException If any task times out, fails, or is interrupted
+     */
+    public void execute(Runnable step1, Runnable step2) {
+        execute(step1, step2, 28, TimeUnit.SECONDS);
+    }
+
+    /**
+     * Execute two tasks in parallel with custom timeout
+     *
+     * @param step1   Task 1
+     * @param step2   Task 2
+     * @param timeout Timeout duration
+     * @param unit    Time unit
+     * @throws ParallelExecutionException If any task times out, fails, or is interrupted
+     */
+    public void execute(Runnable step1, Runnable step2, long timeout, TimeUnit unit) {
+        CompletableFuture<Void> f1 = CompletableFuture.runAsync(step1, executor);
+        CompletableFuture<Void> f2 = CompletableFuture.runAsync(step2, executor);
+        try {
+            CompletableFuture.allOf(f1, f2).get(timeout, unit);
+        } catch (TimeoutException e) {
+            throw new ParallelExecutionException("parallel task timeout", e);
+        } catch (ExecutionException e) {
+            throw new ParallelExecutionException("parallel task failed", unwrap(e));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new ParallelExecutionException("parallel task interrupted", e);
+        } finally {
+            f1.cancel(true);
+            f2.cancel(true);
+        }
+    }
+
+    private Throwable unwrap(Throwable ex) {
+        while ((ex instanceof ExecutionException || ex instanceof CompletionException)
+                && ex.getCause() != null) {
+            ex = ex.getCause();
+        }
+        return ex;
+    }
+
+    @Override
+    public void close() {
+        if (owned) {
+            shutdown();
+        }
+    }
+
+    private void shutdown() {
+        executor.shutdown();
+        try {
+            if (!executor.awaitTermination(30, TimeUnit.SECONDS)) {
+                executor.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executor.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    /**
+     * Parallel task execution exception
+     *
+     * <p>Wraps TimeoutException, ExecutionException, InterruptedException
+     */
+    public static class ParallelExecutionException extends RuntimeException {
+        public ParallelExecutionException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+
+    /**
+     * Named thread factory
+     *
+     * <p>Created thread format: {prefix}-{sequence}
+     */
+    public static class NamedThreadFactory implements ThreadFactory {
+        private final String prefix;
+        private final AtomicInteger counter = new AtomicInteger(1);
+
+        public NamedThreadFactory(String prefix) {
+            this.prefix = prefix;
+        }
+
+        @Override
+        public Thread newThread(Runnable r) {
+            Thread t = new Thread(r, prefix + "-" + counter.getAndIncrement());
+            t.setDaemon(false);
+            return t;
+        }
+    }
+}
+```
+</details>
+
+[Detailed code commit record](https://github.com/Halcyon666/mybatis-plus/commit/6d73a87af86bd64620364dbe67aad2b6a969f1ab)
 
 import TailProtocal from "@site/src/components/TailProtocal";
 
