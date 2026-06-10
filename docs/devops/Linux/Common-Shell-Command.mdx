@@ -267,6 +267,12 @@ grep -E '(error|fail|fatal) [0-9]{3}' logfile.txt
 - `[0-9]{3}` → 匹配 **三位数字**
 - 输出整行匹配内容
 
+
+3.7 输出同时包含 abc def的行，及此行前面三行
+```
+grep -B 3 'abc.*def' logfile.txt
+```
+
 ------
 
 ### 4️⃣ 匹配 pip list 示例（结合扩展正则）
