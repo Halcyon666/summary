@@ -9,7 +9,7 @@ tags:
 - computer-science
 - data-structures
 last_update:
-  date: '2026-01-25'
+  date: '2026-05-25'
   author: halcyon666
 sources:
 - mybatis-plus-quick-start
@@ -62,9 +62,14 @@ sources:
 ## 实现分布式锁
 
 利用唯一约束，插入表成功获取锁成功，插入表失败获取锁失败；如果操作执行完需要删除锁。
+需要考虑只有当前线程能删除自己的锁问题。
 
 该锁不可重入，如果要实现可以维护当前获取锁线程的唯一标识，再重入时判断是否为当前获取锁的线程，是则默认获取锁成功。
 
+
+## Mybatis 全局事务失效问题
+
+对于oracle数据库当一堆数据库操作中有`truncate` 操作时，会自动触发前面的事务被提交。
 
 import TailProtocal from "@site/src/components/TailProtocal";
 
