@@ -113,6 +113,52 @@ prive Long primaryKey;
 int insertOne(XxxPo po)
 ```
 
+## 使用MybatisPlusInterceptor + DynamicTableNameInnerInterceptor实现多租户
+
+这个可以实现单schema动态名schema，但是sequence的schema前缀是没有的
+```java
+@Configuration
+public class MybatisPlusConfig {
+
+    // schema白名单，防止非法拼接
+    private static final Set<String> SCHEMA_WHITELIST = Set.of("SCHEMA_A", "SCHEMA_B");
+
+    // 需要动态切schema的表（其余表原样执行，不做任何改写）
+    private static final Set<String> MANAGED_TABLES = Set.of("orders", "order_items");
+
+    @Bean
+    public MybatisPlusInterceptor mybatisPlusInterceptor() {
+        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+
+        // 如果有分页插件，必须先加分页，再加动态表名，顺序影响处理链
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.ORACLE));
+
+        DynamicTableNameInnerInterceptor dynamicTableNameInterceptor =
+            new DynamicTableNameInnerInterceptor();
+
+        dynamicTableNameInterceptor.setTableNameHandler((sql, tableName) -> {
+            String schema = SchemaContextHolder.getSchema();
+
+            // 未设置schema，原样返回，不介入（走数据源默认schema）
+            if (schema == null || schema.isEmpty()) {
+                return tableName;
+            }
+            if (!SCHEMA_WHITELIST.contains(schema)) {
+                throw new IllegalArgumentException("非法schema: " + schema);
+            }
+            if (!MANAGED_TABLES.contains(tableName.toLowerCase())) {
+                return tableName; // 非受管表不改写
+            }
+            return schema + "." + tableName;
+        });
+
+        interceptor.addInnerInterceptor(dynamicTableNameInterceptor);
+        return interceptor;
+    }
+}
+```
+
+- [ ] 补充sequence schema前缀方案
 
 import TailProtocal from "@site/src/components/TailProtocal";
 
