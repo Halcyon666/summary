@@ -158,7 +158,29 @@ public class MybatisPlusConfig {
 }
 ```
 
-- [ ] 补充sequence schema前缀方案
+补充sequence schema前缀方案，使用`${schema}`。
+或者可以使用这种方式静态添加schema，（⚠️一个工程引入多个数据源，只会有一份keygenerators。）
+
+```java
+@Component
+public class SchemaAwareOracleKeyGenerator implements IKeyGenerator {
+
+    @Override
+    public String executeSql(String incrementerName) {
+        String schema = SchemaContextHolder.getSchema();
+        if (schema == null || !SCHEMA_WHITELIST.contains(schema)) {
+            throw new IllegalArgumentException("取序列时非法schema: " + schema);
+        }
+        return "SELECT " + schema + "." + incrementerName + ".NEXTVAL FROM DUAL";
+    }
+
+    @Override
+    public DbType dbType() {
+        return DbType.ORACLE;
+    }
+}
+```
+
 
 import TailProtocal from "@site/src/components/TailProtocal";
 
