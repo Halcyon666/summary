@@ -155,6 +155,85 @@ setterVisibility = JsonAutoDetect.Visibility.NONE)
 | 构造函数参数 | 反序列化          | 映射 JSON 参数名到构造参数 |
 | record 参数  | 序列化 + 反序列化 | 控制 JSON 属性名           |
 
+### Fastjson Date 和 LocalDateTime 的时区问题
+
+`Date` 默认使用 JVM 时区序列化；`LocalDateTime` 不带时区信息，行为取决于 Fastjson 版本和 JVM 配置。跨环境部署时时区不一致是主要风险。
+
+#### 1. 字段级别指定
+
+DTO/VO 字段上通过 `@JSONField` 声明格式和时区，接口层统一约定：
+
+```java
+public class UserDTO {
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private LocalDateTime createTime;
+
+    // Date 同理
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date createTime;
+}
+```
+
+> Fastjson 对 `LocalDateTime` 的原生支持在不同版本间有差异，生产环境建议统一转 `Date` 或 `String` 再输出。
+
+#### 2. Spring Boot 全局配置
+
+##### application.yml（推荐）
+
+```yaml
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+```
+
+##### Fastjson 全局配置
+
+```java
+// 方式一：全局默认值
+JSON.defaultTimeZone = TimeZone.getTimeZone("Asia/Shanghai");
+JSON.defaultDateFormat = "yyyy-MM-dd HH:mm:ss";
+
+// 方式二：FastJsonConfig Bean
+@Bean
+public FastJsonConfig fastJsonConfig() {
+    FastJsonConfig config = new FastJsonConfig();
+    config.setDateFormat("yyyy-MM-dd HH:mm:ss");
+    config.setCharset(StandardCharsets.UTF_8);
+    return config;
+}
+```
+
+#### 3. 不指定时区的表现
+
+```java
+Date d = new Date(0L);
+JSON.toJSONString(d);
+// UTC 环境 → "1970-01-01 00:00:00"
+// Asia/Shanghai 环境 → "1970-01-01 08:00:00"
+```
+
+`LocalDateTime` 没有时区信息，序列化后不带 `+08:00` 或 `Z`：
+
+```java
+LocalDateTime ldt = LocalDateTime.of(2024, 1, 1, 12, 0, 0);
+JSON.toJSONString(ldt); // "2024-01-01 12:00:00"
+// 后续转 Instant 必须显式指定 ZoneId
+Instant instant = ldt.atZone(ZoneId.of("Asia/Shanghai")).toInstant();
+```
+
+#### 4. 类型选择建议
+
+| 类型 | 时区 | 用途 |
+|---|---|---|
+| `Date` | 有（UTC 时间戳） | 跨时区传输、JSON 序列化 |
+| `Instant` | 有（UTC） | 服务内部时间计算、日志 |
+| `ZonedDateTime` | 有 | 需要保留时区的业务逻辑 |
+| `OffsetDateTime` | 有 | API 响应、跨系统传输 |
+| `LocalDateTime` | **无** | 仅展示层，不用于传输或计算 |
+
+服务内部优先使用 `Instant` / `ZonedDateTime` / `OffsetDateTime`，避免裸 `Date` 和 `LocalDateTime` 直接做 JSON 传输。
+
 ## 数据库连接池配置问题
 
 使用Druid 连接池时, 配置参数 `validationInterval`必须小于 `timeBetweenEvictionRunMillis`, 保证数据库连接一直是可用的。

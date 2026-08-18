@@ -155,6 +155,85 @@ Members used in serialization and deserialization
 | Constructor Parameter | Deserialization | Map JSON parameter name to constructor parameter |
 | record Parameter | Serialization + Deserialization | Control JSON property name |
 
+### Fastjson Date and LocalDateTime timezone issues
+
+`Date` serializes using the JVM default timezone; `LocalDateTime` has no timezone info, so its behavior depends on the Fastjson version and JVM settings. Cross-environment timezone mismatch is the main risk.
+
+#### 1. Field-level annotation
+
+Declare format and timezone on DTO/VO fields via `@JSONField`:
+
+```java
+public class UserDTO {
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private LocalDateTime createTime;
+
+    // Date works the same way
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date createTime;
+}
+```
+
+> Fastjson's `LocalDateTime` support varies across versions. In production, prefer converting to `Date` or `String` at the API boundary.
+
+#### 2. Spring Boot global config
+
+##### application.yml (Recommended)
+
+```yaml
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+```
+
+##### Fastjson global config
+
+```java
+// Option 1: global defaults
+JSON.defaultTimeZone = TimeZone.getTimeZone("Asia/Shanghai");
+JSON.defaultDateFormat = "yyyy-MM-dd HH:mm:ss";
+
+// Option 2: FastJsonConfig Bean
+@Bean
+public FastJsonConfig fastJsonConfig() {
+    FastJsonConfig config = new FastJsonConfig();
+    config.setDateFormat("yyyy-MM-dd HH:mm:ss");
+    config.setCharset(StandardCharsets.UTF_8);
+    return config;
+}
+```
+
+#### 3. Behavior without explicit timezone
+
+```java
+Date d = new Date(0L);
+JSON.toJSONString(d);
+// UTC env → "1970-01-01 00:00:00"
+// Asia/Shanghai env → "1970-01-01 08:00:00"
+```
+
+`LocalDateTime` has no timezone info, so serialization omits `+08:00` or `Z`:
+
+```java
+LocalDateTime ldt = LocalDateTime.of(2024, 1, 1, 12, 0, 0);
+JSON.toJSONString(ldt); // "2024-01-01 12:00:00"
+// Must specify ZoneId explicitly when converting to Instant
+Instant instant = ldt.atZone(ZoneId.of("Asia/Shanghai")).toInstant();
+```
+
+#### 4. Type selection guide
+
+| Type | Timezone | Use case |
+|---|---|---|
+| `Date` | Yes (UTC timestamp) | Cross-timezone transfer, JSON serialization |
+| `Instant` | Yes (UTC) | Service-internal time calculation, logging |
+| `ZonedDateTime` | Yes | Business logic that needs timezone |
+| `OffsetDateTime` | Yes | API responses, cross-system transfer |
+| `LocalDateTime` | **No** | Display only, not for transfer or calculation |
+
+Prefer `Instant` / `ZonedDateTime` / `OffsetDateTime` inside services. Avoid passing raw `Date` and `LocalDateTime` directly as JSON.
+
 ## Database Connection Pool Configuration Problems
 
 When using Druid connection pool, config parameter `validationInterval` must be less than `timeBetweenEvictionRunMillis`, ensuring database connection is always available.
