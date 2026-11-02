@@ -58,6 +58,15 @@ Could not find artifact lifecycle-mapping:lifecycle-mapping:jar:sources:1.0.0
 
 ![image-20230728021351697](https://s2.loli.net/2023/07/28/UzsD4BnrPYSbo1T.png)
 
+### Gradle sync 报错 `Connection refused: getsockopt`（IDEA）
+
+如果 IDEA 在 Gradle sync 时提示 `Connection refused: getsockopt`，可以检查并关闭 IDEA 中配置的 HTTP 代理：
+
+1. 打开 `Settings`（macOS 为 `Preferences`）。
+2. 进入 `Appearance & Behavior` > `System Settings` > `HTTP Proxy`。
+3. 选择 `No proxy`，点击 `Apply` / `OK`。
+4. 重新执行 Gradle sync。
+
 ## 日志相关
 
 ### 启动控制台日志没有颜色
