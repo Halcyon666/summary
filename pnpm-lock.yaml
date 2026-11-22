@@ -2161,7 +2161,6 @@ packages:
     engines: {node: '>=10'}
     cpu: [ppc64]
     os: [linux]
-    libc: [glibc]
 
   '@swc/core-linux-s390x-gnu@1.16.0':
     resolution: {integrity: sha512-q+Vr/hmHCcRXT/WFzOJC+T6GGEEtq2iaTtmyLfxO7yzu4ckgcqSNkg9m181wfNhuMwfNBoBhOfwQCnLsGZ5F4g==}
@@ -2247,7 +2246,6 @@ packages:
     engines: {node: '>=10'}
     cpu: [ppc64]
     os: [linux]
-    libc: [glibc]
 
   '@swc/html-linux-s390x-gnu@1.16.0':
     resolution: {integrity: sha512-0LqXAV+uBZJeqYCsLDE2QtZqHK2sAzOo51BJP45GQLqjIWYY5ujnSIMppZeaDclS/ZIpRIegluypTA2BoQW9qg==}
